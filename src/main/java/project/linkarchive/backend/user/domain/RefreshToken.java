@@ -18,6 +18,7 @@ public class RefreshToken extends CreatedEntity {
     @Column(name = "refresh_token_id")
     private Long id;
 
+    @Column(length = 500)
     private String refreshToken;
 
     @OneToOne(fetch = FetchType.LAZY)
