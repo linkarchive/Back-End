@@ -19,11 +19,11 @@ public class UrlHashTag extends CreatedEntity {
     @Column(name = "url_hashtag_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "url_id")
     private Url url;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "hashtag_id")
     private HashTag hashTag;
 
