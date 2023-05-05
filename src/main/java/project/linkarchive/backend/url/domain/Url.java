@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
 import project.linkarchive.backend.bookmark.domain.BookMark;
+import project.linkarchive.backend.url.request.UrlCreateRequest;
 import project.linkarchive.backend.user.domain.User;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Url extends TimeEntity {
     @Column(name = "url_id")
     private Long id;
 
+    private String thumbnail;
     private String title;
     private String url;
     private Long bookMarkCount;
@@ -37,14 +39,24 @@ public class Url extends TimeEntity {
     private List<BookMark> bookMarkList = new ArrayList<>();
 
     @Builder
-    public Url(Long id, String title, String url, Long bookMarkCount, User user, List<UrlHashTag> urlHashTagList, List<BookMark> bookMarkList) {
+    public Url(Long id, String thumbnail, String title, String url, Long bookMarkCount, User user, List<UrlHashTag> urlHashTagList, List<BookMark> bookMarkList) {
         this.id = id;
+        this.thumbnail = thumbnail;
         this.title = title;
         this.url = url;
         this.bookMarkCount = bookMarkCount;
         this.user = user;
         this.urlHashTagList = urlHashTagList;
         this.bookMarkList = bookMarkList;
+    }
+
+    public static Url of(UrlCreateRequest request) {
+        return Url.builder()
+                .thumbnail(request.getThumbnail())
+                .title(request.getTitle())
+                .url(request.getUrl())
+                .bookMarkCount(0L)
+                .build();
     }
 
 }

@@ -5,8 +5,7 @@ import lombok.Getter;
 @Getter
 public enum SuccessCodeConst {
 
-    // SAMPLE
-    SINGUP_SUCCESS(200, "SIGNUP", "회원가입에 성공했습니다.");
+    URL_CREATE(201, "URL_CREATE", "url 이 생성되었습니다.");
 
     private int status;
     private String code;
