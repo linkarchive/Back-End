@@ -31,11 +31,9 @@ public class HashTag extends CreatedEntity {
     private List<UrlHashTag> urlHashTagList = new ArrayList<>();
 
     @Builder
-    public HashTag(Long id, String tag, List<UserHashTag> userHashTags, List<UrlHashTag> urlHashTagList) {
+    public HashTag(Long id, String tag) {
         this.id = id;
         this.tag = tag;
-        this.userHashTags = userHashTags;
-        this.urlHashTagList = urlHashTagList;
     }
 
 }
