@@ -23,9 +23,13 @@ public class Url extends TimeEntity {
     @Column(name = "url_id")
     private Long id;
 
-    private String thumbnail;
-    private String title;
     private String url;
+    private String title;
+
+    @Column(length = 500)
+    private String description;
+
+    private String thumbnail;
     private Long bookMarkCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,22 +43,22 @@ public class Url extends TimeEntity {
     private List<BookMark> bookMarkList = new ArrayList<>();
 
     @Builder
-    public Url(Long id, String thumbnail, String title, String url, Long bookMarkCount, User user, List<UrlHashTag> urlHashTagList, List<BookMark> bookMarkList) {
+    public Url(Long id, String url, String title, String description, String thumbnail, Long bookMarkCount, User user) {
         this.id = id;
-        this.thumbnail = thumbnail;
-        this.title = title;
         this.url = url;
+        this.title = title;
+        this.description = description;
+        this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
         this.user = user;
-        this.urlHashTagList = urlHashTagList;
-        this.bookMarkList = bookMarkList;
     }
 
     public static Url of(UrlCreateRequest request) {
         return Url.builder()
-                .thumbnail(request.getThumbnail())
-                .title(request.getTitle())
                 .url(request.getUrl())
+                .title(request.getTitle())
+                .description(request.getDescription())
+                .thumbnail(request.getThumbnail())
                 .bookMarkCount(0L)
                 .build();
     }
