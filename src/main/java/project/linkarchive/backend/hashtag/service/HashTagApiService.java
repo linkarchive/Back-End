@@ -34,6 +34,7 @@ public class HashTagApiService {
                     throw new BusinessException(ALREADY_EXIST_TAG);
                 }, () -> {
                     UserHashTag getHashTag = UserHashTag.builder()
+                            .userHashTagCount(0L)
                             .hashTag(hashTag)
                             .build();
                     userHashTagRepository.save(getHashTag);

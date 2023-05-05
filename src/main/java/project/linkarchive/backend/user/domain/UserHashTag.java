@@ -19,6 +19,8 @@ public class UserHashTag extends CreatedEntity {
     @Column(name = "user_hashtag_id")
     private Long id;
 
+    private Long userHashTagCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -28,10 +30,15 @@ public class UserHashTag extends CreatedEntity {
     private HashTag hashTag;
 
     @Builder
-    public UserHashTag(Long id, User user, HashTag hashTag) {
+    public UserHashTag(Long id, Long userHashTagCount, User user, HashTag hashTag) {
         this.id = id;
+        this.userHashTagCount = userHashTagCount;
         this.user = user;
         this.hashTag = hashTag;
+    }
+
+    public void increaseUserHashTagCount(Long count) {
+        this.userHashTagCount = ++count;
     }
 
 }
