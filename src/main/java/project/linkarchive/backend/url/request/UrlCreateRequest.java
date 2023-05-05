@@ -10,15 +10,17 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UrlCreateRequest {
 
-    private String thumbnail;
-    private String title;
     private String url;
+    private String title;
+    private String description;
+    private String thumbnail;
     private List<String> tag;
 
-    public UrlCreateRequest(String thumbnail, String title, String url, List<String> tag) {
-        this.thumbnail = thumbnail;
-        this.title = title;
+    public UrlCreateRequest(String url, String title, String description, String thumbnail, List<String> tag) {
         this.url = url;
+        this.title = title;
+        this.description = description;
+        this.thumbnail = thumbnail;
         this.tag = tag;
     }
 
