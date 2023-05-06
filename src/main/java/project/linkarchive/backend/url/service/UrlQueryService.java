@@ -6,10 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.url.domain.UrlHashTag;
 import project.linkarchive.backend.url.repository.UrlHashTagRepository;
 import project.linkarchive.backend.url.repository.UrlRepositoryImpl;
-import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListResponse;
-import project.linkarchive.backend.url.response.userLinkList.UserUrlLinkListDetailResponse;
-import project.linkarchive.backend.url.response.userLinkList.UserUrlLinkTagListDetailResponse;
-import project.linkarchive.backend.url.response.userLinkList.UserUrlTagListDetailResponse;
+import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
+import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
+import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListDetailResponse;
+import project.linkarchive.backend.url.response.userLinkList.UserTagListDetailResponse;
+import project.linkarchive.backend.user.domain.UserHashTag;
+import project.linkarchive.backend.user.repository.UserHashTagRepository;
+import project.linkarchive.backend.user.response.userLinkList.UserTagList30Response;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,38 +21,45 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class UrlQueryService {
 
+    private final UserHashTagRepository userHashTagRepository;
     private final UrlRepositoryImpl urlRepositoryImpl;
     private final UrlHashTagRepository urlHashTagRepository;
 
-    public UrlQueryService(UrlRepositoryImpl urlRepositoryImpl, UrlHashTagRepository urlHashTagRepository) {
+    public UrlQueryService(UserHashTagRepository userHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UrlHashTagRepository urlHashTagRepository) {
+        this.userHashTagRepository = userHashTagRepository;
         this.urlRepositoryImpl = urlRepositoryImpl;
         this.urlHashTagRepository = urlHashTagRepository;
     }
 
-    public UserLinkTagListResponse getUserLinkList(Pageable pageable, Long lastUrlId) {
-        List<UserUrlLinkListDetailResponse> userUrlLinkListDetailResponseList = urlRepositoryImpl.getUserLinkList(pageable, lastUrlId);
-        List<UserUrlLinkTagListDetailResponse> content = userUrlLinkListDetailResponseList.stream()
+    public UserLinkListResponse getUserLinkList(Pageable pageable, Long lastUrlId) {
+        //FIXME user가 자주 사용하는 해시태그 30개 조회로 리팩토링 필요. user 정보 없어서 조회하는걸로 대체했어요
+        List<UserHashTag> userHashTagList = userHashTagRepository.findAll();
+        List<UserTagList30Response> userTagList30ResponseList = userHashTagList.stream()
+                .map(h -> new UserTagList30Response(h.getHashTag().getId(), h.getHashTag().getTag())).collect(Collectors.toList());
+
+        //FIXME 기능에 초점을 둬서 쿼리 성능이 좋지 않아요.
+        List<UserLinkListDetailResponse> userUrlLinkListDetailResponseList = urlRepositoryImpl.getUserLinkList(pageable, lastUrlId);
+        List<UserLinkTagListDetailResponse> userLinkTagListDetailResponseList = userUrlLinkListDetailResponseList.stream()
                 .map(u -> {
                     List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(u.getUrlId());
-                    List<UserUrlTagListDetailResponse> userUrlTagListDetailResponseList = urlHashTagList.stream()
-                            .map(h -> new UserUrlTagListDetailResponse(
+                    List<UserTagListDetailResponse> userTagListDetailResponseList = urlHashTagList.stream()
+                            .map(h -> new UserTagListDetailResponse(
                                     h.getHashTag().getId(),
                                     h.getHashTag().getTag()))
                             .collect(Collectors.toList());
 
-                    return new UserUrlLinkTagListDetailResponse(
+                    return new UserLinkTagListDetailResponse(
                             u.getUrlId(),
                             u.getLink(),
                             u.getTitle(),
                             u.getDescription(),
                             u.getThumbnail(),
                             u.getBookMarkCount(),
-                            userUrlTagListDetailResponseList
+                            userTagListDetailResponseList
                     );
                 }).collect(Collectors.toList());
 
-
-        return new UserLinkTagListResponse(content);
+        return new UserLinkListResponse(userTagList30ResponseList, userLinkTagListDetailResponseList);
     }
 
 }

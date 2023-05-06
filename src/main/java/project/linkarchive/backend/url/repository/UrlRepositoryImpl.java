@@ -4,14 +4,13 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import project.linkarchive.backend.url.response.userLinkList.QUserUrlLinkListDetailResponse;
-import project.linkarchive.backend.url.response.userLinkList.UserUrlLinkListDetailResponse;
+import project.linkarchive.backend.url.response.userLinkList.QUserLinkListDetailResponse;
+import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 import static project.linkarchive.backend.url.domain.QUrl.url;
-import static project.linkarchive.backend.url.domain.QUrlHashTag.urlHashTag;
 
 @Repository
 public class UrlRepositoryImpl {
@@ -22,9 +21,9 @@ public class UrlRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<UserUrlLinkListDetailResponse> getUserLinkList(Pageable pageable, Long lastUrlId) {
-        List<UserUrlLinkListDetailResponse> content = queryFactory
-                .select(new QUserUrlLinkListDetailResponse(
+    public List<UserLinkListDetailResponse> getUserLinkList(Pageable pageable, Long lastUrlId) {
+        List<UserLinkListDetailResponse> content = queryFactory
+                .select(new QUserLinkListDetailResponse(
                         url.id,
                         url.link,
                         url.title,

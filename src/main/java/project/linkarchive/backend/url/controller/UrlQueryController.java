@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.url.response.UrlMetaDataResponse;
-import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListResponse;
+import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.service.UrlQueryService;
 
 import java.io.IOException;
@@ -70,9 +70,9 @@ public class UrlQueryController {
 
 
     @GetMapping("/links")
-    public ResponseEntity<UserLinkTagListResponse> getUserLinkList(@PageableDefault(direction = Sort.Direction.DESC) Pageable pageable,
-                                                                   @RequestParam(value = "urlId", required = false) Long lastUrlId) {
-        UserLinkTagListResponse userLinkListResponse = urlQueryService.getUserLinkList(pageable, lastUrlId);
+    public ResponseEntity<UserLinkListResponse> getUserLinkList(@PageableDefault(direction = Sort.Direction.DESC) Pageable pageable,
+                                                                @RequestParam(value = "urlId", required = false) Long lastUrlId) {
+        UserLinkListResponse userLinkListResponse = urlQueryService.getUserLinkList(pageable, lastUrlId);
         return ResponseEntity.ok(userLinkListResponse);
     }
 

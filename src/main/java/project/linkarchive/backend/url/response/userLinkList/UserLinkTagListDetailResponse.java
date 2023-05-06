@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class UserUrlLinkTagListDetailResponse {
+public class UserLinkTagListDetailResponse {
 
     private Long urlId;
     private String link;
@@ -13,16 +13,16 @@ public class UserUrlLinkTagListDetailResponse {
     private String description;
     private String thumbnail;
     private Long bookMarkCount;
-    private List<UserUrlTagListDetailResponse> userUrlTagListDetailResponseList;
+    private List<UserTagListDetailResponse> userTagListDetailResponseList;
 
-    public UserUrlLinkTagListDetailResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<UserUrlTagListDetailResponse> userUrlTagListDetailResponseList) {
+    public UserLinkTagListDetailResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<UserTagListDetailResponse> userTagListDetailResponseList) {
         this.urlId = urlId;
         this.link = link;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
-        this.userUrlTagListDetailResponseList = userUrlTagListDetailResponseList;
+        this.userTagListDetailResponseList = userTagListDetailResponseList;
     }
 
 }
