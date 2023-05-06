@@ -4,10 +4,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -37,6 +37,10 @@ public class UserEntity {
     @Column(name = "created_at")
     @CreationTimestamp
     private Timestamp createdAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 
     @Builder
     public UserEntity(Long kakaoId, String kakaoProfileImg, String kakaoNickname,

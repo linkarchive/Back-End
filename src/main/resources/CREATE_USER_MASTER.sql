@@ -7,5 +7,6 @@ CREATE TABLE user_master
     kakao_email varchar(20) NOT NULL COMMENT '이메일',
     user_role      varchar(20)     NOT NULL COMMENT '유저 권한',
     created_at     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성 시간',
+    updated_at     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수정 시간',
     PRIMARY KEY (user_code)
 ) ENGINE = InnoDB COMMENT '사용자 정보';
