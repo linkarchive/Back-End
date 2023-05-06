@@ -2,12 +2,17 @@ package project.linkarchive.backend.url.controller;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.url.response.UrlMetaDataResponse;
+import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListResponse;
+import project.linkarchive.backend.url.service.UrlQueryService;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -16,6 +21,12 @@ import java.net.URL;
 
 @RestController
 public class UrlQueryController {
+
+    private final UrlQueryService urlQueryService;
+
+    public UrlQueryController(UrlQueryService urlQueryService) {
+        this.urlQueryService = urlQueryService;
+    }
 
     @GetMapping("/url/metadata")
     public ResponseEntity<UrlMetaDataResponse> getUrlMetaData(@RequestParam(value = "url") String url) {
@@ -55,6 +66,14 @@ public class UrlQueryController {
 
         UrlMetaDataResponse urlMetaDataResponse = new UrlMetaDataResponse(title, description, thumbnail);
         return ResponseEntity.ok(urlMetaDataResponse);
+    }
+
+
+    @GetMapping("/links")
+    public ResponseEntity<UserLinkTagListResponse> getUserLinkList(@PageableDefault(direction = Sort.Direction.DESC) Pageable pageable,
+                                                                   @RequestParam(value = "urlId", required = false) Long lastUrlId) {
+        UserLinkTagListResponse userLinkListResponse = urlQueryService.getUserLinkList(pageable, lastUrlId);
+        return ResponseEntity.ok(userLinkListResponse);
     }
 
 }
