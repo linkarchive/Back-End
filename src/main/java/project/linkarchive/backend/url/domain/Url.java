@@ -23,7 +23,7 @@ public class Url extends TimeEntity {
     @Column(name = "url_id")
     private Long id;
 
-    private String url;
+    private String link;
     private String title;
 
     @Column(length = 500)
@@ -43,9 +43,9 @@ public class Url extends TimeEntity {
     private List<BookMark> bookMarkList = new ArrayList<>();
 
     @Builder
-    public Url(Long id, String url, String title, String description, String thumbnail, Long bookMarkCount, User user) {
+    public Url(Long id, String link, String title, String description, String thumbnail, Long bookMarkCount, User user) {
         this.id = id;
-        this.url = url;
+        this.link = link;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
@@ -55,7 +55,7 @@ public class Url extends TimeEntity {
 
     public static Url of(UrlCreateRequest request) {
         return Url.builder()
-                .url(request.getUrl())
+                .link(request.getLink())
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .thumbnail(request.getThumbnail())
