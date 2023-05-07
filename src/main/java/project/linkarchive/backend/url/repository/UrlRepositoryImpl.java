@@ -4,6 +4,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import project.linkarchive.backend.url.response.linkList.LinkListDetailResponse;
+import project.linkarchive.backend.url.response.linkList.QLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.QUserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 
@@ -24,6 +26,27 @@ public class UrlRepositoryImpl {
     public List<UserLinkListDetailResponse> getUserLinkList(Pageable pageable, Long lastUrlId) {
         List<UserLinkListDetailResponse> content = queryFactory
                 .select(new QUserLinkListDetailResponse(
+                        url.id,
+                        url.link,
+                        url.title,
+                        url.description,
+                        url.thumbnail,
+                        url.bookMarkCount
+                ))
+                .from(url)
+                .where(
+                        ltUrlId(lastUrlId)
+                )
+                .limit(pageable.getPageSize())
+                .orderBy(url.id.desc())
+                .fetch();
+
+        return content;
+    }
+
+    public List<LinkListDetailResponse> getLinkList(Pageable pageable, Long lastUrlId) {
+        List<LinkListDetailResponse> content = queryFactory
+                .select(new QLinkListDetailResponse(
                         url.id,
                         url.link,
                         url.title,
