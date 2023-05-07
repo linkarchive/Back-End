@@ -4,7 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
 @Getter
-public class LinkListDetailResponse {
+public class UserExcludedLinkListDetailResponse {
 
     private Long urlId;
     private String link;
@@ -14,7 +14,7 @@ public class LinkListDetailResponse {
     private Long bookMarkCount;
 
     @QueryProjection
-    public LinkListDetailResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount) {
+    public UserExcludedLinkListDetailResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount) {
         this.urlId = urlId;
         this.link = link;
         this.title = title;

@@ -3,12 +3,12 @@ package project.linkarchive.backend.url.response.linkList;
 import lombok.Getter;
 
 @Getter
-public class TagListDetailResponse {
+public class UserExcludedTagListDetailResponse {
 
     private Long tagId;
     private String tagName;
 
-    public TagListDetailResponse(Long tagId, String tagName) {
+    public UserExcludedTagListDetailResponse(Long tagId, String tagName) {
         this.tagId = tagId;
         this.tagName = tagName;
     }
