@@ -13,16 +13,16 @@ public class UserLinkTagListDetailResponse {
     private String description;
     private String thumbnail;
     private Long bookMarkCount;
-    private List<UserTagListDetailResponse> userTagListDetailResponseList;
+    private List<UserTagListDetailResponse> linkTagList;
 
-    public UserLinkTagListDetailResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<UserTagListDetailResponse> userTagListDetailResponseList) {
+    public UserLinkTagListDetailResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<UserTagListDetailResponse> linkTagList) {
         this.urlId = urlId;
         this.link = link;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
-        this.userTagListDetailResponseList = userTagListDetailResponseList;
+        this.linkTagList = linkTagList;
     }
 
 }

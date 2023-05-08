@@ -7,10 +7,10 @@ import java.util.List;
 @Getter
 public class UserTagListResponse {
 
-    private List<UserTagListDetailResponse> userTagListDetailResponseList;
+    private List<UserTagListDetailResponse> tagList;
 
-    public UserTagListResponse(List<UserTagListDetailResponse> userTagListDetailResponseList) {
-        this.userTagListDetailResponseList = userTagListDetailResponseList;
+    public UserTagListResponse(List<UserTagListDetailResponse> tagList) {
+        this.tagList = tagList;
     }
 
 }
