@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.url.response.UrlMetaDataResponse;
+import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.service.UrlQueryService;
 
@@ -74,6 +75,13 @@ public class UrlQueryController {
                                                                 @RequestParam(value = "urlId", required = false) Long lastUrlId) {
         UserLinkListResponse userLinkListResponse = urlQueryService.getUserLinkList(pageable, lastUrlId);
         return ResponseEntity.ok(userLinkListResponse);
+    }
+
+    @GetMapping("/links/archive")
+    public ResponseEntity<UserExcludedLinkListResponse> getLinkList(@PageableDefault(direction = Sort.Direction.DESC) Pageable pageable,
+                                                                    @RequestParam(value = "urlId", required = false) Long lastUrlId) {
+        UserExcludedLinkListResponse userExcludedLinkListResponse = urlQueryService.getLinkList(pageable, lastUrlId);
+        return ResponseEntity.ok(userExcludedLinkListResponse);
     }
 
 }

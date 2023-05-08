@@ -6,6 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.url.domain.UrlHashTag;
 import project.linkarchive.backend.url.repository.UrlHashTagRepository;
 import project.linkarchive.backend.url.repository.UrlRepositoryImpl;
+import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListDetailResponse;
+import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
+import project.linkarchive.backend.url.response.linkList.UserExcludedLinkTagListDetailResponse;
+import project.linkarchive.backend.url.response.linkList.UserExcludedTagListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListDetailResponse;
@@ -40,8 +44,8 @@ public class UrlQueryService {
         //FIXME 기능에 초점을 둬서 쿼리 성능이 좋지 않아요.
         List<UserLinkListDetailResponse> userUrlLinkListDetailResponseList = urlRepositoryImpl.getUserLinkList(pageable, lastUrlId);
         List<UserLinkTagListDetailResponse> userLinkTagListDetailResponseList = userUrlLinkListDetailResponseList.stream()
-                .map(u -> {
-                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(u.getUrlId());
+                .map(l -> {
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(l.getUrlId());
                     List<UserTagListDetailResponse> userTagListDetailResponseList = urlHashTagList.stream()
                             .map(h -> new UserTagListDetailResponse(
                                     h.getHashTag().getId(),
@@ -49,17 +53,43 @@ public class UrlQueryService {
                             .collect(Collectors.toList());
 
                     return new UserLinkTagListDetailResponse(
-                            u.getUrlId(),
-                            u.getLink(),
-                            u.getTitle(),
-                            u.getDescription(),
-                            u.getThumbnail(),
-                            u.getBookMarkCount(),
+                            l.getUrlId(),
+                            l.getLink(),
+                            l.getTitle(),
+                            l.getDescription(),
+                            l.getThumbnail(),
+                            l.getBookMarkCount(),
                             userTagListDetailResponseList
                     );
                 }).collect(Collectors.toList());
 
         return new UserLinkListResponse(userTagList30ResponseList, userLinkTagListDetailResponseList);
+    }
+
+    public UserExcludedLinkListResponse getLinkList(Pageable pageable, Long lastUrlId) {
+        //FIXME 기능에 초점을 둬서 쿼리 성능이 좋지 않아요.
+        //FIXME 로그인한 유저의 리스트를 제외하고 조회해야 해요.
+        List<UserExcludedLinkListDetailResponse> userExcludedLinkListDetailResponseList = urlRepositoryImpl.getLinkList(pageable, lastUrlId);
+        List<UserExcludedLinkTagListDetailResponse> userExcludedLinkTagListDetailResponseList = userExcludedLinkListDetailResponseList.stream()
+                .map(l -> {
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(l.getUrlId());
+                    List<UserExcludedTagListDetailResponse> userExcludedTagListDetailResponseList = urlHashTagList.stream()
+                            .map(h -> new UserExcludedTagListDetailResponse(
+                                    h.getHashTag().getId(),
+                                    h.getHashTag().getTag()))
+                            .collect(Collectors.toList());
+                    return new UserExcludedLinkTagListDetailResponse(
+                            l.getUrlId(),
+                            l.getLink(),
+                            l.getTitle(),
+                            l.getDescription(),
+                            l.getThumbnail(),
+                            l.getBookMarkCount(),
+                            userExcludedTagListDetailResponseList
+                    );
+                }).collect(Collectors.toList());
+
+        return new UserExcludedLinkListResponse(userExcludedLinkTagListDetailResponseList);
     }
 
 }
