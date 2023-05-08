@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum SuccessCodeConst {
 
     // SAMPLE
-    SINGUP_SUCCESS(200, "SIGNUP", "회원가입에 성공했습니다.");
+    LOGIN_SUCCESS(200, "LOGIN", "회원가입에 성공했습니다.");
 
     private int status;
     private String code;

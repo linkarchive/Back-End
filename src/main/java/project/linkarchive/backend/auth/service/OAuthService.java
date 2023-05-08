@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import project.linkarchive.backend.advice.exception.BusinessException;
+import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.auth.KakaoProfile;
 import project.linkarchive.backend.auth.OauthToken;
 import project.linkarchive.backend.jwt.JwtProperties;
@@ -67,10 +69,9 @@ public class OAuthService {
             oauthToken = objectMapper.readValue(response.getBody(), OauthToken.class);
         } catch (
                 JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new BusinessException(ExceptionCodeConst.NOT_FOUND_USER);
         }
 
-        System.out.println("oauthToken.getAccess_token() = " + oauthToken.getAccess_token());
         return oauthToken;
     }
 
@@ -176,7 +177,7 @@ public class OAuthService {
         try {
             kakaoProfile = objectMapper.readValue(kakaoProfileResponse.getBody(), KakaoProfile.class);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new BusinessException(ExceptionCodeConst.NOT_FOUND_USER);
         }
 
         return kakaoProfile;
