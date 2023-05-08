@@ -4,8 +4,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import project.linkarchive.backend.url.response.linkList.QUserExcludedLinkListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListDetailResponse;
-import project.linkarchive.backend.url.response.linkList.QLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.QUserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 
@@ -24,7 +24,7 @@ public class UrlRepositoryImpl {
     }
 
     public List<UserLinkListDetailResponse> getUserLinkList(Pageable pageable, Long lastUrlId) {
-        List<UserLinkListDetailResponse> content = queryFactory
+        return queryFactory
                 .select(new QUserLinkListDetailResponse(
                         url.id,
                         url.link,
@@ -40,13 +40,14 @@ public class UrlRepositoryImpl {
                 .limit(pageable.getPageSize())
                 .orderBy(url.id.desc())
                 .fetch();
-
-        return content;
     }
 
     public List<UserExcludedLinkListDetailResponse> getLinkList(Pageable pageable, Long lastUrlId) {
-        List<UserExcludedLinkListDetailResponse> content = queryFactory
-                .select(new QLinkListDetailResponse(
+        return queryFactory
+                .select(new QUserExcludedLinkListDetailResponse(
+                        url.user.id,
+                        url.user.name,
+                        url.user.userProfileImage.imagePath,
                         url.id,
                         url.link,
                         url.title,
@@ -55,14 +56,14 @@ public class UrlRepositoryImpl {
                         url.bookMarkCount
                 ))
                 .from(url)
+                .leftJoin(url.user)
+                .leftJoin(url.user.userProfileImage)
                 .where(
                         ltUrlId(lastUrlId)
                 )
                 .limit(pageable.getPageSize())
                 .orderBy(url.id.desc())
                 .fetch();
-
-        return content;
     }
 
     private BooleanExpression ltUrlId(Long lastUrlId) {

@@ -79,6 +79,9 @@ public class UrlQueryService {
                                     h.getHashTag().getTag()))
                             .collect(Collectors.toList());
                     return new UserExcludedLinkTagListDetailResponse(
+                            l.getUserId(),
+                            l.getName(),
+                            l.getProfileImage(),
                             l.getUrlId(),
                             l.getLink(),
                             l.getTitle(),
