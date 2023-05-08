@@ -1,16 +1,15 @@
 package project.linkarchive.backend.user.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "user_profile_image")
 public class UserProfileImage extends TimeEntity {
 
     @Id
@@ -18,17 +17,20 @@ public class UserProfileImage extends TimeEntity {
     @Column(name = "user_profile_image_id")
     private Long id;
 
-    private String imagePath;
+    @Column(name = "user_profile_img")
+    private String userProfileImage;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Builder
-    public UserProfileImage(Long id, String imagePath, User user) {
+    public UserProfileImage(Long id, String userProfileImage, User user) {
         this.id = id;
-        this.imagePath = imagePath;
+        this.userProfileImage = userProfileImage;
         this.user = user;
     }
+
+
 
 }
