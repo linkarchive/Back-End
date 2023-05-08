@@ -47,7 +47,7 @@ public class UrlRepositoryImpl {
                 .select(new QUserExcludedLinkListDetailResponse(
                         url.user.id,
                         url.user.name,
-                        url.user.userProfileImage.profileImage,
+                        url.user.profileImage.profileImage,
                         url.id,
                         url.link,
                         url.title,
@@ -57,7 +57,7 @@ public class UrlRepositoryImpl {
                 ))
                 .from(url)
                 .leftJoin(url.user)
-                .leftJoin(url.user.userProfileImage)
+                .leftJoin(url.user.profileImage)
                 .where(
                         ltUrlId(lastUrlId)
                 )
