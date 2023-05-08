@@ -48,3 +48,4 @@ out/
 
 ### YML ###
 **.yml
+!appspec.yml
