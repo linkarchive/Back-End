@@ -47,7 +47,7 @@ public class UrlRepositoryImpl {
                 .select(new QUserExcludedLinkListDetailResponse(
                         url.user.id,
                         url.user.name,
-                        url.user.userProfileImage.imagePath,
+                        url.user.userProfileImage.profileImage,
                         url.id,
                         url.link,
                         url.title,

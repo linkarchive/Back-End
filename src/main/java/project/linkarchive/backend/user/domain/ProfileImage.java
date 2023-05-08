@@ -9,28 +9,26 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "user_profile_image")
-public class UserProfileImage extends TimeEntity {
+@Table(name = "profile_image")
+public class ProfileImage extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_profile_image_id")
+    @Column(name = "profile_image_id")
     private Long id;
 
-    @Column(name = "user_profile_img")
-    private String userProfileImage;
+    @Column(name = "profile_image")
+    private String profileImage;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Builder
-    public UserProfileImage(Long id, String userProfileImage, User user) {
+    public ProfileImage(Long id, String profileImage, User user) {
         this.id = id;
-        this.userProfileImage = userProfileImage;
+        this.profileImage = profileImage;
         this.user = user;
     }
-
-
 
 }

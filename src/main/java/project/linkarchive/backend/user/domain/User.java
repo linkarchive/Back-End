@@ -23,21 +23,19 @@ public class User extends TimeEntity {
     private Long id;
 
     @Column(name = "social_id")
-    private Long socialId;
+    private String socialId;
+
     @Column(name = "email")
     private String email;
 
     @Column(name = "user_name")
-    private String userName;
+    private String name;
+
     @Column(name = "user_introduce")
     private String introduce;
 
-    @Column(name = "user_role")
-    private String userRole;
-
-
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private UserProfileImage userProfileImage;
+    private ProfileImage profileImage;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private RefreshToken refreshToken;
@@ -49,16 +47,12 @@ public class User extends TimeEntity {
     private List<BookMark> bookMarkList = new ArrayList<>();
 
     @Builder
-    public User(Long socialId, String email, String userName, String introduce, String userRole, RefreshToken refreshToken, UserProfileImage userProfileImage, List<UserHashTag> userHashTagList, List<BookMark> bookMarkList) {
+    public User(Long id, String socialId, String email, String name, String introduce) {
+        this.id = id;
         this.socialId = socialId;
         this.email = email;
-        this.userName = userName;
+        this.name = name;
         this.introduce = introduce;
-        this.userRole = userRole;
-        this.refreshToken = refreshToken;
-        this.userProfileImage = userProfileImage;
-        this.userHashTagList = userHashTagList;
-        this.bookMarkList = bookMarkList;
     }
 
 }
