@@ -6,6 +6,9 @@ import lombok.Getter;
 @Getter
 public class UserExcludedLinkListDetailResponse {
 
+    private Long userId;
+    private String name;
+    private String profileImage;
     private Long urlId;
     private String link;
     private String title;
@@ -14,7 +17,10 @@ public class UserExcludedLinkListDetailResponse {
     private Long bookMarkCount;
 
     @QueryProjection
-    public UserExcludedLinkListDetailResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount) {
+    public UserExcludedLinkListDetailResponse(Long userId, String name, String profileImage, Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount) {
+        this.userId = userId;
+        this.name = name;
+        this.profileImage = profileImage;
         this.urlId = urlId;
         this.link = link;
         this.title = title;
