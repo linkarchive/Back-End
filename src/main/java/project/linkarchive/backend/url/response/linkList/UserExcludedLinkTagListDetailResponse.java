@@ -13,16 +13,16 @@ public class UserExcludedLinkTagListDetailResponse {
     private String description;
     private String thumbnail;
     private Long bookMarkCount;
-    private List<UserExcludedTagListDetailResponse> userExcludedTagListDetailResponseList;
+    private List<UserExcludedTagListDetailResponse> linkTagList;
 
-    public UserExcludedLinkTagListDetailResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<UserExcludedTagListDetailResponse> userExcludedTagListDetailResponseList) {
+    public UserExcludedLinkTagListDetailResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<UserExcludedTagListDetailResponse> linkTagList) {
         this.urlId = urlId;
         this.link = link;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
-        this.userExcludedTagListDetailResponseList = userExcludedTagListDetailResponseList;
+        this.linkTagList = linkTagList;
     }
 
 }

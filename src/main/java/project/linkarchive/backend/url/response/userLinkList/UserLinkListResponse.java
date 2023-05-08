@@ -8,12 +8,12 @@ import java.util.List;
 @Getter
 public class UserLinkListResponse {
 
-    private List<UserTagList30Response> userTagList30ResponseList;
-    private List<UserLinkTagListDetailResponse> userUrlLinkListDetailResponseList;
+    private List<UserTagList30Response> userTagList;
+    private List<UserLinkTagListDetailResponse> userLinkList;
 
-    public UserLinkListResponse(List<UserTagList30Response> userTagList30ResponseList, List<UserLinkTagListDetailResponse> userUrlLinkListDetailResponseList) {
-        this.userTagList30ResponseList = userTagList30ResponseList;
-        this.userUrlLinkListDetailResponseList = userUrlLinkListDetailResponseList;
+    public UserLinkListResponse(List<UserTagList30Response> userTagList, List<UserLinkTagListDetailResponse> userLinkList) {
+        this.userTagList = userTagList;
+        this.userLinkList = userLinkList;
     }
 
 }
