@@ -10,3 +10,4 @@ CREATE TABLE user
     updated_at        datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수정 시간',
     PRIMARY KEY (user_id)
 ) ENGINE = InnoDB COMMENT '사용자 정보';
+
