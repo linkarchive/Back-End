@@ -63,4 +63,8 @@ public class Url extends TimeEntity {
                 .build();
     }
 
+    public void increaseBookMarkCount(Long bookMarkCount) {
+        this.bookMarkCount = ++bookMarkCount;
+    }
+    
 }
