@@ -2,10 +2,13 @@ package project.linkarchive.backend.bookmark.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import project.linkarchive.backend.bookmark.domain.BookMark;
-import project.linkarchive.backend.url.domain.Url;
+
+import java.util.Optional;
 
 public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
 
-    Boolean existsByUrl(Url url);
+    Boolean existsByUrlId(Long urlId);
+
+    Optional<BookMark> findByUrlId(Long urlId);
 
 }

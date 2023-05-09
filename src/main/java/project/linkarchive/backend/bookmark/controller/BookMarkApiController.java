@@ -31,7 +31,7 @@ public class BookMarkApiController {
     //FIXME 유저에 관한 정보가 없어요.
     @DeleteMapping("/mark/url/{urlId}")
     public ResponseEntity<SuccessResponse> bookMarkCancel(@PathVariable(value = "urlId") Long urlId) {
-
+        bookMarkApiService.bookMarkCancel(urlId);
         return ResponseEntity.ok(new SuccessResponse(BOOK_MARK_CANCEL));
     }
 

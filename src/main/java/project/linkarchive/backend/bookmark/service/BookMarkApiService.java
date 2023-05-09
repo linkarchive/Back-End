@@ -8,8 +8,7 @@ import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.url.domain.Url;
 import project.linkarchive.backend.url.repository.UrlRepository;
 
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.ALREADY_EXIST_BOOKMARK;
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_URL;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Service
 @Transactional
@@ -25,12 +24,8 @@ public class BookMarkApiService {
 
     //FIXME 동시성 이슈에 대한 해결이 필요해요.
     public void bookMark(Long urlId) {
-        Url url = urlRepository.findById(urlId)
-                .orElseThrow(() -> new BusinessException(NOT_FOUND_URL));
-
-        if (bookMarkRepository.existsByUrl(url)) {
-            throw new BusinessException(ALREADY_EXIST_BOOKMARK);
-        }
+        Url url = getUrlValidation(urlId);
+        existUrlValidation(url.getId());
 
         BookMark bookMark = BookMark.builder()
                 .url(url)
@@ -41,6 +36,25 @@ public class BookMarkApiService {
     }
 
     //FIXME 동시성 이슈에 대한 해결이 필요해요.
+    public void bookMarkCancel(Long urlId) {
+        Url url = getUrlValidation(urlId);
 
+        BookMark bookMark = bookMarkRepository.findByUrlId(url.getId())
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_BOOKMARK));
+        bookMarkRepository.delete(bookMark);
+
+        url.decreaseBookMarkCount(url.getBookMarkCount());
+    }
+
+    private Url getUrlValidation(Long urlId) {
+        return urlRepository.findById(urlId)
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_URL));
+    }
+
+    private void existUrlValidation(Long urlId) {
+        if (bookMarkRepository.existsByUrlId(urlId)) {
+            throw new BusinessException(ALREADY_EXIST_BOOKMARK);
+        }
+    }
 
 }
