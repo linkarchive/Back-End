@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -38,13 +37,13 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class OAuthService {
 
     private final UserRepository userRepository;
     private final UserProfileImageRepository userProfileImageRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+
     @Value("${oauth.client.registration.kakao.grant_type}")
     private String GRANT_TYPE;
     @Value("${oauth.client.registration.kakao.client_id}")
@@ -52,7 +51,19 @@ public class OAuthService {
     @Value("${oauth.client.registration.kakao.redirect_uri}")
     private String REDIRECT_URI;
 
-    public OauthToken getAccessToken(String code) {
+    public OAuthService(UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
+        this.userRepository = userRepository;
+        this.userProfileImageRepository = userProfileImageRepository;
+        this.refreshTokenRepository = refreshTokenRepository;
+    }
+
+    public String login(String code) {
+        OauthToken token = getToken(code);
+        User user = saveUser(token.getAccess_token());
+        return createToken(user);
+    }
+
+    public OauthToken getToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
@@ -85,11 +96,6 @@ public class OAuthService {
         }
 
         return oauthToken;
-    }
-
-    public String login(String token) {
-        User user = saveUser(token);
-        return createToken(user);
     }
 
     private User saveUser(String token) {
@@ -144,7 +150,6 @@ public class OAuthService {
         Optional<RefreshToken> oldRefreshToken = refreshTokenRepository.findByUserId(user.getId());
         if(oldRefreshToken.isPresent()){
             oldRefreshToken.get().renewalToken(jwtRefreshToken);
-            refreshTokenRepository.save(oldRefreshToken.get());
         } else {
             refreshTokenRepository.save(refreshToken);
         }
