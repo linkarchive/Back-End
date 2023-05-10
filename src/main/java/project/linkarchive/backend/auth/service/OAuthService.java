@@ -22,10 +22,10 @@ import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.jwt.JwtProperties;
-import project.linkarchive.backend.user.domain.LinkarchiveToken;
+import project.linkarchive.backend.user.domain.RefreshToken;
 import project.linkarchive.backend.user.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.user.repository.LinkarchiveTokenRepository;
+import project.linkarchive.backend.user.repository.RefreshTokenRepository;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 
@@ -34,7 +34,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +41,7 @@ public class OAuthService {
 
     private final UserRepository userRepository;
     private final UserProfileImageRepository userProfileImageRepository;
-    private final LinkarchiveTokenRepository linkarchiveTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     @Value("${oauth.client.registration.kakao.grant_type}")
     private String GRANT_TYPE;
     @Value("${oauth.client.registration.kakao.client_id}")
@@ -85,7 +84,7 @@ public class OAuthService {
         return oauthToken;
     }
 
-    public LinkarchiveToken login(String token){
+    public String login(String token) {
         User user = saveUser(token);
         return createToken(user);
     }
@@ -111,21 +110,13 @@ public class OAuthService {
         return user;
     }
 
-    private LinkarchiveToken createToken(User user) {
+    private String createToken(User user) {
 
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
 
         long expirationMillis = nowMillis + (5 * 60 * 1000);
         Date expiration = new Date(expirationMillis);
-
-        if(linkarchiveTokenRepository.findById(user.getId()).isPresent()) {
-
-            //FIXME: 최초 로그인이 아닌 경우 토큰의 유효성을 검사한 후 유효한 토큰을 보내줘야합니다.
-            Optional<LinkarchiveToken> linkarchiveToken = linkarchiveTokenRepository.findByUserId(user.getId());
-
-            return linkarchiveToken.get();
-        }
 
         //FIXME: accessToken,refreshToken 유효기간 재설정 필요합니다.
         String jwtAccessToken = Jwts.builder()
@@ -141,15 +132,19 @@ public class OAuthService {
                 .signWith(getSigningKey())
                 .compact();
 
-        LinkarchiveToken linkarchiveToken = LinkarchiveToken.builder()
-                .accessToken(jwtAccessToken)
+        RefreshToken refreshToken = RefreshToken.builder()
                 .refreshToken(jwtRefreshToken)
                 .user(user)
                 .build();
 
-        linkarchiveTokenRepository.save(linkarchiveToken);
-
-        return linkarchiveToken;
+        if (refreshTokenRepository.findByUserId(user.getId()) != null) {
+            RefreshToken oldRefreshToken = refreshTokenRepository.findByUserId(user.getId());
+            oldRefreshToken.setRefreshToken(refreshToken.getRefreshToken());
+            refreshTokenRepository.save(oldRefreshToken);
+        } else {
+            refreshTokenRepository.save(refreshToken);
+        }
+        return jwtAccessToken;
     }
 
     private Date toDate(LocalDateTime localDateTime) {
@@ -173,7 +168,7 @@ public class OAuthService {
     public Long getUserId(String token) {
         Long userId;
 
-        if(validate(token)) {
+        if (validate(token)) {
             userId = Long.valueOf(Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()

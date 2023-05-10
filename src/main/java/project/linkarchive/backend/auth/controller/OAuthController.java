@@ -10,7 +10,7 @@ import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.auth.service.OAuthService;
 import project.linkarchive.backend.jwt.JwtProperties;
-import project.linkarchive.backend.user.domain.LinkarchiveToken;
+import project.linkarchive.backend.user.domain.RefreshToken;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,12 +21,12 @@ public class OAuthController {
     @PostMapping("/auth/kakao")
     public ResponseEntity<LoginResponse> getLogin(@RequestParam("code") String code) {
         OauthToken oauthToken = oAuthService.getAccessToken(code);
-        LinkarchiveToken linkarchiveToken = oAuthService.login(oauthToken.getAccess_token());
+        String refreshToken = oAuthService.login(oauthToken.getAccess_token());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + linkarchiveToken );
+        headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + refreshToken);
 
-        return ResponseEntity.ok(new LoginResponse(linkarchiveToken.getAccessToken(), linkarchiveToken.getRefreshToken()));
+        return ResponseEntity.ok(new LoginResponse(refreshToken));
 
     }
 
