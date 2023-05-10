@@ -13,7 +13,7 @@ public class RefreshToken extends CreatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "refreshToken_id")
+    @Column(name = "refresh_token_id")
     private Long id;
 
     @Column(length = 500)
