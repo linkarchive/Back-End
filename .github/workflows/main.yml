@@ -27,6 +27,18 @@ jobs:
         java-version: '17'
         distribution: 'corretto'
         
+    - name: make application.yml
+      if: contains(github.ref, 'dev') 
+      run: |
+        cd ./src/main/resources
+        touch ./application.yml
+        echo "${{ secrets.YML_BASE }}" > ./application.yml
+        touch ./application-dev.yml
+        echo "${{ secrets.YML_DEV }}" > ./application-dev.yml
+        touch ./application-oauth.yml
+        echo "${{ secrets.YML_AUTH }}" > ./application-oauth.yml
+      shell: bash
+        
     - name: gradlew에 실행 권한 부여
       run: chmod +x ./gradlew
       shell: bash

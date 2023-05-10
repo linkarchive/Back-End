@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PROJECT_ROOT="/home/ubuntu/linkarchive"
+PROJECT_ROOT="/home/ubuntu/linkarchive/build/libs"
 JAR_FILE="$PROJECT_ROOT/backend-0.0.1-SNAPSHOT.jar"
 
 DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
