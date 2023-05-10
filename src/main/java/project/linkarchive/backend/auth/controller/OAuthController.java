@@ -21,12 +21,12 @@ public class OAuthController {
     @PostMapping("/auth/kakao")
     public ResponseEntity<LoginResponse> getLogin(@RequestParam("code") String code) {
         OauthToken oauthToken = oAuthService.getAccessToken(code);
-        String refreshToken = oAuthService.login(oauthToken.getAccess_token());
+        String accessToken = oAuthService.login(oauthToken.getAccess_token());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + refreshToken);
+        headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
 
-        return ResponseEntity.ok(new LoginResponse(refreshToken));
+        return ResponseEntity.ok(new LoginResponse(accessToken));
 
     }
 
