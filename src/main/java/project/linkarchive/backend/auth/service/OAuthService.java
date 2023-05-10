@@ -22,8 +22,8 @@ import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.jwt.JwtProperties;
-import project.linkarchive.backend.user.domain.RefreshToken;
 import project.linkarchive.backend.user.domain.ProfileImage;
+import project.linkarchive.backend.user.domain.RefreshToken;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.RefreshTokenRepository;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
@@ -34,6 +34,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -70,7 +71,7 @@ public class OAuthService {
                     kakaoTokenRequest,
                     String.class);
         } catch (HttpClientErrorException e) {
-            throw new BusinessException(ExceptionCodeConst.BAD_REQUEST);
+            throw new BusinessException(ExceptionCodeConst.INVALID_AUTHORIZATION_CODE);
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -137,14 +138,17 @@ public class OAuthService {
                 .user(user)
                 .build();
 
-        if (refreshTokenRepository.findByUserId(user.getId()) != null) {
-            RefreshToken oldRefreshToken = refreshTokenRepository.findByUserId(user.getId());
-            oldRefreshToken.setRefreshToken(refreshToken.getRefreshToken());
-            refreshTokenRepository.save(oldRefreshToken);
+        if (refreshTokenRepository.findByUserId(user.getId()).isPresent()) {
+            renewRefreshToken(refreshTokenRepository.findByUserId(user.getId()), refreshToken);
         } else {
             refreshTokenRepository.save(refreshToken);
         }
         return jwtAccessToken;
+    }
+
+    private void renewRefreshToken(Optional<RefreshToken> oldRefreshToken, RefreshToken refreshToken) {
+        oldRefreshToken.get().setRefreshToken(refreshToken.getRefreshToken());
+        refreshTokenRepository.save(oldRefreshToken.get());
     }
 
     private Date toDate(LocalDateTime localDateTime) {

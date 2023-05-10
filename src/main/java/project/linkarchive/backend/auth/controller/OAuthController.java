@@ -10,7 +10,6 @@ import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.auth.service.OAuthService;
 import project.linkarchive.backend.jwt.JwtProperties;
-import project.linkarchive.backend.user.domain.RefreshToken;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,15 +26,6 @@ public class OAuthController {
         headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
 
         return ResponseEntity.ok(new LoginResponse(accessToken));
-
-    }
-
-    @PostMapping("/token")
-    public Long getUserId(@RequestParam("token") String token){
-
-        Long userId = oAuthService.getUserId(token);
-
-        return userId;
     }
 
 }
