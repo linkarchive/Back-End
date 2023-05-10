@@ -37,9 +37,6 @@ public class User extends TimeEntity {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ProfileImage profileImage;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private RefreshToken refreshToken;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserHashTag> userHashTagList = new ArrayList<>();
 

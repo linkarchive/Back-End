@@ -18,7 +18,7 @@ public class OAuthController {
     private final OAuthService oAuthService;
 
     @PostMapping("/auth/kakao")
-    public ResponseEntity<LoginResponse> getLogin(@RequestParam("code") String code) {
+    public ResponseEntity<LoginResponse> login(@RequestParam("code") String code) {
         OauthToken oauthToken = oAuthService.getAccessToken(code);
         String accessToken = oAuthService.login(oauthToken.getAccess_token());
 

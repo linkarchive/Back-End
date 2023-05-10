@@ -7,7 +7,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RefreshToken extends CreatedEntity {
 
@@ -28,6 +27,10 @@ public class RefreshToken extends CreatedEntity {
         this.id = id;
         this.refreshToken = refreshToken;
         this.user = user;
+    }
+
+    public void renewalToken(String token){
+        this.refreshToken = token;
     }
 
 }
