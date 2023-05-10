@@ -1,15 +1,13 @@
 package project.linkarchive.backend.user.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RefreshToken extends CreatedEntity {
 

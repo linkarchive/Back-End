@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import project.linkarchive.backend.advice.exception.BusinessException;
 import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
@@ -22,7 +23,9 @@ import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.jwt.JwtProperties;
 import project.linkarchive.backend.user.domain.ProfileImage;
+import project.linkarchive.backend.user.domain.RefreshToken;
 import project.linkarchive.backend.user.domain.User;
+import project.linkarchive.backend.user.repository.RefreshTokenRepository;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 
@@ -31,6 +34,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +42,7 @@ public class OAuthService {
 
     private final UserRepository userRepository;
     private final UserProfileImageRepository userProfileImageRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     @Value("${oauth.client.registration.kakao.grant_type}")
     private String GRANT_TYPE;
     @Value("${oauth.client.registration.kakao.client_id}")
@@ -58,11 +63,16 @@ public class OAuthService {
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
 
         RestTemplate rt = new RestTemplate();
-        ResponseEntity<String> response = rt.exchange(
-                "https://kauth.kakao.com/oauth/token",
-                HttpMethod.POST,
-                kakaoTokenRequest,
-                String.class);
+        ResponseEntity<String> response;
+        try {
+            response = rt.exchange(
+                    "https://kauth.kakao.com/oauth/token",
+                    HttpMethod.POST,
+                    kakaoTokenRequest,
+                    String.class);
+        } catch (HttpClientErrorException e) {
+            throw new BusinessException(ExceptionCodeConst.INVALID_AUTHORIZATION_CODE);
+        }
 
         ObjectMapper objectMapper = new ObjectMapper();
         OauthToken oauthToken;
@@ -75,7 +85,12 @@ public class OAuthService {
         return oauthToken;
     }
 
-    public String saveUserAndGetToken(String token) {
+    public String login(String token) {
+        User user = saveUser(token);
+        return createToken(user);
+    }
+
+    private User saveUser(String token) {
         KakaoProfile profile = findProfile(token);
 
         User user = userRepository.findByEmail(profile.getKakaoAccount().getEmail())
@@ -93,16 +108,47 @@ public class OAuthService {
                         .build())
                 ));
 
-        return createToken(user);
+        return user;
     }
 
-    public String createToken(User user) {
-        String jwtToken = Jwts.builder()
-                .setId(user.getSocialId())
-                .setExpiration(toDate(user.getCreatedAt()))
+    private String createToken(User user) {
+
+        long nowMillis = System.currentTimeMillis();
+        Date now = new Date(nowMillis);
+
+        long expirationMillis = nowMillis + (5 * 60 * 1000);
+        Date expiration = new Date(expirationMillis);
+
+        //FIXME: accessToken,refreshToken 유효기간 재설정 필요합니다.
+        String jwtAccessToken = Jwts.builder()
+                .setId(user.getId().toString())
+                .setExpiration(expiration)
                 .signWith(getSigningKey())
                 .compact();
-        return jwtToken;
+
+        String jwtRefreshToken = Jwts.builder()
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .setId(user.getId().toString())
+                .signWith(getSigningKey())
+                .compact();
+
+        RefreshToken refreshToken = RefreshToken.builder()
+                .refreshToken(jwtRefreshToken)
+                .user(user)
+                .build();
+
+        if (refreshTokenRepository.findByUserId(user.getId()).isPresent()) {
+            renewRefreshToken(refreshTokenRepository.findByUserId(user.getId()), refreshToken);
+        } else {
+            refreshTokenRepository.save(refreshToken);
+        }
+        return jwtAccessToken;
+    }
+
+    private void renewRefreshToken(Optional<RefreshToken> oldRefreshToken, RefreshToken refreshToken) {
+        oldRefreshToken.get().setRefreshToken(refreshToken.getRefreshToken());
+        refreshTokenRepository.save(oldRefreshToken.get());
     }
 
     private Date toDate(LocalDateTime localDateTime) {
@@ -124,12 +170,19 @@ public class OAuthService {
     }
 
     public Long getUserId(String token) {
-        Long userId = Long.valueOf(Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getId());
+        Long userId;
+
+        if (validate(token)) {
+            userId = Long.valueOf(Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getId());
+        } else {
+            //FIXME: 토큰 유효기간 수정 후 토큰 만료, 유효하지 않음, 시그니처 다름 등의 예외 처리가 필요합니다.
+            throw new BusinessException(ExceptionCodeConst.INVALID_TOKEN);
+        }
         return userId;
     }
 
