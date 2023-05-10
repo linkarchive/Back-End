@@ -51,6 +51,9 @@ public class OAuthService {
     @Value("${oauth.client.registration.kakao.redirect_uri}")
     private String REDIRECT_URI;
 
+    @Value("${oauth.client.registration.kakao.client_secret}")
+    private String CLIENT_SECRET;
+
     public OAuthService(UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
@@ -72,7 +75,7 @@ public class OAuthService {
         params.add("client_id", CLIENT_ID);
         params.add("redirect_uri", REDIRECT_URI);
         params.add("code", code);
-        params.add("client_secret", "tFs1H2bp9FrJU4AwV1CCUKSiSdbVM9eR");
+        params.add("client_secret", CLIENT_SECRET);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
 
