@@ -29,6 +29,7 @@ import project.linkarchive.backend.user.repository.RefreshTokenRepository;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 
+import javax.transaction.Transactional;
 import java.security.Key;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OAuthService {
 
     private final UserRepository userRepository;
@@ -138,18 +140,17 @@ public class OAuthService {
                 .user(user)
                 .build();
 
-        if (refreshTokenRepository.findByUserId(user.getId()).isPresent()) {
-            renewRefreshToken(refreshTokenRepository.findByUserId(user.getId()), refreshToken);
+
+        Optional<RefreshToken> oldRefreshToken = refreshTokenRepository.findByUserId(user.getId());
+        if(oldRefreshToken.isPresent()){
+            oldRefreshToken.get().renewalToken(jwtRefreshToken);
+            refreshTokenRepository.save(oldRefreshToken.get());
         } else {
             refreshTokenRepository.save(refreshToken);
         }
         return jwtAccessToken;
     }
 
-    private void renewRefreshToken(Optional<RefreshToken> oldRefreshToken, RefreshToken refreshToken) {
-        oldRefreshToken.get().setRefreshToken(refreshToken.getRefreshToken());
-        refreshTokenRepository.save(oldRefreshToken.get());
-    }
 
     private Date toDate(LocalDateTime localDateTime) {
         Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
