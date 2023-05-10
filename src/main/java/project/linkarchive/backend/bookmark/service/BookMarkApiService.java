@@ -32,7 +32,7 @@ public class BookMarkApiService {
                 .build();
         bookMarkRepository.save(bookMark);
 
-        url.increaseBookMarkCount(url.getBookMarkCount());
+        bookMarkRepository.increaseBookMarkCount(url.getId());
     }
 
     //FIXME 동시성 이슈에 대한 해결이 필요해요.
@@ -43,7 +43,7 @@ public class BookMarkApiService {
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_BOOKMARK));
         bookMarkRepository.delete(bookMark);
 
-        url.decreaseBookMarkCount(url.getBookMarkCount());
+        bookMarkRepository.decreaseBookMarkCount(url.getId());
     }
 
     private Url getUrlValidation(Long urlId) {
