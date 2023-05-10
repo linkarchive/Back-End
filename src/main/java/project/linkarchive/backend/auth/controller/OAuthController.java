@@ -10,6 +10,7 @@ import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.auth.service.OAuthService;
 import project.linkarchive.backend.jwt.JwtProperties;
+import project.linkarchive.backend.user.domain.LinkarchiveToken;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,12 +21,21 @@ public class OAuthController {
     @PostMapping("/auth/kakao")
     public ResponseEntity<LoginResponse> getLogin(@RequestParam("code") String code) {
         OauthToken oauthToken = oAuthService.getAccessToken(code);
-        String jwtToken = oAuthService.saveUserAndGetToken(oauthToken.getAccess_token());
+        LinkarchiveToken linkarchiveToken = oAuthService.login(oauthToken.getAccess_token());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
+        headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + linkarchiveToken );
 
-        return ResponseEntity.ok(new LoginResponse(oauthToken.getAccess_token()));
+        return ResponseEntity.ok(new LoginResponse(linkarchiveToken.getAccessToken(), linkarchiveToken.getRefreshToken()));
+
+    }
+
+    @PostMapping("/token")
+    public Long getUserId(@RequestParam("token") String token){
+
+        Long userId = oAuthService.getUserId(token);
+
+        return userId;
     }
 
 }
