@@ -59,7 +59,7 @@ public class Url extends TimeEntity {
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .thumbnail(request.getThumbnail())
-                .bookMarkCount(0L)
+                .bookMarkCount(7L)
                 .build();
     }
     
