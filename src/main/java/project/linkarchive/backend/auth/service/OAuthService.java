@@ -72,6 +72,7 @@ public class OAuthService {
         params.add("client_id", CLIENT_ID);
         params.add("redirect_uri", REDIRECT_URI);
         params.add("code", code);
+        params.add("client_secret", "tFs1H2bp9FrJU4AwV1CCUKSiSdbVM9eR");
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
 
@@ -124,7 +125,7 @@ public class OAuthService {
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
 
-        long expirationMillis = nowMillis + (5 * 60 * 1000);
+        long expirationMillis = nowMillis + (5 * 24 * 60 * 60 * 1000);
         Date expiration = new Date(expirationMillis);
 
         //FIXME: accessToken,refreshToken 유효기간 재설정 필요합니다.
