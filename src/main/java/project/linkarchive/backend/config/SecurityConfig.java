@@ -8,7 +8,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import project.linkarchive.backend.auth.service.OAuthService;
-import project.linkarchive.backend.security.FailureHandler;
+import project.linkarchive.backend.security.AuthenticationEntryPointImpl;
 import project.linkarchive.backend.security.TokenAuthenticationFilter;
 
 @Configuration
@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(new TokenAuthenticationFilter(oAuthService), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
-                .authenticationEntryPoint(new FailureHandler())
+                .authenticationEntryPoint(new AuthenticationEntryPointImpl())
                 .and()
                 .build();
     }
