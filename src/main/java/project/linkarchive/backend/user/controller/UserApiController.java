@@ -12,7 +12,7 @@ public class UserApiController {
     @GetMapping("/user")
     public AuthInfo getUserProfile(
             AuthInfo authInfo
-    ){
+    ) {
         return authInfo;
     }
 

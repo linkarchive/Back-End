@@ -25,11 +25,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         String[] tokenData = tokenHeader.split(" ");
-        if (tokenData.length != 2) {
+
+        if (!tokenData[0].equalsIgnoreCase("bearer")) {
             filterChain.doFilter(request, response);
             return;
         }
-        if (!tokenData[0].equalsIgnoreCase("bearer")) {
+        if (tokenData.length != 2) {
             filterChain.doFilter(request, response);
             return;
         }
