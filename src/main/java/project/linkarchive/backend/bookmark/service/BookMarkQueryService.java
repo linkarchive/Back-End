@@ -13,7 +13,7 @@ import project.linkarchive.backend.url.domain.UrlHashTag;
 import project.linkarchive.backend.url.repository.UrlHashTagRepository;
 import project.linkarchive.backend.user.domain.UserHashTag;
 import project.linkarchive.backend.user.repository.UserHashTagRepository;
-import project.linkarchive.backend.user.response.userLinkList.UserTagList30Response;
+import project.linkarchive.backend.user.response.UserTagList30Response;
 
 import java.util.List;
 import java.util.stream.Collectors;
