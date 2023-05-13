@@ -29,7 +29,7 @@ public class UrlQueryController {
         this.urlQueryService = urlQueryService;
     }
 
-    @GetMapping("/url/metadata")
+    @GetMapping("/link/metadata")
     public ResponseEntity<UrlMetaDataResponse> getUrlMetaData(@RequestParam(value = "url") String url) {
         URL urlObject;
         try {
