@@ -30,7 +30,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        if (tokenData.length != 1) {
+        if (tokenData.length != 2) {
             filterChain.doFilter(request, response);
             return;
         }
