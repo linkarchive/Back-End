@@ -1,11 +1,9 @@
 package project.linkarchive.backend.user.response;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import project.linkarchive.backend.user.domain.User;
 
 @Getter
-@RequiredArgsConstructor
 public class UserProfileResponse {
     private Long id;
     private String name;
