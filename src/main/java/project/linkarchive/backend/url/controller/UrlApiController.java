@@ -19,7 +19,7 @@ public class UrlApiController {
         this.urlApiService = urlApiService;
     }
 
-    @PostMapping("/url")
+    @PostMapping("/link")
     public ResponseEntity<SuccessResponse> create(@RequestBody UrlCreateRequest request) {
         urlApiService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(SuccessCodeConst.URL_CREATE));
