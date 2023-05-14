@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.url.response.UrlMetaDataResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.service.UrlQueryService;
 
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 @RestController
 public class UrlQueryController {
@@ -84,4 +86,13 @@ public class UrlQueryController {
         return ResponseEntity.ok(userExcludedLinkListResponse);
     }
 
+    @GetMapping("/links/user")
+    public ResponseEntity<List<OtherUserLinkListResponse>> getOtherUserLinkList(
+            @RequestParam(value = "userId") Long userId
+    ) {
+        List<OtherUserLinkListResponse> otherUserLinkListResponses = urlQueryService.getOtherUserLinkList(userId);
+        return ResponseEntity.ok(otherUserLinkListResponses);
+    }
 }
+
+

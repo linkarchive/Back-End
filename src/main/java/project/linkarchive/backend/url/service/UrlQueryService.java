@@ -1,15 +1,19 @@
 package project.linkarchive.backend.url.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.linkarchive.backend.url.domain.Url;
 import project.linkarchive.backend.url.domain.UrlHashTag;
 import project.linkarchive.backend.url.repository.UrlHashTagRepository;
+import project.linkarchive.backend.url.repository.UrlRepository;
 import project.linkarchive.backend.url.repository.UrlRepositoryImpl;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkTagListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedTagListDetailResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListDetailResponse;
@@ -22,18 +26,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UrlQueryService {
 
     private final UserHashTagRepository userHashTagRepository;
     private final UrlRepositoryImpl urlRepositoryImpl;
     private final UrlHashTagRepository urlHashTagRepository;
+    private final UrlRepository urlRepository;
 
-    public UrlQueryService(UserHashTagRepository userHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UrlHashTagRepository urlHashTagRepository) {
-        this.userHashTagRepository = userHashTagRepository;
-        this.urlRepositoryImpl = urlRepositoryImpl;
-        this.urlHashTagRepository = urlHashTagRepository;
-    }
+
+//    public UrlQueryService(UserHashTagRepository userHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UrlHashTagRepository urlHashTagRepository) {
+//        this.userHashTagRepository = userHashTagRepository;
+//        this.urlRepositoryImpl = urlRepositoryImpl;
+//        this.urlHashTagRepository = urlHashTagRepository;
+//    }
 
     public UserLinkListResponse getUserLinkList(Pageable pageable, Long lastUrlId) {
         //FIXME user가 자주 사용하는 해시태그 30개 조회로 리팩토링 필요. user 정보 없어서 조회하는걸로 대체했어요
@@ -93,6 +100,15 @@ public class UrlQueryService {
                 }).collect(Collectors.toList());
 
         return new UserExcludedLinkListResponse(userExcludedLinkTagListDetailResponseList);
+    }
+
+    public List<OtherUserLinkListResponse> getOtherUserLinkList(Long userId){
+        List<Url> url = urlRepository.getByUserId(userId);
+        return responseBoard(url);
+    }
+
+    private List<OtherUserLinkListResponse> responseBoard(List<Url> urlList) {
+        return urlList.stream().map(OtherUserLinkListResponse::new).toList();
     }
 
 }

@@ -62,5 +62,14 @@ public class Url extends TimeEntity {
                 .bookMarkCount(7L)
                 .build();
     }
-    
+
+    public List<String> getUrlHashTagList() {
+        return urlHashTagList.stream()
+                .map((e)->e.getHashTag().getTag())
+                .toList();
+    }
+
+//    public List<UrlHashTag> getUrlHashTagList() {
+//        return urlHashTagList.stream().toList();
+//    }
 }
