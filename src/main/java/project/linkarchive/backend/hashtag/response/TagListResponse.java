@@ -4,17 +4,17 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class TagListDetailResponse {
+public class TagListResponse {
 
     private String tagName;
 
     @Builder
-    public TagListDetailResponse(String tagName) {
+    public TagListResponse(String tagName) {
         this.tagName = tagName;
     }
 
-    public static TagListDetailResponse of(String tagName) {
-        return TagListDetailResponse.builder()
+    public static TagListResponse of(String tagName) {
+        return TagListResponse.builder()
                 .tagName(tagName)
                 .build();
     }
