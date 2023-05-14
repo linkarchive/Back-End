@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.url.response.UrlMetaDataResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserLinkListResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserUrlListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.service.UrlQueryService;
 
@@ -87,11 +88,11 @@ public class UrlQueryController {
     }
 
     @GetMapping("/links/user")
-    public ResponseEntity<List<OtherUserLinkListResponse>> getOtherUserLinkList(
+    public ResponseEntity<OtherUserLinkListResponse> getOtherUserLinkList(
             @RequestParam(value = "userId") Long userId
     ) {
-        List<OtherUserLinkListResponse> otherUserLinkListResponses = urlQueryService.getOtherUserLinkList(userId);
-        return ResponseEntity.ok(otherUserLinkListResponses);
+        OtherUserLinkListResponse otherUserLinkListResponse = urlQueryService.getOtherUserLinkList(userId);
+        return ResponseEntity.ok(otherUserLinkListResponse);
     }
 }
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.url.domain.Url;
 import project.linkarchive.backend.url.domain.UrlHashTag;
 import project.linkarchive.backend.url.repository.UrlHashTagRepository;
@@ -13,7 +14,9 @@ import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListDet
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkTagListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedTagListDetailResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserHashtagListResponse;
 import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserLinkListResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserUrlListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListDetailResponse;
@@ -22,6 +25,7 @@ import project.linkarchive.backend.user.domain.UserHashTag;
 import project.linkarchive.backend.user.repository.UserHashTagRepository;
 import project.linkarchive.backend.user.response.UserTagList30Response;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,13 +106,33 @@ public class UrlQueryService {
         return new UserExcludedLinkListResponse(userExcludedLinkTagListDetailResponseList);
     }
 
-    public List<OtherUserLinkListResponse> getOtherUserLinkList(Long userId){
+    public OtherUserLinkListResponse getOtherUserLinkList(Long userId){
         List<Url> url = urlRepository.getByUserId(userId);
-        return responseBoard(url);
+        List<UserHashTag> userHashTags = userHashTagRepository.getByUserId(userId);
+
+//        List<OtherUserUrlListResponse> urlList = responseUrlList(url);
+//        List<OtherUserHashtagListResponse> userHashtagList = responseUserHashtagList(userHashTags);
+
+
+        return responseOtherUserLinkList(url, userHashTags);
     }
 
-    private List<OtherUserLinkListResponse> responseBoard(List<Url> urlList) {
-        return urlList.stream().map(OtherUserLinkListResponse::new).toList();
+    private OtherUserLinkListResponse responseOtherUserLinkList(List<Url> urlList, List<UserHashTag> userHashTags){
+        responseUrlList(urlList);
+        responseUserHashtagList(userHashTags);
+
+        OtherUserLinkListResponse response = new OtherUserLinkListResponse(responseUrlList(urlList), responseUserHashtagList(userHashTags));
+
+        return response;
+
+    }
+
+    private List<OtherUserUrlListResponse> responseUrlList(List<Url> urlList) {
+        return urlList.stream().map(OtherUserUrlListResponse::new).toList();
+    }
+
+    private List<OtherUserHashtagListResponse> responseUserHashtagList(List<UserHashTag> userHashTags){
+        return userHashTags.stream().map(OtherUserHashtagListResponse::new).toList();
     }
 
 }

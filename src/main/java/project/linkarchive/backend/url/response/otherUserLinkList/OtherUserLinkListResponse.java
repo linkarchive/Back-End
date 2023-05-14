@@ -1,29 +1,17 @@
 package project.linkarchive.backend.url.response.otherUserLinkList;
 
 import lombok.Getter;
-import project.linkarchive.backend.url.domain.Url;
 
 import java.util.List;
 
 @Getter
 public class OtherUserLinkListResponse {
-    private final Long urlId;
-    private final String link;
-    private final String title;
-    private final String description;
-    private final String thumbnail;
-    private final Long bookmarkCount;
+    private final List<OtherUserHashtagListResponse> userTagList;
+    private final List<OtherUserUrlListResponse> urlList;
 
-    private final List<String> urlHashtags;
-
-    public OtherUserLinkListResponse(Url url){
-        this.urlId = url.getId();
-        this.link = url.getLink();
-        this.title = url.getTitle();
-        this.description = url.getDescription();
-        this.thumbnail = url.getThumbnail();
-        this.bookmarkCount = url.getBookMarkCount();
-        this.urlHashtags = url.getUrlHashTagList();
+    public OtherUserLinkListResponse(List<OtherUserUrlListResponse> urlList, List<OtherUserHashtagListResponse> otherUserHashtagListResponse) {
+        this.urlList = urlList;
+        this.userTagList = otherUserHashtagListResponse;
     }
-
 }
+

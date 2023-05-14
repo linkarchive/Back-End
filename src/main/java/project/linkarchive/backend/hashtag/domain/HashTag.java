@@ -36,4 +36,10 @@ public class HashTag extends CreatedEntity {
         this.tag = tag;
     }
 
+    public List<String> getUserHashTagList() {
+        return userHashTags.stream()
+                .map((e)->e.getHashTag().getTag())
+                .toList();
+    }
+
 }
