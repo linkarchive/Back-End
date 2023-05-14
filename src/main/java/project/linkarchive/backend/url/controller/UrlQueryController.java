@@ -7,9 +7,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.url.response.UrlMetaDataResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
@@ -21,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 @RestController
+@PreAuthorize("isAuthenticated()")
 public class UrlQueryController {
 
     private final UrlQueryService urlQueryService;
@@ -72,8 +75,9 @@ public class UrlQueryController {
 
     @GetMapping("/links")
     public ResponseEntity<UserLinkListResponse> getUserLinkList(@PageableDefault(direction = Sort.Direction.DESC) Pageable pageable,
-                                                                @RequestParam(value = "urlId", required = false) Long lastUrlId) {
-        UserLinkListResponse userLinkListResponse = urlQueryService.getUserLinkList(pageable, lastUrlId);
+                                                                @RequestParam(value = "urlId", required = false) Long lastUrlId,
+                                                                AuthInfo authInfo) {
+        UserLinkListResponse userLinkListResponse = urlQueryService.getUserLinkList(pageable, lastUrlId, authInfo.getId());
         return ResponseEntity.ok(userLinkListResponse);
     }
 
