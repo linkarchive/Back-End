@@ -13,7 +13,8 @@ public interface UserHashTagRepository extends JpaRepository<UserHashTag, Long> 
     Optional<UserHashTag> findByHashTagId(Long hashTagId);
 
     @Query("SELECT ut FROM UserHashTag ut " +
-            "WHERE ut.user.id=:userId ")
+            "WHERE ut.user.id=:userId " +
+            "ORDER BY ut.userHashTagCount DESC ")
     List<UserHashTag> getByUserId(Long userId);
 
 }
