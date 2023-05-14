@@ -53,13 +53,14 @@ public class Url extends TimeEntity {
         this.user = user;
     }
 
-    public static Url of(UrlCreateRequest request) {
+    public static Url of(UrlCreateRequest request, User user) {
         return Url.builder()
                 .link(request.getLink())
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .thumbnail(request.getThumbnail())
-                .bookMarkCount(7L)
+                .bookMarkCount(0L)
+                .user(user)
                 .build();
     }
 
