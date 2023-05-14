@@ -18,6 +18,7 @@ import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListDeta
 import project.linkarchive.backend.url.response.userLinkList.UserTagListDetailResponse;
 import project.linkarchive.backend.user.domain.UserHashTag;
 import project.linkarchive.backend.user.repository.UserHashTagRepository;
+import project.linkarchive.backend.user.repository.UserHashTagRepositoryImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,21 +28,19 @@ import java.util.stream.Collectors;
 public class UrlQueryService {
 
     private final UserHashTagRepository userHashTagRepository;
-    private final UrlRepositoryImpl urlRepositoryImpl;
     private final UrlHashTagRepository urlHashTagRepository;
+    private final UrlRepositoryImpl urlRepositoryImpl;
+    private final UserHashTagRepositoryImpl userHashTagRepositoryImpl;
 
-    public UrlQueryService(UserHashTagRepository userHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UrlHashTagRepository urlHashTagRepository) {
+    public UrlQueryService(UserHashTagRepository userHashTagRepository, UrlHashTagRepository urlHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UserHashTagRepositoryImpl userHashTagRepositoryImpl) {
         this.userHashTagRepository = userHashTagRepository;
-        this.urlRepositoryImpl = urlRepositoryImpl;
         this.urlHashTagRepository = urlHashTagRepository;
+        this.urlRepositoryImpl = urlRepositoryImpl;
+        this.userHashTagRepositoryImpl = userHashTagRepositoryImpl;
     }
 
     public UserLinkListResponse getUserLinkList(Pageable pageable, Long lastUrlId, Long userId) {
-        PageRequest limit = PageRequest.of(0, 30);
-        List<UserHashTag> userHashTagList = userHashTagRepository.findByUserId(userId, limit);
-        List<TagListDetailResponse> tagListResponseList = userHashTagList.stream()
-                .map(userHashTag -> TagListDetailResponse.of(userHashTag.getHashTag().getTag()))
-                .collect(Collectors.toList());
+        List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getUserHashTagList(userId);
 
         //FIXME 기능에 초점을 둬서 쿼리 성능이 좋지 않아요.
         List<UserLinkListDetailResponse> userUrlLinkListDetailResponseList = urlRepositoryImpl.getUserLinkList(pageable, lastUrlId);
@@ -65,7 +64,7 @@ public class UrlQueryService {
                     );
                 }).collect(Collectors.toList());
 
-        return new UserLinkListResponse(tagListResponseList, userLinkTagListDetailResponseList);
+        return new UserLinkListResponse(userHashTagList, userLinkTagListDetailResponseList);
     }
 
     public UserExcludedLinkListResponse getLinkList(Pageable pageable, Long lastUrlId) {
