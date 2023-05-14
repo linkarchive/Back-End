@@ -1,7 +1,7 @@
 package project.linkarchive.backend.bookmark.response;
 
 import lombok.Getter;
-import project.linkarchive.backend.user.response.userLinkList.UserTagList30Response;
+import project.linkarchive.backend.user.response.UserTagList30Response;
 
 import java.util.List;
 
