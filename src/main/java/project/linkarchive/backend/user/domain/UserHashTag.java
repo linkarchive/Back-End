@@ -30,11 +30,18 @@ public class UserHashTag extends CreatedEntity {
     private HashTag hashTag;
 
     @Builder
-    public UserHashTag(Long id, Long userHashTagCount, User user, HashTag hashTag) {
-        this.id = id;
+    public UserHashTag(Long userHashTagCount, User user, HashTag hashTag) {
         this.userHashTagCount = userHashTagCount;
         this.user = user;
         this.hashTag = hashTag;
+    }
+
+    public static UserHashTag of(User user, HashTag hashTag) {
+        return UserHashTag.builder()
+                .userHashTagCount(0L)
+                .user(user)
+                .hashTag(hashTag)
+                .build();
     }
 
     public void increaseUserHashTagCount(Long count) {
