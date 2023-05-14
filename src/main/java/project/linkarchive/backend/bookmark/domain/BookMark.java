@@ -29,10 +29,16 @@ public class BookMark extends CreatedEntity {
     private Url url;
 
     @Builder
-    public BookMark(Long id, User user, Url url) {
-        this.id = id;
+    public BookMark(User user, Url url) {
         this.user = user;
         this.url = url;
+    }
+
+    public static BookMark of(User user, Url url) {
+        return BookMark.builder()
+                .user(user)
+                .url(url)
+                .build();
     }
 
 }
