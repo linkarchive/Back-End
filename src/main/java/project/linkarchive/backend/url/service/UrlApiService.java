@@ -43,7 +43,7 @@ public class UrlApiService {
                 )
                 .forEach(hashTag -> {
                     userHashTagRepository.findByHashTagId(hashTag.getId())
-                            .ifPresent(tag -> tag.increaseUserHashTagCount(tag.getUserHashTagCount()));
+                            .ifPresent(tag -> tag.increaseUserHashTagCount(tag.getUsageCount()));
                     urlHashTagRepository.save(UrlHashTag.builder()
                             .url(url)
                             .hashTag(hashTag)
