@@ -9,7 +9,8 @@ import java.util.List;
 public interface UrlRepository extends JpaRepository<Url, Long> {
 
     @Query("SELECT u FROM Url u " +
-            "WHERE u.user.id=:userId ")
+            "WHERE u.user.id=:userId " +
+            "ORDER BY u.id DESC ")
     List<Url> getByUserId(Long userId);
 
 }

@@ -110,10 +110,6 @@ public class UrlQueryService {
         List<Url> url = urlRepository.getByUserId(userId);
         List<UserHashTag> userHashTags = userHashTagRepository.getByUserId(userId);
 
-//        List<OtherUserUrlListResponse> urlList = responseUrlList(url);
-//        List<OtherUserHashtagListResponse> userHashtagList = responseUserHashtagList(userHashTags);
-
-
         return responseOtherUserLinkList(url, userHashTags);
     }
 
