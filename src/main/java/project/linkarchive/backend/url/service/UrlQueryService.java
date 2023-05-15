@@ -82,16 +82,15 @@ public class UrlQueryService {
         return new UserExcludedLinkListResponse(linkDetailList);
     }
 
-    public OtherUserLinkListResponse getOtherLinkList(long userId, long size, Long lastUrlId) {
+    public OtherUserLinkListResponse getOtherLinkList(Long userId, Pageable pageable, Long lastUrlId) {
         List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getTagListLimit30(userId);
 
-        List<UrlResponse> urlResponses = urlRepositoryImpl.getLinkList(userId,size,lastUrlId);
+        List<UrlResponse> urlResponses = urlRepositoryImpl.getOtherLinkList(userId,pageable,lastUrlId);
         List<UrlListResponse> urlListResponses = urlResponses.stream()
                 .map(link -> {
                     List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(link.getUrlId());
                     List<UrlHashTagResponse> urlHashTagResponse = urlHashTagList.stream()
                             .map(urlHashTag -> new UrlHashTagResponse(
-                                    urlHashTag.getHashTag().getId(),
                                     urlHashTag.getHashTag().getTag()))
                             .collect(Collectors.toList());
 
