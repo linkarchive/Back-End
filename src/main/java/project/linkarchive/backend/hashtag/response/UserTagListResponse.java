@@ -7,9 +7,9 @@ import java.util.List;
 @Getter
 public class UserTagListResponse {
 
-    private List<UserTagListDetailResponse> tagList;
+    private List<TagListDetailResponse> tagList;
 
-    public UserTagListResponse(List<UserTagListDetailResponse> tagList) {
+    public UserTagListResponse(List<TagListDetailResponse> tagList) {
         this.tagList = tagList;
     }
 
