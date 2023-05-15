@@ -97,7 +97,7 @@ public class UrlQueryController {
     public ResponseEntity<OtherUserLinkListResponse> getOtherUserLinkList(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "urlId", required = false) Long lastUrlId,
-            Pageable pageable
+            @PageableDefault Pageable pageable
     ) {
 
         OtherUserLinkListResponse otherUserLinkListResponse = urlQueryService.getOtherLinkList(userId, pageable, lastUrlId);

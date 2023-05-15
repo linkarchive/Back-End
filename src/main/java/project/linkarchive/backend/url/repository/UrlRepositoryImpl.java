@@ -45,6 +45,7 @@ public class UrlRepositoryImpl {
     }
 
     public List<UserExcludedLinkListDetailResponse> getLinkList(Pageable pageable, Long lastUrlId, Long userId) {
+
         return queryFactory
                 .select(new QUserExcludedLinkListDetailResponse(
                         url.user.id,
