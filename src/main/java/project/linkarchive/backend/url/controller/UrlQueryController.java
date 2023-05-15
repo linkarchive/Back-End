@@ -9,13 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.url.response.UrlMetaDataResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserLinkListResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserUrlListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.service.UrlQueryService;
 
@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
 @RestController
 @PreAuthorize("isAuthenticated()")
@@ -77,9 +76,11 @@ public class UrlQueryController {
 
 
     @GetMapping("/links")
-    public ResponseEntity<UserLinkListResponse> getUserLinkList(@PageableDefault(direction = Sort.Direction.DESC) Pageable pageable,
-                                                                @RequestParam(value = "urlId", required = false) Long lastUrlId,
-                                                                AuthInfo authInfo) {
+    public ResponseEntity<UserLinkListResponse> getUserLinkList(
+            @PageableDefault(direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(value = "urlId", required = false) Long lastUrlId,
+            AuthInfo authInfo
+    ) {
         UserLinkListResponse userLinkListResponse = urlQueryService.getUserLinkList(pageable, lastUrlId, authInfo.getId());
         return ResponseEntity.ok(userLinkListResponse);
     }
@@ -91,14 +92,17 @@ public class UrlQueryController {
         return ResponseEntity.ok(userExcludedLinkListResponse);
     }
 
-    @GetMapping("/links/user")
+    @GetMapping("/links/user/{userId}")
     public ResponseEntity<OtherUserLinkListResponse> getOtherUserLinkList(
-            @RequestParam(value = "userId") Long userId,
-            Pageable pageable
+            @PathVariable("userId") long userId,
+            @RequestParam(value = "size", defaultValue = "10") long size,
+            @RequestParam(value = "urlId", required = false) Long lastUrlId
     ) {
-        OtherUserLinkListResponse otherUserLinkListResponse = urlQueryService.getOtherUserLinkList(pageable, userId);
+
+        OtherUserLinkListResponse otherUserLinkListResponse = urlQueryService.getOtherLinkList(userId, size, lastUrlId);
         return ResponseEntity.ok(otherUserLinkListResponse);
     }
+
 }
 
 

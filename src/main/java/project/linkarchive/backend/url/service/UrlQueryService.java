@@ -1,28 +1,24 @@
 package project.linkarchive.backend.url.service;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.linkarchive.backend.url.domain.Url;
 import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 import project.linkarchive.backend.url.domain.UrlHashTag;
 import project.linkarchive.backend.url.repository.UrlHashTagRepository;
-import project.linkarchive.backend.url.repository.UrlRepository;
 import project.linkarchive.backend.url.repository.UrlRepositoryImpl;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkTagListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedTagListDetailResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserHashtagListResponse;
 import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserLinkListResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserUrlListResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.UrlHashTagResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.UrlListResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.UrlResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserTagListDetailResponse;
-import project.linkarchive.backend.user.domain.UserHashTag;
-import project.linkarchive.backend.user.repository.UserHashTagRepository;
 import project.linkarchive.backend.user.repository.UserHashTagRepositoryImpl;
 
 import java.util.List;
@@ -32,17 +28,13 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class UrlQueryService {
 
-    private final UserHashTagRepository userHashTagRepository;
     private final UrlHashTagRepository urlHashTagRepository;
-    private final UrlRepository urlRepository;
     private final UrlRepositoryImpl urlRepositoryImpl;
     private final UserHashTagRepositoryImpl userHashTagRepositoryImpl;
 
-    public UrlQueryService(UserHashTagRepository userHashTagRepository, UrlHashTagRepository urlHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UserHashTagRepositoryImpl userHashTagRepositoryImpl, UrlRepository urlRepository) {
+    public UrlQueryService(UrlHashTagRepository urlHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UserHashTagRepositoryImpl userHashTagRepositoryImpl) {
 
-        this.userHashTagRepository = userHashTagRepository;
         this.urlHashTagRepository = urlHashTagRepository;
-        this.urlRepository = urlRepository;
         this.urlRepositoryImpl = urlRepositoryImpl;
         this.userHashTagRepositoryImpl = userHashTagRepositoryImpl;
 
@@ -52,7 +44,7 @@ public class UrlQueryService {
         List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getUserHashTagList(userId);
 
         //FIXME 기능에 초점을 둬서 쿼리 성능이 좋지 않아요.
-        List<UserLinkListDetailResponse> userUrlLinkListDetailResponseList = urlRepositoryImpl.getUserLinkList(pageable, lastUrlId);
+        List<UserLinkListDetailResponse> userUrlLinkListDetailResponseList = urlRepositoryImpl.getUserLinkList(pageable, lastUrlId, userId);
         List<UserLinkTagListDetailResponse> userLinkTagListDetailResponseList = userUrlLinkListDetailResponseList.stream()
                 .map(link -> {
                     List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(link.getUrlId());
@@ -105,29 +97,30 @@ public class UrlQueryService {
         return new UserExcludedLinkListResponse(userExcludedLinkTagListDetailResponseList);
     }
 
-    public OtherUserLinkListResponse getOtherUserLinkList(Pageable pageable, Long userId) {
-        List<Url> url = urlRepository.getByUserId(pageable, userId);
-        List<UserHashTag> userHashTags = userHashTagRepository.getByUserId(userId);
+    public OtherUserLinkListResponse getOtherLinkList(long userId, long size, Long lastUrlId) {
+        List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getUserHashTagList(userId);
 
-        return responseOtherUserLinkList(url, userHashTags);
+        List<UrlResponse> urlResponses = urlRepositoryImpl.getLinkList(userId,size,lastUrlId);
+        List<UrlListResponse> urlListResponses = urlResponses.stream()
+                .map(link -> {
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(link.getUrlId());
+                    List<UrlHashTagResponse> urlHashTagResponse = urlHashTagList.stream()
+                            .map(urlHashTag -> new UrlHashTagResponse(
+                                    urlHashTag.getHashTag().getId(),
+                                    urlHashTag.getHashTag().getTag()))
+                            .collect(Collectors.toList());
+
+                    return new UrlListResponse(
+                            link.getUrlId(),
+                            link.getLink(),
+                            link.getTitle(),
+                            link.getDescription(),
+                            link.getThumbnail(),
+                            link.getBookMarkCount(),
+                            urlHashTagResponse
+                    );
+                }).collect(Collectors.toList());
+
+        return new OtherUserLinkListResponse(userHashTagList, urlListResponses);
     }
-
-    private OtherUserLinkListResponse responseOtherUserLinkList(List<Url> urlList, List<UserHashTag> userHashTags) {
-        responseUrlList(urlList);
-        responseUserHashtagList(userHashTags);
-
-        OtherUserLinkListResponse response = new OtherUserLinkListResponse(responseUrlList(urlList), responseUserHashtagList(userHashTags));
-
-        return response;
-
-    }
-
-    private List<OtherUserUrlListResponse> responseUrlList(List<Url> urlList) {
-        return urlList.stream().map(OtherUserUrlListResponse::new).toList();
-    }
-
-    private List<OtherUserHashtagListResponse> responseUserHashtagList(List<UserHashTag> userHashTags) {
-        return userHashTags.stream().map(OtherUserHashtagListResponse::new).toList();
-    }
-
 }

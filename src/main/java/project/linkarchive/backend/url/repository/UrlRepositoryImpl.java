@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import project.linkarchive.backend.url.response.linkList.QUserExcludedLinkListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListDetailResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.QUrlResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.UrlResponse;
 import project.linkarchive.backend.url.response.userLinkList.QUserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 
@@ -18,12 +20,11 @@ import static project.linkarchive.backend.url.domain.QUrl.url;
 public class UrlRepositoryImpl {
 
     private final JPAQueryFactory queryFactory;
-
     public UrlRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<UserLinkListDetailResponse> getUserLinkList(Pageable pageable, Long lastUrlId) {
+    public List<UserLinkListDetailResponse> getUserLinkList(Pageable pageable, Long lastUrlId, Long userId) {
         return queryFactory
                 .select(new QUserLinkListDetailResponse(
                         url.id,
@@ -35,6 +36,7 @@ public class UrlRepositoryImpl {
                 ))
                 .from(url)
                 .where(
+                        url.user.id.eq(userId),
                         ltUrlId(lastUrlId)
                 )
                 .limit(pageable.getPageSize())
@@ -62,6 +64,26 @@ public class UrlRepositoryImpl {
                         ltUrlId(lastUrlId)
                 )
                 .limit(pageable.getPageSize())
+                .orderBy(url.id.desc())
+                .fetch();
+    }
+
+    public List<UrlResponse> getLinkList(long userId, long size, Long lastUrlId) {
+        return queryFactory
+                .select(new QUrlResponse(
+                        url.id,
+                        url.link,
+                        url.title,
+                        url.description,
+                        url.thumbnail,
+                        url.bookMarkCount
+                ))
+                .from(url)
+                .where(
+                        url.user.id.eq(userId),
+                        ltUrlId(lastUrlId)
+                )
+                .limit(size)
                 .orderBy(url.id.desc())
                 .fetch();
     }

@@ -1,20 +1,17 @@
 package project.linkarchive.backend.url.response.otherUserLinkList;
 
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
+import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 
 import java.util.List;
 
 @Getter
 public class OtherUserLinkListResponse {
-    private final List<OtherUserHashtagListResponse> userTagList;
-    private final List<OtherUserUrlListResponse> urlList;
+    private List<TagListDetailResponse> userTagList;
+    private List<UrlListResponse> userLinkList;
 
-    @QueryProjection
-    public OtherUserLinkListResponse(List<OtherUserUrlListResponse> urlList, List<OtherUserHashtagListResponse> otherUserHashtagListResponse) {
-        this.urlList = urlList;
-        this.userTagList = otherUserHashtagListResponse;
+    public OtherUserLinkListResponse(List<TagListDetailResponse> userTagList, List<UrlListResponse> userLinkList) {
+        this.userTagList = userTagList;
+        this.userLinkList = userLinkList;
     }
-
 }
-
