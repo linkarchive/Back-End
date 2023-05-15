@@ -87,8 +87,9 @@ public class UrlQueryController {
 
     @GetMapping("/links/archive")
     public ResponseEntity<UserExcludedLinkListResponse> getLinkList(@PageableDefault(direction = Sort.Direction.DESC) Pageable pageable,
-                                                                    @RequestParam(value = "urlId", required = false) Long lastUrlId) {
-        UserExcludedLinkListResponse userExcludedLinkListResponse = urlQueryService.getLinkList(pageable, lastUrlId);
+                                                                    @RequestParam(value = "urlId", required = false) Long lastUrlId,
+                                                                    AuthInfo authInfo) {
+        UserExcludedLinkListResponse userExcludedLinkListResponse = urlQueryService.getLinkList(pageable, lastUrlId, authInfo.getId());
         return ResponseEntity.ok(userExcludedLinkListResponse);
     }
 

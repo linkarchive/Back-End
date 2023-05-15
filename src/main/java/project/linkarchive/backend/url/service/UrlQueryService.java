@@ -10,7 +10,6 @@ import project.linkarchive.backend.url.repository.UrlRepositoryImpl;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkTagListDetailResponse;
-import project.linkarchive.backend.url.response.linkList.UserExcludedTagListDetailResponse;
 import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserLinkListResponse;
 import project.linkarchive.backend.url.response.otherUserLinkList.UrlHashTagResponse;
 import project.linkarchive.backend.url.response.otherUserLinkList.UrlListResponse;
@@ -41,13 +40,13 @@ public class UrlQueryService {
     }
 
     public UserLinkListResponse getUserLinkList(Pageable pageable, Long lastUrlId, Long userId) {
-        List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getUserHashTagList(userId);
+        List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getTagListLimit30(userId);
 
         //FIXME 기능에 초점을 둬서 쿼리 성능이 좋지 않아요.
-        List<UserLinkListDetailResponse> userUrlLinkListDetailResponseList = urlRepositoryImpl.getUserLinkList(pageable, lastUrlId, userId);
-        List<UserLinkTagListDetailResponse> userLinkTagListDetailResponseList = userUrlLinkListDetailResponseList.stream()
-                .map(link -> {
-                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(link.getUrlId());
+        List<UserLinkListDetailResponse> linkList = urlRepositoryImpl.getUserLinkList(pageable, lastUrlId, userId);
+        List<UserLinkTagListDetailResponse> userLinkTagListDetailResponseList = linkList.stream()
+                .map(url -> {
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(url.getUrlId());
                     List<UserTagListDetailResponse> userTagListDetailResponseList = urlHashTagList.stream()
                             .map(urlHashTag -> new UserTagListDetailResponse(
                                     urlHashTag.getHashTag().getId(),
@@ -55,12 +54,12 @@ public class UrlQueryService {
                             .collect(Collectors.toList());
 
                     return new UserLinkTagListDetailResponse(
-                            link.getUrlId(),
-                            link.getLink(),
-                            link.getTitle(),
-                            link.getDescription(),
-                            link.getThumbnail(),
-                            link.getBookMarkCount(),
+                            url.getUrlId(),
+                            url.getLink(),
+                            url.getTitle(),
+                            url.getDescription(),
+                            url.getThumbnail(),
+                            url.getBookMarkCount(),
                             userTagListDetailResponseList
                     );
                 }).collect(Collectors.toList());
@@ -68,37 +67,23 @@ public class UrlQueryService {
         return new UserLinkListResponse(userHashTagList, userLinkTagListDetailResponseList);
     }
 
-    public UserExcludedLinkListResponse getLinkList(Pageable pageable, Long lastUrlId) {
+    public UserExcludedLinkListResponse getLinkList(Pageable pageable, Long lastUrlId, Long userId) {
         //FIXME 기능에 초점을 둬서 쿼리 성능이 좋지 않아요.
-        //FIXME 로그인한 유저의 리스트를 제외하고 조회해야 해요.
-        List<UserExcludedLinkListDetailResponse> userExcludedLinkListDetailResponseList = urlRepositoryImpl.getLinkList(pageable, lastUrlId);
-        List<UserExcludedLinkTagListDetailResponse> userExcludedLinkTagListDetailResponseList = userExcludedLinkListDetailResponseList.stream()
-                .map(l -> {
-                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(l.getUrlId());
-                    List<UserExcludedTagListDetailResponse> userExcludedTagListDetailResponseList = urlHashTagList.stream()
-                            .map(h -> new UserExcludedTagListDetailResponse(
-                                    h.getHashTag().getId(),
-                                    h.getHashTag().getTag()))
+        List<UserExcludedLinkListDetailResponse> linkList = urlRepositoryImpl.getLinkList(pageable, lastUrlId, userId);
+        List<UserExcludedLinkTagListDetailResponse> linkDetailList = linkList.stream()
+                .map(url -> {
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(url.getUrlId());
+                    List<TagListDetailResponse> tagListDetailResponseList = urlHashTagList.stream()
+                            .map(urlHashTag -> TagListDetailResponse.of(urlHashTag))
                             .collect(Collectors.toList());
-                    return new UserExcludedLinkTagListDetailResponse(
-                            l.getUserId(),
-                            l.getName(),
-                            l.getProfileImage(),
-                            l.getUrlId(),
-                            l.getLink(),
-                            l.getTitle(),
-                            l.getDescription(),
-                            l.getThumbnail(),
-                            l.getBookMarkCount(),
-                            userExcludedTagListDetailResponseList
-                    );
+                    return UserExcludedLinkTagListDetailResponse.of(url, tagListDetailResponseList);
                 }).collect(Collectors.toList());
 
-        return new UserExcludedLinkListResponse(userExcludedLinkTagListDetailResponseList);
+        return new UserExcludedLinkListResponse(linkDetailList);
     }
 
     public OtherUserLinkListResponse getOtherLinkList(long userId, long size, Long lastUrlId) {
-        List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getUserHashTagList(userId);
+        List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getTagListLimit30(userId);
 
         List<UrlResponse> urlResponses = urlRepositoryImpl.getLinkList(userId,size,lastUrlId);
         List<UrlListResponse> urlListResponses = urlResponses.stream()

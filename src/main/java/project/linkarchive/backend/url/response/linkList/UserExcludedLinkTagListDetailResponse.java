@@ -1,6 +1,8 @@
 package project.linkarchive.backend.url.response.linkList;
 
+import lombok.Builder;
 import lombok.Getter;
+import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 
 import java.util.List;
 
@@ -16,9 +18,10 @@ public class UserExcludedLinkTagListDetailResponse {
     private String description;
     private String thumbnail;
     private Long bookMarkCount;
-    private List<UserExcludedTagListDetailResponse> linkTagList;
+    private List<TagListDetailResponse> linkTagList;
 
-    public UserExcludedLinkTagListDetailResponse(Long userId, String name, String profileImage, Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<UserExcludedTagListDetailResponse> linkTagList) {
+    @Builder
+    public UserExcludedLinkTagListDetailResponse(Long userId, String name, String profileImage, Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<TagListDetailResponse> linkTagList) {
         this.userId = userId;
         this.name = name;
         this.profileImage = profileImage;
@@ -31,4 +34,18 @@ public class UserExcludedLinkTagListDetailResponse {
         this.linkTagList = linkTagList;
     }
 
+    public static UserExcludedLinkTagListDetailResponse of(UserExcludedLinkListDetailResponse response, List<TagListDetailResponse> linkTagList) {
+        return UserExcludedLinkTagListDetailResponse.builder()
+                .userId(response.getUserId())
+                .name(response.getName())
+                .profileImage(response.getProfileImage())
+                .urlId(response.getUrlId())
+                .link(response.getLink())
+                .title(response.getTitle())
+                .description(response.getDescription())
+                .thumbnail(response.getThumbnail())
+                .bookMarkCount(response.getBookMarkCount())
+                .linkTagList(linkTagList)
+                .build();
+    }
 }

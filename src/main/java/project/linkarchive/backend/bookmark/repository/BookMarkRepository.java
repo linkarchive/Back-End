@@ -12,7 +12,7 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
 
     Boolean existsByUrlId(Long urlId);
 
-    Optional<BookMark> findByUrlId(Long urlId);
+    Optional<BookMark> findByUrlIdAndUserId(Long urlId, Long userId);
 
     @Modifying
     @Query("UPDATE Url u SET u.bookMarkCount = u.bookMarkCount + 1 WHERE u.id = :urlId")
