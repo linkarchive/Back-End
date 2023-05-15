@@ -63,5 +63,11 @@ public class Url extends TimeEntity {
                 .user(user)
                 .build();
     }
-    
+
+    public List<String> getUrlHashTagList() {
+        return urlHashTagList.stream()
+                .map((e)->e.getHashTag().getTag())
+                .toList();
+    }
+
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.url.response.UrlMetaDataResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.service.UrlQueryService;
 
@@ -75,9 +76,11 @@ public class UrlQueryController {
 
 
     @GetMapping("/links")
-    public ResponseEntity<UserLinkListResponse> getUserLinkList(@PageableDefault(direction = Sort.Direction.DESC) Pageable pageable,
-                                                                @RequestParam(value = "urlId", required = false) Long lastUrlId,
-                                                                AuthInfo authInfo) {
+    public ResponseEntity<UserLinkListResponse> getUserLinkList(
+            @PageableDefault(direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(value = "urlId", required = false) Long lastUrlId,
+            AuthInfo authInfo
+    ) {
         UserLinkListResponse userLinkListResponse = urlQueryService.getUserLinkList(pageable, lastUrlId, authInfo.getId());
         return ResponseEntity.ok(userLinkListResponse);
     }
@@ -90,4 +93,17 @@ public class UrlQueryController {
         return ResponseEntity.ok(userExcludedLinkListResponse);
     }
 
+    @GetMapping("/links/user/{userId}")
+    public ResponseEntity<OtherUserLinkListResponse> getOtherUserLinkList(
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "urlId", required = false) Long lastUrlId,
+            @PageableDefault Pageable pageable
+    ) {
+
+        OtherUserLinkListResponse otherUserLinkListResponse = urlQueryService.getOtherLinkList(userId, pageable, lastUrlId);
+        return ResponseEntity.ok(otherUserLinkListResponse);
+    }
+
 }
+
+

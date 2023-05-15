@@ -10,6 +10,10 @@ import project.linkarchive.backend.url.repository.UrlRepositoryImpl;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkTagListDetailResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserLinkListResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.UrlHashTagResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.UrlListResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.UrlResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListDetailResponse;
@@ -28,16 +32,18 @@ public class UrlQueryService {
     private final UserHashTagRepositoryImpl userHashTagRepositoryImpl;
 
     public UrlQueryService(UrlHashTagRepository urlHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UserHashTagRepositoryImpl userHashTagRepositoryImpl) {
+
         this.urlHashTagRepository = urlHashTagRepository;
         this.urlRepositoryImpl = urlRepositoryImpl;
         this.userHashTagRepositoryImpl = userHashTagRepositoryImpl;
+
     }
 
     public UserLinkListResponse getUserLinkList(Pageable pageable, Long lastUrlId, Long userId) {
         List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getTagListLimit30(userId);
 
         //FIXME 기능에 초점을 둬서 쿼리 성능이 좋지 않아요.
-        List<UserLinkListDetailResponse> linkList = urlRepositoryImpl.getUserLinkList(pageable, lastUrlId);
+        List<UserLinkListDetailResponse> linkList = urlRepositoryImpl.getUserLinkList(pageable, lastUrlId, userId);
         List<UserLinkTagListDetailResponse> userLinkTagListDetailResponseList = linkList.stream()
                 .map(url -> {
                     List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(url.getUrlId());
@@ -76,4 +82,29 @@ public class UrlQueryService {
         return new UserExcludedLinkListResponse(linkDetailList);
     }
 
+    public OtherUserLinkListResponse getOtherLinkList(Long userId, Pageable pageable, Long lastUrlId) {
+        List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getTagListLimit30(userId);
+
+        List<UrlResponse> urlResponses = urlRepositoryImpl.getOtherLinkList(userId,pageable,lastUrlId);
+        List<UrlListResponse> urlListResponses = urlResponses.stream()
+                .map(link -> {
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(link.getUrlId());
+                    List<UrlHashTagResponse> urlHashTagResponse = urlHashTagList.stream()
+                            .map(urlHashTag -> new UrlHashTagResponse(
+                                    urlHashTag.getHashTag().getTag()))
+                            .collect(Collectors.toList());
+
+                    return new UrlListResponse(
+                            link.getUrlId(),
+                            link.getLink(),
+                            link.getTitle(),
+                            link.getDescription(),
+                            link.getThumbnail(),
+                            link.getBookMarkCount(),
+                            urlHashTagResponse
+                    );
+                }).collect(Collectors.toList());
+
+        return new OtherUserLinkListResponse(userHashTagList, urlListResponses);
+    }
 }
