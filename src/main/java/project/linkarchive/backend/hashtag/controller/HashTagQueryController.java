@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.hashtag.response.UserTagListResponse;
 import project.linkarchive.backend.hashtag.service.HashTagQueryService;
+import project.linkarchive.backend.security.AuthInfo;
 
 @RestController
 public class HashTagQueryController {
@@ -16,8 +17,8 @@ public class HashTagQueryController {
     }
 
     @GetMapping("/tags")
-    public ResponseEntity<UserTagListResponse> getUserTagList() {
-        UserTagListResponse userTagList = hashTagQueryService.getUserTagList();
+    public ResponseEntity<UserTagListResponse> getUserTagList(AuthInfo authInfo) {
+        UserTagListResponse userTagList = hashTagQueryService.getLoginUserTagList(authInfo.getId());
         return ResponseEntity.ok(userTagList);
     }
 

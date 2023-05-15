@@ -34,7 +34,7 @@ public class UrlQueryService {
     }
 
     public UserLinkListResponse getUserLinkList(Pageable pageable, Long lastUrlId, Long userId) {
-        List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getUserHashTagList(userId);
+        List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getTagListLimit30(userId);
 
         //FIXME 기능에 초점을 둬서 쿼리 성능이 좋지 않아요.
         List<UserLinkListDetailResponse> linkList = urlRepositoryImpl.getUserLinkList(pageable, lastUrlId);
