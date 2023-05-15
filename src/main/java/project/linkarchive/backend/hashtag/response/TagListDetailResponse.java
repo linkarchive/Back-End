@@ -3,6 +3,7 @@ package project.linkarchive.backend.hashtag.response;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
+import project.linkarchive.backend.url.domain.UrlHashTag;
 
 @Getter
 public class TagListDetailResponse {
@@ -15,9 +16,9 @@ public class TagListDetailResponse {
         this.tagName = tagName;
     }
 
-    public static TagListDetailResponse of(String tagName) {
+    public static TagListDetailResponse of(UrlHashTag urlHashTag) {
         return TagListDetailResponse.builder()
-                .tagName(tagName)
+                .tagName(urlHashTag.getHashTag().getTag())
                 .build();
     }
 

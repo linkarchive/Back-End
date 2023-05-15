@@ -64,16 +64,16 @@ public class UrlQueryService {
     public UserExcludedLinkListResponse getLinkList(Pageable pageable, Long lastUrlId, Long userId) {
         //FIXME 기능에 초점을 둬서 쿼리 성능이 좋지 않아요.
         List<UserExcludedLinkListDetailResponse> linkList = urlRepositoryImpl.getLinkList(pageable, lastUrlId, userId);
-        List<UserExcludedLinkTagListDetailResponse> userExcludedLinkTagListDetailResponseList = linkList.stream()
+        List<UserExcludedLinkTagListDetailResponse> linkDetailList = linkList.stream()
                 .map(url -> {
                     List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(url.getUrlId());
                     List<TagListDetailResponse> tagListDetailResponseList = urlHashTagList.stream()
-                            .map(h -> TagListDetailResponse.of(h.getHashTag().getTag()))
+                            .map(urlHashTag -> TagListDetailResponse.of(urlHashTag))
                             .collect(Collectors.toList());
                     return UserExcludedLinkTagListDetailResponse.of(url, tagListDetailResponseList);
                 }).collect(Collectors.toList());
 
-        return new UserExcludedLinkListResponse(userExcludedLinkTagListDetailResponseList);
+        return new UserExcludedLinkListResponse(linkDetailList);
     }
 
 }
