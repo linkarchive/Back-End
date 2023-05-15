@@ -93,9 +93,10 @@ public class UrlQueryController {
 
     @GetMapping("/links/user")
     public ResponseEntity<OtherUserLinkListResponse> getOtherUserLinkList(
-            @RequestParam(value = "userId") Long userId
+            @RequestParam(value = "userId") Long userId,
+            Pageable pageable
     ) {
-        OtherUserLinkListResponse otherUserLinkListResponse = urlQueryService.getOtherUserLinkList(userId);
+        OtherUserLinkListResponse otherUserLinkListResponse = urlQueryService.getOtherUserLinkList(pageable, userId);
         return ResponseEntity.ok(otherUserLinkListResponse);
     }
 }

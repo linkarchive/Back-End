@@ -105,8 +105,8 @@ public class UrlQueryService {
         return new UserExcludedLinkListResponse(userExcludedLinkTagListDetailResponseList);
     }
 
-    public OtherUserLinkListResponse getOtherUserLinkList(Long userId) {
-        List<Url> url = urlRepository.getByUserId(userId);
+    public OtherUserLinkListResponse getOtherUserLinkList(Pageable pageable, Long userId) {
+        List<Url> url = urlRepository.getByUserId(pageable, userId);
         List<UserHashTag> userHashTags = userHashTagRepository.getByUserId(userId);
 
         return responseOtherUserLinkList(url, userHashTags);

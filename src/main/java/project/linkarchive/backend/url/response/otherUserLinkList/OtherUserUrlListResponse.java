@@ -1,5 +1,6 @@
 package project.linkarchive.backend.url.response.otherUserLinkList;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import project.linkarchive.backend.url.domain.Url;
 
@@ -16,6 +17,7 @@ public class OtherUserUrlListResponse {
 
     private final List<String> urlHashtags;
 
+    @QueryProjection
     public OtherUserUrlListResponse(Url url){
         this.urlId = url.getId();
         this.link = url.getLink();
