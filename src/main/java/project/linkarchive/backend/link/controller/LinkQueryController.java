@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import project.linkarchive.backend.bookmark.service.BookMarkQueryService;
 import project.linkarchive.backend.link.response.LinkMetaDataResponse;
 import project.linkarchive.backend.link.response.RefactorUserLinkList.UserLinkListResponse;
 import project.linkarchive.backend.link.response.linkList.UserExcludedLinkListResponse;
@@ -92,6 +93,17 @@ public class LinkQueryController {
         UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(userId, pageable, lastUrlId);
         return ResponseEntity.ok(userLinkListResponse);
     }
+
+    // 사용자별 북마크 리스트 조회 010
+    @GetMapping("/mark/links/user/{userId}")
+    public ResponseEntity<UserLinkListResponse> getMarkedLinkList(
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "urlId", required = false) Long lastUrlId,
+            @PageableDefault Pageable pageable) {
+        UserLinkListResponse userLinkListResponse = linkQueryService.getMarkedLinkList(userId, lastUrlId, pageable);
+        return ResponseEntity.ok(userLinkListResponse);
+    }
+
 
 }
 

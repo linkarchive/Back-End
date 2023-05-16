@@ -3,6 +3,9 @@ package project.linkarchive.backend.link.service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.linkarchive.backend.advice.exception.BusinessException;
+import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
+import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
 import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 import project.linkarchive.backend.link.domain.UrlHashTag;
 import project.linkarchive.backend.link.repository.UrlHashTagRepository;
@@ -14,6 +17,7 @@ import project.linkarchive.backend.link.response.RefactorUserLinkList.UserLinkRe
 import project.linkarchive.backend.link.response.linkList.UserExcludedLinkListDetailResponse;
 import project.linkarchive.backend.link.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.link.response.linkList.UserExcludedLinkTagListDetailResponse;
+import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,10 +28,14 @@ public class LinkQueryService {
 
     private final UrlHashTagRepository urlHashTagRepository;
     private final UrlRepositoryImpl urlRepositoryImpl;
+    private final UserRepository userRepository;
+    private final BookMarkRepositoryImpl bookMarkRepositoryImpl;
 
-    public LinkQueryService(UrlHashTagRepository urlHashTagRepository, UrlRepositoryImpl urlRepositoryImpl) {
+    public LinkQueryService(UrlHashTagRepository urlHashTagRepository, UrlRepositoryImpl urlRepositoryImpl,UserRepository userRepository, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
         this.urlHashTagRepository = urlHashTagRepository;
         this.urlRepositoryImpl = urlRepositoryImpl;
+        this.userRepository = userRepository;
+        this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
     }
 
     public UserLinkListResponse getUserLinkList(Long userId, Pageable pageable, Long lastUrlId) {
@@ -68,6 +76,33 @@ public class LinkQueryService {
                 }).collect(Collectors.toList());
 
         return new UserExcludedLinkListResponse(linkDetailList);
+    }
+
+    public UserLinkListResponse getMarkedLinkList(Long userId, Long lastUrlId, Pageable pageable) {
+
+        userRepository.findById(userId).orElseThrow(() -> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
+
+        List<LinkResponse> linkResponses = bookMarkRepositoryImpl.getMarkLinkList(userId, lastUrlId, pageable);
+        List<UserLinkResponse> userLinkResponses = linkResponses.stream()
+                .map(link -> {
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(link.getUrlId());
+                    List<TagResponse> tagResponse = urlHashTagList.stream()
+                            .map(urlHashTag -> new TagResponse(
+                                    urlHashTag.getHashTag().getTag()))
+                            .toList();
+
+                    return new UserLinkResponse(
+                            link.getUrlId(),
+                            link.getLink(),
+                            link.getTitle(),
+                            link.getDescription(),
+                            link.getThumbnail(),
+                            link.getBookMarkCount(),
+                            tagResponse
+                    );
+                }).collect(Collectors.toList());
+
+        return new UserLinkListResponse(userLinkResponses);
     }
 
 }
