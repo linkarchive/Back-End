@@ -1,4 +1,4 @@
-package project.linkarchive.backend.url.response.otherUserLinkList;
+package project.linkarchive.backend.url.response.RefactorUserLinkList;
 
 import lombok.Getter;
 import project.linkarchive.backend.hashtag.response.TagListDetailResponse;

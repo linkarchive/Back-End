@@ -6,8 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import project.linkarchive.backend.url.response.linkList.QUserExcludedLinkListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListDetailResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.QUrlResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.UrlResponse;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.QUrlResponse;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.UrlResponse;
 import project.linkarchive.backend.url.response.userLinkList.QUserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 

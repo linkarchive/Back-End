@@ -4,8 +4,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import project.linkarchive.backend.url.response.otherUserLinkList.QUrlResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.UrlResponse;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.QUrlResponse;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.UrlResponse;
 
 import javax.persistence.EntityManager;
 import java.util.List;

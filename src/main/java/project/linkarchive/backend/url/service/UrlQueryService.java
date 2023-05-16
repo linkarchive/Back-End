@@ -11,7 +11,7 @@ import project.linkarchive.backend.url.repository.UrlRepositoryImpl;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkTagListDetailResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.*;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.*;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.DUserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListDetailResponse;

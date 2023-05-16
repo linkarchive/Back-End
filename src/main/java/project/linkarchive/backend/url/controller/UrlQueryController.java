@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.url.response.UrlMetaDataResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.UserLinkListResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.DOtherUserLinkListResponse;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.UserLinkListResponse;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.DOtherUserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.DUserLinkListResponse;
 import project.linkarchive.backend.url.service.UrlQueryService;
 
