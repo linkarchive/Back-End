@@ -1,6 +1,5 @@
 package project.linkarchive.backend.user.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,10 +9,14 @@ import project.linkarchive.backend.user.response.UserProfileResponse;
 import project.linkarchive.backend.user.service.UserQueryService;
 
 @RestController
-@RequiredArgsConstructor
 @PreAuthorize("isAuthenticated()")
 public class UserQueryController {
+
     private final UserQueryService userQueryService;
+
+    public UserQueryController(UserQueryService userQueryService) {
+        this.userQueryService = userQueryService;
+    }
 
     @GetMapping("/user")
     public ResponseEntity<UserProfileResponse> getUserProfile(
@@ -22,4 +25,5 @@ public class UserQueryController {
         UserProfileResponse userProfileResponse = userQueryService.getUserProfile(authInfo.getId());
         return ResponseEntity.ok(userProfileResponse);
     }
+    
 }

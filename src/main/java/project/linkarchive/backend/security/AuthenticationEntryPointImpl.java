@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         authException.printStackTrace();
@@ -18,4 +19,5 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         writer.print("로그인이 필요합니다.");
         // FIXME: JSON 형식으로 에러 메시지 수정
     }
+
 }

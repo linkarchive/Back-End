@@ -4,8 +4,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import project.linkarchive.backend.bookmark.response.QUserMarkedLinkListDetailResponse;
-import project.linkarchive.backend.bookmark.response.UserMarkedLinkListDetailResponse;
+import project.linkarchive.backend.link.response.RefactorUserLinkList.LinkResponse;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.QLinkResponse;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -21,10 +21,9 @@ public class BookMarkRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<UserMarkedLinkListDetailResponse> getMarkLinkList(Pageable pageable, Long lastMarkId) {
+    public List<LinkResponse> getMarkLinkList(Long userId, Long lastMarkId, Pageable pageable) {
         return queryFactory
-                .select(new QUserMarkedLinkListDetailResponse(
-                        bookMark.id,
+                .select(new QLinkResponse(
                         bookMark.link.id,
                         bookMark.link.url,
                         bookMark.link.title,
@@ -35,10 +34,11 @@ public class BookMarkRepositoryImpl {
                 .from(bookMark)
                 .leftJoin(bookMark.link)
                 .where(
+                        bookMark.user.id.eq(userId),
                         ltMarkId(lastMarkId)
                 )
                 .limit(pageable.getPageSize())
-                .orderBy(bookMark.id.desc(), bookMark.link.bookMarkCount.desc())
+                .orderBy(bookMark.id.desc())
                 .fetch();
     }
 

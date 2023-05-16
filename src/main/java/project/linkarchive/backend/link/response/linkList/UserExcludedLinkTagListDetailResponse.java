@@ -9,16 +9,16 @@ import java.util.List;
 @Getter
 public class UserExcludedLinkTagListDetailResponse {
 
-    private Long userId;
-    private String name;
-    private String profileImage;
-    private Long urlId;
-    private String link;
-    private String title;
-    private String description;
-    private String thumbnail;
-    private Long bookMarkCount;
-    private List<TagListDetailResponse> linkTagList;
+    private final Long userId;
+    private final String name;
+    private final String profileImage;
+    private final Long urlId;
+    private final String link;
+    private final String title;
+    private final String description;
+    private final String thumbnail;
+    private final Long bookMarkCount;
+    private final List<TagListDetailResponse> linkTagList;
 
     @Builder
     public UserExcludedLinkTagListDetailResponse(Long userId, String name, String profileImage, Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<TagListDetailResponse> linkTagList) {

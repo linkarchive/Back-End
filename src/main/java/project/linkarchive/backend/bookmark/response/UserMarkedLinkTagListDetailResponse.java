@@ -27,5 +27,5 @@ public class UserMarkedLinkTagListDetailResponse {
         this.markCount = markCount;
         this.markLinkTagList = markLinkTagList;
     }
-    
+
 }

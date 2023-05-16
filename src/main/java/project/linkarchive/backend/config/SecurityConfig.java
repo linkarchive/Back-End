@@ -1,6 +1,5 @@
 package project.linkarchive.backend.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -19,9 +18,13 @@ import java.util.List;
 
 @Configuration
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfig implements WebMvcConfigurer {
+
     private final SecurityArgumentResolver securityArgumentResolver;
+
+    public SecurityConfig(SecurityArgumentResolver securityArgumentResolver) {
+        this.securityArgumentResolver = securityArgumentResolver;
+    }
 
     @Bean
     public SecurityFilterChain setupSecurity(
@@ -39,6 +42,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .and()
                 .build();
     }
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(securityArgumentResolver);

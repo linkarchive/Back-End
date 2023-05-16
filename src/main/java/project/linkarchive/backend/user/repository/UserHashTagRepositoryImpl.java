@@ -8,7 +8,7 @@ import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static project.linkarchive.backend.user.domain.QUserHashTag.*;
+import static project.linkarchive.backend.user.domain.QUserHashTag.userHashTag;
 
 @Repository
 public class UserHashTagRepositoryImpl {

@@ -3,15 +3,16 @@ package project.linkarchive.backend.bookmark.service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.linkarchive.backend.advice.exception.BusinessException;
+import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
-import project.linkarchive.backend.bookmark.response.UserMarkedLinkListDetailResponse;
-import project.linkarchive.backend.bookmark.response.UserMarkedLinkListResponse;
-import project.linkarchive.backend.bookmark.response.UserMarkedLinkTagListDetailResponse;
-import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 import project.linkarchive.backend.link.domain.UrlHashTag;
 import project.linkarchive.backend.link.repository.UrlHashTagRepository;
-import project.linkarchive.backend.user.domain.UserHashTag;
-import project.linkarchive.backend.user.repository.UserHashTagRepository;
+import project.linkarchive.backend.link.response.RefactorUserLinkList.LinkResponse;
+import project.linkarchive.backend.link.response.RefactorUserLinkList.TagResponse;
+import project.linkarchive.backend.link.response.RefactorUserLinkList.UserLinkListResponse;
+import project.linkarchive.backend.link.response.RefactorUserLinkList.UserLinkResponse;
+import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,44 +21,41 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class BookMarkQueryService {
 
-    private final UserHashTagRepository userHashTagRepository;
-    private final BookMarkRepositoryImpl bookMarkRepositoryImpl;
     private final UrlHashTagRepository urlHashTagRepository;
+    private final UserRepository userRepository;
+    private final BookMarkRepositoryImpl bookMarkRepositoryImpl;
 
-    public BookMarkQueryService(UserHashTagRepository userHashTagRepository, BookMarkRepositoryImpl bookMarkRepositoryImpl, UrlHashTagRepository urlHashTagRepository) {
-        this.userHashTagRepository = userHashTagRepository;
-        this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
+    public BookMarkQueryService(UrlHashTagRepository urlHashTagRepository, UserRepository userRepository, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
         this.urlHashTagRepository = urlHashTagRepository;
+        this.userRepository = userRepository;
+        this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
     }
 
-    public UserMarkedLinkListResponse getMarkLinkList(Pageable pageable, Long lastUrlId) {
-        //FIXME user가 자주 사용하는 해시태그 30개 조회로 리팩토링 필요. user 정보 없어서 조회하는걸로 대체했어요
-        List<UserHashTag> userHashTagList = userHashTagRepository.findAll();
-        List<TagListDetailResponse> userTagList30ResponseList = userHashTagList.stream()
-                .map(h -> new TagListDetailResponse(h.getHashTag().getTag())).collect(Collectors.toList());
+    public UserLinkListResponse getMarkedLinkList(Long userId, Long lastUrlId, Pageable pageable) {
 
-        //FIXME 기능에 초점을 둬서 쿼리 성능이 좋지 않아요.
-        List<UserMarkedLinkListDetailResponse> userMarkedLinkListDetailResponseList = bookMarkRepositoryImpl.getMarkLinkList(pageable, lastUrlId);
-        List<UserMarkedLinkTagListDetailResponse> userMarkedLinkTagListDetailResponseList = userMarkedLinkListDetailResponseList.stream()
-                .map(m -> {
-                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(m.getUrlId());
-                    List<TagListDetailResponse> tagListResponseListDetailList = urlHashTagList.stream()
-                            .map(h -> new TagListDetailResponse(
-                                    h.getHashTag().getTag())).collect(Collectors.toList());
+        userRepository.findById(userId).orElseThrow(() -> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
 
-                    return new UserMarkedLinkTagListDetailResponse(
-                            m.getMarkId(),
-                            m.getUrlId(),
-                            m.getLink(),
-                            m.getTitle(),
-                            m.getDescription(),
-                            m.getThumbnail(),
-                            m.getMarkCount(),
-                            tagListResponseListDetailList
+        List<LinkResponse> linkResponses = bookMarkRepositoryImpl.getMarkLinkList(userId, lastUrlId, pageable);
+        List<UserLinkResponse> userLinkResponses = linkResponses.stream()
+                .map(link -> {
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(link.getUrlId());
+                    List<TagResponse> tagResponse = urlHashTagList.stream()
+                            .map(urlHashTag -> new TagResponse(
+                                    urlHashTag.getHashTag().getTag()))
+                            .toList();
+
+                    return new UserLinkResponse(
+                            link.getUrlId(),
+                            link.getLink(),
+                            link.getTitle(),
+                            link.getDescription(),
+                            link.getThumbnail(),
+                            link.getBookMarkCount(),
+                            tagResponse
                     );
                 }).collect(Collectors.toList());
 
-        return new UserMarkedLinkListResponse(userTagList30ResponseList, userMarkedLinkTagListDetailResponseList);
+        return new UserLinkListResponse(userLinkResponses);
     }
 
 }

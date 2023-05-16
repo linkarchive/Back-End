@@ -1,6 +1,5 @@
 package project.linkarchive.backend.security;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,9 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
+
     private final OAuthService oAuthService;
+
+    public TokenAuthenticationFilter(OAuthService oAuthService) {
+        this.oAuthService = oAuthService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -26,17 +29,17 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         }
         String[] tokenData = tokenHeader.split(" ");
 
-        if (!tokenData[0].equalsIgnoreCase("bearer")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
         if (tokenData.length != 2) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = tokenData[1];
+        if (!tokenData[0].equalsIgnoreCase("bearer")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
+        String token = tokenData[1];
         if (!oAuthService.validate(token)) {
             filterChain.doFilter(request, response);
             return;
@@ -49,7 +52,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         securityContext.setAuthentication(authentication);
         SecurityContextHolder.setContext(securityContext);
         filterChain.doFilter(request, response);
-
     }
 
 }

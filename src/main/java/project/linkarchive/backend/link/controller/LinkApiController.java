@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.advice.success.SuccessCodeConst;
 import project.linkarchive.backend.advice.success.SuccessResponse;
-import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.link.service.LinkApiService;
+import project.linkarchive.backend.security.AuthInfo;
 
 @RestController
 @PreAuthorize("isAuthenticated()")

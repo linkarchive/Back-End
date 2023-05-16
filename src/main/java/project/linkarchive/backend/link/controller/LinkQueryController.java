@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.link.response.LinkMetaDataResponse;
+import project.linkarchive.backend.link.response.RefactorUserLinkList.DOtherUserLinkListResponse;
 import project.linkarchive.backend.link.response.linkList.UserExcludedLinkListResponse;
-import project.linkarchive.backend.link.response.otherUserLinkList.OtherUserLinkListResponse;
-import project.linkarchive.backend.link.response.userLinkList.UserLinkListResponse;
+import project.linkarchive.backend.link.response.userLinkList.DUserLinkListResponse;
 import project.linkarchive.backend.link.service.LinkQueryService;
+import project.linkarchive.backend.security.AuthInfo;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -76,13 +76,13 @@ public class LinkQueryController {
 
 
     @GetMapping("/links")
-    public ResponseEntity<UserLinkListResponse> getUserLinkList(
+    public ResponseEntity<DUserLinkListResponse> getUserLinkList(
             @PageableDefault(direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(value = "urlId", required = false) Long lastUrlId,
             AuthInfo authInfo
     ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(pageable, lastUrlId, authInfo.getId());
-        return ResponseEntity.ok(userLinkListResponse);
+        DUserLinkListResponse DUserLinkListResponse = linkQueryService.getUserLinkList(pageable, lastUrlId, authInfo.getId());
+        return ResponseEntity.ok(DUserLinkListResponse);
     }
 
     @GetMapping("/links/archive")
@@ -94,14 +94,14 @@ public class LinkQueryController {
     }
 
     @GetMapping("/links/user/{userId}")
-    public ResponseEntity<OtherUserLinkListResponse> getOtherUserLinkList(
+    public ResponseEntity<DOtherUserLinkListResponse> getOtherUserLinkList(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "urlId", required = false) Long lastUrlId,
             @PageableDefault Pageable pageable
     ) {
 
-        OtherUserLinkListResponse otherUserLinkListResponse = linkQueryService.getOtherLinkList(userId, pageable, lastUrlId);
-        return ResponseEntity.ok(otherUserLinkListResponse);
+        DOtherUserLinkListResponse DOtherUserLinkListResponse = linkQueryService.getOtherLinkList(userId, pageable, lastUrlId);
+        return ResponseEntity.ok(DOtherUserLinkListResponse);
     }
 
 }
