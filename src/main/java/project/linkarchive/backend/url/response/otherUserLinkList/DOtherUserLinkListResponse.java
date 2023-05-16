@@ -6,11 +6,11 @@ import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 import java.util.List;
 
 @Getter
-public class OtherUserLinkListResponse {
+public class DOtherUserLinkListResponse {
     private List<TagListDetailResponse> userTagList;
-    private List<UrlListResponse> userLinkList;
+    private List<UserLinkResponse> userLinkList;
 
-    public OtherUserLinkListResponse(List<TagListDetailResponse> userTagList, List<UrlListResponse> userLinkList) {
+    public DOtherUserLinkListResponse(List<TagListDetailResponse> userTagList, List<UserLinkResponse> userLinkList) {
         this.userTagList = userTagList;
         this.userLinkList = userLinkList;
     }

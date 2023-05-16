@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.url.response.UrlMetaDataResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.LinkListResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserLinkListResponse;
-import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.UserLinkListResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.DOtherUserLinkListResponse;
+import project.linkarchive.backend.url.response.userLinkList.DUserLinkListResponse;
 import project.linkarchive.backend.url.service.UrlQueryService;
 
 import java.io.IOException;
@@ -77,13 +77,13 @@ public class UrlQueryController {
 
 
     @GetMapping("/links")
-    public ResponseEntity<UserLinkListResponse> getUserLinkList(
+    public ResponseEntity<DUserLinkListResponse> getUserLinkList(
             @PageableDefault(direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(value = "urlId", required = false) Long lastUrlId,
             AuthInfo authInfo
     ) {
-        UserLinkListResponse userLinkListResponse = urlQueryService.getUserLinkList(pageable, lastUrlId, authInfo.getId());
-        return ResponseEntity.ok(userLinkListResponse);
+        DUserLinkListResponse DUserLinkListResponse = urlQueryService.getUserLinkList(pageable, lastUrlId, authInfo.getId());
+        return ResponseEntity.ok(DUserLinkListResponse);
     }
 
     @GetMapping("/links/archive")
@@ -95,26 +95,27 @@ public class UrlQueryController {
     }
 
     @GetMapping("/links/user/{userId}")
-    public ResponseEntity<OtherUserLinkListResponse> getOtherUserLinkList(
+    public ResponseEntity<DOtherUserLinkListResponse> getOtherUserLinkList(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "urlId", required = false) Long lastUrlId,
             @PageableDefault Pageable pageable
     ) {
 
-        OtherUserLinkListResponse otherUserLinkListResponse = urlQueryService.getOtherLinkList(userId, pageable, lastUrlId);
-        return ResponseEntity.ok(otherUserLinkListResponse);
+        DOtherUserLinkListResponse DOtherUserLinkListResponse = urlQueryService.getOtherLinkList(userId, pageable, lastUrlId);
+        return ResponseEntity.ok(DOtherUserLinkListResponse);
     }
 
 
-    @GetMapping("/links/mark/user/{userId}")
-    public ResponseEntity<LinkListResponse> getMarkedLinkList(
+    //사용자별 북마크 리스트 조회 010
+    @GetMapping("/mark/links/user/{userId}")
+    public ResponseEntity<UserLinkListResponse> getMarkedLinkList(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "urlId", required = false) Long lastUrlId,
             @PageableDefault Pageable pageable
     ) {
 
-        LinkListResponse linkListResponse = urlQueryService.getMarkedLinkList(userId, pageable, lastUrlId);
-        return ResponseEntity.ok(linkListResponse);
+        UserLinkListResponse userLinkListResponse = urlQueryService.getMarkedLinkList(userId, pageable, lastUrlId);
+        return ResponseEntity.ok(userLinkListResponse);
 
     }
 }

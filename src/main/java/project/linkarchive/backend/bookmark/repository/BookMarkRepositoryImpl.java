@@ -4,8 +4,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import project.linkarchive.backend.bookmark.response.QUserMarkedLinkListDetailResponse;
-import project.linkarchive.backend.bookmark.response.UserMarkedLinkListDetailResponse;
 import project.linkarchive.backend.url.response.otherUserLinkList.QUrlResponse;
 import project.linkarchive.backend.url.response.otherUserLinkList.UrlResponse;
 
@@ -21,27 +19,6 @@ public class BookMarkRepositoryImpl {
 
     public BookMarkRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
-    }
-
-    public List<UserMarkedLinkListDetailResponse> getMarkLinkList(Pageable pageable, Long lastMarkId) {
-        return queryFactory
-                .select(new QUserMarkedLinkListDetailResponse(
-                        bookMark.id,
-                        bookMark.url.id,
-                        bookMark.url.link,
-                        bookMark.url.title,
-                        bookMark.url.description,
-                        bookMark.url.thumbnail,
-                        bookMark.url.bookMarkCount
-                ))
-                .from(bookMark)
-                .leftJoin(bookMark.url)
-                .where(
-                        ltMarkId(lastMarkId)
-                )
-                .limit(pageable.getPageSize())
-                .orderBy(bookMark.id.desc(), bookMark.url.bookMarkCount.desc())
-                .fetch();
     }
 
     public List<UrlResponse> getMarkLinkList(Long userId, Pageable pageable, Long lastMarkId) {
@@ -65,17 +42,8 @@ public class BookMarkRepositoryImpl {
                 .fetch();
     }
 
-
-
-
-
-
-
-
     private BooleanExpression ltMarkId(Long lastMarkId) {
         return lastMarkId != null ? bookMark.url.id.lt(lastMarkId) : null;
     }
-
-
 
 }

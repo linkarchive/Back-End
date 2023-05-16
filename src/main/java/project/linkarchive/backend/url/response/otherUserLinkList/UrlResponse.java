@@ -20,5 +20,6 @@ public class UrlResponse {
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
+
     }
 }

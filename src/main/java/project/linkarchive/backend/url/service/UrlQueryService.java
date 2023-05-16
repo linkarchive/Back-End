@@ -13,7 +13,7 @@ import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListRes
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkTagListDetailResponse;
 import project.linkarchive.backend.url.response.otherUserLinkList.*;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
-import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
+import project.linkarchive.backend.url.response.userLinkList.DUserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserTagListDetailResponse;
 import project.linkarchive.backend.user.repository.UserHashTagRepositoryImpl;
@@ -40,7 +40,7 @@ public class UrlQueryService {
 
     }
 
-    public UserLinkListResponse getUserLinkList(Pageable pageable, Long lastUrlId, Long userId) {
+    public DUserLinkListResponse getUserLinkList(Pageable pageable, Long lastUrlId, Long userId) {
         List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getTagListLimit30(userId);
 
         //FIXME 기능에 초점을 둬서 쿼리 성능이 좋지 않아요.
@@ -65,7 +65,7 @@ public class UrlQueryService {
                     );
                 }).collect(Collectors.toList());
 
-        return new UserLinkListResponse(userHashTagList, userLinkTagListDetailResponseList);
+        return new DUserLinkListResponse(userHashTagList, userLinkTagListDetailResponseList);
     }
 
     public UserExcludedLinkListResponse getLinkList(Pageable pageable, Long lastUrlId, Long userId) {
@@ -83,55 +83,55 @@ public class UrlQueryService {
         return new UserExcludedLinkListResponse(linkDetailList);
     }
 
-    public OtherUserLinkListResponse getOtherLinkList(Long userId, Pageable pageable, Long lastUrlId) {
+    public DOtherUserLinkListResponse getOtherLinkList(Long userId, Pageable pageable, Long lastUrlId) {
         List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getTagListLimit30(userId);
 
         List<UrlResponse> urlResponses = urlRepositoryImpl.getOtherLinkList(userId,pageable,lastUrlId);
-        List<UrlListResponse> urlListResponses = urlResponses.stream()
+        List<UserLinkResponse> userLinkRespons = urlResponses.stream()
                 .map(link -> {
                     List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(link.getUrlId());
-                    List<UrlHashTagResponse> urlHashTagResponse = urlHashTagList.stream()
-                            .map(urlHashTag -> new UrlHashTagResponse(
+                    List<TagResponse> tagResponse = urlHashTagList.stream()
+                            .map(urlHashTag -> new TagResponse(
                                     urlHashTag.getHashTag().getTag()))
                             .collect(Collectors.toList());
 
-                    return new UrlListResponse(
+                    return new UserLinkResponse(
                             link.getUrlId(),
                             link.getLink(),
                             link.getTitle(),
                             link.getDescription(),
                             link.getThumbnail(),
                             link.getBookMarkCount(),
-                            urlHashTagResponse
+                            tagResponse
                     );
                 }).collect(Collectors.toList());
 
-        return new OtherUserLinkListResponse(userHashTagList, urlListResponses);
+        return new DOtherUserLinkListResponse(userHashTagList, userLinkRespons);
     }
 
-    public LinkListResponse getMarkedLinkList(Long userId, Pageable pageable, Long lastUrlId) {
+    public UserLinkListResponse getMarkedLinkList(Long userId, Pageable pageable, Long lastUrlId) {
 
         List<UrlResponse> urlResponses = bookMarkRepositoryImpl.getMarkLinkList(userId,pageable,lastUrlId);
-        List<UrlListResponse> urlListResponses = urlResponses.stream()
+        List<UserLinkResponse> userLinkResponses = urlResponses.stream()
                 .map(link -> {
                     List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(link.getUrlId());
-                    List<UrlHashTagResponse> urlHashTagResponse = urlHashTagList.stream()
-                            .map(urlHashTag -> new UrlHashTagResponse(
+                    List<TagResponse> tagResponse = urlHashTagList.stream()
+                            .map(urlHashTag -> new TagResponse(
                                     urlHashTag.getHashTag().getTag()))
                             .toList();
 
-                    return new UrlListResponse(
+                    return new UserLinkResponse(
                             link.getUrlId(),
                             link.getLink(),
                             link.getTitle(),
                             link.getDescription(),
                             link.getThumbnail(),
                             link.getBookMarkCount(),
-                            urlHashTagResponse
+                            tagResponse
                     );
                 }).collect(Collectors.toList());
 
-        return new LinkListResponse(urlListResponses);
+        return new UserLinkListResponse(userLinkResponses);
     }
 
 }
