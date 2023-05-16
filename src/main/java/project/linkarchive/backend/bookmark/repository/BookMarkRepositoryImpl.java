@@ -5,7 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import project.linkarchive.backend.link.response.RefactorUserLinkList.LinkResponse;
-import project.linkarchive.backend.url.response.RefactorUserLinkList.QLinkResponse;
+import project.linkarchive.backend.link.response.RefactorUserLinkList.QLinkResponse;
 
 import javax.persistence.EntityManager;
 import java.util.List;
