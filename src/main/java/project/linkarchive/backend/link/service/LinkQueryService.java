@@ -40,6 +40,8 @@ public class LinkQueryService {
 
     public UserLinkListResponse getUserLinkList(Long userId, Pageable pageable, Long lastUrlId) {
 
+        userRepository.findById(userId).orElseThrow(() -> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
+
         List<LinkResponse> linkResponseList = urlRepositoryImpl.getUserLinkList(userId, pageable, lastUrlId);
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(link -> {
