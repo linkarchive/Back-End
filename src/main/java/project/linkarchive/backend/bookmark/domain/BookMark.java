@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
-import project.linkarchive.backend.url.domain.Url;
+import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.user.domain.User;
 
 import javax.persistence.*;
@@ -25,19 +25,19 @@ public class BookMark extends CreatedEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "url_id")
-    private Url url;
+    @JoinColumn(name = "link_id")
+    private Link link;
 
     @Builder
-    public BookMark(User user, Url url) {
+    public BookMark(User user, Link link) {
         this.user = user;
-        this.url = url;
+        this.link = link;
     }
 
-    public static BookMark of(User user, Url url) {
+    public static BookMark of(User user, Link link) {
         return BookMark.builder()
                 .user(user)
-                .url(url)
+                .link(link)
                 .build();
     }
 

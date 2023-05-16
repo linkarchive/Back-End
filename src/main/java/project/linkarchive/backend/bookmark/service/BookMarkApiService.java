@@ -5,8 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.BusinessException;
 import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
-import project.linkarchive.backend.url.domain.Url;
-import project.linkarchive.backend.url.repository.UrlRepository;
+import project.linkarchive.backend.link.domain.Link;
+import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 
@@ -17,43 +17,43 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 public class BookMarkApiService {
 
     private final UserRepository userRepository;
-    private final UrlRepository urlRepository;
+    private final LinkRepository linkRepository;
     private final BookMarkRepository bookMarkRepository;
 
-    public BookMarkApiService(UserRepository userRepository, UrlRepository urlRepository, BookMarkRepository bookMarkRepository) {
+    public BookMarkApiService(UserRepository userRepository, LinkRepository linkRepository, BookMarkRepository bookMarkRepository) {
         this.userRepository = userRepository;
-        this.urlRepository = urlRepository;
+        this.linkRepository = linkRepository;
         this.bookMarkRepository = bookMarkRepository;
     }
 
     //FIXME 동시성 이슈에 대한 해결이 필요해요.
     public void bookMark(Long urlId, Long userId) {
-        Url url = getUrlValidation(urlId);
-        existUrlValidation(url.getId());
+        Link link = getUrlValidation(urlId);
+        existUrlValidation(link.getId());
 
         User user = findUserById(userId);
-        BookMark bookMark = BookMark.of(user, url);
+        BookMark bookMark = BookMark.of(user, link);
         bookMarkRepository.save(bookMark);
 
-        bookMarkRepository.increaseBookMarkCount(url.getId());
+        linkRepository.increaseBookMarkCount(link.getId());
     }
 
     //FIXME 동시성 이슈에 대한 해결이 필요해요.
     public void bookMarkCancel(Long urlId, Long userId) {
-        Url url = getUrlValidation(urlId);
-        BookMark bookMark = findBookMarkByUrlAndUser(userId, url);
+        Link link = getUrlValidation(urlId);
+        BookMark bookMark = findBookMarkByUrlAndUser(userId, link);
         bookMarkRepository.delete(bookMark);
 
-        bookMarkRepository.decreaseBookMarkCount(url.getId());
+        linkRepository.decreaseBookMarkCount(link.getId());
     }
 
-    private Url getUrlValidation(Long urlId) {
-        return urlRepository.findById(urlId)
-                .orElseThrow(() -> new BusinessException(NOT_FOUND_URL));
+    private Link getUrlValidation(Long urlId) {
+        return linkRepository.findById(urlId)
+                .orElseThrow(() -> new BusinessException(NOT_FOUND_LINK));
     }
 
     private void existUrlValidation(Long urlId) {
-        if (bookMarkRepository.existsByUrlId(urlId)) {
+        if (bookMarkRepository.existsByLinkId(urlId)) {
             throw new BusinessException(ALREADY_EXIST_BOOKMARK);
         }
     }
@@ -63,8 +63,8 @@ public class BookMarkApiService {
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_USER));
     }
 
-    private BookMark findBookMarkByUrlAndUser(Long userId, Url url) {
-        return bookMarkRepository.findByUrlIdAndUserId(url.getId(), userId)
+    private BookMark findBookMarkByUrlAndUser(Long userId, Link link) {
+        return bookMarkRepository.findByLinkIdAndUserId(link.getId(), userId)
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_BOOKMARK));
     }
 

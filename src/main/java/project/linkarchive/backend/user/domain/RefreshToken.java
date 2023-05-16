@@ -1,6 +1,9 @@
 package project.linkarchive.backend.user.domain;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
 
 import javax.persistence.*;
@@ -29,7 +32,7 @@ public class RefreshToken extends CreatedEntity {
         this.user = user;
     }
 
-    public void renewalToken(String token){
+    public void renewalToken(String token) {
         this.refreshToken = token;
     }
 

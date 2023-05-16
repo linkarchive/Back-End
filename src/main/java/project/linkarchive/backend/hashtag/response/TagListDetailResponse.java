@@ -3,7 +3,7 @@ package project.linkarchive.backend.hashtag.response;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
-import project.linkarchive.backend.url.domain.UrlHashTag;
+import project.linkarchive.backend.link.domain.UrlHashTag;
 
 @Getter
 public class TagListDetailResponse {

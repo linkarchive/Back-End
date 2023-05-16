@@ -148,7 +148,7 @@ public class OAuthService {
 
 
         Optional<RefreshToken> oldRefreshToken = refreshTokenRepository.findByUserId(user.getId());
-        if(oldRefreshToken.isPresent()){
+        if (oldRefreshToken.isPresent()) {
             oldRefreshToken.get().renewalToken(jwtRefreshToken);
         } else {
             refreshTokenRepository.save(refreshToken);

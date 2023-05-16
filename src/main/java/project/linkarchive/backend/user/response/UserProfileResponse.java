@@ -5,6 +5,7 @@ import project.linkarchive.backend.user.domain.User;
 
 @Getter
 public class UserProfileResponse {
+
     private Long id;
     private String name;
     private String introduce;
@@ -16,6 +17,7 @@ public class UserProfileResponse {
         this.introduce = user.getIntroduce();
         this.profileImage = user.getProfileImage().getProfileImage();
     }
+
 }
 
 
