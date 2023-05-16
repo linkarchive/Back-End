@@ -4,8 +4,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import project.linkarchive.backend.url.response.RefactorUserLinkList.QUrlResponse;
-import project.linkarchive.backend.url.response.RefactorUserLinkList.UrlResponse;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.LinkResponse;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.QLinkResponse;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -21,9 +21,9 @@ public class BookMarkRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<UrlResponse> getMarkLinkList(Long userId, Pageable pageable, Long lastMarkId) {
+    public List<LinkResponse> getMarkLinkList(Long userId, Pageable pageable, Long lastMarkId) {
         return queryFactory
-                .select(new QUrlResponse(
+                .select(new QLinkResponse(
                         bookMark.url.id,
                         bookMark.url.link,
                         bookMark.url.title,

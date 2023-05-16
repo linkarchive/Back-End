@@ -3,19 +3,20 @@ package project.linkarchive.backend.url.service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.linkarchive.backend.advice.exception.BusinessException;
-import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
 import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 import project.linkarchive.backend.url.domain.UrlHashTag;
 import project.linkarchive.backend.url.repository.UrlHashTagRepository;
 import project.linkarchive.backend.url.repository.UrlRepositoryImpl;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.DOtherUserLinkListResponse;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.LinkResponse;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.TagResponse;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.UserLinkResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkTagListDetailResponse;
-import project.linkarchive.backend.url.response.RefactorUserLinkList.*;
-import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.DUserLinkListResponse;
+import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserTagListDetailResponse;
 import project.linkarchive.backend.user.repository.UserHashTagRepositoryImpl;
@@ -91,8 +92,8 @@ public class UrlQueryService {
     public DOtherUserLinkListResponse getOtherLinkList(Long userId, Pageable pageable, Long lastUrlId) {
         List<TagListDetailResponse> userHashTagList = userHashTagRepositoryImpl.getTagListLimit30(userId);
 
-        List<UrlResponse> urlResponses = urlRepositoryImpl.getOtherLinkList(userId,pageable,lastUrlId);
-        List<UserLinkResponse> userLinkRespons = urlResponses.stream()
+        List<LinkResponse> linkRespons = urlRepositoryImpl.getOtherLinkList(userId,pageable,lastUrlId);
+        List<UserLinkResponse> userLinkRespons = linkRespons.stream()
                 .map(link -> {
                     List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(link.getUrlId());
                     List<TagResponse> tagResponse = urlHashTagList.stream()
@@ -112,33 +113,6 @@ public class UrlQueryService {
                 }).collect(Collectors.toList());
 
         return new DOtherUserLinkListResponse(userHashTagList, userLinkRespons);
-    }
-
-    public UserLinkListResponse getMarkedLinkList(Long userId, Pageable pageable, Long lastUrlId) {
-
-        userRepository.findById(userId).orElseThrow(()-> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
-
-        List<UrlResponse> urlResponses = bookMarkRepositoryImpl.getMarkLinkList(userId,pageable,lastUrlId);
-        List<UserLinkResponse> userLinkResponses = urlResponses.stream()
-                .map(link -> {
-                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(link.getUrlId());
-                    List<TagResponse> tagResponse = urlHashTagList.stream()
-                            .map(urlHashTag -> new TagResponse(
-                                    urlHashTag.getHashTag().getTag()))
-                            .toList();
-
-                    return new UserLinkResponse(
-                            link.getUrlId(),
-                            link.getLink(),
-                            link.getTitle(),
-                            link.getDescription(),
-                            link.getThumbnail(),
-                            link.getBookMarkCount(),
-                            tagResponse
-                    );
-                }).collect(Collectors.toList());
-
-        return new UserLinkListResponse(userLinkResponses);
     }
 
 }

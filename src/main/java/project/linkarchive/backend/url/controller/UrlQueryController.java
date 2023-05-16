@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.security.AuthInfo;
+import project.linkarchive.backend.url.response.RefactorUserLinkList.DOtherUserLinkListResponse;
 import project.linkarchive.backend.url.response.UrlMetaDataResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
-import project.linkarchive.backend.url.response.RefactorUserLinkList.UserLinkListResponse;
-import project.linkarchive.backend.url.response.RefactorUserLinkList.DOtherUserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.DUserLinkListResponse;
 import project.linkarchive.backend.url.service.UrlQueryService;
 
@@ -105,19 +104,6 @@ public class UrlQueryController {
         return ResponseEntity.ok(DOtherUserLinkListResponse);
     }
 
-
-    //사용자별 북마크 리스트 조회 010
-    @GetMapping("/mark/links/user/{userId}")
-    public ResponseEntity<UserLinkListResponse> getMarkedLinkList(
-            @PathVariable("userId") Long userId,
-            @RequestParam(value = "urlId", required = false) Long lastUrlId,
-            @PageableDefault Pageable pageable
-    ) {
-
-        UserLinkListResponse userLinkListResponse = urlQueryService.getMarkedLinkList(userId, pageable, lastUrlId);
-        return ResponseEntity.ok(userLinkListResponse);
-
-    }
 }
 
 
