@@ -1,10 +1,11 @@
-package project.linkarchive.backend.link.response.RefactorUserLinkList;
+package project.linkarchive.backend.link.response.UserLinkList;
 
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
-public class LinkResponse {
+public class UserLinkResponse {
 
     private Long urlId;
     private String link;
@@ -12,16 +13,16 @@ public class LinkResponse {
     private String description;
     private String thumbnail;
     private Long bookMarkCount;
+    private List<TagResponse> tagList;
 
-    @QueryProjection
-    public LinkResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount) {
+    public UserLinkResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<TagResponse> linkTagList) {
         this.urlId = urlId;
         this.link = link;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
-
+        this.tagList = linkTagList;
     }
 
 }

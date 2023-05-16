@@ -1,4 +1,4 @@
-package project.linkarchive.backend.link.response.RefactorUserLinkList;
+package project.linkarchive.backend.link.response.UserLinkList;
 
 import lombok.Getter;
 
