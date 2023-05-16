@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.url.response.UrlMetaDataResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.LinkListResponse;
 import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.service.UrlQueryService;
@@ -104,6 +105,18 @@ public class UrlQueryController {
         return ResponseEntity.ok(otherUserLinkListResponse);
     }
 
+
+    @GetMapping("/links/mark/user/{userId}")
+    public ResponseEntity<LinkListResponse> getMarkedLinkList(
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "urlId", required = false) Long lastUrlId,
+            @PageableDefault Pageable pageable
+    ) {
+
+        LinkListResponse linkListResponse = urlQueryService.getMarkedLinkList(userId, pageable, lastUrlId);
+        return ResponseEntity.ok(linkListResponse);
+
+    }
 }
 
 

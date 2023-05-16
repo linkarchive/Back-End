@@ -3,6 +3,7 @@ package project.linkarchive.backend.url.service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
 import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 import project.linkarchive.backend.url.domain.UrlHashTag;
 import project.linkarchive.backend.url.repository.UrlHashTagRepository;
@@ -10,10 +11,7 @@ import project.linkarchive.backend.url.repository.UrlRepositoryImpl;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListDetailResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkListResponse;
 import project.linkarchive.backend.url.response.linkList.UserExcludedLinkTagListDetailResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.OtherUserLinkListResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.UrlHashTagResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.UrlListResponse;
-import project.linkarchive.backend.url.response.otherUserLinkList.UrlResponse;
+import project.linkarchive.backend.url.response.otherUserLinkList.*;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkListResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListDetailResponse;
@@ -31,11 +29,14 @@ public class UrlQueryService {
     private final UrlRepositoryImpl urlRepositoryImpl;
     private final UserHashTagRepositoryImpl userHashTagRepositoryImpl;
 
-    public UrlQueryService(UrlHashTagRepository urlHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UserHashTagRepositoryImpl userHashTagRepositoryImpl) {
+    private final BookMarkRepositoryImpl bookMarkRepositoryImpl;
+
+    public UrlQueryService(UrlHashTagRepository urlHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UserHashTagRepositoryImpl userHashTagRepositoryImpl, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
 
         this.urlHashTagRepository = urlHashTagRepository;
         this.urlRepositoryImpl = urlRepositoryImpl;
         this.userHashTagRepositoryImpl = userHashTagRepositoryImpl;
+        this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
 
     }
 
@@ -107,4 +108,30 @@ public class UrlQueryService {
 
         return new OtherUserLinkListResponse(userHashTagList, urlListResponses);
     }
+
+    public LinkListResponse getMarkedLinkList(Long userId, Pageable pageable, Long lastUrlId) {
+
+        List<UrlResponse> urlResponses = bookMarkRepositoryImpl.getMarkLinkList(userId,pageable,lastUrlId);
+        List<UrlListResponse> urlListResponses = urlResponses.stream()
+                .map(link -> {
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(link.getUrlId());
+                    List<UrlHashTagResponse> urlHashTagResponse = urlHashTagList.stream()
+                            .map(urlHashTag -> new UrlHashTagResponse(
+                                    urlHashTag.getHashTag().getTag()))
+                            .toList();
+
+                    return new UrlListResponse(
+                            link.getUrlId(),
+                            link.getLink(),
+                            link.getTitle(),
+                            link.getDescription(),
+                            link.getThumbnail(),
+                            link.getBookMarkCount(),
+                            urlHashTagResponse
+                    );
+                }).collect(Collectors.toList());
+
+        return new LinkListResponse(urlListResponses);
+    }
+
 }
