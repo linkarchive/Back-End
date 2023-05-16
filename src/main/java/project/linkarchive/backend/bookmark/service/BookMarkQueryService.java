@@ -8,8 +8,8 @@ import project.linkarchive.backend.bookmark.response.UserMarkedLinkListDetailRes
 import project.linkarchive.backend.bookmark.response.UserMarkedLinkListResponse;
 import project.linkarchive.backend.bookmark.response.UserMarkedLinkTagListDetailResponse;
 import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
-import project.linkarchive.backend.url.domain.UrlHashTag;
-import project.linkarchive.backend.url.repository.UrlHashTagRepository;
+import project.linkarchive.backend.link.domain.UrlHashTag;
+import project.linkarchive.backend.link.repository.UrlHashTagRepository;
 import project.linkarchive.backend.user.domain.UserHashTag;
 import project.linkarchive.backend.user.repository.UserHashTagRepository;
 
@@ -40,7 +40,7 @@ public class BookMarkQueryService {
         List<UserMarkedLinkListDetailResponse> userMarkedLinkListDetailResponseList = bookMarkRepositoryImpl.getMarkLinkList(pageable, lastUrlId);
         List<UserMarkedLinkTagListDetailResponse> userMarkedLinkTagListDetailResponseList = userMarkedLinkListDetailResponseList.stream()
                 .map(m -> {
-                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByUrlId(m.getUrlId());
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(m.getUrlId());
                     List<TagListDetailResponse> tagListResponseListDetailList = urlHashTagList.stream()
                             .map(h -> new TagListDetailResponse(
                                     h.getHashTag().getTag())).collect(Collectors.toList());
