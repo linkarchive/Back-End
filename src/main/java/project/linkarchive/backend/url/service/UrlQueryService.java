@@ -3,6 +3,8 @@ package project.linkarchive.backend.url.service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.linkarchive.backend.advice.exception.BusinessException;
+import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
 import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 import project.linkarchive.backend.url.domain.UrlHashTag;
@@ -17,6 +19,7 @@ import project.linkarchive.backend.url.response.userLinkList.DUserLinkListRespon
 import project.linkarchive.backend.url.response.userLinkList.UserLinkTagListDetailResponse;
 import project.linkarchive.backend.url.response.userLinkList.UserTagListDetailResponse;
 import project.linkarchive.backend.user.repository.UserHashTagRepositoryImpl;
+import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,17 +29,19 @@ import java.util.stream.Collectors;
 public class UrlQueryService {
 
     private final UrlHashTagRepository urlHashTagRepository;
+    private final UserRepository userRepository;
     private final UrlRepositoryImpl urlRepositoryImpl;
     private final UserHashTagRepositoryImpl userHashTagRepositoryImpl;
 
     private final BookMarkRepositoryImpl bookMarkRepositoryImpl;
 
-    public UrlQueryService(UrlHashTagRepository urlHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UserHashTagRepositoryImpl userHashTagRepositoryImpl, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
+    public UrlQueryService(UrlHashTagRepository urlHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UserHashTagRepositoryImpl userHashTagRepositoryImpl, BookMarkRepositoryImpl bookMarkRepositoryImpl, UserRepository userRepository) {
 
         this.urlHashTagRepository = urlHashTagRepository;
         this.urlRepositoryImpl = urlRepositoryImpl;
         this.userHashTagRepositoryImpl = userHashTagRepositoryImpl;
         this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
+        this.userRepository = userRepository;
 
     }
 
@@ -110,6 +115,8 @@ public class UrlQueryService {
     }
 
     public UserLinkListResponse getMarkedLinkList(Long userId, Pageable pageable, Long lastUrlId) {
+
+        userRepository.findById(userId).orElseThrow(()-> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
 
         List<UrlResponse> urlResponses = bookMarkRepositoryImpl.getMarkLinkList(userId,pageable,lastUrlId);
         List<UserLinkResponse> userLinkResponses = urlResponses.stream()
