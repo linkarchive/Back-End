@@ -32,7 +32,8 @@ public class HashTagApiService {
         User user = findUserById(userId);
 
         HashTag hashTag = hashTagRepository.findByTag(request.getTag())
-                .orElseGet(() -> HashTag.of(request));
+                .orElseGet(() -> HashTag.bui
+                        ld(request));
 
         userHashTagRepository.findByHashTagId(hashTag.getId())
                 .ifPresentOrElse(userHashTag -> {
