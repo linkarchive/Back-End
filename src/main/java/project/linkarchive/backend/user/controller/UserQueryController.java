@@ -5,7 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.security.AuthInfo;
-import project.linkarchive.backend.user.response.UserProfileResponse;
+import project.linkarchive.backend.user.response.ProfileResponse;
 import project.linkarchive.backend.user.service.UserQueryService;
 
 @RestController
@@ -19,11 +19,11 @@ public class UserQueryController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<UserProfileResponse> getUserProfile(
+    public ResponseEntity<ProfileResponse> getUserProfile(
             AuthInfo authInfo
     ) {
-        UserProfileResponse userProfileResponse = userQueryService.getUserProfile(authInfo.getId());
-        return ResponseEntity.ok(userProfileResponse);
+        ProfileResponse profileResponse = userQueryService.getUserProfile(authInfo.getId());
+        return ResponseEntity.ok(profileResponse);
     }
     
 }

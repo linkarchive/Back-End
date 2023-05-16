@@ -6,7 +6,7 @@ import project.linkarchive.backend.advice.exception.BusinessException;
 import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
-import project.linkarchive.backend.user.response.UserProfileResponse;
+import project.linkarchive.backend.user.response.ProfileResponse;
 
 @Service
 @Transactional(readOnly = true)
@@ -18,11 +18,11 @@ public class UserQueryService {
         this.userRepository = userRepository;
     }
 
-    public UserProfileResponse getUserProfile(Long userId) {
+    public ProfileResponse getUserProfile(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
 
-        return new UserProfileResponse(user);
+        return new ProfileResponse(user);
     }
 
 }
