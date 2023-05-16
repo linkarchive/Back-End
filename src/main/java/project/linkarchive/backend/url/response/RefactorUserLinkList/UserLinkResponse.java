@@ -1,26 +1,26 @@
-package project.linkarchive.backend.url.response.otherUserLinkList;
+package project.linkarchive.backend.url.response.RefactorUserLinkList;
 
 import lombok.Getter;
 
 import java.util.List;
 @Getter
 
-public class UrlListResponse {
+public class UserLinkResponse {
     private Long urlId;
     private String link;
     private String title;
     private String description;
     private String thumbnail;
     private Long bookMarkCount;
-    private List<UrlHashTagResponse> urlTagList;
+    private List<TagResponse> tagList;
 
-    public UrlListResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<UrlHashTagResponse> linkTagList) {
+    public UserLinkResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<TagResponse> linkTagList) {
         this.urlId = urlId;
         this.link = link;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
-        this.urlTagList = linkTagList;
+        this.tagList = linkTagList;
     }
 }
