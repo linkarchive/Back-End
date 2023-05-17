@@ -7,9 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "profile_image")
 public class ProfileImage extends TimeEntity {
 
     @Id

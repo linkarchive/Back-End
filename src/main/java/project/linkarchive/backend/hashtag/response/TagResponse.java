@@ -10,8 +10,8 @@ public class TagResponse {
 
     private String tagName;
 
-    @QueryProjection
     @Builder
+    @QueryProjection
     public TagResponse(String tagName) {
         this.tagName = tagName;
     }
