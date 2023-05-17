@@ -1,11 +1,8 @@
 package project.linkarchive.backend.advice.success;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SuccessResponse {
 
     private int status;
