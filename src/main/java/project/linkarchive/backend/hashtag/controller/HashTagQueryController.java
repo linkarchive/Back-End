@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.hashtag.response.TagListResponse;
-import project.linkarchive.backend.hashtag.response.UserTagListResponse;
 import project.linkarchive.backend.hashtag.service.HashTagQueryService;
-import project.linkarchive.backend.security.AuthInfo;
 
 @RestController
 @PreAuthorize("isAuthenticated()")
@@ -21,10 +19,10 @@ public class HashTagQueryController {
         this.hashTagQueryService = hashTagQueryService;
     }
 
-    @GetMapping("/tags")
-    public ResponseEntity<UserTagListResponse> getUserTagList(AuthInfo authInfo) {
-        UserTagListResponse userTagList = hashTagQueryService.getLoginUserTagList(authInfo.getId());
-        return ResponseEntity.ok(userTagList);
+    @GetMapping("/tags/user/{userId}")
+    public ResponseEntity<TagListResponse> getUserTagList(@PathVariable(name = "userId") Long userId) {
+        TagListResponse tagList = hashTagQueryService.getUserTagList(userId);
+        return ResponseEntity.ok(tagList);
     }
 
     // 사용자 별 자주 사용하는 해시태그 N개 조회 007

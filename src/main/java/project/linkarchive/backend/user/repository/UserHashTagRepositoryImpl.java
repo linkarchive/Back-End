@@ -2,9 +2,7 @@ package project.linkarchive.backend.user.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
-import project.linkarchive.backend.hashtag.response.QTagListDetailResponse;
 import project.linkarchive.backend.hashtag.response.QTagResponse;
-import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
 
 import javax.persistence.EntityManager;
@@ -33,16 +31,15 @@ public class UserHashTagRepositoryImpl {
                 .fetch();
     }
 
-    public List<TagListDetailResponse> getUserTagList(Long userId) {
+    public List<TagResponse> getUserTagList(Long userId) {
         return queryFactory
-                .select(new QTagListDetailResponse(
+                .select(new QTagResponse(
                         userHashTag.hashTag.tag
                 ))
                 .from(userHashTag)
                 .where(userHashTag.user.id.eq(userId))
                 .orderBy(userHashTag.usageCount.desc())
                 .fetch();
-
     }
 
 }

@@ -1,4 +1,4 @@
-package project.linkarchive.backend.link.response.UserLinkList;
+package project.linkarchive.backend.link.response.userLinkList;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -21,7 +21,6 @@ public class LinkResponse {
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
-
     }
 
 }
