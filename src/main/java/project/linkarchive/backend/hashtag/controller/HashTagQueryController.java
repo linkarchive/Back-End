@@ -3,10 +3,10 @@ package project.linkarchive.backend.hashtag.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import project.linkarchive.backend.hashtag.response.UserTagListResponse;
+import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.service.HashTagQueryService;
-import project.linkarchive.backend.security.AuthInfo;
 
 @RestController
 @PreAuthorize("isAuthenticated()")
@@ -18,10 +18,10 @@ public class HashTagQueryController {
         this.hashTagQueryService = hashTagQueryService;
     }
 
-    @GetMapping("/tags")
-    public ResponseEntity<UserTagListResponse> getUserTagList(AuthInfo authInfo) {
-        UserTagListResponse userTagList = hashTagQueryService.getLoginUserTagList(authInfo.getId());
-        return ResponseEntity.ok(userTagList);
+    @GetMapping("/tags/user/{userId}")
+    public ResponseEntity<TagListResponse> getUserTagList(@PathVariable(name = "userId") Long userId) {
+        TagListResponse tagList = hashTagQueryService.getLoginUserTagList(userId);
+        return ResponseEntity.ok(tagList);
     }
 
 }
