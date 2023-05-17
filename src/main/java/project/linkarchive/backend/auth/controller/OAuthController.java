@@ -1,6 +1,5 @@
 package project.linkarchive.backend.auth.controller;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,10 +21,9 @@ public class OAuthController {
     public ResponseEntity<LoginResponse> login(@RequestParam("code") String code) {
         String accessToken = oAuthService.login(code);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
-
-        return ResponseEntity.ok().headers(headers).body(new LoginResponse(accessToken));
+        return ResponseEntity.ok()
+                .header(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken)
+                .body(new LoginResponse(accessToken));
     }
 
 }

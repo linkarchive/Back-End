@@ -49,5 +49,6 @@ out/
 ### YML ###
 **.yml
 !appspec.yml
+!application-tmp.yml
 
 **.sql

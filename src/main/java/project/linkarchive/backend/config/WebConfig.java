@@ -11,6 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(
+                        "*",
                         "http://localhost:3000",
                         "https://front-end-git-dev-link-archive.vercel.app",
                         "https://front-end-git-test-api-https-link-archive.vercel.app")
@@ -18,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("Access-Control-Allow-Origin",
                         "Access-Control-Allow-Methods",
                         "Access-Control-Allow-Headers",
-                        "Origin, X-Requested-With, Content-Type, Accept")
+                        "Origin, X-Requested-With, Content-Type, Accept, Authorization")
                 .maxAge(3000);
     }
 

@@ -1,11 +1,8 @@
 package project.linkarchive.backend.advice.exception;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ExceptionResponse {
 
     private int status;
