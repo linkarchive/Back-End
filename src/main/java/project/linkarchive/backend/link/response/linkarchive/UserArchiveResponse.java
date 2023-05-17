@@ -1,13 +1,17 @@
-package project.linkarchive.backend.link.response.UserLinkList;
+package project.linkarchive.backend.link.response.linkarchive;
 
 import lombok.Builder;
 import lombok.Getter;
+import project.linkarchive.backend.link.response.UserLinkList.TagResponse;
 
 import java.util.List;
 
 @Getter
-public class UserLinkResponse {
+public class UserArchiveResponse {
 
+    private Long userId;
+    private String name;
+    private String profileImage;
     private Long urlId;
     private String link;
     private String title;
@@ -17,7 +21,10 @@ public class UserLinkResponse {
     private List<TagResponse> tagList;
 
     @Builder
-    public UserLinkResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<TagResponse> tagList) {
+    public UserArchiveResponse(Long userId, String name, String profileImage, Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<TagResponse> tagList) {
+        this.userId = userId;
+        this.name = name;
+        this.profileImage = profileImage;
         this.urlId = urlId;
         this.link = link;
         this.title = title;
@@ -27,8 +34,11 @@ public class UserLinkResponse {
         this.tagList = tagList;
     }
 
-    public static UserLinkResponse build(LinkResponse response, List<TagResponse> tagList) {
-        return UserLinkResponse.builder()
+    public static UserArchiveResponse build(ArchiveResponse response, List<TagResponse> tagList) {
+        return UserArchiveResponse.builder()
+                .userId(response.getUserId())
+                .name(response.getName())
+                .profileImage(response.getProfileImage())
                 .urlId(response.getUrlId())
                 .link(response.getLink())
                 .title(response.getTitle())
