@@ -2,7 +2,7 @@ package project.linkarchive.backend.link.response.linkarchive;
 
 import lombok.Builder;
 import lombok.Getter;
-import project.linkarchive.backend.link.response.UserLinkList.TagResponse;
+import project.linkarchive.backend.hashtag.response.TagResponse;
 
 import java.util.List;
 

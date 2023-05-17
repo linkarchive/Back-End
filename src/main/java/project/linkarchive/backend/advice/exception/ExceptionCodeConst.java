@@ -14,7 +14,9 @@ public enum ExceptionCodeConst {
     NOT_FOUND_BOOKMARK(404, "NOT_FOUND_BOOKMARK", "존재하지 않는 북마크입니다."),
 
     ALREADY_EXIST_TAG(409, "ALREADY_EXIST_TAG", "이미 존재하는 태그입니다."),
-    ALREADY_EXIST_BOOKMARK(409, "ALREADY_EXIST_BOOKMARK", "이미 마크가 된 Link 입니다.");
+    ALREADY_EXIST_BOOKMARK(409, "ALREADY_EXIST_BOOKMARK", "이미 마크가 된 Link 입니다."),
+
+    OVER_SIZE_TAG(416, "OVER_SIZE", "해시태그 조회 갯수를 초과했습니다.");
 
     private final int status;
     private final String code;
