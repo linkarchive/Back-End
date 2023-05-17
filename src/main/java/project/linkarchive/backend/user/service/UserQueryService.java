@@ -19,10 +19,14 @@ public class UserQueryService {
     }
 
     public ProfileResponse getUserProfile(Long userId) {
+        User user = checkUserId(userId);
+        return new ProfileResponse(user);
+    }
+
+    private User checkUserId(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
-
-        return new ProfileResponse(user);
+        return user;
     }
 
 }
