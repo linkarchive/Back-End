@@ -7,11 +7,11 @@ import project.linkarchive.backend.advice.exception.BusinessException;
 import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
 import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
+import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.link.domain.UrlHashTag;
 import project.linkarchive.backend.link.repository.UrlHashTagRepository;
 import project.linkarchive.backend.link.repository.UrlRepositoryImpl;
 import project.linkarchive.backend.link.response.UserLinkList.LinkResponse;
-import project.linkarchive.backend.link.response.UserLinkList.TagResponse;
 import project.linkarchive.backend.link.response.UserLinkList.UserLinkListResponse;
 import project.linkarchive.backend.link.response.UserLinkList.UserLinkResponse;
 import project.linkarchive.backend.link.response.linkList.UserExcludedLinkListDetailResponse;
@@ -105,7 +105,7 @@ public class LinkQueryService {
         return new UserLinkListResponse(userLinkResponses);
     }
 
-    private void checkUserId(Long userId) {
+    public void checkUserId(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
     }
 

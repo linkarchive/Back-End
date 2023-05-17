@@ -1,22 +1,16 @@
 package project.linkarchive.backend.hashtag.response;
 
-import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class TagListResponse {
 
-    private String tagName;
+    private List<TagResponse> tagList;
 
-    @Builder
-    public TagListResponse(String tagName) {
-        this.tagName = tagName;
-    }
-
-    public static TagListResponse of(String tagName) {
-        return TagListResponse.builder()
-                .tagName(tagName)
-                .build();
+    public TagListResponse(List<TagResponse> tagList) {
+        this.tagList = tagList;
     }
 
 }

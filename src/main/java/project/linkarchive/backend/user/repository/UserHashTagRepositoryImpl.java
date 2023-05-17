@@ -4,6 +4,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import project.linkarchive.backend.hashtag.response.QTagListDetailResponse;
 import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
+import project.linkarchive.backend.hashtag.response.TagResponse;
+import project.linkarchive.backend.link.response.UserLinkList.QTagResponse;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -19,15 +21,15 @@ public class UserHashTagRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<TagListDetailResponse> getTagListLimit30(Long userId) {
+    public List<TagResponse> getTagListLimitSize(Long userId, Long size) {
         return queryFactory
-                .select(new QTagListDetailResponse(
+                .select(new QTagResponse(
                         userHashTag.hashTag.tag
                 ))
                 .from(userHashTag)
                 .where(userHashTag.user.id.eq(userId))
                 .orderBy(userHashTag.usageCount.desc())
-                .limit(30)
+                .limit(size)
                 .fetch();
     }
 
