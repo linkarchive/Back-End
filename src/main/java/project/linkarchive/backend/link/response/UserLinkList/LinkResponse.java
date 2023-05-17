@@ -1,10 +1,10 @@
-package project.linkarchive.backend.link.response.userLinkList;
+package project.linkarchive.backend.link.response.UserLinkList;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
 @Getter
-public class UserLinkListDetailResponse {
+public class LinkResponse {
 
     private Long urlId;
     private String link;
@@ -14,13 +14,14 @@ public class UserLinkListDetailResponse {
     private Long bookMarkCount;
 
     @QueryProjection
-    public UserLinkListDetailResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount) {
+    public LinkResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount) {
         this.urlId = urlId;
         this.link = link;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
+
     }
 
 }

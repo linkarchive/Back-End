@@ -4,17 +4,17 @@ import lombok.Getter;
 import project.linkarchive.backend.user.domain.User;
 
 @Getter
-public class UserProfileResponse {
+public class ProfileResponse {
 
     private Long id;
     private String name;
-    private String introduce;
+    private String intro;
     private String profileImage;
 
-    public UserProfileResponse(User user) {
+    public ProfileResponse(User user) {
         this.id = user.getId();
         this.name = user.getName();
-        this.introduce = user.getIntroduce();
+        this.intro = user.getIntroduce();
         this.profileImage = user.getProfileImage().getProfileImage();
     }
 

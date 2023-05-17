@@ -4,12 +4,10 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import project.linkarchive.backend.link.response.RefactorUserLinkList.LinkResponse;
-import project.linkarchive.backend.link.response.RefactorUserLinkList.QLinkResponse;
+import project.linkarchive.backend.link.response.UserLinkList.LinkResponse;
+import project.linkarchive.backend.link.response.UserLinkList.QLinkResponse;
 import project.linkarchive.backend.link.response.linkList.QUserExcludedLinkListDetailResponse;
 import project.linkarchive.backend.link.response.linkList.UserExcludedLinkListDetailResponse;
-import project.linkarchive.backend.link.response.userLinkList.QUserLinkListDetailResponse;
-import project.linkarchive.backend.link.response.userLinkList.UserLinkListDetailResponse;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -25,9 +23,9 @@ public class UrlRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<UserLinkListDetailResponse> getUserLinkList(Pageable pageable, Long lastUrlId, Long userId) {
+    public List<LinkResponse> getUserLinkList(Long userId, Pageable pageable, Long lastUrlId) {
         return queryFactory
-                .select(new QUserLinkListDetailResponse(
+                .select(new QLinkResponse(
                         link.id,
                         link.url,
                         link.title,
@@ -44,7 +42,6 @@ public class UrlRepositoryImpl {
                 .orderBy(link.id.desc())
                 .fetch();
     }
-
     public List<UserExcludedLinkListDetailResponse> getLinkList(Pageable pageable, Long lastUrlId, Long userId) {
 
         return queryFactory
@@ -71,25 +68,6 @@ public class UrlRepositoryImpl {
                 .fetch();
     }
 
-    public List<LinkResponse> getOtherLinkList(Long userId, Pageable pageable, Long lastUrlId) {
-        return queryFactory
-                .select(new QLinkResponse(
-                        link.id,
-                        link.url,
-                        link.title,
-                        link.description,
-                        link.thumbnail,
-                        link.bookMarkCount
-                ))
-                .from(link)
-                .where(
-                        link.user.id.eq(userId),
-                        ltUrlId(lastUrlId)
-                )
-                .limit(pageable.getPageSize())
-                .orderBy(link.id.desc())
-                .fetch();
-    }
 
     private BooleanExpression ltUrlId(Long lastUrlId) {
         return lastUrlId != null ? link.id.lt(lastUrlId) : null;
