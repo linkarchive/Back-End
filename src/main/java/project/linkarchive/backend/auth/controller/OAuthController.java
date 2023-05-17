@@ -19,7 +19,7 @@ public class OAuthController {
     }
 
     @PostMapping("/auth/kakao")
-    public ResponseEntity<LoginResponse> login(@RequestParam("code") String code) {
+    public ResponseEntity<LoginResponse> login(@RequestParam(value = "code") String code) {
         String accessToken = oAuthService.login(code);
 
         HttpHeaders headers = new HttpHeaders();
