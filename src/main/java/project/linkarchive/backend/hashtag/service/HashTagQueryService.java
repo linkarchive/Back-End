@@ -3,6 +3,8 @@ package project.linkarchive.backend.hashtag.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.linkarchive.backend.advice.exception.BusinessException;
+import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
@@ -19,6 +21,7 @@ public class HashTagQueryService {
 
     private final UserHashTagRepositoryImpl userHashTagRepositoryImpl;
     private final LinkQueryService linkQueryService;
+    private final Long maxSize = 30L;
 
 
     public UserTagListResponse getLoginUserTagList(Long userId) {
@@ -30,9 +33,14 @@ public class HashTagQueryService {
     public TagListResponse getTagList(Long userId, Long size) {
         linkQueryService.checkUserId(userId);
 
+        if (size > maxSize) {
+            throw new BusinessException(ExceptionCodeConst.OVER_SIZE);
+        }
+
         List<TagResponse> tagResponses = userHashTagRepositoryImpl.getTagListLimitSize(userId, size);
         return new TagListResponse(tagResponses);
     }
+
 
 
 }
