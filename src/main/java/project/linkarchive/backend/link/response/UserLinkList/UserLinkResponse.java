@@ -29,8 +29,8 @@ public class UserLinkResponse {
 
     public static UserLinkResponse build(LinkResponse response, List<TagResponse> tagList) {
         return UserLinkResponse.builder()
-                .urlId(response.getUrlId())
-                .link(response.getLink())
+                .urlId(response.getLinkId())
+                .link(response.getUrl())
                 .title(response.getTitle())
                 .description(response.getDescription())
                 .thumbnail(response.getThumbnail())

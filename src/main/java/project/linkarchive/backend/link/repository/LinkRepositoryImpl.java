@@ -23,7 +23,7 @@ public class LinkRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<LinkResponse> getUserLinkList(Long userId, Pageable pageable, Long lastUrlId) {
+    public List<LinkResponse> getUserLinkList(Long userId, Pageable pageable, Long lastLinkLid) {
         return queryFactory
                 .select(new QLinkResponse(
                         link.id,
@@ -36,14 +36,14 @@ public class LinkRepositoryImpl {
                 .from(link)
                 .where(
                         link.user.id.eq(userId),
-                        ltUrlId(lastUrlId)
+                        ltUrlId(lastLinkLid)
                 )
                 .limit(pageable.getPageSize())
                 .orderBy(link.id.desc())
                 .fetch();
     }
 
-    public List<ArchiveResponse> getLinkArchive(Pageable pageable, Long lastUrlId, Long userId) {
+    public List<ArchiveResponse> getLinkArchive(Pageable pageable, Long lastLinkId, Long userId) {
         return queryFactory
                 .select(new QArchiveResponse(
                         link.user.id,
@@ -60,7 +60,7 @@ public class LinkRepositoryImpl {
                 .leftJoin(link.user)
                 .leftJoin(link.user.profileImage)
                 .where(
-                        ltUrlId(lastUrlId),
+                        ltUrlId(lastLinkId),
                         link.user.id.ne(userId)
                 )
                 .limit(pageable.getPageSize())
@@ -68,8 +68,8 @@ public class LinkRepositoryImpl {
                 .fetch();
     }
 
-    private BooleanExpression ltUrlId(Long lastUrlId) {
-        return lastUrlId != null ? link.id.lt(lastUrlId) : null;
+    private BooleanExpression ltUrlId(Long lastLinkId) {
+        return lastLinkId != null ? link.id.lt(lastLinkId) : null;
     }
 
 }

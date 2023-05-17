@@ -76,10 +76,10 @@ public class LinkQueryController {
     @GetMapping("/links/user/{userId}")
     public ResponseEntity<UserLinkListResponse> getUserLinkList(
             @PathVariable("userId") Long userId,
-            @RequestParam(value = "urlId", required = false) Long lastUrlId,
+            @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable
     ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(userId, pageable, lastUrlId);
+        UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(userId, pageable, lastLinkId);
         return ResponseEntity.ok(userLinkListResponse);
     }
 
@@ -87,10 +87,10 @@ public class LinkQueryController {
     @GetMapping("/mark/links/user/{userId}")
     public ResponseEntity<UserLinkListResponse> getMarkedLinkList(
             @PathVariable("userId") Long userId,
-            @RequestParam(value = "urlId", required = false) Long lastUrlId,
+            @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable
     ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getMarkedLinkList(userId, lastUrlId, pageable);
+        UserLinkListResponse userLinkListResponse = linkQueryService.getMarkedLinkList(userId, lastLinkId, pageable);
         return ResponseEntity.ok(userLinkListResponse);
     }
 
@@ -98,10 +98,10 @@ public class LinkQueryController {
     @GetMapping("/links/archive")
     public ResponseEntity<UserLinkArchiveResponse> getLinkArchive(
             @PageableDefault Pageable pageable,
-            @RequestParam(value = "urlId", required = false) Long lastUrlId,
+            @RequestParam(value = "linkId", required = false) Long lastLinkId,
             AuthInfo authInfo
     ) {
-        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getLinkArchive(pageable, lastUrlId, authInfo.getId());
+        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getLinkArchive(pageable, lastLinkId, authInfo.getId());
         return ResponseEntity.ok(userLinkArchiveResponse);
     }
 

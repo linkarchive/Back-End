@@ -37,13 +37,13 @@ public class LinkQueryService {
         this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
     }
 
-    public UserLinkListResponse getUserLinkList(Long userId, Pageable pageable, Long lastUrlId) {
+    public UserLinkListResponse getUserLinkList(Long userId, Pageable pageable, Long lastLinkId) {
         checkUserId(userId);
 
-        List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(userId, pageable, lastUrlId);
+        List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(userId, pageable, lastLinkId);
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
-                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(linkResponse.getUrlId());
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(linkResponse.getLinkId());
                     List<TagResponse> tagList = urlHashTagList.stream()
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
@@ -54,13 +54,13 @@ public class LinkQueryService {
         return new UserLinkListResponse(userLinkResponse);
     }
 
-    public UserLinkListResponse getMarkedLinkList(Long userId, Long lastUrlId, Pageable pageable) {
+    public UserLinkListResponse getMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable) {
         checkUserId(userId);
 
-        List<LinkResponse> linkResponses = bookMarkRepositoryImpl.getMarkLinkList(userId, lastUrlId, pageable);
+        List<LinkResponse> linkResponses = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable);
         List<UserLinkResponse> userLinkResponses = linkResponses.stream()
                 .map(linkResponse -> {
-                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(linkResponse.getUrlId());
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(linkResponse.getLinkId());
                     List<TagResponse> tagList = urlHashTagList.stream()
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
@@ -71,13 +71,13 @@ public class LinkQueryService {
         return new UserLinkListResponse(userLinkResponses);
     }
 
-    public UserLinkArchiveResponse getLinkArchive(Pageable pageable, Long lastUrlId, Long userId) {
+    public UserLinkArchiveResponse getLinkArchive(Pageable pageable, Long lastLinkId, Long userId) {
         checkUserId(userId);
 
-        List<ArchiveResponse> linkList = linkRepositoryImpl.getLinkArchive(pageable, lastUrlId, userId);
+        List<ArchiveResponse> linkList = linkRepositoryImpl.getLinkArchive(pageable, lastLinkId, userId);
         List<UserArchiveResponse> linkDetailList = linkList.stream()
                 .map(archiveResponse -> {
-                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(archiveResponse.getUrlId());
+                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(archiveResponse.getLinkId());
                     List<TagResponse> tagList = urlHashTagList.stream()
                             .map(TagResponse::build)
                             .collect(Collectors.toList());

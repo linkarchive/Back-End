@@ -9,7 +9,7 @@ public class ArchiveResponse {
     private Long userId;
     private String name;
     private String profileImage;
-    private Long urlId;
+    private Long linkId;
     private String link;
     private String title;
     private String description;
@@ -17,11 +17,11 @@ public class ArchiveResponse {
     private Long bookMarkCount;
 
     @QueryProjection
-    public ArchiveResponse(Long userId, String name, String profileImage, Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount) {
+    public ArchiveResponse(Long userId, String name, String profileImage, Long linkId, String link, String title, String description, String thumbnail, Long bookMarkCount) {
         this.userId = userId;
         this.name = name;
         this.profileImage = profileImage;
-        this.urlId = urlId;
+        this.linkId = linkId;
         this.link = link;
         this.title = title;
         this.description = description;

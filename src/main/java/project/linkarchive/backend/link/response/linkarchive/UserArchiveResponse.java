@@ -39,7 +39,7 @@ public class UserArchiveResponse {
                 .userId(response.getUserId())
                 .name(response.getName())
                 .profileImage(response.getProfileImage())
-                .urlId(response.getUrlId())
+                .urlId(response.getLinkId())
                 .link(response.getLink())
                 .title(response.getTitle())
                 .description(response.getDescription())
