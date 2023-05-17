@@ -42,6 +42,7 @@ public class UserHashTagRepositoryImpl {
                 .where(userHashTag.user.id.eq(userId))
                 .orderBy(userHashTag.usageCount.desc())
                 .fetch();
+
     }
 
 }
