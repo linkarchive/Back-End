@@ -45,7 +45,7 @@ public class HashTagQueryService {
 
     private void checkSize(Long size) {
         if (size > MAX_SIZE) {
-            throw new BusinessException(ExceptionCodeConst.OVER_SIZE);
+            throw new BusinessException(ExceptionCodeConst.OVER_SIZE_TAG);
         }
     }
 

@@ -8,7 +8,7 @@ public enum ExceptionCodeConst {
     INVALID_TOKEN(400, "BAD_REQUEST", "잘못된 토큰입니다."),
     INVALID_AUTHORIZATION_CODE(400, "INVALID_AUTHORIZATION_CODE", "잘못된 인가코드입니다."),
     EXCEEDED_TAG_10_LIMIT(400, "EXCEEDED_TAG_LIMIT", "태그의 개수가 10개를 초과할 수 없습니다."),
-    OVER_SIZE(416, "OVER_SIZE", "해시태그 조회 갯수를 초과했습니다."),
+    OVER_SIZE_TAG(416, "OVER_SIZE", "해시태그 조회 갯수를 초과했습니다."),
 
     NOT_FOUND_USER(404, "NOT_FOUND_USER", "유저가 존재하지 않습니다."),
     NOT_FOUND_LINK(404, "NOT_FOUND_URL", "존재하지 않는 Link 입니다."),
