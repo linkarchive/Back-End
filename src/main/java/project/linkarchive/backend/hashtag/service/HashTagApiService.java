@@ -30,16 +30,14 @@ public class HashTagApiService {
 
     public void create(TagCreateRequest request, Long userId) {
         User user = findUserById(userId);
-
-        HashTag hashTag = hashTagRepository.findByTag(request.getTag())
-                .orElseGet(() -> HashTag.build(request));
+        HashTag hashTag = findAndBuildHashTagByTag(request);
 
         userHashTagRepository.findByHashTagId(hashTag.getId())
                 .ifPresentOrElse(userHashTag -> {
                             throw new BusinessException(ALREADY_EXIST_TAG);
                         },
                         () -> {
-                            UserHashTag getHashTag = UserHashTag.of(user, hashTag);
+                            UserHashTag getHashTag = UserHashTag.build(user, hashTag);
                             userHashTagRepository.save(getHashTag);
                         });
     }
@@ -47,6 +45,11 @@ public class HashTagApiService {
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_USER));
+    }
+
+    private HashTag findAndBuildHashTagByTag(TagCreateRequest request) {
+        return hashTagRepository.findByTag(request.getTag())
+                .orElseGet(() -> HashTag.build(request));
     }
 
 

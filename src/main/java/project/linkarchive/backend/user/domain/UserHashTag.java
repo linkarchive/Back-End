@@ -36,7 +36,7 @@ public class UserHashTag extends CreatedEntity {
         this.hashTag = hashTag;
     }
 
-    public static UserHashTag of(User user, HashTag hashTag) {
+    public static UserHashTag build(User user, HashTag hashTag) {
         return UserHashTag.builder()
                 .usageCount(0L)
                 .user(user)
