@@ -18,7 +18,7 @@ public class HashTagQueryService {
         this.userHashTagRepositoryImpl = userHashTagRepositoryImpl;
     }
 
-    public TagListResponse getLoginUserTagList(Long userId) {
+    public TagListResponse getUserTagList(Long userId) {
         List<TagResponse> tagList = userHashTagRepositoryImpl.getUserTagList(userId);
         return new TagListResponse(tagList);
     }

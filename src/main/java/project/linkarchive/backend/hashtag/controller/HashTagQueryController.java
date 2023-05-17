@@ -20,7 +20,7 @@ public class HashTagQueryController {
 
     @GetMapping("/tags/user/{userId}")
     public ResponseEntity<TagListResponse> getUserTagList(@PathVariable(name = "userId") Long userId) {
-        TagListResponse tagList = hashTagQueryService.getLoginUserTagList(userId);
+        TagListResponse tagList = hashTagQueryService.getUserTagList(userId);
         return ResponseEntity.ok(tagList);
     }
 
