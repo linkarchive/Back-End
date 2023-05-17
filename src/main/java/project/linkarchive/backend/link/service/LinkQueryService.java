@@ -31,7 +31,7 @@ public class LinkQueryService {
     private final UserRepository userRepository;
     private final BookMarkRepositoryImpl bookMarkRepositoryImpl;
 
-    public LinkQueryService(UrlHashTagRepository urlHashTagRepository, UrlRepositoryImpl urlRepositoryImpl,UserRepository userRepository, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
+    public LinkQueryService(UrlHashTagRepository urlHashTagRepository, UrlRepositoryImpl urlRepositoryImpl, UserRepository userRepository, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
         this.urlHashTagRepository = urlHashTagRepository;
         this.urlRepositoryImpl = urlRepositoryImpl;
         this.userRepository = userRepository;
@@ -39,9 +39,7 @@ public class LinkQueryService {
     }
 
     public UserLinkListResponse getUserLinkList(Long userId, Pageable pageable, Long lastUrlId) {
-
-        userRepository.findById(userId).orElseThrow(() -> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
-
+        checkUserId(userId);
         List<LinkResponse> linkResponseList = urlRepositoryImpl.getUserLinkList(userId, pageable, lastUrlId);
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(link -> {
@@ -82,7 +80,7 @@ public class LinkQueryService {
 
     public UserLinkListResponse getMarkedLinkList(Long userId, Long lastUrlId, Pageable pageable) {
 
-        userRepository.findById(userId).orElseThrow(() -> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
+        checkUserId(userId);
 
         List<LinkResponse> linkResponses = bookMarkRepositoryImpl.getMarkLinkList(userId, lastUrlId, pageable);
         List<UserLinkResponse> userLinkResponses = linkResponses.stream()
@@ -105,6 +103,10 @@ public class LinkQueryService {
                 }).collect(Collectors.toList());
 
         return new UserLinkListResponse(userLinkResponses);
+    }
+
+    private void checkUserId(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
     }
 
 }
