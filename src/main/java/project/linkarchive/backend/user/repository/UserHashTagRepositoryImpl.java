@@ -3,9 +3,9 @@ package project.linkarchive.backend.user.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import project.linkarchive.backend.hashtag.response.QTagListDetailResponse;
+import project.linkarchive.backend.hashtag.response.QTagResponse;
 import project.linkarchive.backend.hashtag.response.TagListDetailResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
-import project.linkarchive.backend.link.response.UserLinkList.QTagResponse;
 
 import javax.persistence.EntityManager;
 import java.util.List;
