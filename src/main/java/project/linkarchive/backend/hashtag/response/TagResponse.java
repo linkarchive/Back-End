@@ -1,5 +1,6 @@
-package project.linkarchive.backend.link.response.UserLinkList;
+package project.linkarchive.backend.hashtag.response;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import project.linkarchive.backend.link.domain.UrlHashTag;
@@ -9,6 +10,7 @@ public class TagResponse {
 
     private String tagName;
 
+    @QueryProjection
     @Builder
     public TagResponse(String tagName) {
         this.tagName = tagName;
