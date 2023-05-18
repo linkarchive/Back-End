@@ -27,33 +27,33 @@ public class BookMarkApiService {
     }
 
     //FIXME 동시성 이슈에 대한 해결이 필요해요.
-    public void bookMark(Long urlId, Long userId) {
-        Link link = getUrlValidation(urlId);
+    public void bookMark(Long linkId, Long userId) {
+        Link link = findLinkById(linkId);
         existUrlValidation(link.getId());
 
         User user = findUserById(userId);
-        BookMark bookMark = BookMark.of(user, link);
+        BookMark bookMark = BookMark.build(user, link);
         bookMarkRepository.save(bookMark);
 
         linkRepository.increaseBookMarkCount(link.getId());
     }
 
     //FIXME 동시성 이슈에 대한 해결이 필요해요.
-    public void bookMarkCancel(Long urlId, Long userId) {
-        Link link = getUrlValidation(urlId);
-        BookMark bookMark = findBookMarkByUrlAndUser(userId, link);
+    public void bookMarkCancel(Long linkId, Long userId) {
+        Link link = findLinkById(linkId);
+        BookMark bookMark = findBookMarkByLinkAndUser(link, userId);
         bookMarkRepository.delete(bookMark);
 
         linkRepository.decreaseBookMarkCount(link.getId());
     }
 
-    private Link getUrlValidation(Long urlId) {
-        return linkRepository.findById(urlId)
+    private Link findLinkById(Long linkId) {
+        return linkRepository.findById(linkId)
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_LINK));
     }
 
-    private void existUrlValidation(Long urlId) {
-        if (bookMarkRepository.existsByLinkId(urlId)) {
+    private void existUrlValidation(Long linkId) {
+        if (bookMarkRepository.existsByLinkId(linkId)) {
             throw new BusinessException(ALREADY_EXIST_BOOKMARK);
         }
     }
@@ -63,7 +63,7 @@ public class BookMarkApiService {
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_USER));
     }
 
-    private BookMark findBookMarkByUrlAndUser(Long userId, Link link) {
+    private BookMark findBookMarkByLinkAndUser(Link link, Long userId) {
         return bookMarkRepository.findByLinkIdAndUserId(link.getId(), userId)
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_BOOKMARK));
     }

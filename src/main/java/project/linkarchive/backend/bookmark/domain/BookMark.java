@@ -34,7 +34,7 @@ public class BookMark extends CreatedEntity {
         this.link = link;
     }
 
-    public static BookMark of(User user, Link link) {
+    public static BookMark build(User user, Link link) {
         return BookMark.builder()
                 .user(user)
                 .link(link)
