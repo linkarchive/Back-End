@@ -13,8 +13,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "http://localhost:3000",
                         "https://localhost:3000",
-                        "https://front-end-git-dev-link-archive.vercel.app",
-                        "https://front-end-git-test-api-https-link-archive.vercel.app")
+                        "https://dev.link-archive.com",
+                        "https://www.link-archive.com"
+                )
                 .allowedMethods("GET", "POST", "PATCH", "DELETE")
                 .allowedHeaders("Access-Control-Allow-Origin",
                         "Access-Control-Allow-Methods",
