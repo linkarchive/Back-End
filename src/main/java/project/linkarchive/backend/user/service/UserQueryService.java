@@ -23,7 +23,7 @@ public class UserQueryService {
         return new ProfileResponse(user);
     }
 
-    private User checkUserId(Long userId){
+    private User checkUserId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
         return user;

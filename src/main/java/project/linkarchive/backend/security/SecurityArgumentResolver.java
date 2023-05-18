@@ -30,5 +30,5 @@ public class SecurityArgumentResolver implements HandlerMethodArgumentResolver {
             return null;
         }
     }
-    
+
 }
