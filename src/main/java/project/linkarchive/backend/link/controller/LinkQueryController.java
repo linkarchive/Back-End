@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.link.response.LinkMetaDataResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
-import project.linkarchive.backend.link.response.userLinkList.UserLinkListResponse;
+import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
 import project.linkarchive.backend.link.service.LinkQueryService;
 import project.linkarchive.backend.security.AuthInfo;
 

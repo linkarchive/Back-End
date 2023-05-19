@@ -6,15 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
 import project.linkarchive.backend.hashtag.response.TagResponse;
-import project.linkarchive.backend.link.domain.UrlHashTag;
+import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkRepositoryImpl;
-import project.linkarchive.backend.link.repository.UrlHashTagRepository;
+import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.link.response.linkarchive.ArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
-import project.linkarchive.backend.link.response.userLinkList.LinkResponse;
-import project.linkarchive.backend.link.response.userLinkList.UserLinkListResponse;
-import project.linkarchive.backend.link.response.userLinkList.UserLinkResponse;
+import project.linkarchive.backend.link.response.linkList.LinkResponse;
+import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
+import project.linkarchive.backend.link.response.linkList.UserLinkResponse;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.List;
@@ -26,13 +26,13 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NO
 @Transactional(readOnly = true)
 public class LinkQueryService {
 
-    private final UrlHashTagRepository urlHashTagRepository;
+    private final LinkHashTagRepository linkHashTagRepository;
     private final LinkRepositoryImpl linkRepositoryImpl;
     private final UserRepository userRepository;
     private final BookMarkRepositoryImpl bookMarkRepositoryImpl;
 
-    public LinkQueryService(UrlHashTagRepository urlHashTagRepository, LinkRepositoryImpl linkRepositoryImpl, UserRepository userRepository, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
-        this.urlHashTagRepository = urlHashTagRepository;
+    public LinkQueryService(LinkHashTagRepository linkHashTagRepository, LinkRepositoryImpl linkRepositoryImpl, UserRepository userRepository, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
+        this.linkHashTagRepository = linkHashTagRepository;
         this.linkRepositoryImpl = linkRepositoryImpl;
         this.userRepository = userRepository;
         this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
@@ -44,8 +44,8 @@ public class LinkQueryService {
         List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(userId, pageable, lastLinkId);
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
-                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(linkResponse.getLinkId());
-                    List<TagResponse> tagList = urlHashTagList.stream()
+                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashTagList.stream()
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
@@ -61,8 +61,8 @@ public class LinkQueryService {
         List<LinkResponse> linkResponses = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable);
         List<UserLinkResponse> userLinkResponses = linkResponses.stream()
                 .map(linkResponse -> {
-                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(linkResponse.getLinkId());
-                    List<TagResponse> tagList = urlHashTagList.stream()
+                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashTagList.stream()
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
@@ -78,8 +78,8 @@ public class LinkQueryService {
         List<ArchiveResponse> linkList = linkRepositoryImpl.getLinkArchive(pageable, lastLinkId, userId);
         List<UserArchiveResponse> linkDetailList = linkList.stream()
                 .map(archiveResponse -> {
-                    List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(archiveResponse.getLinkId());
-                    List<TagResponse> tagList = urlHashTagList.stream()
+                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(archiveResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashTagList.stream()
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 

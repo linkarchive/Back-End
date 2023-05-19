@@ -1,4 +1,4 @@
-package project.linkarchive.backend.link.response.userLinkList;
+package project.linkarchive.backend.link.response.linkList;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;

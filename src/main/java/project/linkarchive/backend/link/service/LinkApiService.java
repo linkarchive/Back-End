@@ -7,8 +7,8 @@ import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.link.domain.Link;
-import project.linkarchive.backend.link.domain.UrlHashTag;
-import project.linkarchive.backend.link.repository.UrlHashTagRepository;
+import project.linkarchive.backend.link.domain.LinkHashTag;
+import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserHashTagRepository;
@@ -23,13 +23,13 @@ public class LinkApiService {
 
     private final UserRepository userRepository;
     private final HashTagRepository hashTagRepository;
-    private final UrlHashTagRepository urlHashTagRepository;
+    private final LinkHashTagRepository linkHashTagRepository;
     private final UserHashTagRepository userHashTagRepository;
 
-    public LinkApiService(UserRepository userRepository, HashTagRepository hashTagRepository, UrlHashTagRepository urlHashTagRepository, UserHashTagRepository userHashTagRepository) {
+    public LinkApiService(UserRepository userRepository, HashTagRepository hashTagRepository, LinkHashTagRepository linkHashTagRepository, UserHashTagRepository userHashTagRepository) {
         this.userRepository = userRepository;
         this.hashTagRepository = hashTagRepository;
-        this.urlHashTagRepository = urlHashTagRepository;
+        this.linkHashTagRepository = linkHashTagRepository;
         this.userHashTagRepository = userHashTagRepository;
     }
 
@@ -45,7 +45,7 @@ public class LinkApiService {
                 .forEach(hashTag -> {
                     userHashTagRepository.findByHashTagId(hashTag.getId())
                             .ifPresent(tag -> tag.increaseUserHashTagCount(tag.getUsageCount()));
-                    urlHashTagRepository.save(UrlHashTag.of(link, hashTag));
+                    linkHashTagRepository.save(LinkHashTag.of(link, hashTag));
                 });
     }
 
