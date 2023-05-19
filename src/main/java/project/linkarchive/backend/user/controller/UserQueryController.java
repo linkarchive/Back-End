@@ -25,5 +25,5 @@ public class UserQueryController {
         ProfileResponse profileResponse = userQueryService.getUserProfile(userId);
         return ResponseEntity.ok(profileResponse);
     }
-    
+
 }
