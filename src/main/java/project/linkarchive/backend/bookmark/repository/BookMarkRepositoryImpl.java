@@ -12,6 +12,7 @@ import java.util.List;
 
 import static project.linkarchive.backend.bookmark.domain.QBookMark.bookMark;
 
+
 @Repository
 public class BookMarkRepositoryImpl {
 

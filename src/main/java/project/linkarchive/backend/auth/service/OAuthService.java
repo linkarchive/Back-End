@@ -9,15 +9,14 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import project.linkarchive.backend.advice.exception.custom.InvalidException;
-import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.advice.exception.BusinessException;
+import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.jwt.JwtProperties;
@@ -27,6 +26,7 @@ import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.RefreshTokenRepository;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
+import project.linkarchive.backend.user.service.ProfileService;
 
 import javax.transaction.Transactional;
 import java.security.Key;
@@ -36,7 +36,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
+import static org.springframework.http.HttpMethod.POST;
 
 @Service
 @Transactional
@@ -82,11 +82,11 @@ public class OAuthService {
         try {
             response = rt.exchange(
                     "https://kauth.kakao.com/oauth/token",
-                    HttpMethod.POST,
+                    POST,
                     kakaoTokenRequest,
                     String.class);
         } catch (HttpClientErrorException e) {
-            throw new InvalidException(INVALID_AUTHORIZATION_CODE);
+            throw new BusinessException(ExceptionCodeConst.INVALID_AUTHORIZATION_CODE);
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -94,7 +94,7 @@ public class OAuthService {
         try {
             oauthToken = objectMapper.readValue(response.getBody(), OauthToken.class);
         } catch (JsonProcessingException e) {
-            throw new NotFoundException(NOT_FOUND_USER);
+            throw new BusinessException(ExceptionCodeConst.NOT_FOUND_USER);
         }
 
         return oauthToken;
@@ -117,7 +117,6 @@ public class OAuthService {
                         .user(user)
                         .build())
                 ));
-
         return user;
     }
 
@@ -189,7 +188,7 @@ public class OAuthService {
                     .getId());
         } else {
             //FIXME: 토큰 유효기간 수정 후 토큰 만료, 유효하지 않음, 시그니처 다름 등의 예외 처리가 필요합니다.
-            throw new InvalidException(INVALID_TOKEN);
+            throw new BusinessException(ExceptionCodeConst.INVALID_TOKEN);
         }
         return userId;
     }
@@ -201,7 +200,7 @@ public class OAuthService {
 
         RestTemplate rt = new RestTemplate();
         HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
-        ResponseEntity<String> kakaoProfileResponse = rt.exchange("https://kapi.kakao.com/v2/user/me", HttpMethod.POST, kakaoProfileRequest, String.class);
+        ResponseEntity<String> kakaoProfileResponse = rt.exchange("https://kapi.kakao.com/v2/user/me", POST, kakaoProfileRequest, String.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -210,7 +209,7 @@ public class OAuthService {
         try {
             kakaoProfile = objectMapper.readValue(kakaoProfileResponse.getBody(), KakaoProfile.class);
         } catch (JsonProcessingException e) {
-            throw new NotFoundException(NOT_FOUND_USER);
+            throw new BusinessException(ExceptionCodeConst.NOT_FOUND_USER);
         }
 
         return kakaoProfile;
