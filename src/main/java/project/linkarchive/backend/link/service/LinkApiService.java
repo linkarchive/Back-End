@@ -13,7 +13,7 @@ import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserHashTagRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.EXCEEDED_TAG_10_LIMIT;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.EXCEEDED_TAG_LIMIT_10;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 @Service
@@ -55,7 +55,7 @@ public class LinkApiService {
 
     private void exceededTagLimit(CreateLinkRequest request) {
         if (request.getTag().size() > 10) {
-            throw new BusinessException(EXCEEDED_TAG_10_LIMIT);
+            throw new BusinessException(EXCEEDED_TAG_LIMIT_10);
         }
     }
 
