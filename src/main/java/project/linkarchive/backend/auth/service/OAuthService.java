@@ -9,7 +9,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -36,6 +35,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 
+import static org.springframework.http.HttpMethod.POST;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Service
@@ -82,7 +82,7 @@ public class OAuthService {
         try {
             response = rt.exchange(
                     "https://kauth.kakao.com/oauth/token",
-                    HttpMethod.POST,
+                    POST,
                     kakaoTokenRequest,
                     String.class);
         } catch (HttpClientErrorException e) {
@@ -117,7 +117,6 @@ public class OAuthService {
                         .user(user)
                         .build())
                 ));
-
         return user;
     }
 
@@ -201,7 +200,7 @@ public class OAuthService {
 
         RestTemplate rt = new RestTemplate();
         HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
-        ResponseEntity<String> kakaoProfileResponse = rt.exchange("https://kapi.kakao.com/v2/user/me", HttpMethod.POST, kakaoProfileRequest, String.class);
+        ResponseEntity<String> kakaoProfileResponse = rt.exchange("https://kapi.kakao.com/v2/user/me", POST, kakaoProfileRequest, String.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

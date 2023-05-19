@@ -26,6 +26,7 @@ public class OAuthController {
         String redirectUri = referer + "auth/kakao";
         String accessToken = oAuthService.login(code, redirectUri);
 
+
         return ResponseEntity.ok()
                 .header(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken)
                 .body(new LoginResponse(accessToken));
