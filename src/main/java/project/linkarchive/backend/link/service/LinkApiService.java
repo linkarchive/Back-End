@@ -2,7 +2,8 @@ package project.linkarchive.backend.link.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.linkarchive.backend.advice.exception.BusinessException;
+import project.linkarchive.backend.advice.exception.custom.ExceededException;
+import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.link.domain.Link;
@@ -50,12 +51,12 @@ public class LinkApiService {
 
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(NOT_FOUND_USER));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
     private void exceededTagLimit(CreateLinkRequest request) {
         if (request.getTag().size() > 10) {
-            throw new BusinessException(EXCEEDED_TAG_LIMIT_10);
+            throw new ExceededException(EXCEEDED_TAG_LIMIT_10);
         }
     }
 

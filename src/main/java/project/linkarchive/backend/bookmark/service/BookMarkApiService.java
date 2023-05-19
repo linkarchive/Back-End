@@ -2,7 +2,8 @@ package project.linkarchive.backend.bookmark.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.linkarchive.backend.advice.exception.BusinessException;
+import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
+import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.link.domain.Link;
@@ -49,23 +50,23 @@ public class BookMarkApiService {
 
     private Link findLinkById(Long linkId) {
         return linkRepository.findById(linkId)
-                .orElseThrow(() -> new BusinessException(NOT_FOUND_LINK));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_LINK));
     }
 
     private void existUrlValidation(Long linkId) {
         if (bookMarkRepository.existsByLinkId(linkId)) {
-            throw new BusinessException(ALREADY_EXIST_BOOKMARK);
+            throw new AlreadyExistException(ALREADY_EXIST_BOOKMARK);
         }
     }
 
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(NOT_FOUND_USER));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
     private BookMark findBookMarkByLinkAndUser(Link link, Long userId) {
         return bookMarkRepository.findByLinkIdAndUserId(link.getId(), userId)
-                .orElseThrow(() -> new BusinessException(NOT_FOUND_BOOKMARK));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_BOOKMARK));
     }
 
 }
