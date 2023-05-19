@@ -9,8 +9,8 @@ import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
 import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
-import project.linkarchive.backend.link.domain.UrlHashTag;
-import project.linkarchive.backend.link.repository.UrlHashTagRepository;
+import project.linkarchive.backend.link.domain.LinkHashTag;
+import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.Comparator;
@@ -30,13 +30,13 @@ public class BookMarkQueryService {
 
     private final UserRepository userRepository;
     private final BookMarkRepository bookMarkRepository;
-    private final UrlHashTagRepository urlHashTagRepository;
+    private final LinkHashTagRepository linkHashTagRepository;
     private final BookMarkRepositoryImpl bookMarkRepositoryImpl;
 
-    public BookMarkQueryService(UserRepository userRepository, BookMarkRepository bookMarkRepository, UrlHashTagRepository urlHashTagRepository, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
+    public BookMarkQueryService(UserRepository userRepository, BookMarkRepository bookMarkRepository, LinkHashTagRepository linkHashTagRepository, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
         this.userRepository = userRepository;
         this.bookMarkRepository = bookMarkRepository;
-        this.urlHashTagRepository = urlHashTagRepository;
+        this.linkHashTagRepository = linkHashTagRepository;
         this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
     }
 
@@ -47,8 +47,8 @@ public class BookMarkQueryService {
 
         Map<String, Integer> tagCountMap = new HashMap<>();
         bookMarkList.forEach(bookMark -> {
-            List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(bookMark.getLink().getId());
-            urlHashTagList.forEach(urlHashTag -> {
+            List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(bookMark.getLink().getId());
+            linkHashTagList.forEach(urlHashTag -> {
                 String tag = urlHashTag.getHashTag().getTag();
                 tagCountMap.put(tag, tagCountMap.getOrDefault(tag, 0) + 1);
             });
@@ -69,8 +69,8 @@ public class BookMarkQueryService {
 
         Map<String, Integer> tagCountMap = new HashMap<>();
         bookMarkList.forEach(bookMark -> {
-            List<UrlHashTag> urlHashTagList = urlHashTagRepository.findByLinkId(bookMark.getLink().getId());
-            urlHashTagList.forEach(urlHashTag -> {
+            List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(bookMark.getLink().getId());
+            linkHashTagList.forEach(urlHashTag -> {
                 String tag = urlHashTag.getHashTag().getTag();
                 tagCountMap.put(tag, tagCountMap.getOrDefault(tag, 0) + 1);
             });

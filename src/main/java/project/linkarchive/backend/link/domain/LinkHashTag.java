@@ -12,11 +12,11 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UrlHashTag extends CreatedEntity {
+public class LinkHashTag extends CreatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "url_hashtag_id")
+    @Column(name = "link_hashtag_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -28,14 +28,14 @@ public class UrlHashTag extends CreatedEntity {
     private HashTag hashTag;
 
     @Builder
-    public UrlHashTag(Long id, Link link, HashTag hashTag) {
+    public LinkHashTag(Long id, Link link, HashTag hashTag) {
         this.id = id;
         this.link = link;
         this.hashTag = hashTag;
     }
 
-    public static UrlHashTag of(Link link, HashTag hashTag) {
-        return UrlHashTag.builder()
+    public static LinkHashTag of(Link link, HashTag hashTag) {
+        return LinkHashTag.builder()
                 .link(link)
                 .hashTag(hashTag)
                 .build();

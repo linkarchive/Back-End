@@ -37,7 +37,7 @@ public class Link extends TimeEntity {
     private User user;
 
     @OneToMany(mappedBy = "link", cascade = CascadeType.ALL)
-    private List<UrlHashTag> urlHashTagList = new ArrayList<>();
+    private List<LinkHashTag> linkHashTagList = new ArrayList<>();
 
     @OneToMany(mappedBy = "link", cascade = CascadeType.ALL)
     private List<BookMark> bookMarkList = new ArrayList<>();
