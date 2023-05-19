@@ -1,13 +1,15 @@
 package project.linkarchive.backend.user.domain;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProfileImage extends TimeEntity {
 
@@ -28,6 +30,10 @@ public class ProfileImage extends TimeEntity {
         this.id = id;
         this.profileImage = profileImage;
         this.user = user;
+    }
+
+    public void updateProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
 }

@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
+import project.linkarchive.backend.advice.exception.custom.NotAcceptableException;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -18,6 +20,10 @@ public class S3Uploader {
     private final AmazonS3 amazonS3;
 
     public String upload(MultipartFile multipartFile) throws IOException {
+
+        if(multipartFile.isEmpty()){
+            throw new NotAcceptableException(ExceptionCodeConst.EMPTY_UPLOAD_FILE);
+        }
 
         String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
         ObjectMetadata objMeta = new ObjectMetadata();

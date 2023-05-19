@@ -15,8 +15,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import project.linkarchive.backend.advice.exception.BusinessException;
-import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
+import project.linkarchive.backend.advice.exception.custom.InvalidException;
+import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.jwt.JwtProperties;
@@ -26,7 +26,6 @@ import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.RefreshTokenRepository;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
-import project.linkarchive.backend.user.service.ProfileService;
 
 import javax.transaction.Transactional;
 import java.security.Key;
@@ -37,6 +36,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import static org.springframework.http.HttpMethod.POST;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Service
 @Transactional
@@ -86,7 +86,7 @@ public class OAuthService {
                     kakaoTokenRequest,
                     String.class);
         } catch (HttpClientErrorException e) {
-            throw new BusinessException(ExceptionCodeConst.INVALID_AUTHORIZATION_CODE);
+            throw new InvalidException(INVALID_AUTHORIZATION_CODE);
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -94,7 +94,7 @@ public class OAuthService {
         try {
             oauthToken = objectMapper.readValue(response.getBody(), OauthToken.class);
         } catch (JsonProcessingException e) {
-            throw new BusinessException(ExceptionCodeConst.NOT_FOUND_USER);
+            throw new NotFoundException(NOT_FOUND_USER);
         }
 
         return oauthToken;
@@ -188,7 +188,7 @@ public class OAuthService {
                     .getId());
         } else {
             //FIXME: 토큰 유효기간 수정 후 토큰 만료, 유효하지 않음, 시그니처 다름 등의 예외 처리가 필요합니다.
-            throw new BusinessException(ExceptionCodeConst.INVALID_TOKEN);
+            throw new InvalidException(INVALID_TOKEN);
         }
         return userId;
     }
@@ -209,7 +209,7 @@ public class OAuthService {
         try {
             kakaoProfile = objectMapper.readValue(kakaoProfileResponse.getBody(), KakaoProfile.class);
         } catch (JsonProcessingException e) {
-            throw new BusinessException(ExceptionCodeConst.NOT_FOUND_USER);
+            throw new NotFoundException(NOT_FOUND_USER);
         }
 
         return kakaoProfile;

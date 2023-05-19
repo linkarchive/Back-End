@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +22,7 @@ import java.io.IOException;
 public class ProfileController {
     private final ProfileService profileService;
 
-    @PostMapping(value = "/profile-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/profile-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SuccessResponse> updateProfileImage(
             AuthInfo authInfo,
             @RequestParam(value = "image") MultipartFile image
@@ -31,9 +31,3 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(SuccessCodeConst.UPDATE_PROFILE_IMAGE));
     }
 }
-
-
-
-
-
-
