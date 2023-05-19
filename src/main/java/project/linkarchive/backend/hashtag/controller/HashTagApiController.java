@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.advice.success.SuccessResponse;
-import project.linkarchive.backend.hashtag.request.TagCreateRequest;
+import project.linkarchive.backend.hashtag.request.CreateTagRequest;
 import project.linkarchive.backend.hashtag.service.HashTagApiService;
 import project.linkarchive.backend.security.AuthInfo;
 
@@ -24,7 +24,7 @@ public class HashTagApiController {
     }
 
     @PostMapping("/tag")
-    public ResponseEntity<SuccessResponse> create(@RequestBody TagCreateRequest request, AuthInfo authInfo) {
+    public ResponseEntity<SuccessResponse> create(@RequestBody CreateTagRequest request, AuthInfo authInfo) {
         hashTagApiService.create(request, authInfo.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(USER_TAG_CREATE));
     }

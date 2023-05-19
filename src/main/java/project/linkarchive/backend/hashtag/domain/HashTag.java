@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
-import project.linkarchive.backend.hashtag.request.TagCreateRequest;
+import project.linkarchive.backend.hashtag.request.CreateTagRequest;
 import project.linkarchive.backend.link.domain.UrlHashTag;
 import project.linkarchive.backend.user.domain.UserHashTag;
 
@@ -36,7 +36,7 @@ public class HashTag extends CreatedEntity {
         this.tag = tag;
     }
 
-    public static HashTag build(TagCreateRequest request) {
+    public static HashTag build(CreateTagRequest request) {
         return HashTag.builder()
                 .tag(request.getTag())
                 .build();

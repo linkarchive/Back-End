@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.BusinessException;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
-import project.linkarchive.backend.hashtag.request.TagCreateRequest;
+import project.linkarchive.backend.hashtag.request.CreateTagRequest;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.domain.UserHashTag;
 import project.linkarchive.backend.user.repository.UserHashTagRepository;
@@ -28,7 +28,7 @@ public class HashTagApiService {
         this.userHashTagRepository = userHashTagRepository;
     }
 
-    public void create(TagCreateRequest request, Long userId) {
+    public void create(CreateTagRequest request, Long userId) {
         User user = findUserById(userId);
         HashTag hashTag = findAndBuildHashTagByTag(request);
 
@@ -47,7 +47,7 @@ public class HashTagApiService {
                 .orElseThrow(() -> new BusinessException(NOT_FOUND_USER));
     }
 
-    private HashTag findAndBuildHashTagByTag(TagCreateRequest request) {
+    private HashTag findAndBuildHashTagByTag(CreateTagRequest request) {
         return hashTagRepository.findByTag(request.getTag())
                 .orElseGet(() -> HashTag.build(request));
     }
