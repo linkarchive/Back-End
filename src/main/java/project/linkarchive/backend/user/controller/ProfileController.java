@@ -23,7 +23,7 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @PostMapping(value = "/profile-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<SuccessResponse> saveImage(
+    public ResponseEntity<SuccessResponse> updateProfileImage(
             AuthInfo authInfo,
             @RequestParam(value = "image") MultipartFile image
     ) throws IOException {

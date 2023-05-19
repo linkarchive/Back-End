@@ -20,8 +20,8 @@ public class ProfileService {
 
     @Transactional
     public String saveProfileImage(MultipartFile image, Long userId) throws IOException {
-
         userId = 11L;
+
         ProfileImage profileImage = userProfileImageRepository.findByUserId(userId).orElseThrow();
         String storedFileName = s3Uploader.upload(image);
         profileImage.setProfileImage(storedFileName);
