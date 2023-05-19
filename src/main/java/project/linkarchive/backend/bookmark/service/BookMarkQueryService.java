@@ -2,8 +2,8 @@ package project.linkarchive.backend.bookmark.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.linkarchive.backend.advice.exception.BusinessException;
-import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
+import project.linkarchive.backend.advice.exception.ExceededException;
+import project.linkarchive.backend.advice.exception.NotFoundException;
 import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.EXCEEDED_TAG_SIZE;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 @Service
 @Transactional(readOnly = true)
@@ -84,12 +87,12 @@ public class BookMarkQueryService {
 
     private void validateUserExists(Long userId) {
         userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
     private void validateSizeDoesNotExceedMax(Long size) {
         if (size > MAX_SIZE) {
-            throw new BusinessException(ExceptionCodeConst.EXCEEDED_TAG_SIZE);
+            throw new ExceededException(EXCEEDED_TAG_SIZE);
         }
     }
 
