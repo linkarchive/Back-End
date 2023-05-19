@@ -3,6 +3,10 @@ package project.linkarchive.backend.advice.exception;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
+import project.linkarchive.backend.advice.exception.custom.ExceededException;
+import project.linkarchive.backend.advice.exception.custom.InvalidException;
+import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 
 import static org.springframework.http.HttpStatus.*;
 

@@ -2,8 +2,8 @@ package project.linkarchive.backend.bookmark.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.linkarchive.backend.advice.exception.ExceededException;
-import project.linkarchive.backend.advice.exception.NotFoundException;
+import project.linkarchive.backend.advice.exception.custom.ExceededException;
+import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;

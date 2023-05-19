@@ -2,8 +2,8 @@ package project.linkarchive.backend.hashtag.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.linkarchive.backend.advice.exception.AlreadyExistException;
-import project.linkarchive.backend.advice.exception.NotFoundException;
+import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
+import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.hashtag.request.CreateTagRequest;

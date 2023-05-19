@@ -2,8 +2,8 @@ package project.linkarchive.backend.link.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.linkarchive.backend.advice.exception.ExceededException;
-import project.linkarchive.backend.advice.exception.NotFoundException;
+import project.linkarchive.backend.advice.exception.custom.ExceededException;
+import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.link.domain.Link;

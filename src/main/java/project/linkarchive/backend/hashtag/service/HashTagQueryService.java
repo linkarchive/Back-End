@@ -2,8 +2,8 @@ package project.linkarchive.backend.hashtag.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.linkarchive.backend.advice.exception.ExceededException;
-import project.linkarchive.backend.advice.exception.NotFoundException;
+import project.linkarchive.backend.advice.exception.custom.ExceededException;
+import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.user.repository.UserHashTagRepositoryImpl;
