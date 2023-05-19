@@ -16,7 +16,7 @@ public enum ExceptionCodeConst {
     ALREADY_EXIST_BOOKMARK(409, "ALREADY_EXIST_BOOKMARK", "이미 마크가 된 Link 입니다."),
 
     EXCEEDED_TAG_LIMIT_10(416, "EXCEEDED_TAG_LIMIT", "태그의 개수가 10개를 초과할 수 없습니다."),
-    EXCEEDED_TAG_SIZE(416, "OVER_SIZE", "해시태그 조회 갯수를 초과했습니다.");
+    EXCEEDED_TAG_SIZE(416, "EXCEEDED_TAG_SIZE", "해시태그 조회 갯수를 초과했습니다.");
 
     private final int status;
     private final String code;
