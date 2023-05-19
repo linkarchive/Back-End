@@ -6,8 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import project.linkarchive.backend.link.response.linkarchive.ArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.QArchiveResponse;
-import project.linkarchive.backend.link.response.userLinkList.LinkResponse;
-import project.linkarchive.backend.link.response.userLinkList.QLinkResponse;
+import project.linkarchive.backend.link.response.linkList.LinkResponse;
+import project.linkarchive.backend.link.response.linkList.QLinkResponse;
 
 import javax.persistence.EntityManager;
 import java.util.List;
