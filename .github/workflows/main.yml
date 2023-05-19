@@ -27,6 +27,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'corretto'
+        cache: gradle
         
     - name: gradlew에 실행 권한 부여
       run: chmod +x ./gradlew
@@ -51,6 +52,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'corretto'
+        cache: gradle
         
     - name: make application.yml
       if: contains(github.ref, 'dev') 
