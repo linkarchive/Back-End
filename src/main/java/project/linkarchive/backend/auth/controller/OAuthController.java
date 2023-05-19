@@ -24,8 +24,7 @@ public class OAuthController {
         // Referer는 HTTP 헤더 중 하나로, 현재 요청을 보내는 페이지의 주소 URL이에요. *참고*
         String referer = request.getHeader("Referer");
         String redirectUri = referer + "auth/kakao";
-//        String accessToken = oAuthService.login(code, redirectUri);
-        String accessToken = oAuthService.login(code);
+        String accessToken = oAuthService.login(code, redirectUri);
 
 
         return ResponseEntity.ok()
