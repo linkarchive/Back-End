@@ -13,7 +13,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "https://localhost:3000",
                         "https://dev.link-archive.com",
-                        "https://www.link-archive.com"
+                        "https://www.link-archive.com",
+                        "https://front-12t545pry-link-archive.vercel.app"
                 )
                 .allowedMethods("GET", "POST", "PATCH", "DELETE")
                 .allowedHeaders("Access-Control-Allow-Origin",
