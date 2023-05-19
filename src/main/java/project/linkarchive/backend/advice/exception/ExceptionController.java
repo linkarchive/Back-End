@@ -3,10 +3,7 @@ package project.linkarchive.backend.advice.exception;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
-import project.linkarchive.backend.advice.exception.custom.ExceededException;
-import project.linkarchive.backend.advice.exception.custom.InvalidException;
-import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.advice.exception.custom.*;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -33,4 +30,8 @@ public class ExceptionController {
         return ResponseEntity.status(REQUESTED_RANGE_NOT_SATISFIABLE).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
     }
 
+    @ExceptionHandler(NotAcceptableException.class)
+    public ResponseEntity<ExceptionResponse> notAcceptableException(ExceededException businessException) {
+        return ResponseEntity.status(NOT_ACCEPTABLE).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
+    }
 }
