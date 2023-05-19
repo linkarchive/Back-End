@@ -38,7 +38,7 @@ public class BookMarkQueryService {
     }
 
     public TagListResponse getMarkTagList(Long userId) {
-        checkUserId(userId);
+        validateUserExists(userId);
 
         List<BookMark> bookMarkList = bookMarkRepository.findByUserId(userId);
 
@@ -60,8 +60,8 @@ public class BookMarkQueryService {
     }
 
     public TagListResponse getMarkTagLimitList(Long userId, Long size) {
-        checkUserId(userId);
-        checkSize(size);
+        validateUserExists(userId);
+        validateSizeDoesNotExceedMax(size);
         List<BookMark> bookMarkList = bookMarkRepository.findByUserId(userId);
 
         Map<String, Integer> tagCountMap = new HashMap<>();
@@ -82,14 +82,14 @@ public class BookMarkQueryService {
         return new TagListResponse(tagList);
     }
 
-    private void checkUserId(Long userId) {
+    private void validateUserExists(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ExceptionCodeConst.NOT_FOUND_USER));
     }
 
-    private void checkSize(Long size) {
+    private void validateSizeDoesNotExceedMax(Long size) {
         if (size > MAX_SIZE) {
-            throw new BusinessException(ExceptionCodeConst.OVER_SIZE_TAG);
+            throw new BusinessException(ExceptionCodeConst.EXCEEDED_TAG_SIZE);
         }
     }
 
