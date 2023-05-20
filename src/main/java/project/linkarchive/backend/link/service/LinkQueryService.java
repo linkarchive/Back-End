@@ -58,24 +58,6 @@ public class LinkQueryService {
         return new UserLinkListResponse(userLinkResponse, hasNext);
     }
 
-    public UserLinkListResponse getMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable) {
-        checkUserId(userId);
-
-        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable);
-
-        List<UserLinkResponse> userLinkResponseList = linkResponseList.stream()
-                .map(linkResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
-                            .collect(Collectors.toList());
-
-                    return UserLinkResponse.build(linkResponse, tagList);
-                }).collect(Collectors.toList());
-
-        return new UserLinkListResponse(userLinkResponseList);
-    }
-
     public UserLinkArchiveResponse getLinkArchive(Pageable pageable, Long lastLinkId, Long userId) {
         checkUserId(userId);
 
@@ -93,7 +75,6 @@ public class LinkQueryService {
                     return UserArchiveResponse.build(archiveResponse, tagList);
                 }).collect(Collectors.toList());
 
-
         return new UserLinkArchiveResponse(userArchiveResponseList, hasNext);
     }
 
@@ -108,6 +89,7 @@ public class LinkQueryService {
             linkResponseList.remove(linkResponseList.size() - 1);
             hasNext = true;
         }
+
         return hasNext;
     }
 
@@ -117,6 +99,7 @@ public class LinkQueryService {
             archiveResponseList.remove(archiveResponseList.size() - 1);
             hasNext = true;
         }
+
         return hasNext;
     }
 

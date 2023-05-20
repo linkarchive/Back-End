@@ -38,7 +38,7 @@ public class BookMarkRepositoryImpl {
                         bookMark.user.id.eq(userId),
                         ltMarkId(lastMarkId)
                 )
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .orderBy(bookMark.id.desc())
                 .fetch();
     }

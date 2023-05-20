@@ -1,5 +1,6 @@
 package project.linkarchive.backend.bookmark.service;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.ExceededException;
@@ -11,6 +12,9 @@ import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
+import project.linkarchive.backend.link.response.linkList.LinkResponse;
+import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
+import project.linkarchive.backend.link.response.linkList.UserLinkResponse;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.Comparator;
@@ -38,6 +42,26 @@ public class BookMarkQueryService {
         this.bookMarkRepository = bookMarkRepository;
         this.linkHashTagRepository = linkHashTagRepository;
         this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
+    }
+
+    public UserLinkListResponse getMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable) {
+        validateUserExists(userId);
+
+        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable);
+
+        boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
+
+        List<UserLinkResponse> userLinkResponseList = linkResponseList.stream()
+                .map(linkResponse -> {
+                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashTagList.stream()
+                            .map(TagResponse::build)
+                            .collect(Collectors.toList());
+
+                    return UserLinkResponse.build(linkResponse, tagList);
+                }).collect(Collectors.toList());
+
+        return new UserLinkListResponse(userLinkResponseList, hasNext);
     }
 
     public TagListResponse getMarkTagList(Long userId) {
@@ -94,6 +118,15 @@ public class BookMarkQueryService {
         if (size > MAX_SIZE) {
             throw new ExceededException(EXCEEDED_TAG_SIZE);
         }
+    }
+
+    private boolean isHasNextLinkList(Pageable pageable, List<LinkResponse> linkResponseList) {
+        boolean hasNext = false;
+        if (linkResponseList.size() > pageable.getPageSize()) {
+            linkResponseList.remove(linkResponseList.size() - 1);
+            hasNext = true;
+        }
+        return hasNext;
     }
 
 }

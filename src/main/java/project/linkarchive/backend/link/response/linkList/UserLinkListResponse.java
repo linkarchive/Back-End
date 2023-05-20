@@ -10,10 +10,6 @@ public class UserLinkListResponse {
     private List<UserLinkResponse> linkList;
     private Boolean hasNext;
 
-    public UserLinkListResponse(List<UserLinkResponse> linkList) {
-        this.linkList = linkList;
-    }
-
     public UserLinkListResponse(List<UserLinkResponse> linkList, Boolean hasNext) {
         this.linkList = linkList;
         this.hasNext = hasNext;
