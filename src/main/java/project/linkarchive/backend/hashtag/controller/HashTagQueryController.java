@@ -35,5 +35,4 @@ public class HashTagQueryController {
         return ResponseEntity.ok(tagList);
     }
 
-
 }

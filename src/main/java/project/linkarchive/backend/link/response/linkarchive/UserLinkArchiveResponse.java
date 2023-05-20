@@ -8,9 +8,11 @@ import java.util.List;
 public class UserLinkArchiveResponse {
 
     private List<UserArchiveResponse> linkArchive;
+    private Boolean hasNext;
 
-    public UserLinkArchiveResponse(List<UserArchiveResponse> linkArchive) {
+    public UserLinkArchiveResponse(List<UserArchiveResponse> linkArchive, Boolean hasNext) {
         this.linkArchive = linkArchive;
+        this.hasNext = hasNext;
     }
 
 }

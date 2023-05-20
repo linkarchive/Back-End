@@ -6,7 +6,9 @@ import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 
 @Getter
 public class NotAcceptableException extends BusinessException {
+
     public NotAcceptableException(ExceptionCodeConst exceptionCodeConst) {
         super(exceptionCodeConst);
     }
+
 }

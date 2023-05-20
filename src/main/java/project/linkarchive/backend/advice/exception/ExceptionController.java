@@ -20,6 +20,11 @@ public class ExceptionController {
         return ResponseEntity.status(NOT_FOUND).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
     }
 
+    @ExceptionHandler(NotAcceptableException.class)
+    public ResponseEntity<ExceptionResponse> notAcceptableException(ExceededException businessException) {
+        return ResponseEntity.status(NOT_ACCEPTABLE).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
+    }
+
     @ExceptionHandler(AlreadyExistException.class)
     public ResponseEntity<ExceptionResponse> handleNotFoundUserException(AlreadyExistException businessException) {
         return ResponseEntity.status(CONFLICT).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
@@ -30,8 +35,4 @@ public class ExceptionController {
         return ResponseEntity.status(REQUESTED_RANGE_NOT_SATISFIABLE).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
     }
 
-    @ExceptionHandler(NotAcceptableException.class)
-    public ResponseEntity<ExceptionResponse> notAcceptableException(ExceededException businessException) {
-        return ResponseEntity.status(NOT_ACCEPTABLE).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
-    }
 }

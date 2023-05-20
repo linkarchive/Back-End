@@ -9,6 +9,7 @@ public enum ExceptionCodeConst {
     INVALID_AUTHORIZATION_CODE(400, "INVALID_AUTHORIZATION_CODE", "잘못된 인가코드입니다."),
 
     NOT_FOUND_USER(404, "NOT_FOUND_USER", "유저가 존재하지 않습니다."),
+    NOT_FOUND_PROFILE_IMAGE(404, "NOT_FOUND_PROFILE_IMAGE", "프로필 이미지가 존재하지 않습니다."),
     NOT_FOUND_LINK(404, "NOT_FOUND_URL", "존재하지 않는 Link 입니다."),
     NOT_FOUND_BOOKMARK(404, "NOT_FOUND_BOOKMARK", "존재하지 않는 북마크입니다."),
 
