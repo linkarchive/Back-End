@@ -10,8 +10,8 @@ import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.domain.LinkHashTag;
-import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
+import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.user.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.domain.UserHashTag;
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Transactional
 public class DataInit {
 
     private final UserRepository userRepository;
@@ -44,7 +45,6 @@ public class DataInit {
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    @Transactional
     public void initDB() {
         initUser();
         initProfileImage();
@@ -156,7 +156,7 @@ public class DataInit {
                     HashTag hashTag = hashTagRepository.findById((long) j).orElse(null);
                     if (hashTag != null) {
                         UserHashTag userHashTag = UserHashTag.builder()
-                                .usageCount((long)i)
+                                .usageCount((long) i)
                                 .user(user)
                                 .hashTag(hashTag)
                                 .build();
