@@ -1,4 +1,4 @@
-package project.linkarchive.backend;
+package project.linkarchive.backend.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
