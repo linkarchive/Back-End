@@ -33,10 +33,10 @@ public class LinkQueryController {
     }
 
     @GetMapping("/link/metadata")
-    public ResponseEntity<LinkMetaDataResponse> getUrlMetaData(@RequestParam(value = "url") String url) {
+    public ResponseEntity<LinkMetaDataResponse> getUrlMetaData(@RequestParam(value = "link") String link) {
         URL urlObject;
         try {
-            urlObject = new URL(url);
+            urlObject = new URL(link);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -58,7 +58,7 @@ public class LinkQueryController {
 
         Document document;
         try {
-            document = Jsoup.connect(url).get();
+            document = Jsoup.connect(link).get();
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
