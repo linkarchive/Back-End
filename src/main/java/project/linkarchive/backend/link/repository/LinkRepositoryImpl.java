@@ -38,7 +38,7 @@ public class LinkRepositoryImpl {
                         link.user.id.eq(userId),
                         ltUrlId(lastLinkLid)
                 )
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .orderBy(link.id.desc())
                 .fetch();
     }
@@ -63,7 +63,7 @@ public class LinkRepositoryImpl {
                         ltUrlId(lastLinkId),
                         link.user.id.ne(userId)
                 )
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .orderBy(link.id.desc())
                 .fetch();
     }
