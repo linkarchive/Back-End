@@ -63,7 +63,7 @@ public class LinkQueryService {
 
         List<ArchiveResponse> archiveResponseList = linkRepositoryImpl.getLinkArchive(pageable, lastLinkId, userId);
 
-        boolean hasNext = isHasNextArchiveList(pageable, archiveResponseList);
+        boolean hasNext = isHasNextLinkArchive(pageable, archiveResponseList);
 
         List<UserArchiveResponse> userArchiveResponseList = archiveResponseList.stream()
                 .map(archiveResponse -> {
@@ -93,7 +93,7 @@ public class LinkQueryService {
         return hasNext;
     }
 
-    private boolean isHasNextArchiveList(Pageable pageable, List<ArchiveResponse> archiveResponseList) {
+    private boolean isHasNextLinkArchive(Pageable pageable, List<ArchiveResponse> archiveResponseList) {
         boolean hasNext = false;
         if (archiveResponseList.size() > pageable.getPageSize()) {
             archiveResponseList.remove(archiveResponseList.size() - 1);
