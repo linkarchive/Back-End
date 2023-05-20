@@ -83,17 +83,6 @@ public class LinkQueryController {
         return ResponseEntity.ok(userLinkListResponse);
     }
 
-    // 사용자별 북마크 리스트 조회 010
-    @GetMapping("/mark/links/user/{userId}")
-    public ResponseEntity<UserLinkListResponse> getMarkedLinkList(
-            @PathVariable("userId") Long userId,
-            @RequestParam(value = "linkId", required = false) Long lastLinkId,
-            @PageableDefault Pageable pageable
-    ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getMarkedLinkList(userId, lastLinkId, pageable);
-        return ResponseEntity.ok(userLinkListResponse);
-    }
-
     // 로그인한 유저를 제외한 사용자들의 링크 리스트 조회 013
     @PreAuthorize("isAuthenticated() == false")
     @GetMapping("/links/archive")
