@@ -49,4 +49,3 @@ public class SecurityConfig implements WebMvcConfigurer {
     }
 
 }
-
