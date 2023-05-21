@@ -8,16 +8,14 @@ public class ProfileResponse {
 
     private Long id;
     private String name;
-    private String intro;
+    private String introduce;
     private String profileImage;
 
-    public ProfileResponse(User user) {
+    public ProfileResponse(User user, String preSignedUrl) {
         this.id = user.getId();
         this.name = user.getName();
-        this.intro = user.getIntroduce();
-        this.profileImage = user.getProfileImage().getProfileImage();
+        this.introduce = user.getIntroduce();
+        this.profileImage = preSignedUrl;
     }
 
 }
-
-
