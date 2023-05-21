@@ -21,8 +21,8 @@ import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.jwt.JwtProperties;
+import project.linkarchive.backend.jwt.JwtUtil;
 import project.linkarchive.backend.user.domain.ProfileImage;
-import project.linkarchive.backend.user.domain.RefreshToken;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.RefreshTokenRepository;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
@@ -34,7 +34,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Optional;
 
 import static org.springframework.http.HttpMethod.POST;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
@@ -43,6 +42,7 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 @Transactional
 public class OAuthService {
 
+    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final UserProfileImageRepository userProfileImageRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -54,7 +54,8 @@ public class OAuthService {
     @Value("${oauth.client.registration.kakao.redirect_uri}")
     private String REDIRECT_URI;
 
-    public OAuthService(UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
+    public OAuthService(JwtUtil jwtUtil, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
+        this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
         this.refreshTokenRepository = refreshTokenRepository;
@@ -63,8 +64,8 @@ public class OAuthService {
     public LoginResponse login(String code, String redirectUri) {
         OauthToken oauthToken = getToken(code, redirectUri);
         User user = saveUser(oauthToken.getAccess_token());
-        String accessToken = createAccessToken(user);
-        createRefreshToken(user);
+        String accessToken = jwtUtil.createAccessToken(user);
+        jwtUtil.createRefreshToken(user);
 
         return new LoginResponse(user.getId(), accessToken);
     }
@@ -126,57 +127,6 @@ public class OAuthService {
         return user;
     }
 
-    private String createAccessToken(User user) {
-        long nowMillis = System.currentTimeMillis();
-        long expirationMillis = nowMillis + (5 * 24 * 60 * 60 * 1000);
-        Date expiration = new Date(expirationMillis);
-
-        //FIXME: accessToken,refreshToken 유효기간 재설정 필요합니다.
-        String jwtAccessToken = Jwts.builder()
-                .setId(user.getId().toString())
-                .setExpiration(expiration)
-                .signWith(getSigningKey())
-                .compact();
-
-        return jwtAccessToken;
-    }
-
-    private String createRefreshToken(User user) {
-        long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
-
-        long expirationMillis = nowMillis + (5 * 24 * 60 * 60 * 1000);
-        Date expiration = new Date(expirationMillis);
-
-        String jwtRefreshToken = Jwts.builder()
-                .setIssuedAt(now)
-                .setExpiration(expiration)
-                .setId(user.getId().toString())
-                .signWith(getSigningKey())
-                .compact();
-
-        RefreshToken refreshToken = RefreshToken.builder()
-                .refreshToken(jwtRefreshToken)
-                .user(user)
-                .build();
-
-
-        Optional<RefreshToken> oldRefreshToken = refreshTokenRepository.findByUserId(user.getId());
-        if (oldRefreshToken.isPresent()) {
-            oldRefreshToken.get().renewalToken(jwtRefreshToken);
-        } else {
-            refreshTokenRepository.save(refreshToken);
-        }
-
-        return jwtRefreshToken;
-    }
-
-
-    private Date toDate(LocalDateTime localDateTime) {
-        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-        return Date.from(instant);
-    }
-
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(JwtProperties.SECRET.getBytes());
     }
@@ -227,6 +177,11 @@ public class OAuthService {
         }
 
         return kakaoProfile;
+    }
+
+    private Date toDate(LocalDateTime localDateTime) {
+        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        return Date.from(instant);
     }
 
 }
