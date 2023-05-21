@@ -77,7 +77,7 @@ public class DataInit {
 
             ProfileImage profileImage = ProfileImage.builder()
                     .id((long) i)
-                    .profileImage("profileImage" + i)
+                    .profileImageFilename("profileImage" + i)
                     .user(user)
                     .build();
             profileImages.add(profileImage);
