@@ -154,6 +154,7 @@ public class OAuthService {
             //FIXME: 토큰 유효기간 수정 후 토큰 만료, 유효하지 않음, 시그니처 다름 등의 예외 처리가 필요합니다.
             throw new InvalidException(INVALID_TOKEN);
         }
+
         return userId;
     }
 
