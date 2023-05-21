@@ -63,7 +63,8 @@ public class OAuthService {
     public LoginResponse login(String code, String redirectUri) {
         OauthToken oauthToken = getToken(code, redirectUri);
         User user = saveUser(oauthToken.getAccess_token());
-        String accessToken = createToken(user);
+        String accessToken = createAccessToken(user);
+        createRefreshToken(user);
 
         return new LoginResponse(user.getId(), accessToken);
     }
@@ -75,7 +76,7 @@ public class OAuthService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", GRANT_TYPE);
         params.add("client_id", CLIENT_ID);
-        params.add("redirect_uri", redirectUri);
+        params.add("redirect_uri", REDIRECT_URI);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
@@ -125,10 +126,8 @@ public class OAuthService {
         return user;
     }
 
-    private String createToken(User user) {
+    private String createAccessToken(User user) {
         long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
-
         long expirationMillis = nowMillis + (5 * 24 * 60 * 60 * 1000);
         Date expiration = new Date(expirationMillis);
 
@@ -138,6 +137,16 @@ public class OAuthService {
                 .setExpiration(expiration)
                 .signWith(getSigningKey())
                 .compact();
+
+        return jwtAccessToken;
+    }
+
+    private String createRefreshToken(User user) {
+        long nowMillis = System.currentTimeMillis();
+        Date now = new Date(nowMillis);
+
+        long expirationMillis = nowMillis + (5 * 24 * 60 * 60 * 1000);
+        Date expiration = new Date(expirationMillis);
 
         String jwtRefreshToken = Jwts.builder()
                 .setIssuedAt(now)
@@ -158,7 +167,8 @@ public class OAuthService {
         } else {
             refreshTokenRepository.save(refreshToken);
         }
-        return jwtAccessToken;
+
+        return jwtRefreshToken;
     }
 
 
