@@ -177,8 +177,6 @@ public class OAuthService {
         return userId;
     }
 
-
-
     private Date toDate(LocalDateTime localDateTime) {
         Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
         return Date.from(instant);
