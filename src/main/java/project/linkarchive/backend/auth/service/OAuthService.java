@@ -111,7 +111,7 @@ public class OAuthService {
                         .socialId(profile.id)
                         .name(profile.getKakaoAccount().getProfile().getNickname())
                         .email(profile.getKakaoAccount().getEmail())
-                        .introduce("")
+                        .introduce("지윤씨 매운거 못드시니깐 다들 주의 바랄게요~ ^^;")
                         .build()
                 );
 
