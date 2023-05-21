@@ -23,6 +23,7 @@ import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.jwt.JwtProperties;
 import project.linkarchive.backend.jwt.JwtUtil;
 import project.linkarchive.backend.user.domain.ProfileImage;
+import project.linkarchive.backend.user.domain.RefreshToken;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.RefreshTokenRepository;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
@@ -63,11 +64,29 @@ public class OAuthService {
 
     public LoginResponse login(String code, String redirectUri) {
         OauthToken oauthToken = getToken(code, redirectUri);
-        User user = saveUser(oauthToken.getAccess_token());
-        String accessToken = jwtUtil.createAccessToken(user);
-        jwtUtil.createRefreshToken(user);
+        KakaoProfile kakaoProfile = getUserInfo(oauthToken.getAccess_token());
 
-        return new LoginResponse(user.getId(), accessToken);
+        User findUser = userRepository.findBySocialId(kakaoProfile.getId())
+                .map(user -> {
+                    userProfileImageRepository.findByUserId(user.getId())
+                            .orElseGet(() -> userProfileImageRepository.save(ProfileImage.build(kakaoProfile, user)));
+
+                    return user;
+                })
+                .orElseGet(() -> {
+                    User user = User.build(kakaoProfile);
+                    userProfileImageRepository.save(ProfileImage.build(kakaoProfile, user));
+
+                    return user;
+                });
+
+        String accessToken = jwtUtil.createAccessToken(findUser);
+        String refreshToken = jwtUtil.createRefreshToken(findUser);
+
+        RefreshToken token = RefreshToken.build(refreshToken, findUser);
+        refreshTokenRepository.save(token);
+
+        return new LoginResponse(findUser.getId(), accessToken, refreshToken);
     }
 
     public OauthToken getToken(String code, String redirectUri) {
@@ -105,26 +124,26 @@ public class OAuthService {
         return oauthToken;
     }
 
-    private User saveUser(String token) {
-        KakaoProfile profile = findProfile(token);
+    public KakaoProfile getUserInfo(String token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + token);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        User user = userRepository.findByEmail(profile.getKakaoAccount().getEmail())
-                .orElse(User.builder()
-                        .socialId(profile.id)
-                        .name(profile.getKakaoAccount().getProfile().getNickname())
-                        .email(profile.getKakaoAccount().getEmail())
-                        .introduce("지윤씨 매운거 못드시니깐 다들 주의 바랄게요~ ^^;")
-                        .build()
-                );
+        RestTemplate rt = new RestTemplate();
+        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
+        ResponseEntity<String> kakaoProfileResponse = rt.exchange("https://kapi.kakao.com/v2/user/me", POST, kakaoProfileRequest, String.class);
 
-        userProfileImageRepository.findByUserId(user.getId())
-                .orElseGet((() -> userProfileImageRepository.save(ProfileImage.builder()
-                        .profileImageFilename(profile.getKakaoAccount().getProfile().getProfileImageUrl())
-                        .user(user)
-                        .build())
-                ));
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        return user;
+        KakaoProfile kakaoProfile;
+        try {
+            kakaoProfile = objectMapper.readValue(kakaoProfileResponse.getBody(), KakaoProfile.class);
+        } catch (JsonProcessingException e) {
+            throw new NotFoundException(NOT_FOUND_USER);
+        }
+
+        return kakaoProfile;
     }
 
     private Key getSigningKey() {
@@ -158,27 +177,7 @@ public class OAuthService {
         return userId;
     }
 
-    public KakaoProfile findProfile(String token) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + token);
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        RestTemplate rt = new RestTemplate();
-        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
-        ResponseEntity<String> kakaoProfileResponse = rt.exchange("https://kapi.kakao.com/v2/user/me", POST, kakaoProfileRequest, String.class);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        KakaoProfile kakaoProfile;
-        try {
-            kakaoProfile = objectMapper.readValue(kakaoProfileResponse.getBody(), KakaoProfile.class);
-        } catch (JsonProcessingException e) {
-            throw new NotFoundException(NOT_FOUND_USER);
-        }
-
-        return kakaoProfile;
-    }
 
     private Date toDate(LocalDateTime localDateTime) {
         Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
