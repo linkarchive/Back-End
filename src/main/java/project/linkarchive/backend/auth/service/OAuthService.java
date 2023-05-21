@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import project.linkarchive.backend.advice.exception.custom.InvalidException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.auth.response.KakaoProfile;
+import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.jwt.JwtProperties;
 import project.linkarchive.backend.user.domain.ProfileImage;
@@ -59,10 +60,12 @@ public class OAuthService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public String login(String code, String redirectUri) {
-        OauthToken token = getToken(code, redirectUri);
-        User user = saveUser(token.getAccess_token());
-        return createToken(user);
+    public LoginResponse login(String code, String redirectUri) {
+        OauthToken oauthToken = getToken(code, redirectUri);
+        User user = saveUser(oauthToken.getAccess_token());
+        String accessToken = createToken(user);
+
+        return new LoginResponse(user.getId(), accessToken);
     }
 
     public OauthToken getToken(String code, String redirectUri) {
@@ -108,20 +111,21 @@ public class OAuthService {
                         .socialId(profile.id)
                         .name(profile.getKakaoAccount().getProfile().getNickname())
                         .email(profile.getKakaoAccount().getEmail())
+                        .introduce("")
                         .build()
                 );
 
         userProfileImageRepository.findByUserId(user.getId())
                 .orElseGet((() -> userProfileImageRepository.save(ProfileImage.builder()
-                        .profileImage(profile.getKakaoAccount().getProfile().getProfileImageUrl())
+                        .profileImageFilename(profile.getKakaoAccount().getProfile().getProfileImageUrl())
                         .user(user)
                         .build())
                 ));
+
         return user;
     }
 
     private String createToken(User user) {
-
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
 

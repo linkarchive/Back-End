@@ -23,11 +23,11 @@ public class OAuthController {
     public ResponseEntity<LoginResponse> login(@RequestParam("code") String code, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
         String redirectUri = referer + "auth/kakao";
-        String accessToken = oAuthService.login(code, redirectUri);
+        LoginResponse loginResponse = oAuthService.login(code, redirectUri);
 
         return ResponseEntity.ok()
-                .header(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken)
-                .body(new LoginResponse(accessToken));
+                .header(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + loginResponse.getAccessToken())
+                .body(loginResponse);
     }
 
 }
