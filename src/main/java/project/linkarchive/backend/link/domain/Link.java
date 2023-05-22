@@ -53,7 +53,7 @@ public class Link extends TimeEntity {
         this.user = user;
     }
 
-    public static Link of(CreateLinkRequest request, User user) {
+    public static Link build(CreateLinkRequest request, User user) {
         return Link.builder()
                 .url(request.getUrl())
                 .title(request.getTitle())
