@@ -1,8 +1,11 @@
 package project.linkarchive.backend.user.service;
 
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import project.linkarchive.backend.advice.exception.ExceptionResponse;
+import project.linkarchive.backend.advice.exception.custom.NotAcceptableException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.domain.ProfileImage;
@@ -11,8 +14,7 @@ import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.io.IOException;
 
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_PROFILE_IMAGE;
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Service
 @Transactional
@@ -30,9 +32,10 @@ public class UserApiService {
 
     public void saveProfileImage(MultipartFile image, Long userId) throws IOException {
         validateUserExists(userId);
-        ProfileImage profileImage = findProfileImageByUserId(userId);
 
+        ProfileImage profileImage = findProfileImageByUserId(userId);
         String storedFileName = s3Uploader.upload(image);
+
         profileImage.updateProfileImage(storedFileName);
     }
 
@@ -45,5 +48,7 @@ public class UserApiService {
         return userProfileImageRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_PROFILE_IMAGE));
     }
+
+
 
 }

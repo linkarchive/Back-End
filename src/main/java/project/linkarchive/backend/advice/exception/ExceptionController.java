@@ -21,7 +21,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(NotAcceptableException.class)
-    public ResponseEntity<ExceptionResponse> notAcceptableException(ExceededException businessException) {
+    public ResponseEntity<ExceptionResponse> notAcceptableException(NotAcceptableException businessException) {
         return ResponseEntity.status(NOT_ACCEPTABLE).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
     }
 
