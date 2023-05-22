@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.EMPTY_UPLOAD_FILE;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_ACCEPTABLE_CONTENT_TYPE;
 
 @Service
 public class S3Uploader {
@@ -30,13 +31,10 @@ public class S3Uploader {
     public String upload(MultipartFile multipartFile) throws IOException {
         validateNotEmptyFile(multipartFile);
 
-        String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
-        ObjectMetadata objMeta = new ObjectMetadata();
-
         String contentType = multipartFile.getContentType();
-        if (contentType != null) {
-            objMeta.setContentType(contentType);
-        }
+        ObjectMetadata objMeta = validateContentType(contentType);
+
+        String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
 
         objMeta.setContentLength(multipartFile.getInputStream().available());
         amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
@@ -51,8 +49,8 @@ public class S3Uploader {
         expiration.setTime(mSec);
 
         GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, objectKey)
-                                                                        .withMethod(HttpMethod.GET)
-                                                                        .withExpiration(expiration);
+                .withMethod(HttpMethod.GET)
+                .withExpiration(expiration);
         URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
 
         return url;
@@ -62,6 +60,20 @@ public class S3Uploader {
         if (multipartFile.isEmpty()) {
             throw new NotAcceptableException(EMPTY_UPLOAD_FILE);
         }
+    }
+
+    private ObjectMetadata validateContentType(String contentType) {
+        ObjectMetadata objMeta = new ObjectMetadata();
+
+        if (contentType != null) {
+            if (!(contentType.contains("image/jpeg")
+                    || contentType.contains("image/jpg")
+                    || contentType.contains("image/png"))) {
+                throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
+            }
+        }
+        objMeta.setContentType(contentType);
+        return objMeta;
     }
 
 }
