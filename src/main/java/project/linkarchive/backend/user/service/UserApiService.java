@@ -32,10 +32,9 @@ public class UserApiService {
 
     public void saveProfileImage(MultipartFile image, Long userId) throws IOException {
         validateUserExists(userId);
-
         ProfileImage profileImage = findProfileImageByUserId(userId);
-        String storedFileName = s3Uploader.upload(image);
 
+        String storedFileName = s3Uploader.upload(image);
         profileImage.updateProfileImage(storedFileName);
     }
 
@@ -48,7 +47,4 @@ public class UserApiService {
         return userProfileImageRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_PROFILE_IMAGE));
     }
-
-
-
 }
