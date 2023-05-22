@@ -3,6 +3,7 @@ package project.linkarchive.backend.link.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.ExceededException;
+import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
@@ -14,12 +15,19 @@ import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserHashTagRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.EXCEEDED_TAG_LIMIT_10;
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Service
 @Transactional
 public class LinkApiService {
+
+    public static final int MINIMUM_TAG_LENGTH = 2;
+    public static final int MAXIMUM_TAG_LENGTH = 8;
+    public static final int MAX_TAG_COUNT = 10;
 
     private final UserRepository userRepository;
     private final HashTagRepository hashTagRepository;
@@ -35,18 +43,11 @@ public class LinkApiService {
 
     public void create(CreateLinkRequest request, Long userId) {
         User user = findUserById(userId);
-        exceededTagLimit(request);
+        Set<String> tagsFromRequest = getTagsFromRequest(request);
+        exceededTagCount(tagsFromRequest);
 
-        Link link = Link.of(request, user);
-        request.getTag().stream()
-                .map(tag -> hashTagRepository.findByTag(tag)
-                        .orElseGet(() -> HashTag.build(tag))
-                )
-                .forEach(hashTag -> {
-                    userHashTagRepository.findByHashTagId(hashTag.getId())
-                            .ifPresent(tag -> tag.increaseUserHashTagCount(tag.getUsageCount()));
-                    linkHashTagRepository.save(LinkHashTag.of(link, hashTag));
-                });
+        Link link = Link.build(request, user);
+        addTagsToLinkAndIncrementUserTagCount(tagsFromRequest, link);
     }
 
     private User findUserById(Long userId) {
@@ -54,10 +55,35 @@ public class LinkApiService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
-    private void exceededTagLimit(CreateLinkRequest request) {
-        if (request.getTag().size() > 10) {
+    private Set<String> getTagsFromRequest(CreateLinkRequest request) {
+        return request.getTag().stream()
+                .peek(tag -> validationTagLength(tag))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private void validationTagLength(String tag) {
+        boolean isTooLong = tag.length() > MAXIMUM_TAG_LENGTH;
+        boolean isTooShort = tag.length() < MINIMUM_TAG_LENGTH;
+        if (isTooLong || isTooShort) {
+            throw new LengthRequiredException(LENGTH_REQUIRED_TAG);
+        }
+    }
+
+    private void exceededTagCount(Set<String> requestForTag) {
+        if (requestForTag.size() > MAX_TAG_COUNT) {
             throw new ExceededException(EXCEEDED_TAG_LIMIT_10);
         }
+    }
+
+    private void addTagsToLinkAndIncrementUserTagCount(Set<String> tagsFromRequest, Link link) {
+        tagsFromRequest.stream()
+                .map(tag -> hashTagRepository.findByTag(tag)
+                        .orElseGet(() -> HashTag.build(tag)))
+                .forEach(hashTag -> {
+                    userHashTagRepository.findByHashTagId(hashTag.getId())
+                            .ifPresent(tag -> tag.increaseUserHashTagCount(tag.getUsageCount()));
+                    linkHashTagRepository.save(LinkHashTag.of(link, hashTag));
+                });
     }
 
 }

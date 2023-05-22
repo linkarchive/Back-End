@@ -30,6 +30,11 @@ public class ExceptionController {
         return ResponseEntity.status(CONFLICT).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
     }
 
+    @ExceptionHandler(LengthRequiredException.class)
+    public ResponseEntity<ExceptionResponse> handleNotFoundUserException(LengthRequiredException businessException) {
+        return ResponseEntity.status(LENGTH_REQUIRED).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
+    }
+
     @ExceptionHandler(ExceededException.class)
     public ResponseEntity<ExceptionResponse> handleNotFoundUserException(ExceededException businessException) {
         return ResponseEntity.status(REQUESTED_RANGE_NOT_SATISFIABLE).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
