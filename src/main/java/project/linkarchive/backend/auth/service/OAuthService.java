@@ -20,8 +20,7 @@ import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
-import project.linkarchive.backend.jwt.JwtProperties;
-import project.linkarchive.backend.jwt.JwtUtil;
+import project.linkarchive.backend.util.JwtUtil;
 import project.linkarchive.backend.user.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.RefreshToken;
 import project.linkarchive.backend.user.domain.User;
@@ -42,6 +41,8 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 @Service
 @Transactional
 public class OAuthService {
+
+    private static final String SECRET = "qwertyuiopasdfghjkl123qwertyuiopasdfghjkl123";
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
@@ -147,7 +148,7 @@ public class OAuthService {
     }
 
     private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(JwtProperties.SECRET.getBytes());
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
     public boolean validate(String token) {

@@ -1,8 +1,7 @@
-package project.linkarchive.backend.jwt;
+package project.linkarchive.backend.util;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import project.linkarchive.backend.user.domain.User;
 
@@ -14,6 +13,7 @@ public class JwtUtil {
 
     private static final Long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 2L;
     private static final Long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30L;
+    private static final String SECRET = "qwertyuiopasdfghjkl123qwertyuiopasdfghjkl123";
 
     public String createAccessToken(User user) {
         return createJwtToken(user, ACCESS_TOKEN_EXPIRATION_TIME);
@@ -40,7 +40,7 @@ public class JwtUtil {
     }
 
     private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(JwtProperties.SECRET.getBytes());
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
 }

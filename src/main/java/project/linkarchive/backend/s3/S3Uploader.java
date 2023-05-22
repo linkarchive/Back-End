@@ -56,7 +56,7 @@ public class S3Uploader {
         return url;
     }
 
-    private static void validateNotEmptyFile(MultipartFile multipartFile) {
+    private void validateNotEmptyFile(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
             throw new NotAcceptableException(EMPTY_UPLOAD_FILE);
         }
