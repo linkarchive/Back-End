@@ -15,7 +15,6 @@ import project.linkarchive.backend.link.response.LinkMetaDataResponse;
 import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
 import project.linkarchive.backend.link.service.LinkQueryService;
-import project.linkarchive.backend.security.AuthInfo;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -83,7 +82,7 @@ public class LinkQueryController {
         return ResponseEntity.ok(userLinkListResponse);
     }
 
-    // 로그인한 유저를 제외한 사용자들의 링크 리스트 조회 013
+    // 사용자들의 링크 리스트 조회 013
     @GetMapping("/links/archive")
     public ResponseEntity<UserLinkArchiveResponse> getLinkArchive(
             @PageableDefault Pageable pageable,

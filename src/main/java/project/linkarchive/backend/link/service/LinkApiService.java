@@ -15,7 +15,9 @@ import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserHashTagRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
@@ -41,11 +43,11 @@ public class LinkApiService {
 
     public void create(CreateLinkRequest request, Long userId) {
         User user = findUserById(userId);
-        List<String> tagsFromRequest = getTagsFromRequest(request);
+        Set<String> tagsFromRequest = getTagsFromRequest(request);
         exceededTagCount(tagsFromRequest);
 
         Link link = Link.build(request, user);
-        addTagsToLinkAndIncrementUserTagCount(request, link);
+        addTagsToLinkAndIncrementUserTagCount(tagsFromRequest, link);
     }
 
     private User findUserById(Long userId) {
@@ -53,11 +55,10 @@ public class LinkApiService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
-    private List<String> getTagsFromRequest(CreateLinkRequest request) {
+    private Set<String> getTagsFromRequest(CreateLinkRequest request) {
         return request.getTag().stream()
-                .peek(tag -> {
-                    validationTagLength(tag);
-                }).toList();
+                .peek(tag -> validationTagLength(tag))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private void validationTagLength(String tag) {
@@ -68,17 +69,16 @@ public class LinkApiService {
         }
     }
 
-    private void exceededTagCount(List<String> requestForTag) {
+    private void exceededTagCount(Set<String> requestForTag) {
         if (requestForTag.size() > MAX_TAG_COUNT) {
             throw new ExceededException(EXCEEDED_TAG_LIMIT_10);
         }
     }
 
-    private void addTagsToLinkAndIncrementUserTagCount(CreateLinkRequest request, Link link) {
-        request.getTag().stream()
+    private void addTagsToLinkAndIncrementUserTagCount(Set<String> tagsFromRequest, Link link) {
+        tagsFromRequest.stream()
                 .map(tag -> hashTagRepository.findByTag(tag)
-                        .orElseGet(() -> HashTag.build(tag))
-                )
+                        .orElseGet(() -> HashTag.build(tag)))
                 .forEach(hashTag -> {
                     userHashTagRepository.findByHashTagId(hashTag.getId())
                             .ifPresent(tag -> tag.increaseUserHashTagCount(tag.getUsageCount()));
