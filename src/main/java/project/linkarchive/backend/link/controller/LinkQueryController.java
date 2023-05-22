@@ -84,14 +84,12 @@ public class LinkQueryController {
     }
 
     // 로그인한 유저를 제외한 사용자들의 링크 리스트 조회 013
-    @PreAuthorize("isAuthenticated() == false")
     @GetMapping("/links/archive")
     public ResponseEntity<UserLinkArchiveResponse> getLinkArchive(
             @PageableDefault Pageable pageable,
-            @RequestParam(value = "linkId", required = false) Long lastLinkId,
-            AuthInfo authInfo
+            @RequestParam(value = "linkId", required = false) Long lastLinkId
     ) {
-        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getLinkArchive(pageable, lastLinkId, authInfo.getId());
+        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getLinkArchive(pageable, lastLinkId);
         return ResponseEntity.ok(userLinkArchiveResponse);
     }
 

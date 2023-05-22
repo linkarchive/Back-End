@@ -43,7 +43,7 @@ public class LinkRepositoryImpl {
                 .fetch();
     }
 
-    public List<ArchiveResponse> getLinkArchive(Pageable pageable, Long lastLinkId, Long userId) {
+    public List<ArchiveResponse> getLinkArchive(Pageable pageable, Long lastLinkId) {
         return queryFactory
                 .select(new QArchiveResponse(
                         link.user.id,
@@ -60,8 +60,7 @@ public class LinkRepositoryImpl {
                 .leftJoin(link.user)
                 .leftJoin(link.user.profileImage)
                 .where(
-                        ltUrlId(lastLinkId),
-                        link.user.id.ne(userId)
+                        ltUrlId(lastLinkId)
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(link.id.desc())
