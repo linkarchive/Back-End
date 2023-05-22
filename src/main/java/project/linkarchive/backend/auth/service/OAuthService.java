@@ -20,7 +20,7 @@ import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
-import project.linkarchive.backend.jwt.JwtProperties;
+import project.linkarchive.backend.util.JwtUtil;
 import project.linkarchive.backend.user.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.RefreshToken;
 import project.linkarchive.backend.user.domain.User;
@@ -34,7 +34,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Optional;
 
 import static org.springframework.http.HttpMethod.POST;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
@@ -43,6 +42,9 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 @Transactional
 public class OAuthService {
 
+    private static final String SECRET = "qwertyuiopasdfghjkl123qwertyuiopasdfghjkl123";
+
+    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final UserProfileImageRepository userProfileImageRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -54,7 +56,8 @@ public class OAuthService {
     @Value("${oauth.client.registration.kakao.redirect_uri}")
     private String REDIRECT_URI;
 
-    public OAuthService(UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
+    public OAuthService(JwtUtil jwtUtil, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
+        this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
         this.refreshTokenRepository = refreshTokenRepository;
@@ -62,10 +65,29 @@ public class OAuthService {
 
     public LoginResponse login(String code, String redirectUri) {
         OauthToken oauthToken = getToken(code, redirectUri);
-        User user = saveUser(oauthToken.getAccess_token());
-        String accessToken = createToken(user);
+        KakaoProfile kakaoProfile = getUserInfo(oauthToken.getAccess_token());
 
-        return new LoginResponse(user.getId(), accessToken);
+        User findUser = userRepository.findBySocialId(kakaoProfile.getId())
+                .map(user -> {
+                    userProfileImageRepository.findByUserId(user.getId())
+                            .orElseGet(() -> userProfileImageRepository.save(ProfileImage.build(kakaoProfile, user)));
+
+                    return user;
+                })
+                .orElseGet(() -> {
+                    User user = User.build(kakaoProfile);
+                    userProfileImageRepository.save(ProfileImage.build(kakaoProfile, user));
+
+                    return user;
+                });
+
+        String accessToken = jwtUtil.createAccessToken(findUser);
+        String refreshToken = jwtUtil.createRefreshToken(findUser);
+
+        RefreshToken token = RefreshToken.build(refreshToken, findUser);
+        refreshTokenRepository.save(token);
+
+        return new LoginResponse(findUser.getId(), accessToken, refreshToken);
     }
 
     public OauthToken getToken(String code, String redirectUri) {
@@ -103,72 +125,30 @@ public class OAuthService {
         return oauthToken;
     }
 
-    private User saveUser(String token) {
-        KakaoProfile profile = findProfile(token);
+    public KakaoProfile getUserInfo(String token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + token);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        User user = userRepository.findByEmail(profile.getKakaoAccount().getEmail())
-                .orElse(User.builder()
-                        .socialId(profile.id)
-                        .name(profile.getKakaoAccount().getProfile().getNickname())
-                        .email(profile.getKakaoAccount().getEmail())
-                        .introduce("지윤씨 매운거 못드시니깐 다들 주의 바랄게요~ ^^;")
-                        .build()
-                );
+        RestTemplate rt = new RestTemplate();
+        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
+        ResponseEntity<String> kakaoProfileResponse = rt.exchange("https://kapi.kakao.com/v2/user/me", POST, kakaoProfileRequest, String.class);
 
-        userProfileImageRepository.findByUserId(user.getId())
-                .orElseGet((() -> userProfileImageRepository.save(ProfileImage.builder()
-                        .profileImageFilename(profile.getKakaoAccount().getProfile().getProfileImageUrl())
-                        .user(user)
-                        .build())
-                ));
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        return user;
-    }
-
-    private String createToken(User user) {
-        long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
-
-        long expirationMillis = nowMillis + (5 * 24 * 60 * 60 * 1000);
-        Date expiration = new Date(expirationMillis);
-
-        //FIXME: accessToken,refreshToken 유효기간 재설정 필요합니다.
-        String jwtAccessToken = Jwts.builder()
-                .setId(user.getId().toString())
-                .setExpiration(expiration)
-                .signWith(getSigningKey())
-                .compact();
-
-        String jwtRefreshToken = Jwts.builder()
-                .setIssuedAt(now)
-                .setExpiration(expiration)
-                .setId(user.getId().toString())
-                .signWith(getSigningKey())
-                .compact();
-
-        RefreshToken refreshToken = RefreshToken.builder()
-                .refreshToken(jwtRefreshToken)
-                .user(user)
-                .build();
-
-
-        Optional<RefreshToken> oldRefreshToken = refreshTokenRepository.findByUserId(user.getId());
-        if (oldRefreshToken.isPresent()) {
-            oldRefreshToken.get().renewalToken(jwtRefreshToken);
-        } else {
-            refreshTokenRepository.save(refreshToken);
+        KakaoProfile kakaoProfile;
+        try {
+            kakaoProfile = objectMapper.readValue(kakaoProfileResponse.getBody(), KakaoProfile.class);
+        } catch (JsonProcessingException e) {
+            throw new NotFoundException(NOT_FOUND_USER);
         }
-        return jwtAccessToken;
-    }
 
-
-    private Date toDate(LocalDateTime localDateTime) {
-        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-        return Date.from(instant);
+        return kakaoProfile;
     }
 
     private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(JwtProperties.SECRET.getBytes());
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
     public boolean validate(String token) {
@@ -194,29 +174,13 @@ public class OAuthService {
             //FIXME: 토큰 유효기간 수정 후 토큰 만료, 유효하지 않음, 시그니처 다름 등의 예외 처리가 필요합니다.
             throw new InvalidException(INVALID_TOKEN);
         }
+
         return userId;
     }
 
-    public KakaoProfile findProfile(String token) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + token);
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        RestTemplate rt = new RestTemplate();
-        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
-        ResponseEntity<String> kakaoProfileResponse = rt.exchange("https://kapi.kakao.com/v2/user/me", POST, kakaoProfileRequest, String.class);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        KakaoProfile kakaoProfile;
-        try {
-            kakaoProfile = objectMapper.readValue(kakaoProfileResponse.getBody(), KakaoProfile.class);
-        } catch (JsonProcessingException e) {
-            throw new NotFoundException(NOT_FOUND_USER);
-        }
-
-        return kakaoProfile;
+    private Date toDate(LocalDateTime localDateTime) {
+        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        return Date.from(instant);
     }
 
 }

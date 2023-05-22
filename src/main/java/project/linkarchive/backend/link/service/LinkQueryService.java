@@ -58,10 +58,8 @@ public class LinkQueryService {
         return new UserLinkListResponse(userLinkResponse, hasNext);
     }
 
-    public UserLinkArchiveResponse getLinkArchive(Pageable pageable, Long lastLinkId, Long userId) {
-        checkUserId(userId);
-
-        List<ArchiveResponse> archiveResponseList = linkRepositoryImpl.getLinkArchive(pageable, lastLinkId, userId);
+    public UserLinkArchiveResponse getLinkArchive(Pageable pageable, Long lastLinkId) {
+        List<ArchiveResponse> archiveResponseList = linkRepositoryImpl.getLinkArchive(pageable, lastLinkId);
 
         boolean hasNext = isHasNextLinkArchive(pageable, archiveResponseList);
 

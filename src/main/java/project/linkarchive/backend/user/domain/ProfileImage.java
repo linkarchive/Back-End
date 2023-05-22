@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
+import project.linkarchive.backend.auth.response.KakaoProfile;
 
 import javax.persistence.*;
 
@@ -29,6 +30,13 @@ public class ProfileImage extends TimeEntity {
         this.id = id;
         this.profileImageFilename = profileImageFilename;
         this.user = user;
+    }
+
+    public static ProfileImage build(KakaoProfile kakaoProfile, User user) {
+        return ProfileImage.builder()
+                .profileImageFilename(kakaoProfile.getKakaoAccount().getProfile().getProfileImageUrl())
+                .user(user)
+                .build();
     }
 
     public void updateProfileImage(String profileImage) {

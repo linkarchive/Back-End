@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
+import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.bookmark.domain.BookMark;
 
 import javax.persistence.*;
@@ -30,7 +31,6 @@ public class User extends TimeEntity {
     @Column(name = "user_name")
     private String name;
 
-    @Column(name = "user_introduce")
     private String introduce;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -49,6 +49,15 @@ public class User extends TimeEntity {
         this.email = email;
         this.name = name;
         this.introduce = introduce;
+    }
+
+    public static User build(KakaoProfile kakaoProfile) {
+        return User.builder()
+                .socialId(kakaoProfile.id)
+                .name(kakaoProfile.getKakaoAccount().getProfile().getNickname())
+                .email(kakaoProfile.getKakaoAccount().getEmail())
+                .introduce("지윤씨 매운거 못드시니깐 다들 주의 바랄게요~ ^^;")
+                .build();
     }
 
 }
