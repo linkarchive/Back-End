@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
 import project.linkarchive.backend.hashtag.domain.HashTag;
+import project.linkarchive.backend.link.domain.LinkHashTag;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,9 +38,9 @@ public class UserHashTag extends CreatedEntity {
         this.hashTag = hashTag;
     }
 
-    public static UserHashTag build(User user, HashTag hashTag) {
+    public static UserHashTag build(User user, HashTag hashTag, List<LinkHashTag> linkHashTagList) {
         return UserHashTag.builder()
-                .usageCount(0L)
+                .usageCount((long) linkHashTagList.size())
                 .user(user)
                 .hashTag(hashTag)
                 .build();

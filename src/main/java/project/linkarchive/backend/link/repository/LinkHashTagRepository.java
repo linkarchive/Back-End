@@ -9,4 +9,6 @@ public interface LinkHashTagRepository extends JpaRepository<LinkHashTag, Long> 
 
     List<LinkHashTag> findByLinkId(Long linkId);
 
+    List<LinkHashTag> findByHashTagId(Long HashTagId);
+
 }
