@@ -7,14 +7,12 @@ import project.linkarchive.backend.user.domain.User;
 public class ProfileResponse {
 
     private Long id;
-    private String name;
     private String nickname;
     private String introduce;
     private String profileImage;
 
     public ProfileResponse(User user, String preSignedUrl) {
         this.id = user.getId();
-        this.name = user.getName();
         this.nickname = user.getNickname();
         this.introduce = user.getIntroduce();
         this.profileImage = preSignedUrl;
