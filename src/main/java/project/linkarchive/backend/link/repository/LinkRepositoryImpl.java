@@ -47,7 +47,7 @@ public class LinkRepositoryImpl {
         return queryFactory
                 .select(new QArchiveResponse(
                         link.user.id,
-                        link.user.name,
+                        link.user.nickname,
                         link.user.profileImage.profileImageFilename,
                         link.id,
                         link.url,

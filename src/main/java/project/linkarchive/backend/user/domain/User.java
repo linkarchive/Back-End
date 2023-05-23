@@ -26,7 +26,6 @@ public class User extends TimeEntity {
 
     private String socialId;
     private String email;
-    private String name;
     private String nickname;
     private String introduce;
 
@@ -40,11 +39,10 @@ public class User extends TimeEntity {
     private List<BookMark> bookMarkList = new ArrayList<>();
 
     @Builder
-    public User(Long id, String socialId, String email, String name, String nickname, String introduce) {
+    public User(Long id, String socialId, String email, String nickname, String introduce) {
         this.id = id;
         this.socialId = socialId;
         this.email = email;
-        this.name = name;
         this.nickname = nickname;
         this.introduce = introduce;
     }
@@ -52,7 +50,6 @@ public class User extends TimeEntity {
     public static User build(KakaoProfile kakaoProfile) {
         return User.builder()
                 .socialId(kakaoProfile.id)
-                .name(kakaoProfile.getKakaoAccount().getProfile().getNickname())
                 .nickname("")
                 .email(kakaoProfile.getKakaoAccount().getEmail())
                 .introduce("지윤씨 매운거 못드시니깐 다들 주의 바랄게요~ ^^;")

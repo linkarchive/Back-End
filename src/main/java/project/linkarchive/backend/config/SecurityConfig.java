@@ -36,6 +36,13 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .and()
                 .formLogin().disable().headers().frameOptions().disable()
                 .and()
+                .authorizeRequests()
+                .antMatchers(
+                        "/auth/**","/mark/links/user/{userId}","/links/user/{userId}",
+                        "/links/archive","/user/{userId}","/health"
+                ).permitAll()
+                .anyRequest().authenticated()
+                .and()
                 .addFilterBefore(new TokenAuthenticationFilter(oAuthService), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new AuthenticationEntryPointImpl())

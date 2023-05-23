@@ -2,7 +2,6 @@ package project.linkarchive.backend.bookmark.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +14,6 @@ import static project.linkarchive.backend.advice.success.SuccessCodeConst.BOOK_M
 import static project.linkarchive.backend.advice.success.SuccessCodeConst.BOOK_MARK_CANCEL;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
 public class BookMarkApiController {
 
     private final BookMarkApiService bookMarkApiService;
