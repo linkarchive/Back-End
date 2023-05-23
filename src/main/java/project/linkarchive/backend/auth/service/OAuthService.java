@@ -34,6 +34,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Objects;
 
 import static org.springframework.http.HttpMethod.POST;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
@@ -87,7 +88,9 @@ public class OAuthService {
         RefreshToken token = RefreshToken.build(refreshToken, findUser);
         refreshTokenRepository.save(token);
 
-        return new LoginResponse(findUser.getId(), accessToken, refreshToken);
+        boolean isFirstLogin = findUser.getNickname().equals("");
+
+        return new LoginResponse(findUser.getId(), accessToken, refreshToken, isFirstLogin);
     }
 
     public OauthToken getToken(String code, String redirectUri) {
