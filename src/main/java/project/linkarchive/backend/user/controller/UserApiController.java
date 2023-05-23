@@ -11,12 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 import project.linkarchive.backend.advice.success.SuccessResponse;
 import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.request.UpdateNickNameRequest;
+import project.linkarchive.backend.user.request.UpdateProfileRequest;
 import project.linkarchive.backend.user.service.UserApiService;
 
 import java.io.IOException;
 
-import static project.linkarchive.backend.advice.success.SuccessCodeConst.UPDATE_NICKNAME;
-import static project.linkarchive.backend.advice.success.SuccessCodeConst.UPDATE_PROFILE_IMAGE;
+import static project.linkarchive.backend.advice.success.SuccessCodeConst.*;
 
 @RestController
 @PreAuthorize("isAuthenticated()")
@@ -28,8 +28,17 @@ public class UserApiController {
         this.userApiService = userApiService;
     }
 
+    @PatchMapping("/user")
+    public ResponseEntity<SuccessResponse> updateUserProfile(
+            @RequestBody UpdateProfileRequest request,
+            AuthInfo authInfo
+    ) {
+        userApiService.updateUserProfile(request, authInfo.getId());
+        return ResponseEntity.ok(new SuccessResponse(UPDATE_USER_PROFILE));
+    }
+
     @PatchMapping("/user/nickname")
-    public ResponseEntity<SuccessResponse> updateUserNickName(
+    public ResponseEntity<SuccessResponse> updateUserNickname(
             @RequestBody UpdateNickNameRequest request,
             AuthInfo authInfo
     ) {

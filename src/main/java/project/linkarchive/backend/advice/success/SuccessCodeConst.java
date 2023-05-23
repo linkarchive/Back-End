@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum SuccessCodeConst {
 
     LOGIN_SUCCESS(200, "LOGIN", "회원가입에 성공했습니다."),
+    UPDATE_USER_PROFILE(200, "UPDATE_USER_PROFILE", "유저의 프로필이 수정되었습니다."),
     UPDATE_PROFILE_IMAGE(200, "UPDATE_PROFILE_IMAGE", "프로필 이미지가 수정되었습니다."),
     UPDATE_NICKNAME(200, "UPDATE_NICKNAME", "닉네임이 수정되었습니다."),
     BOOK_MARK_CANCEL(200, "BOOK_MARK_CANCEL", "북마크가 취소되었습니다."),
