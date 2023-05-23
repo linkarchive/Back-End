@@ -27,7 +27,7 @@ public class UserApiController {
         this.userApiService = userApiService;
     }
 
-    @PatchMapping("/user")
+    @PatchMapping("/user/nickname")
     public ResponseEntity<SuccessResponse> updateUserNickName(
             @RequestBody UpdateNickNameRequest request,
             AuthInfo authInfo
