@@ -10,7 +10,7 @@ import java.util.List;
 public class UserArchiveResponse {
 
     private Long userId;
-    private String name;
+    private String nickname;
     private String profileImage;
     private Long urlId;
     private String link;
@@ -21,9 +21,9 @@ public class UserArchiveResponse {
     private List<TagResponse> tagList;
 
     @Builder
-    public UserArchiveResponse(Long userId, String name, String profileImage, Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<TagResponse> tagList) {
+    public UserArchiveResponse(Long userId, String nickname, String profileImage, Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, List<TagResponse> tagList) {
         this.userId = userId;
-        this.name = name;
+        this.nickname = nickname;
         this.profileImage = profileImage;
         this.urlId = urlId;
         this.link = link;
@@ -37,7 +37,7 @@ public class UserArchiveResponse {
     public static UserArchiveResponse build(ArchiveResponse response, List<TagResponse> tagList) {
         return UserArchiveResponse.builder()
                 .userId(response.getUserId())
-                .name(response.getName())
+                .nickname(response.getNickname())
                 .profileImage(response.getProfileImage())
                 .urlId(response.getLinkId())
                 .link(response.getLink())

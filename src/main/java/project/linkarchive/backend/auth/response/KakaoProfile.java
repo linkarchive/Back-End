@@ -25,8 +25,6 @@ public class KakaoProfile {
         @Getter
         @JsonIgnoreProperties(ignoreUnknown = true)
         public class Profile {
-            @JsonSetter("nickname")
-            public String nickname;
 
             @JsonSetter("profile_image_url")
             public String profileImageUrl;

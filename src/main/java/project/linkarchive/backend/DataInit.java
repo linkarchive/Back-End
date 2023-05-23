@@ -62,7 +62,6 @@ public class DataInit {
                     .id((long) i)
                     .socialId("kakao" + i)
                     .email(i + "@google.com")
-                    .name("user" + i)
                     .nickname("nickname" + i)
                     .introduce(i + "입니다")
                     .build();

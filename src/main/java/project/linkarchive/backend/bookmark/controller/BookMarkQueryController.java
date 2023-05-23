@@ -3,7 +3,6 @@ package project.linkarchive.backend.bookmark.controller;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.bookmark.service.BookMarkQueryService;
 import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
+import project.linkarchive.backend.security.AuthInfo;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
 public class BookMarkQueryController {
 
     private final BookMarkQueryService bookMarkQueryService;
@@ -22,7 +21,18 @@ public class BookMarkQueryController {
         this.bookMarkQueryService = bookMarkQueryService;
     }
 
-    // 사용자별 북마크 리스트 조회 010
+    // 내 북마크 리스트 조회 - 로그인 필요 O
+    @GetMapping("/mark/links/user")
+    public ResponseEntity<UserLinkListResponse> getMarkedLinkList(
+            AuthInfo authInfo,
+            @RequestParam(value = "linkId", required = false) Long lastLinkId,
+            @PageableDefault Pageable pageable
+    ) {
+        UserLinkListResponse userLinkListResponse = bookMarkQueryService.getMarkedLinkList(authInfo.getId(), lastLinkId, pageable);
+        return ResponseEntity.ok(userLinkListResponse);
+    }
+
+    // 사용자별 북마크 리스트 조회 - 로그인 필요 X
     @GetMapping("/mark/links/user/{userId}")
     public ResponseEntity<UserLinkListResponse> getMarkedLinkList(
             @PathVariable("userId") Long userId,

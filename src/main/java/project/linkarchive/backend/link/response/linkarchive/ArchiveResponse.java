@@ -7,7 +7,7 @@ import lombok.Getter;
 public class ArchiveResponse {
 
     private Long userId;
-    private String name;
+    private String nickname;
     private String profileImage;
     private Long linkId;
     private String link;
@@ -17,9 +17,9 @@ public class ArchiveResponse {
     private Long bookMarkCount;
 
     @QueryProjection
-    public ArchiveResponse(Long userId, String name, String profileImage, Long linkId, String link, String title, String description, String thumbnail, Long bookMarkCount) {
+    public ArchiveResponse(Long userId, String nickname, String profileImage, Long linkId, String link, String title, String description, String thumbnail, Long bookMarkCount) {
         this.userId = userId;
-        this.name = name;
+        this.nickname = nickname;
         this.profileImage = profileImage;
         this.linkId = linkId;
         this.link = link;
