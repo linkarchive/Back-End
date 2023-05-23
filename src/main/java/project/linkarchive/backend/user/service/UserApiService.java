@@ -43,7 +43,7 @@ public class UserApiService {
         user.updateUserNickName(request);
     }
 
-    public void updateProfileImage(MultipartFile image, Long userId) throws IOException {
+    public void saveProfileImage(MultipartFile image, Long userId) throws IOException {
         getUserById(userId);
         ProfileImage profileImage = getProfileImageByUserId(userId);
 
