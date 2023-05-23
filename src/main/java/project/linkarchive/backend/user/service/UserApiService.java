@@ -12,6 +12,7 @@ import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.request.UpdateNickNameRequest;
+import project.linkarchive.backend.user.request.UpdateProfileRequest;
 
 import java.io.IOException;
 
@@ -23,6 +24,7 @@ public class UserApiService {
 
     public static final int MINIMUM_NICKNAME_LENGTH = 2;
     public static final int MAXIMUM_NICKNAME_LENGTH = 16;
+    public static final int MAXIMUM_INTRODUCE_LENGTH = 20;
 
     private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
@@ -41,6 +43,15 @@ public class UserApiService {
         existUserNickName(request, user);
 
         user.updateUserNickName(request);
+    }
+
+    public void updateUserProfile(UpdateProfileRequest request, Long userId) {
+        validationProfileRequest(request);
+
+        User user = getUserById(userId);
+        existUserNickName(request, user);
+
+        user.updateUserProfile(request);
     }
 
     public void saveProfileImage(MultipartFile image, Long userId) throws IOException {
@@ -69,7 +80,27 @@ public class UserApiService {
         }
     }
 
+    private void validationProfileRequest(UpdateProfileRequest request) {
+        boolean isNicknameTooLong = request.getNickname().length() > MAXIMUM_NICKNAME_LENGTH;
+        boolean isNicknameTooShort = request.getNickname().length() < MINIMUM_NICKNAME_LENGTH;
+        if (isNicknameTooLong || isNicknameTooShort) {
+            throw new LengthRequiredException(LENGTH_REQUIRED_NICKNAME);
+        }
+        boolean isIntroduceTooLong = request.getIntroduce().length() > MAXIMUM_INTRODUCE_LENGTH;
+        if (isIntroduceTooLong) {
+            throw new LengthRequiredException(LENGTH_REQUIRED_INTRODUCE);
+        }
+    }
+
     private void existUserNickName(UpdateNickNameRequest request, User user) {
+        if (userRepository.existsUserByNickname(request.getNickname()) &&
+                !user.getNickname().equals(request.getNickname())
+        ) {
+            throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
+        }
+    }
+
+    private void existUserNickName(UpdateProfileRequest request, User user) {
         if (userRepository.existsUserByNickname(request.getNickname()) &&
                 !user.getNickname().equals(request.getNickname())
         ) {
