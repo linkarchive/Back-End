@@ -10,7 +10,6 @@ import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.service.HashTagQueryService;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
 public class HashTagQueryController {
 
     private final HashTagQueryService hashTagQueryService;

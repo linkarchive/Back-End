@@ -10,7 +10,6 @@ import project.linkarchive.backend.user.response.ProfileResponse;
 import project.linkarchive.backend.user.service.UserQueryService;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
 public class UserQueryController {
 
     private final UserQueryService userQueryService;

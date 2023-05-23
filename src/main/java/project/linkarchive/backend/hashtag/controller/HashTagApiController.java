@@ -14,7 +14,6 @@ import project.linkarchive.backend.security.AuthInfo;
 import static project.linkarchive.backend.advice.success.SuccessCodeConst.USER_TAG_CREATE;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
 public class HashTagApiController {
 
     private final HashTagApiService hashTagApiService;

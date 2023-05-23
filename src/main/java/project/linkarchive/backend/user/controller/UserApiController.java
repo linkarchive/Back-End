@@ -19,7 +19,6 @@ import static project.linkarchive.backend.advice.success.SuccessCodeConst.UPDATE
 import static project.linkarchive.backend.advice.success.SuccessCodeConst.UPDATE_PROFILE_IMAGE;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
 public class UserApiController {
 
     private final UserApiService userApiService;

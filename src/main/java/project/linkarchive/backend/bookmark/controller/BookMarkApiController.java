@@ -15,7 +15,6 @@ import static project.linkarchive.backend.advice.success.SuccessCodeConst.BOOK_M
 import static project.linkarchive.backend.advice.success.SuccessCodeConst.BOOK_MARK_CANCEL;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
 public class BookMarkApiController {
 
     private final BookMarkApiService bookMarkApiService;

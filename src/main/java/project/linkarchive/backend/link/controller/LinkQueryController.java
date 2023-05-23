@@ -22,7 +22,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
 public class LinkQueryController {
 
     private final LinkQueryService linkQueryService;

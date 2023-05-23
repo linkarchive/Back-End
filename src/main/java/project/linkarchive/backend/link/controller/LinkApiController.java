@@ -13,7 +13,6 @@ import project.linkarchive.backend.link.service.LinkApiService;
 import project.linkarchive.backend.security.AuthInfo;
 
 @RestController
-//@PreAuthorize("isAuthenticated()")
 public class LinkApiController {
 
     private final LinkApiService linkApiService;

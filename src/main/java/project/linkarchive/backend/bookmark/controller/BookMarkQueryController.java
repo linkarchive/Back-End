@@ -13,7 +13,6 @@ import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
 public class BookMarkQueryController {
 
     private final BookMarkQueryService bookMarkQueryService;
