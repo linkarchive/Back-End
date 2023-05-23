@@ -71,7 +71,7 @@ public class UserApiService {
 
     private void existUserNickName(UpdateNickNameRequest request, User user) {
         if (userRepository.existsUserByNickName(request.getNickName()) &&
-                !user.getNickName().equals(request.getNickName())
+                !user.getNickname().equals(request.getNickName())
         ) {
             throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
         }

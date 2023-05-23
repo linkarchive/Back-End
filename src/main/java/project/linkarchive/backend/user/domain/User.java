@@ -26,7 +26,7 @@ public class User extends TimeEntity {
     private String socialId;
     private String email;
     private String name;
-    private String nickName;
+    private String nickname;
     private String introduce;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -39,12 +39,12 @@ public class User extends TimeEntity {
     private List<BookMark> bookMarkList = new ArrayList<>();
 
     @Builder
-    public User(Long id, String socialId, String email, String name, String nickName, String introduce) {
+    public User(Long id, String socialId, String email, String name, String nickname, String introduce) {
         this.id = id;
         this.socialId = socialId;
         this.email = email;
         this.name = name;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.introduce = introduce;
     }
 
@@ -52,14 +52,14 @@ public class User extends TimeEntity {
         return User.builder()
                 .socialId(kakaoProfile.id)
                 .name(kakaoProfile.getKakaoAccount().getProfile().getNickname())
-                .nickName("")
+                .nickname("")
                 .email(kakaoProfile.getKakaoAccount().getEmail())
                 .introduce("지윤씨 매운거 못드시니깐 다들 주의 바랄게요~ ^^;")
                 .build();
     }
 
     public void updateUserNickName(UpdateNickNameRequest request) {
-        this.nickName = request.getNickName();
+        this.nickname = request.getNickName();
     }
 
 }
