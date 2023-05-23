@@ -13,6 +13,8 @@ import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.request.UpdateNickNameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
+import project.linkarchive.backend.user.response.FirstLoginResponse;
+import project.linkarchive.backend.util.JwtUtil;
 
 import java.io.IOException;
 
@@ -26,23 +28,29 @@ public class UserApiService {
     public static final int MAXIMUM_NICKNAME_LENGTH = 16;
     public static final int MAXIMUM_INTRODUCE_LENGTH = 20;
 
+    private final JwtUtil jwtUtil;
     private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
     private final UserProfileImageRepository userProfileImageRepository;
 
-    public UserApiService(S3Uploader s3Uploader, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository) {
+    public UserApiService(JwtUtil jwtUtil, S3Uploader s3Uploader, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository) {
+        this.jwtUtil = jwtUtil;
         this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
     }
 
-    public void updateUserNickName(UpdateNickNameRequest request, Long userId) {
+    public FirstLoginResponse updateUserNickName(UpdateNickNameRequest request, Long userId) {
         validationNickNameLength(request);
 
         User user = getUserById(userId);
         existUserNickName(request, user);
 
         user.updateUserNickName(request);
+        String accessToken = jwtUtil.createAccessToken(user);
+        String refreshToken = jwtUtil.createRefreshToken(user);
+
+        return new FirstLoginResponse(user.getId(), accessToken, refreshToken);
     }
 
     public void updateUserProfile(UpdateProfileRequest request, Long userId) {

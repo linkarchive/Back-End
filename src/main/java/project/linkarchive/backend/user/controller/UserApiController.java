@@ -2,10 +2,7 @@ package project.linkarchive.backend.user.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.linkarchive.backend.advice.success.SuccessResponse;
 import project.linkarchive.backend.security.AuthInfo;
@@ -35,12 +32,11 @@ public class UserApiController {
         return ResponseEntity.ok(new SuccessResponse(UPDATE_USER_PROFILE));
     }
 
-    @PatchMapping("/user/nickname")
+    @PatchMapping("/user/{userId}/nickname")
     public ResponseEntity<SuccessResponse> updateUserNickname(
-            @RequestBody UpdateNickNameRequest request,
-            AuthInfo authInfo
-    ) {
-        userApiService.updateUserNickName(request, authInfo.getId());
+            @PathVariable("userId") Long userId,
+            @RequestBody UpdateNickNameRequest request) {
+        userApiService.updateUserNickName(request, userId);
         return ResponseEntity.ok(new SuccessResponse(UPDATE_NICKNAME));
     }
 
