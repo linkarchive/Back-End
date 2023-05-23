@@ -15,6 +15,7 @@ import project.linkarchive.backend.link.response.LinkMetaDataResponse;
 import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
 import project.linkarchive.backend.link.service.LinkQueryService;
+import project.linkarchive.backend.security.AuthInfo;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -70,7 +71,17 @@ public class LinkQueryController {
         return ResponseEntity.ok(linkMetaDataResponse);
     }
 
-    // 사용자별 링크 리스트 조회 003
+    // 내 링크 리스트 조회 - 로그인 필요 O
+    @GetMapping("/links/user/")
+    public ResponseEntity<UserLinkListResponse> getUserLinkList(
+            AuthInfo authInfo,
+            @RequestParam(value = "linkId", required = false) Long lastLinkId,
+            @PageableDefault Pageable pageable
+    ) {
+        UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(authInfo.getId(), pageable, lastLinkId);
+        return ResponseEntity.ok(userLinkListResponse);
+    }
+    // 다른 사용자 링크 리스트 조회 - 로그인 필요 X
     @GetMapping("/links/user/{userId}")
     public ResponseEntity<UserLinkListResponse> getUserLinkList(
             @PathVariable("userId") Long userId,
@@ -80,6 +91,7 @@ public class LinkQueryController {
         UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(userId, pageable, lastLinkId);
         return ResponseEntity.ok(userLinkListResponse);
     }
+
 
     // 사용자들의 링크 리스트 조회 013
     @GetMapping("/links/archive")
