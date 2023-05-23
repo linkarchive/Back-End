@@ -82,15 +82,18 @@ public class OAuthService {
                     return user;
                 });
 
+        boolean isFirstLogin = findUser.getNickname().equals("");
+        if (isFirstLogin) {
+            return new LoginResponse(findUser.getId());
+        }
+
         String accessToken = jwtUtil.createAccessToken(findUser);
         String refreshToken = jwtUtil.createRefreshToken(findUser);
 
         RefreshToken token = RefreshToken.build(refreshToken, findUser);
         refreshTokenRepository.save(token);
 
-        boolean isFirstLogin = findUser.getNickname().equals("");
-
-        return new LoginResponse(findUser.getId(), accessToken, refreshToken, isFirstLogin);
+        return new LoginResponse(findUser.getId(), accessToken, refreshToken);
     }
 
     public OauthToken getToken(String code, String redirectUri) {
@@ -100,7 +103,7 @@ public class OAuthService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", GRANT_TYPE);
         params.add("client_id", CLIENT_ID);
-        params.add("redirect_uri", redirectUri);
+        params.add("redirect_uri", REDIRECT_URI);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
