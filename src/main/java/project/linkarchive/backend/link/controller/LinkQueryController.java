@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -72,7 +71,7 @@ public class LinkQueryController {
     }
 
     // 내 링크 리스트 조회 - 로그인 필요 O
-    @GetMapping("/links/user/")
+    @GetMapping("/links/user")
     public ResponseEntity<UserLinkListResponse> getUserLinkList(
             AuthInfo authInfo,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
