@@ -21,7 +21,8 @@ public enum ExceptionCodeConst {
     ALREADY_EXIST_NICKNAME(409, "ALREADY_EXIST_NICKNAME", "이미 존재하는 닉네임 입니다."),
 
     LENGTH_REQUIRED_TAG(416, "LENGTH_REQUIRED_TAG", "Tag의 길이를 2글자 이상 8글자 이하로 작성해주세요."),
-    LENGTH_REQUIRED_NICKNAME(416, "LENGTH_REQUIRED_TAG", "닉네임의 길이를 2글자 이상 16글자 이하로 작성해주세요."),
+    LENGTH_REQUIRED_NICKNAME(416, "LENGTH_REQUIRED_NICKNAME", "닉네임의 길이를 2글자 이상 16글자 이하로 작성해주세요."),
+    LENGTH_REQUIRED_INTRODUCE(416, "LENGTH_REQUIRED_INTRODUCE", "자기소개는 20글자 이하로 작성해주세요."),
 
     EXCEEDED_TAG_LIMIT_10(416, "EXCEEDED_TAG_LIMIT", "태그의 개수가 10개를 초과할 수 없습니다."),
     EXCEEDED_TAG_SIZE(416, "EXCEEDED_TAG_SIZE", "해시태그 조회 갯수를 초과했습니다.");

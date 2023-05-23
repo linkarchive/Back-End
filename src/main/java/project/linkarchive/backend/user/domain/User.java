@@ -8,6 +8,7 @@ import project.linkarchive.backend.advice.entityBase.TimeEntity;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.user.request.UpdateNickNameRequest;
+import project.linkarchive.backend.user.request.UpdateProfileRequest;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -58,8 +59,13 @@ public class User extends TimeEntity {
                 .build();
     }
 
+    public void updateUserProfile(UpdateProfileRequest request) {
+        this.nickname = request.getNickname();
+        this.introduce = request.getIntroduce();
+    }
+    
     public void updateUserNickName(UpdateNickNameRequest request) {
         this.nickname = request.getNickname();
     }
-
+    
 }
