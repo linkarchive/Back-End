@@ -39,7 +39,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .authorizeRequests()
                 .antMatchers(
                         "/auth/**","/mark/links/user/{userId}","/links/user/{userId}",
-                        "/links/archive","/user/{userId}","/health"
+                        "/links/archive","/user/{userId}", "/user/{userId}/nickname", "/health"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
