@@ -59,7 +59,7 @@ public class User extends TimeEntity {
     }
 
     public void updateUserNickName(UpdateNickNameRequest request) {
-        this.nickname = request.getNickName();
+        this.nickname = request.getNickname();
     }
 
 }

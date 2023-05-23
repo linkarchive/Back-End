@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UpdateNickNameRequest {
 
-    private String nickName;
+    private String nickname;
 
-    public UpdateNickNameRequest(String nickName) {
-        this.nickName = nickName;
+    public UpdateNickNameRequest(String nickname) {
+        this.nickname = nickname;
     }
 
 }

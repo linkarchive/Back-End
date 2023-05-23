@@ -62,16 +62,16 @@ public class UserApiService {
     }
 
     private void validationNickNameLength(UpdateNickNameRequest request) {
-        boolean isTooLong = request.getNickName().length() > MAXIMUM_NICKNAME_LENGTH;
-        boolean isTooShort = request.getNickName().length() < MINIMUM_NICKNAME_LENGTH;
+        boolean isTooLong = request.getNickname().length() > MAXIMUM_NICKNAME_LENGTH;
+        boolean isTooShort = request.getNickname().length() < MINIMUM_NICKNAME_LENGTH;
         if (isTooLong || isTooShort) {
             throw new LengthRequiredException(LENGTH_REQUIRED_NICKNAME);
         }
     }
 
     private void existUserNickName(UpdateNickNameRequest request, User user) {
-        if (userRepository.existsUserByNickName(request.getNickName()) &&
-                !user.getNickname().equals(request.getNickName())
+        if (userRepository.existsUserByNickname(request.getNickname()) &&
+                !user.getNickname().equals(request.getNickname())
         ) {
             throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
         }
