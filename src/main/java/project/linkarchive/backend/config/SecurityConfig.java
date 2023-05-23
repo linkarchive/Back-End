@@ -39,6 +39,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/links/archive").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new TokenAuthenticationFilter(oAuthService), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
