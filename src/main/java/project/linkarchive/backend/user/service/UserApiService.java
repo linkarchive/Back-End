@@ -1,10 +1,12 @@
 package project.linkarchive.backend.user.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
 import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
+import project.linkarchive.backend.advice.exception.custom.NotAcceptableException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.domain.ProfileImage;
@@ -31,6 +33,9 @@ public class UserApiService {
     private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
     private final UserProfileImageRepository userProfileImageRepository;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     public UserApiService(JwtUtil jwtUtil, S3Uploader s3Uploader, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository) {
         this.jwtUtil = jwtUtil;
@@ -60,6 +65,9 @@ public class UserApiService {
     public void saveProfileImage(MultipartFile image, Long userId) throws IOException {
         getUserById(userId);
         ProfileImage profileImage = getProfileImageByUserId(userId);
+
+        validateNotEmptyFile(image);
+        validateContentType(image.getContentType());
 
         String storedFileName = s3Uploader.upload(image);
         profileImage.updateProfileImage(storedFileName);
@@ -108,6 +116,23 @@ public class UserApiService {
                 !user.getNickname().equals(request.getNickname())
         ) {
             throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
+        }
+    }
+
+    private void validateNotEmptyFile(MultipartFile multipartFile) {
+        if (multipartFile.isEmpty()) {
+            throw new NotAcceptableException(EMPTY_UPLOAD_FILE);
+        }
+    }
+
+    private void validateContentType(String contentType) {
+
+        if (contentType != null) {
+            if (!(contentType.contains("image/jpeg")
+                    || contentType.contains("image/jpg")
+                    || contentType.contains("image/png"))) {
+                throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
+            }
         }
     }
 

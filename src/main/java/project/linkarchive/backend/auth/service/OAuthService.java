@@ -63,8 +63,8 @@ public class OAuthService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public LoginResponse login(String code, String redirectUri) {
-        OauthToken oauthToken = getToken(code, redirectUri);
+    public LoginResponse login(String code) {
+        OauthToken oauthToken = getToken(code);
         KakaoProfile kakaoProfile = getUserInfo(oauthToken.getAccess_token());
 
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
@@ -90,14 +90,14 @@ public class OAuthService {
         return new LoginResponse(findUser.getId(), accessToken, refreshToken);
     }
 
-    public OauthToken getToken(String code, String redirectUri) {
+    public OauthToken getToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", GRANT_TYPE);
         params.add("client_id", CLIENT_ID);
-        params.add("redirect_uri", redirectUri);
+        params.add("redirect_uri", REDIRECT_URI);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
