@@ -21,6 +21,7 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NO
 public class S3Uploader {
 
     private final AmazonS3 amazonS3;
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -42,7 +43,7 @@ public class S3Uploader {
         return s3FileName;
     }
 
-    public URL generatePresignedUrl(String objectKey, int expirationTimeInMinutes) {
+    public URL generatePresignedProfileImageUrl(String objectKey, int expirationTimeInMinutes) {
         Date expiration = new Date();
         long mSec = expiration.getTime();
         mSec += expirationTimeInMinutes;

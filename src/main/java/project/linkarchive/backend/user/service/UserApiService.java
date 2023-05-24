@@ -66,7 +66,7 @@ public class UserApiService {
         String storedFileName = s3Uploader.upload(image);
         profileImage.updateProfileImage(storedFileName);
 
-        String profileImageUrl = s3Uploader.generatePresignedUrl(storedFileName, EXPIRATION_TIME_IN_MINUTES).toString();
+        String profileImageUrl = s3Uploader.generatePresignedProfileImageUrl(storedFileName, EXPIRATION_TIME_IN_MINUTES).toString();
         return new ProfileImageResponse(profileImageUrl);
     }
 
@@ -94,6 +94,7 @@ public class UserApiService {
         if (isNicknameTooLong || isNicknameTooShort) {
             throw new LengthRequiredException(LENGTH_REQUIRED_NICKNAME);
         }
+
         boolean isIntroduceTooLong = request.getIntroduce().length() > MAXIMUM_INTRODUCE_LENGTH;
         if (isIntroduceTooLong) {
             throw new LengthRequiredException(LENGTH_REQUIRED_INTRODUCE);
