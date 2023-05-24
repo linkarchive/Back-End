@@ -20,6 +20,7 @@ import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
+import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.RefreshToken;
 import project.linkarchive.backend.user.domain.User;
@@ -45,6 +46,7 @@ public class OAuthService {
     private static final String SECRET = "qwertyuiopasdfghjkl123qwertyuiopasdfghjkl123";
 
     private final JwtUtil jwtUtil;
+    private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
     private final UserProfileImageRepository userProfileImageRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -56,8 +58,12 @@ public class OAuthService {
     @Value("${oauth.client.registration.kakao.redirect_uri}")
     private String REDIRECT_URI;
 
-    public OAuthService(JwtUtil jwtUtil, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
+    @Value("${cloud.aws.s3.default-image}")
+    private String DEFAULT_IMAGE;
+
+    public OAuthService(JwtUtil jwtUtil, S3Uploader s3Uploader, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
         this.jwtUtil = jwtUtil;
+        this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
         this.refreshTokenRepository = refreshTokenRepository;
@@ -70,13 +76,13 @@ public class OAuthService {
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
                 .map(user -> {
                     userProfileImageRepository.findByUserId(user.getId())
-                            .orElseGet(() -> userProfileImageRepository.save(ProfileImage.build(kakaoProfile, user)));
+                            .orElseGet(() -> userProfileImageRepository.save(ProfileImage.build(DEFAULT_IMAGE, user)));
 
                     return user;
                 })
                 .orElseGet(() -> {
                     User user = User.build(kakaoProfile);
-                    userProfileImageRepository.save(ProfileImage.build(kakaoProfile, user));
+                    userProfileImageRepository.save(ProfileImage.build(DEFAULT_IMAGE, user));
 
                     return user;
                 });

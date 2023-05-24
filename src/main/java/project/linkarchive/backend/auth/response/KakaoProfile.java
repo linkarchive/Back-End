@@ -16,19 +16,10 @@ public class KakaoProfile {
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class KakaoAccount {
-        @JsonSetter("profile")
-        public Profile profile;
 
         @JsonSetter("email")
         public String email;
 
-        @Getter
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        public class Profile {
-
-            @JsonSetter("profile_image_url")
-            public String profileImageUrl;
-        }
     }
 
 }
