@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.bookmark.domain.BookMark;
+import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
 import project.linkarchive.backend.user.request.UpdateNickNameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
 
@@ -37,6 +38,9 @@ public class User extends TimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<BookMark> bookMarkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
     @Builder
     public User(Long id, String socialId, String email, String nickname, String introduce) {
