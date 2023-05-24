@@ -23,9 +23,9 @@ public class OAuthController {
 
     @PostMapping("/auth/kakao")
     public ResponseEntity<LoginResponse> login(@RequestParam("code") String code, HttpServletRequest request) {
-//        String referer = request.getHeader("Referer");
-//        String redirectUri = referer + "auth/kakao";
-        LoginResponse loginResponse = oAuthService.login(code);
+        String referer = request.getHeader("Referer");
+        String redirectUri = referer + "auth/kakao";
+        LoginResponse loginResponse = oAuthService.login(code, redirectUri);
 
         return ResponseEntity.ok()
                 .header(HEADER_STRING, TOKEN_PREFIX + loginResponse.getAccessToken())
