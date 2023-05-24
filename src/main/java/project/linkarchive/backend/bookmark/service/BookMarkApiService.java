@@ -27,19 +27,17 @@ public class BookMarkApiService {
         this.bookMarkRepository = bookMarkRepository;
     }
 
-    //FIXME 동시성 이슈에 대한 해결이 필요해요.
     public void bookMark(Long linkId, Long userId) {
         Link link = findLinkById(linkId);
-        existUrlValidation(link.getId());
-
         User user = findUserById(userId);
+        existUrlValidation(link.getId(), user.getId());
+
         BookMark bookMark = BookMark.build(user, link);
         bookMarkRepository.save(bookMark);
 
         linkRepository.increaseBookMarkCount(link.getId());
     }
 
-    //FIXME 동시성 이슈에 대한 해결이 필요해요.
     public void bookMarkCancel(Long linkId, Long userId) {
         Link link = findLinkById(linkId);
         BookMark bookMark = findBookMarkByLinkAndUser(link, userId);
@@ -53,15 +51,15 @@ public class BookMarkApiService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_LINK));
     }
 
-    private void existUrlValidation(Long linkId) {
-        if (bookMarkRepository.existsByLinkId(linkId)) {
-            throw new AlreadyExistException(ALREADY_EXIST_BOOKMARK);
-        }
-    }
-
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+    }
+
+    private void existUrlValidation(Long linkId, Long userId) {
+        if (bookMarkRepository.existsByLinkIdAndUserId(linkId, userId)) {
+            throw new AlreadyExistException(ALREADY_EXIST_BOOKMARK);
+        }
     }
 
     private BookMark findBookMarkByLinkAndUser(Link link, Long userId) {
