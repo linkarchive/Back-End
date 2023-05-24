@@ -29,6 +29,7 @@ public class S3Uploader {
     private final AmazonS3 amazonS3;
 
     private final AmazonS3Client amazonS3Client;
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
