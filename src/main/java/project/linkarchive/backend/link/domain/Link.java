@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
 import project.linkarchive.backend.bookmark.domain.BookMark;
+import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.user.domain.User;
 
@@ -41,6 +42,9 @@ public class Link extends TimeEntity {
 
     @OneToMany(mappedBy = "link", cascade = CascadeType.ALL)
     private List<BookMark> bookMarkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
     @Builder
     public Link(Long id, String url, String title, String description, String thumbnail, Long bookMarkCount, User user) {

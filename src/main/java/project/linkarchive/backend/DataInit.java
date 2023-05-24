@@ -8,6 +8,8 @@ import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
+import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
+import project.linkarchive.backend.isLinkRead.repository.IsLinkReadRepository;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
@@ -33,8 +35,10 @@ public class DataInit {
     private final LinkHashTagRepository linkHashTagRepository;
     private final UserHashTagRepository userHashTagRepository;
     private final BookMarkRepository bookMarkRepository;
+    private final IsLinkReadRepository isLinkReadRepository;
 
-    public DataInit(UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, LinkRepository linkRepository, HashTagRepository hashTagRepository, LinkHashTagRepository linkHashTagRepository, UserHashTagRepository userHashTagRepository, BookMarkRepository bookMarkRepository) {
+    public DataInit(UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, LinkRepository linkRepository, HashTagRepository hashTagRepository, LinkHashTagRepository linkHashTagRepository, UserHashTagRepository userHashTagRepository, BookMarkRepository bookMarkRepository,
+                    IsLinkReadRepository isLinkReadRepository) {
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
         this.linkRepository = linkRepository;
@@ -42,6 +46,7 @@ public class DataInit {
         this.linkHashTagRepository = linkHashTagRepository;
         this.userHashTagRepository = userHashTagRepository;
         this.bookMarkRepository = bookMarkRepository;
+        this.isLinkReadRepository = isLinkReadRepository;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -53,6 +58,7 @@ public class DataInit {
         initLinkTag();
         initUserTag();
         initBookMark();
+        initIsLinkRead();
     }
 
     public void initUser() {
@@ -193,6 +199,31 @@ public class DataInit {
             endTagId += increment;
         }
         bookMarkRepository.saveAll(bookMarks);
+    }
+
+    public void initIsLinkRead() {
+        int startTagId = 1;
+        int endTagId = 5;
+        int increment = 10;
+        List<IsLinkRead> isLinkReads = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            User user = userRepository.findById((long) i).orElse(null);
+            if (user != null) {
+                for (int j = startTagId; j <= endTagId; j++) {
+                    Link link = linkRepository.findById((long) j).orElse(null);
+                    if (link != null) {
+                        IsLinkRead isLinkRead = IsLinkRead.builder()
+                                .user(user)
+                                .link(link)
+                                .build();
+                        isLinkReads.add(isLinkRead);
+                    }
+                }
+            }
+            startTagId += increment;
+            endTagId += increment;
+        }
+        isLinkReadRepository.saveAll(isLinkReads);
     }
 
 }
