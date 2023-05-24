@@ -13,7 +13,8 @@ public enum SuccessCodeConst {
 
     LINK_CREATE(201, "LINK_CREATE", "Link 가 생성되었습니다."),
     USER_TAG_CREATE(201, "USER_TAG_CREATE", "유저가 자주 사용하는 태그가 생성되었습니다."),
-    BOOK_MARK(201, "BOOK_MARK", "북마크 되었습니다.");
+    BOOK_MARK(201, "BOOK_MARK", "북마크 되었습니다."),
+    LINK_READ(201, "LINK_READ", "링크를 읽었어요");
 
     private int status;
     private String code;

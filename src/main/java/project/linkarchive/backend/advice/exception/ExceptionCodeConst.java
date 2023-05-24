@@ -19,6 +19,7 @@ public enum ExceptionCodeConst {
     ALREADY_EXIST_TAG(409, "ALREADY_EXIST_TAG", "이미 존재하는 태그입니다."),
     ALREADY_EXIST_BOOKMARK(409, "ALREADY_EXIST_BOOKMARK", "이미 마크가 된 Link 입니다."),
     ALREADY_EXIST_NICKNAME(409, "ALREADY_EXIST_NICKNAME", "이미 존재하는 닉네임 입니다."),
+    ALREADY_EXIST_IS_LINK_READ(409, "ALREADY_EXIST_IS_LINK_READ", "이미 읽었던 Link 입니다."),
 
     LENGTH_REQUIRED_TAG(416, "LENGTH_REQUIRED_TAG", "Tag의 길이를 2글자 이상 8글자 이하로 작성해주세요."),
     LENGTH_REQUIRED_NICKNAME(416, "LENGTH_REQUIRED_NICKNAME", "닉네임의 길이를 2글자 이상 16글자 이하로 작성해주세요."),
