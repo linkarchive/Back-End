@@ -13,7 +13,6 @@ import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.request.UpdateNickNameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
-import project.linkarchive.backend.user.response.FirstLoginResponse;
 import project.linkarchive.backend.util.JwtUtil;
 
 import java.io.IOException;
@@ -40,17 +39,13 @@ public class UserApiService {
         this.userProfileImageRepository = userProfileImageRepository;
     }
 
-    public FirstLoginResponse updateUserNickName(UpdateNickNameRequest request, Long userId) {
+    public void updateUserNickName(UpdateNickNameRequest request, Long userId) {
         validationNickNameLength(request);
 
         User user = getUserById(userId);
         existUserNickName(request, user);
 
         user.updateUserNickName(request);
-        String accessToken = jwtUtil.createAccessToken(user);
-        String refreshToken = jwtUtil.createRefreshToken(user);
-
-        return new FirstLoginResponse(user.getId(), accessToken, refreshToken);
     }
 
     public void updateUserProfile(UpdateProfileRequest request, Long userId) {

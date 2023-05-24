@@ -20,13 +20,13 @@ import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
-import project.linkarchive.backend.util.JwtUtil;
 import project.linkarchive.backend.user.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.RefreshToken;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.RefreshTokenRepository;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
+import project.linkarchive.backend.util.JwtUtil;
 
 import javax.transaction.Transactional;
 import java.security.Key;
@@ -34,7 +34,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Objects;
 
 import static org.springframework.http.HttpMethod.POST;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
@@ -81,11 +80,6 @@ public class OAuthService {
 
                     return user;
                 });
-
-        boolean isFirstLogin = findUser.getNickname().equals("");
-        if (isFirstLogin) {
-            return new LoginResponse(findUser.getId());
-        }
 
         String accessToken = jwtUtil.createAccessToken(findUser);
         String refreshToken = jwtUtil.createRefreshToken(findUser);
