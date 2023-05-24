@@ -26,7 +26,7 @@ public class UserQueryService {
 
     public ProfileResponse getUserProfile(Long userId) {
         User user = checkUserId(userId);
-        String profileImageUrl = s3Uploader.generatePresignedUrl(
+        String profileImageUrl = s3Uploader.generatePresignedProfileImageUrl(
                         user.getProfileImage().getProfileImageFilename(),
                         EXPIRATION_TIME_IN_MINUTES)
                 .toString();

@@ -8,6 +8,7 @@ import project.linkarchive.backend.advice.success.SuccessResponse;
 import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.request.UpdateNickNameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
+import project.linkarchive.backend.user.response.ProfileImageResponse;
 import project.linkarchive.backend.user.service.UserApiService;
 
 import java.io.IOException;
@@ -41,12 +42,12 @@ public class UserApiController {
     }
 
     @PatchMapping("/profile-image")
-    public ResponseEntity<SuccessResponse> updateProfileImage(
+    public ResponseEntity<ProfileImageResponse> updateProfileImage(
             @RequestParam(value = "image") MultipartFile image,
             AuthInfo authInfo
     ) throws IOException {
-        userApiService.saveProfileImage(image, authInfo.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(UPDATE_PROFILE_IMAGE));
+        ProfileImageResponse profileImageResponse = userApiService.saveProfileImage(image, authInfo.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(profileImageResponse);
     }
 
 }

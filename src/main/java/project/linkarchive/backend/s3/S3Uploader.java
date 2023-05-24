@@ -79,7 +79,7 @@ public class S3Uploader {
     }
 
 
-    public URL generatePresignedUrl(String objectKey, int expirationTimeInMinutes) {
+    public URL generatePresignedProfileImageUrl(String objectKey, int expirationTimeInMinutes) {
         Date expiration = new Date();
         long mSec = expiration.getTime();
         mSec += expirationTimeInMinutes;

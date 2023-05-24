@@ -32,9 +32,9 @@ public class ProfileImage extends TimeEntity {
         this.user = user;
     }
 
-    public static ProfileImage build(KakaoProfile kakaoProfile, User user) {
+    public static ProfileImage build(String profileImageFilename, User user) {
         return ProfileImage.builder()
-                .profileImageFilename(kakaoProfile.getKakaoAccount().getProfile().getProfileImageUrl())
+                .profileImageFilename(profileImageFilename)
                 .user(user)
                 .build();
     }
