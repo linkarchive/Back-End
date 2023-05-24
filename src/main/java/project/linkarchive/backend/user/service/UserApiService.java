@@ -13,6 +13,7 @@ import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.request.UpdateNickNameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
+import project.linkarchive.backend.user.response.ProfileImageResponse;
 import project.linkarchive.backend.util.JwtUtil;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class UserApiService {
     public static final int MINIMUM_NICKNAME_LENGTH = 2;
     public static final int MAXIMUM_NICKNAME_LENGTH = 16;
     public static final int MAXIMUM_INTRODUCE_LENGTH = 20;
+    public final static int EXPIRATION_TIME_IN_MINUTES = 1000 * 60 * 60;
 
     private final JwtUtil jwtUtil;
     private final S3Uploader s3Uploader;
@@ -57,12 +59,15 @@ public class UserApiService {
         user.updateUserProfile(request);
     }
 
-    public void saveProfileImage(MultipartFile image, Long userId) throws IOException {
+    public ProfileImageResponse saveProfileImage(MultipartFile image, Long userId) throws IOException {
         getUserById(userId);
         ProfileImage profileImage = getProfileImageByUserId(userId);
 
         String storedFileName = s3Uploader.upload(image);
         profileImage.updateProfileImage(storedFileName);
+
+        String profileImageUrl = s3Uploader.generatePresignedUrl(storedFileName, EXPIRATION_TIME_IN_MINUTES).toString();
+        return new ProfileImageResponse(profileImageUrl);
     }
 
     private User getUserById(Long userId) {
