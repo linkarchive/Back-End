@@ -29,7 +29,10 @@ public class HashTagQueryService {
     }
 
     public TagListResponse getUserTagList(Long userId) {
+        checkUserId(userId);
+
         List<TagResponse> tagList = userHashTagRepositoryImpl.getUserTagList(userId);
+
         return new TagListResponse(tagList);
     }
 
@@ -39,6 +42,7 @@ public class HashTagQueryService {
         checkSize(size);
 
         List<TagResponse> tagResponses = userHashTagRepositoryImpl.getTagListLimitSize(userId, size);
+
         return new TagListResponse(tagResponses);
     }
 
