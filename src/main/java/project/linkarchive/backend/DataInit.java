@@ -206,7 +206,7 @@ public class DataInit {
         List<Link> links = linkRepository.findAll();
 
         for (User user : users) {
-            int numReadLinks = random.nextInt(links.size()) + 1;  // Each user will read between 1 and the total number of links
+            int numReadLinks = random.nextInt(links.size()) + 1;
             for (int j = 0; j < numReadLinks; j++) {
                 int linkIndex = random.nextInt(links.size());
                 Link link = links.get(linkIndex);
