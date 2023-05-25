@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -14,14 +15,14 @@ public class CreateLinkRequest {
     private String title;
     private String description;
     private String thumbnail;
-    private ArrayList<String> tag;
+    private List<String> tags = new ArrayList<>();
 
-    public CreateLinkRequest(String url, String title, String description, String thumbnail, ArrayList<String> tag) {
+    public CreateLinkRequest(String url, String title, String description, String thumbnail, List<String> tags) {
         this.url = url;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
-        this.tag = tag;
+        this.tags = tags;
     }
 
 }
