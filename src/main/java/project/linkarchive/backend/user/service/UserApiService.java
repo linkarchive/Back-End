@@ -29,6 +29,7 @@ public class UserApiService {
     public static final int MAXIMUM_NICKNAME_LENGTH = 16;
     public static final int MAXIMUM_INTRODUCE_LENGTH = 20;
     public final static int EXPIRATION_TIME_IN_MINUTES = 1000 * 60 * 60;
+    public final static int S3_KEY = 3;
 
     private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
@@ -72,7 +73,7 @@ public class UserApiService {
 
         String oldProfileImageName = profileImage.getProfileImageFilename();
         if (!oldProfileImageName.equals(defaultImage)) {
-        String key = oldProfileImageName.split("/")[3];
+        String key = oldProfileImageName.split("/")[S3_KEY];
         s3Uploader.deleteFile(key);
         }
 
