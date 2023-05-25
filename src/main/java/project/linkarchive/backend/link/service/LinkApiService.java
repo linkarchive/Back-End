@@ -56,7 +56,7 @@ public class LinkApiService {
     }
 
     private Set<String> getTagsFromRequest(CreateLinkRequest request) {
-        return request.getTag().stream()
+        return request.getTags().stream()
                 .peek(tag -> validationTagLength(tag))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
