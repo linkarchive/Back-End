@@ -21,7 +21,10 @@ public class LinkApiController {
     }
 
     @PostMapping("/link")
-    public ResponseEntity<SuccessResponse> create(@RequestBody CreateLinkRequest request, AuthInfo authInfo) {
+    public ResponseEntity<SuccessResponse> create(
+            @RequestBody CreateLinkRequest request,
+            AuthInfo authInfo
+    ) {
         linkApiService.create(request, authInfo.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(SuccessCodeConst.LINK_CREATE));
     }

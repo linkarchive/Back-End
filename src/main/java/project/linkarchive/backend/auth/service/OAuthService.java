@@ -46,7 +46,6 @@ public class OAuthService {
     private static final String SECRET = "qwertyuiopasdfghjkl123qwertyuiopasdfghjkl123";
 
     private final JwtUtil jwtUtil;
-    private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
     private final UserProfileImageRepository userProfileImageRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -61,9 +60,8 @@ public class OAuthService {
     @Value("${cloud.aws.s3.default-image}")
     private String DEFAULT_IMAGE;
 
-    public OAuthService(JwtUtil jwtUtil, S3Uploader s3Uploader, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
+    public OAuthService(JwtUtil jwtUtil, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
         this.jwtUtil = jwtUtil;
-        this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
         this.refreshTokenRepository = refreshTokenRepository;

@@ -10,6 +10,7 @@ import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
 import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
+import project.linkarchive.backend.isLinkRead.repository.IsLinkReadRepository;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.link.response.linkList.LinkResponse;
@@ -35,16 +36,18 @@ public class BookMarkQueryService {
     private final UserRepository userRepository;
     private final BookMarkRepository bookMarkRepository;
     private final LinkHashTagRepository linkHashTagRepository;
+    private final IsLinkReadRepository isLinkReadRepository;
     private final BookMarkRepositoryImpl bookMarkRepositoryImpl;
 
-    public BookMarkQueryService(UserRepository userRepository, BookMarkRepository bookMarkRepository, LinkHashTagRepository linkHashTagRepository, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
+    public BookMarkQueryService(UserRepository userRepository, BookMarkRepository bookMarkRepository, LinkHashTagRepository linkHashTagRepository, IsLinkReadRepository isLinkReadRepository, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
         this.userRepository = userRepository;
         this.bookMarkRepository = bookMarkRepository;
         this.linkHashTagRepository = linkHashTagRepository;
+        this.isLinkReadRepository = isLinkReadRepository;
         this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
     }
 
-    public UserLinkListResponse getMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable) {
+    public UserLinkListResponse getUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable) {
         validateUserExists(userId);
 
         List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable);
@@ -58,7 +61,51 @@ public class BookMarkQueryService {
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
-                    return UserLinkResponse.build(linkResponse, tagList);
+                    Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), userId);
+
+                    return UserLinkResponse.build(linkResponse, isRead, tagList);
+                }).collect(Collectors.toList());
+
+        return new UserLinkListResponse(userLinkResponseList, hasNext);
+    }
+
+    public UserLinkListResponse getPublicUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable) {
+        validateUserExists(userId);
+
+        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable);
+
+        boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
+
+        List<UserLinkResponse> userLinkResponseList = linkResponseList.stream()
+                .map(linkResponse -> {
+                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashTagList.stream()
+                            .map(TagResponse::build)
+                            .collect(Collectors.toList());
+
+                    return UserLinkResponse.build(linkResponse, false, tagList);
+                }).collect(Collectors.toList());
+
+        return new UserLinkListResponse(userLinkResponseList, hasNext);
+    }
+
+    public UserLinkListResponse getAuthenticatedUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable, Long loginUserId) {
+        validateUserExists(userId);
+
+        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable);
+
+        boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
+
+        List<UserLinkResponse> userLinkResponseList = linkResponseList.stream()
+                .map(linkResponse -> {
+                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashTagList.stream()
+                            .map(TagResponse::build)
+                            .collect(Collectors.toList());
+
+                    Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId);
+
+                    return UserLinkResponse.build(linkResponse, isRead, tagList);
                 }).collect(Collectors.toList());
 
         return new UserLinkListResponse(userLinkResponseList, hasNext);

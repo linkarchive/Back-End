@@ -10,12 +10,12 @@ import java.util.Objects;
 @Getter
 public class TagResponse {
 
-    private String tagName;
+    private String tag;
 
     @Builder
     @QueryProjection
     public TagResponse(String tagName) {
-        this.tagName = tagName;
+        this.tag = tagName;
     }
 
     public static TagResponse build(LinkHashTag linkHashTag) {
@@ -29,12 +29,12 @@ public class TagResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TagResponse that = (TagResponse) o;
-        return Objects.equals(tagName, that.tagName);
+        return Objects.equals(tag, that.tag);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tagName);
+        return Objects.hash(tag);
     }
 
 }

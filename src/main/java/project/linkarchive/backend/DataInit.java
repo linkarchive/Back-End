@@ -92,11 +92,14 @@ public class DataInit {
     }
 
     public void initLink() {
+        int startLinkId = 1;
+        int endLinkId = 10;
+        int increment = 10;
         List<Link> links = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
             User user = userRepository.findById((long) i).orElse(null);
             if (user != null) {
-                for (int j = 1; j <= 100; j++) {
+                for (int j = startLinkId; j <= endLinkId; j++) {
                     Link link = Link.builder()
                             .id((long) j)
                             .url("url" + j)
@@ -109,6 +112,8 @@ public class DataInit {
                     links.add(link);
                 }
             }
+            startLinkId += increment;
+            endLinkId += increment;
         }
         linkRepository.saveAll(links);
     }

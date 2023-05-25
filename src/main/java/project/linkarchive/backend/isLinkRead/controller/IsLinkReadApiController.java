@@ -20,7 +20,7 @@ public class IsLinkReadApiController {
         this.isLinkReadApiService = isLinkReadApiService;
     }
 
-    @PostMapping("/link/{linkId}/read")
+    @PostMapping("/read/link/{linkId}")
     public ResponseEntity<SuccessResponse> isLinkRead(
             @PathVariable("linkId") Long linkId,
             AuthInfo authInfo
