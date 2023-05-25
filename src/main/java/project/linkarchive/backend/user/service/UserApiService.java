@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
 import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
+import project.linkarchive.backend.advice.exception.custom.NotAcceptableException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.domain.ProfileImage;
@@ -14,7 +15,6 @@ import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.request.UpdateNickNameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
 import project.linkarchive.backend.user.response.ProfileImageResponse;
-import project.linkarchive.backend.util.JwtUtil;
 
 import java.io.IOException;
 
@@ -29,13 +29,11 @@ public class UserApiService {
     public static final int MAXIMUM_INTRODUCE_LENGTH = 20;
     public final static int EXPIRATION_TIME_IN_MINUTES = 1000 * 60 * 60;
 
-    private final JwtUtil jwtUtil;
     private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
     private final UserProfileImageRepository userProfileImageRepository;
 
-    public UserApiService(JwtUtil jwtUtil, S3Uploader s3Uploader, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository) {
-        this.jwtUtil = jwtUtil;
+    public UserApiService(S3Uploader s3Uploader, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository) {
         this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
@@ -62,6 +60,9 @@ public class UserApiService {
     public ProfileImageResponse saveProfileImage(MultipartFile image, Long userId) throws IOException {
         getUserById(userId);
         ProfileImage profileImage = getProfileImageByUserId(userId);
+
+        validateNotEmptyFile(image);
+        validateContentType(image.getContentType());
 
         String storedFileName = s3Uploader.upload(image);
         profileImage.updateProfileImage(storedFileName);
@@ -114,6 +115,23 @@ public class UserApiService {
                 !user.getNickname().equals(request.getNickname())
         ) {
             throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
+        }
+    }
+
+    private void validateNotEmptyFile(MultipartFile multipartFile) {
+        if (multipartFile.isEmpty()) {
+            throw new NotAcceptableException(EMPTY_UPLOAD_FILE);
+        }
+    }
+
+    private void validateContentType(String contentType) {
+
+        if (contentType != null) {
+            if (!(contentType.contains("image/jpeg")
+                    || contentType.contains("image/jpg")
+                    || contentType.contains("image/png"))) {
+                throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
+            }
         }
     }
 

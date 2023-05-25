@@ -2,46 +2,82 @@ package project.linkarchive.backend.s3;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import project.linkarchive.backend.advice.exception.custom.NotAcceptableException;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.EMPTY_UPLOAD_FILE;
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_ACCEPTABLE_CONTENT_TYPE;
-
-@Service
+@Component
+@Log4j2
 public class S3Uploader {
 
     private final AmazonS3 amazonS3;
 
+    private final AmazonS3Client amazonS3Client;
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public S3Uploader(AmazonS3 amazonS3) {
+    public S3Uploader(AmazonS3 amazonS3, AmazonS3Client amazonS3Client) {
         this.amazonS3 = amazonS3;
+        this.amazonS3Client = amazonS3Client;
     }
 
     public String upload(MultipartFile multipartFile) throws IOException {
-        validateNotEmptyFile(multipartFile);
-
-        String contentType = multipartFile.getContentType();
-        ObjectMetadata objMeta = validateContentType(contentType);
-
-        String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
-
-        objMeta.setContentLength(multipartFile.getInputStream().available());
-        amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
-
-        return s3FileName;
+        File uploadFile = convert(multipartFile)
+                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+        return upload(uploadFile);
     }
+
+    private Optional<File> convert(MultipartFile file) throws IOException {
+        File convertFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
+        if (convertFile.createNewFile()) {
+            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+                fos.write(file.getBytes());
+            }
+            return Optional.of(convertFile);
+        }
+        return Optional.empty();
+    }
+
+    private String upload(File uploadFile) {
+        String fileName = UUID.randomUUID() + uploadFile.getName();
+        String uploadImageUrl = putS3(uploadFile, fileName);
+
+        removeNewFile(uploadFile);
+
+        return uploadImageUrl;
+    }
+
+    private String putS3(File uploadFile, String fileName) {
+        amazonS3Client.putObject(
+                new PutObjectRequest(bucket, fileName, uploadFile)
+                        .withCannedAcl(CannedAccessControlList.PublicRead)
+        );
+        return amazonS3Client.getUrl(bucket, fileName).toString();
+    }
+
+    private void removeNewFile(File targetFile) {
+        if (targetFile.delete()) {
+            log.info("파일이 삭제되었습니다.");
+        } else {
+            log.info("파일이 삭제되지 못했습니다.");
+        }
+    }
+
 
     public URL generatePresignedProfileImageUrl(String objectKey, int expirationTimeInMinutes) {
         Date expiration = new Date();
@@ -55,26 +91,6 @@ public class S3Uploader {
         URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
 
         return url;
-    }
-
-    private void validateNotEmptyFile(MultipartFile multipartFile) {
-        if (multipartFile.isEmpty()) {
-            throw new NotAcceptableException(EMPTY_UPLOAD_FILE);
-        }
-    }
-
-    private ObjectMetadata validateContentType(String contentType) {
-        ObjectMetadata objMeta = new ObjectMetadata();
-
-        if (contentType != null) {
-            if (!(contentType.contains("image/jpeg")
-                    || contentType.contains("image/jpg")
-                    || contentType.contains("image/png"))) {
-                throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
-            }
-        }
-        objMeta.setContentType(contentType);
-        return objMeta;
     }
 
 }
