@@ -105,15 +105,4 @@ public class S3Uploader {
         }
     }
 
-//    public void deleteFile(String key) {
-//        try {
-//            amazonS3Client.deleteObject(bucket,key);
-//
-//        } catch (AmazonServiceException e) {
-//            e.printStackTrace();
-//        } catch (SdkClientException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 }
