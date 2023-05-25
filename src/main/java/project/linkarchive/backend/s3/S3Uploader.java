@@ -99,7 +99,6 @@ public class S3Uploader {
     public void deleteFile(String key) throws IOException {
         try {
             amazonS3Client.deleteObject(bucket, key);
-            System.out.println("key = " + key);
         } catch (SdkClientException e) {
             throw new NotAcceptableException(ExceptionCodeConst.NOT_ACCEPTABLE_CONTENT_TYPE);
         }
