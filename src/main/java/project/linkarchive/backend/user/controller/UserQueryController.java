@@ -18,7 +18,9 @@ public class UserQueryController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<ProfileResponse> getProfile(AuthInfo authInfo) {
+    public ResponseEntity<ProfileResponse> getProfile(
+            AuthInfo authInfo
+    ) {
         ProfileResponse profileResponse = userQueryService.getUserProfile(authInfo.getId());
         return ResponseEntity.ok(profileResponse);
     }

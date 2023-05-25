@@ -25,6 +25,15 @@ public class UserApiController {
         this.userApiService = userApiService;
     }
 
+    @PatchMapping("/user/{userId}/nickname")
+    public ResponseEntity<SuccessResponse> updateUserNickname(
+            @PathVariable("userId") Long userId,
+            @RequestBody UpdateNickNameRequest request
+    ) {
+        userApiService.updateUserNickName(request, userId);
+        return ResponseEntity.ok(new SuccessResponse(UPDATE_NICKNAME));
+    }
+
     @PatchMapping("/user")
     public ResponseEntity<SuccessResponse> updateUserProfile(
             @RequestBody UpdateProfileRequest request,
@@ -32,14 +41,6 @@ public class UserApiController {
     ) {
         userApiService.updateUserProfile(request, authInfo.getId());
         return ResponseEntity.ok(new SuccessResponse(UPDATE_USER_PROFILE));
-    }
-
-    @PatchMapping("/user/{userId}/nickname")
-    public ResponseEntity<SuccessResponse> updateUserNickname(
-            @PathVariable("userId") Long userId,
-            @RequestBody UpdateNickNameRequest request) {
-        userApiService.updateUserNickName(request, userId);
-        return ResponseEntity.ok(new SuccessResponse(UPDATE_NICKNAME));
     }
 
     @PatchMapping("/profile-image")
