@@ -20,7 +20,6 @@ import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
-import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.RefreshToken;
 import project.linkarchive.backend.user.domain.User;
@@ -43,8 +42,6 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 @Transactional
 public class OAuthService {
 
-    private static final String SECRET = "qwertyuiopasdfghjkl123qwertyuiopasdfghjkl123";
-
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final UserProfileImageRepository userProfileImageRepository;
@@ -59,6 +56,9 @@ public class OAuthService {
 
     @Value("${cloud.aws.s3.default-image}")
     private String DEFAULT_IMAGE;
+
+    @Value("${jwt.key}")
+    private String SECRET_KEY;
 
     public OAuthService(JwtUtil jwtUtil, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
         this.jwtUtil = jwtUtil;
@@ -152,7 +152,7 @@ public class OAuthService {
     }
 
     private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET.getBytes());
+        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
     public boolean validate(String token) {
