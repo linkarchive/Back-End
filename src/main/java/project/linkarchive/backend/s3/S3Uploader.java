@@ -1,6 +1,7 @@
 package project.linkarchive.backend.s3;
 
 import com.amazonaws.HttpMethod;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -8,8 +9,10 @@ import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
+import project.linkarchive.backend.advice.exception.custom.NotAcceptableException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-@Component
+@Service
 @Log4j2
 public class S3Uploader {
 
@@ -92,5 +95,25 @@ public class S3Uploader {
 
         return url;
     }
+
+    public void deleteFile(String key) throws IOException {
+        try {
+            amazonS3Client.deleteObject(bucket, key);
+            System.out.println("key = " + key);
+        } catch (SdkClientException e) {
+            throw new NotAcceptableException(ExceptionCodeConst.NOT_ACCEPTABLE_CONTENT_TYPE);
+        }
+    }
+
+//    public void deleteFile(String key) {
+//        try {
+//            amazonS3Client.deleteObject(bucket,key);
+//
+//        } catch (AmazonServiceException e) {
+//            e.printStackTrace();
+//        } catch (SdkClientException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

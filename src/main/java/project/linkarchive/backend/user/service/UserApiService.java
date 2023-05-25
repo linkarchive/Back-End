@@ -1,5 +1,6 @@
 package project.linkarchive.backend.user.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +34,9 @@ public class UserApiService {
     private final UserRepository userRepository;
     private final UserProfileImageRepository userProfileImageRepository;
 
+    @Value("${cloud.aws.s3.default-image}")
+    private String defaultImage;
+
     public UserApiService(S3Uploader s3Uploader, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository) {
         this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
@@ -57,7 +61,7 @@ public class UserApiService {
         user.updateUserProfile(request);
     }
 
-    public ProfileImageResponse saveProfileImage(MultipartFile image, Long userId) throws IOException {
+    public ProfileImageResponse updateProfileImage(MultipartFile image, Long userId) throws IOException {
         getUserById(userId);
         ProfileImage profileImage = getProfileImageByUserId(userId);
 
@@ -65,6 +69,14 @@ public class UserApiService {
         validateContentType(image.getContentType());
 
         String storedFileName = s3Uploader.upload(image);
+
+        String oldProfileImageName = profileImage.getProfileImageFilename();
+
+        if (!oldProfileImageName.equals(defaultImage)) {
+        String key = oldProfileImageName.split("/")[3];
+        s3Uploader.deleteFile(key);
+        }
+
         profileImage.updateProfileImage(storedFileName);
 
         String profileImageUrl = s3Uploader.generatePresignedProfileImageUrl(storedFileName, EXPIRATION_TIME_IN_MINUTES).toString();
