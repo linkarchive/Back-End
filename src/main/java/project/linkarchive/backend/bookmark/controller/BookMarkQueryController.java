@@ -23,23 +23,35 @@ public class BookMarkQueryController {
 
     // 내 북마크 리스트 조회 - 로그인 필요 O
     @GetMapping("/mark/links/user")
-    public ResponseEntity<UserLinkListResponse> getMarkedLinkList(
-            AuthInfo authInfo,
+    public ResponseEntity<UserLinkListResponse> getUserMarkedLinkList(
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
-            @PageableDefault Pageable pageable
+            @PageableDefault Pageable pageable,
+            AuthInfo authInfo
     ) {
-        UserLinkListResponse userLinkListResponse = bookMarkQueryService.getMarkedLinkList(authInfo.getId(), lastLinkId, pageable);
+        UserLinkListResponse userLinkListResponse = bookMarkQueryService.getUserMarkedLinkList(authInfo.getId(), lastLinkId, pageable);
         return ResponseEntity.ok(userLinkListResponse);
     }
 
     // 사용자별 북마크 리스트 조회 - 로그인 필요 X
     @GetMapping("/mark/links/user/{userId}")
-    public ResponseEntity<UserLinkListResponse> getMarkedLinkList(
+    public ResponseEntity<UserLinkListResponse> getPublicUserMarkedLinkList(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable
     ) {
-        UserLinkListResponse userLinkListResponse = bookMarkQueryService.getMarkedLinkList(userId, lastLinkId, pageable);
+        UserLinkListResponse userLinkListResponse = bookMarkQueryService.getPublicUserMarkedLinkList(userId, lastLinkId, pageable);
+        return ResponseEntity.ok(userLinkListResponse);
+    }
+
+    // 사용자별 북마크 리스트 조회 - 로그인 필요 O
+    @GetMapping("/mark/links/user/{userId}")
+    public ResponseEntity<UserLinkListResponse> getAuthenticatedUserMarkedLinkList(
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "linkId", required = false) Long lastLinkId,
+            @PageableDefault Pageable pageable,
+            AuthInfo authInfo
+    ) {
+        UserLinkListResponse userLinkListResponse = bookMarkQueryService.getAuthenticatedUserMarkedLinkList(userId, lastLinkId, pageable, authInfo.getId());
         return ResponseEntity.ok(userLinkListResponse);
     }
 

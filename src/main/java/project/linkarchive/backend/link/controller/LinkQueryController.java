@@ -73,32 +73,55 @@ public class LinkQueryController {
     // 내 링크 리스트 조회 - 로그인 필요 O
     @GetMapping("/links/user")
     public ResponseEntity<UserLinkListResponse> getUserLinkList(
-            AuthInfo authInfo,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
-            @PageableDefault Pageable pageable
+            @PageableDefault Pageable pageable,
+            AuthInfo authInfo
     ) {
         UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(authInfo.getId(), pageable, lastLinkId);
         return ResponseEntity.ok(userLinkListResponse);
     }
+
     // 다른 사용자 링크 리스트 조회 - 로그인 필요 X
     @GetMapping("/links/user/{userId}")
-    public ResponseEntity<UserLinkListResponse> getUserLinkList(
+    public ResponseEntity<UserLinkListResponse> getPublicUserLinkList(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable
     ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(userId, pageable, lastLinkId);
+        UserLinkListResponse userLinkListResponse = linkQueryService.getPublicUserLinkList(userId, pageable, lastLinkId);
         return ResponseEntity.ok(userLinkListResponse);
     }
 
+    // 다른 사용자 링크 리스트 조회 - 로그인 필요 O
+    @GetMapping("/links/user/{userId}")
+    public ResponseEntity<UserLinkListResponse> getAuthenticatedUserLinkList(
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "linkId", required = false) Long lastLinkId,
+            @PageableDefault Pageable pageable,
+            AuthInfo authInfo
+    ) {
+        UserLinkListResponse userLinkListResponse = linkQueryService.getAuthenticatedUserLinkList(userId, pageable, lastLinkId, authInfo.getId());
+        return ResponseEntity.ok(userLinkListResponse);
+    }
 
-    // 사용자들의 링크 리스트 조회 013
+    // 사용자들의 링크 리스트 조회 - 로그인 필요 X
     @GetMapping("/links/archive")
-    public ResponseEntity<UserLinkArchiveResponse> getLinkArchive(
+    public ResponseEntity<UserLinkArchiveResponse> getPublicLinkArchive(
             @PageableDefault Pageable pageable,
             @RequestParam(value = "linkId", required = false) Long lastLinkId
     ) {
-        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getLinkArchive(pageable, lastLinkId);
+        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getPublicLinkArchive(pageable, lastLinkId);
+        return ResponseEntity.ok(userLinkArchiveResponse);
+    }
+
+    // 사용자들의 링크 리스트 조회 - 로그인 필요 X
+    @GetMapping("/links/archive")
+    public ResponseEntity<UserLinkArchiveResponse> getAuthenticatedLinkArchive(
+            @PageableDefault Pageable pageable,
+            @RequestParam(value = "linkId", required = false) Long lastLinkId,
+            AuthInfo authInfo
+    ) {
+        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getAuthenticatedLinkArchive(pageable, lastLinkId, authInfo.getId());
         return ResponseEntity.ok(userLinkArchiveResponse);
     }
 
