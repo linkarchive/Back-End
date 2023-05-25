@@ -66,6 +66,8 @@ jobs:
         echo "${{ secrets.YML_AUTH }}" > ./application-oauth.yml
         touch ./application-aws.yml
         echo "${{ secrets.YML_AWS }}" > ./application-aws.yml
+        touch ./application-jwt.yml
+        echo "${{ secrets.YML_JWT }}" > ./application-jwt.yml
       shell: bash
 
     - name: gradlew에 실행 권한 부여
