@@ -33,7 +33,7 @@ public class BookMarkQueryController {
     }
 
     // 사용자별 북마크 리스트 조회 - 로그인 필요 X
-    @GetMapping("/mark/links/user/{userId}")
+    @GetMapping("/mark/links/public/user/{userId}")
     public ResponseEntity<UserLinkListResponse> getPublicUserMarkedLinkList(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
@@ -44,7 +44,7 @@ public class BookMarkQueryController {
     }
 
     // 사용자별 북마크 리스트 조회 - 로그인 필요 O
-    @GetMapping("/mark/links/user/{userId}")
+    @GetMapping("/mark/links/authentication/user/{userId}")
     public ResponseEntity<UserLinkListResponse> getAuthenticatedUserMarkedLinkList(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
@@ -56,16 +56,20 @@ public class BookMarkQueryController {
     }
 
     // 사용자 별 북마크 리스트 중 해시태그 리스트 조회 011
-    @GetMapping("/mark/tags/user/{userId}")
-    public ResponseEntity<TagListResponse> getMarkTagList(@PathVariable("userId") Long userId) {
+    @GetMapping("/marks/tags/user/{userId}")
+    public ResponseEntity<TagListResponse> getMarkTagList(
+            @PathVariable("userId") Long userId
+    ) {
         TagListResponse tagList = bookMarkQueryService.getMarkTagList(userId);
         return ResponseEntity.ok(tagList);
     }
 
     // 사용자 별 북마크 리스트 중 해시태그 N개 조회 009
-    @GetMapping("/mark/tags/limit/user/{userId}")
-    public ResponseEntity<TagListResponse> getMarkTagLimitList(@PathVariable("userId") Long userId,
-                                                               @RequestParam("size") Long size) {
+    @GetMapping("/marks/limited-tags/user/{userId}")
+    public ResponseEntity<TagListResponse> getMarkTagLimitList(
+            @PathVariable("userId") Long userId,
+            @RequestParam("size") Long size
+    ) {
         TagListResponse tagList = bookMarkQueryService.getMarkTagLimitList(userId, size);
         return ResponseEntity.ok(tagList);
     }
