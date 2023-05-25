@@ -26,6 +26,15 @@ public class SecurityConfig implements WebMvcConfigurer {
         this.securityArgumentResolver = securityArgumentResolver;
     }
 
+    public static final String[] EXCLUDE_PATHS = {
+            "/health",
+            "/auth/**",
+            "/user/{userId}",
+            "/links/public/user/{userId}",
+            "/links/archive/public",
+            "/mark/links/public/user/{userId}"
+    };
+
     @Bean
     public SecurityFilterChain setupSecurity(
             HttpSecurity httpSecurity,
@@ -37,10 +46,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .formLogin().disable().headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                .antMatchers(
-                        "/auth/**","/mark/links/user/{userId}","/links/user/{userId}",
-                        "/links/archive","/user/{userId}", "/health"
-                ).permitAll()
+                .antMatchers(EXCLUDE_PATHS).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new TokenAuthenticationFilter(oAuthService), UsernamePasswordAuthenticationFilter.class)
