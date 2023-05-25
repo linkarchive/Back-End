@@ -13,7 +13,8 @@ import project.linkarchive.backend.user.service.UserApiService;
 
 import java.io.IOException;
 
-import static project.linkarchive.backend.advice.success.SuccessCodeConst.*;
+import static project.linkarchive.backend.advice.success.SuccessCodeConst.UPDATE_NICKNAME;
+import static project.linkarchive.backend.advice.success.SuccessCodeConst.UPDATE_USER_PROFILE;
 
 @RestController
 public class UserApiController {
@@ -46,7 +47,7 @@ public class UserApiController {
             @RequestParam(value = "image") MultipartFile image,
             AuthInfo authInfo
     ) throws IOException {
-        ProfileImageResponse profileImageResponse = userApiService.saveProfileImage(image, authInfo.getId());
+        ProfileImageResponse profileImageResponse = userApiService.updateProfileImage(image, authInfo.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(profileImageResponse);
     }
 
