@@ -83,6 +83,14 @@ public class UserApiService {
         return new ProfileImageResponse(profileImageUrl);
     }
 
+    public void validationNickName(NickNameRequest request) {
+        validationNickNameLength(request);
+
+        if (userRepository.existsUserByNickname(request.getNickname())) {
+            throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
+        }
+    }
+
     private User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));

@@ -17,8 +17,6 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 @Transactional(readOnly = true)
 public class UserQueryService {
 
-    public static final int MINIMUM_NICKNAME_LENGTH = 2;
-    public static final int MAXIMUM_NICKNAME_LENGTH = 16;
     public final static int EXPIRATION_TIME_IN_MINUTES = 1000 * 60 * 60;
 
     private final UserRepository userRepository;
@@ -39,26 +37,10 @@ public class UserQueryService {
         return new ProfileResponse(user, profileImageUrl);
     }
 
-    public void validationNickName(NickNameRequest request) {
-        validationNickNameLength(request);
-
-        if (userRepository.existsUserByNickname(request.getNickname())) {
-            throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
-        }
-    }
-
     private User checkUserId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
         return user;
-    }
-
-    private void validationNickNameLength(NickNameRequest request) {
-        boolean isTooLong = request.getNickname().length() > MAXIMUM_NICKNAME_LENGTH;
-        boolean isTooShort = request.getNickname().length() < MINIMUM_NICKNAME_LENGTH;
-        if (isTooLong || isTooShort) {
-            throw new LengthRequiredException(LENGTH_REQUIRED_NICKNAME);
-        }
     }
 
 }

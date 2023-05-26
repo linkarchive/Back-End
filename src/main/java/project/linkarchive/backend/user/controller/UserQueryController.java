@@ -38,12 +38,4 @@ public class UserQueryController {
         return ResponseEntity.ok(profileResponse);
     }
 
-    @GetMapping("/nickname")
-    public ResponseEntity<SuccessResponse> validationNickName(
-            @RequestBody NickNameRequest request
-    ) {
-        userQueryService.validationNickName(request);
-        return ResponseEntity.ok().body(new SuccessResponse(AVAILABLE_NICKNAME));
-    }
-
 }

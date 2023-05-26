@@ -13,8 +13,7 @@ import project.linkarchive.backend.user.service.UserApiService;
 
 import java.io.IOException;
 
-import static project.linkarchive.backend.advice.success.SuccessCodeConst.UPDATE_NICKNAME;
-import static project.linkarchive.backend.advice.success.SuccessCodeConst.UPDATE_USER_PROFILE;
+import static project.linkarchive.backend.advice.success.SuccessCodeConst.*;
 
 @RestController
 public class UserApiController {
@@ -50,6 +49,14 @@ public class UserApiController {
     ) throws IOException {
         ProfileImageResponse profileImageResponse = userApiService.updateProfileImage(image, authInfo.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(profileImageResponse);
+    }
+
+    @PostMapping("/nickname")
+    public ResponseEntity<SuccessResponse> validationNickName(
+            @RequestBody NickNameRequest request
+    ) {
+        userApiService.validationNickName(request);
+        return ResponseEntity.ok().body(new SuccessResponse(AVAILABLE_NICKNAME));
     }
 
 }
