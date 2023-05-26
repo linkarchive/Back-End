@@ -20,14 +20,14 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig implements WebMvcConfigurer {
 
-//    public static final String[] EXCLUDE_PATHS = {
-//            "/health",
-//            "/auth/**",
-//            "/user/{userId}",
-//            "/links/public/user/{userId}",
-//            "/links/archive/public",
-//            "/mark/links/public/user/{userId}"
-//    };
+    public static final String[] EXCLUDE_PATHS = {
+            "/health",
+            "/auth/**",
+            "/user/{userId}",
+            "/links/public/user/{userId}",
+            "/links/archive/public",
+            "/mark/links/public/user/{userId}"
+    };
 
     private final SecurityArgumentResolver securityArgumentResolver;
 
@@ -46,12 +46,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .formLogin().disable().headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/health",
-                        "/auth/**",
-                        "/user/{userId}",
-                        "/links/public/user/{userId}",
-                        "/links/archive/public",
-                        "/mark/links/public/user/{userId}").permitAll()
+                .antMatchers(EXCLUDE_PATHS).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new TokenAuthenticationFilter(oAuthService), UsernamePasswordAuthenticationFilter.class)
