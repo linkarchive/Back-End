@@ -24,9 +24,9 @@ public class SecurityConfig implements WebMvcConfigurer {
             "/health",
             "/auth/**",
             "/user/{userId}",
-            "/links/public/user/{userId}",
-            "/links/archive/public",
-            "/mark/links/public/user/{userId}"
+            "/links/public/**",
+            "/links/archive/public/**",
+            "/mark/links/public/**"
     };
 
     private final SecurityArgumentResolver securityArgumentResolver;
