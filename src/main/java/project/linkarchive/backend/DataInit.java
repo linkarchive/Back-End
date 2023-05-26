@@ -22,7 +22,9 @@ import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @Component
 @Transactional
@@ -65,7 +67,6 @@ public class DataInit {
         List<User> users = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
             User user = User.builder()
-                    .id((long) i)
                     .socialId("kakao" + i)
                     .email(i + "@google.com")
                     .nickname("nickname" + i)
@@ -73,18 +74,17 @@ public class DataInit {
                     .build();
             users.add(user);
         }
+
         userRepository.saveAll(users);
     }
 
     public void initProfileImage() {
         List<ProfileImage> profileImages = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            User user = userRepository.findById((long) i).orElse(null);
-
+        List<User> users = userRepository.findAll();
+        for (int i = 0; i < users.size(); i++) {
             ProfileImage profileImage = ProfileImage.builder()
-                    .id((long) i)
-                    .profileImageFilename("profileImage" + i)
-                    .user(user)
+                    .profileImageFilename("profileImage" + (i + 1))
+                    .user(users.get(i))
                     .build();
             profileImages.add(profileImage);
         }
@@ -93,140 +93,130 @@ public class DataInit {
 
     public void initLink() {
         int startLinkId = 1;
-        int endLinkId = 10;
-        int increment = 10;
+        int linksPerUser = 10;
         List<Link> links = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            User user = userRepository.findById((long) i).orElse(null);
-            if (user != null) {
-                for (int j = startLinkId; j <= endLinkId; j++) {
-                    Link link = Link.builder()
-                            .id((long) j)
-                            .url("url" + j)
-                            .title("title" + j)
-                            .description("description" + j)
-                            .thumbnail("thumbnail" + j)
-                            .bookMarkCount((long) j)
-                            .user(user)
-                            .build();
-                    links.add(link);
-                }
+        List<User> users = userRepository.findAll();
+
+        for (User user : users) {
+            for (int j = 0; j < linksPerUser; j++) {
+                int linkId = startLinkId + j;
+                Link link = Link.builder()
+                        .url("url" + linkId)
+                        .title("title" + linkId)
+                        .description("description" + linkId)
+                        .thumbnail("thumbnail" + linkId)
+                        .bookMarkCount((long) linkId)
+                        .user(user)
+                        .build();
+                links.add(link);
             }
-            startLinkId += increment;
-            endLinkId += increment;
+            startLinkId += linksPerUser;
         }
+
         linkRepository.saveAll(links);
     }
 
     public void initTag() {
         List<HashTag> hashTags = new ArrayList<>();
-        for (int i = 1; i <= 500; i++) {
+        for (int i = 1; i <= 100; i++) {
             HashTag hashTag = HashTag.builder()
                     .id((long) i)
                     .tag("tag" + i)
                     .build();
             hashTags.add(hashTag);
         }
+
         hashTagRepository.saveAll(hashTags);
     }
 
     public void initLinkTag() {
-        int startTagId = 1;
-        int endTagId = 5;
-        int increment = 5;
+        int tagsPerLink = 5;
+        List<HashTag> allHashTags = hashTagRepository.findAll();
         List<LinkHashTag> linkHashTags = new ArrayList<>();
-        for (int i = 1; i <= 100; i++) {
-            Link link = linkRepository.findById((long) i).orElse(null);
-            if (link != null) {
-                for (int j = startTagId; j <= endTagId; j++) {
-                    HashTag hashTag = hashTagRepository.findById((long) j).orElse(null);
-                    if (hashTag != null) {
-                        LinkHashTag linkHashTag = LinkHashTag.builder()
-                                .link(link)
-                                .hashTag(hashTag)
-                                .build();
-                        linkHashTags.add(linkHashTag);
-                    }
-                }
+
+        List<Link> links = linkRepository.findAll();
+        for (Link link : links) {
+            Collections.shuffle(allHashTags);
+            List<HashTag> linkTags = allHashTags.subList(0, tagsPerLink);
+            for (HashTag hashTag : linkTags) {
+                LinkHashTag linkHashTag = LinkHashTag.builder()
+                        .link(link)
+                        .hashTag(hashTag)
+                        .build();
+                linkHashTags.add(linkHashTag);
             }
-            startTagId += increment;
-            endTagId += increment;
         }
+
         linkHashTagRepository.saveAll(linkHashTags);
     }
 
     public void initUserTag() {
-        int startTagId = 1;
-        int endTagId = 50;
-        int increment = 50;
+        Random rand = new Random();
+
+        List<User> users = userRepository.findAll();
+        List<HashTag> hashTags = hashTagRepository.findAll();
+
         List<UserHashTag> userHashTags = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            User user = userRepository.findById((long) i).orElse(null);
-            if (user != null) {
-                for (int j = startTagId; j <= endTagId; j++) {
-                    HashTag hashTag = hashTagRepository.findById((long) j).orElse(null);
-                    if (hashTag != null) {
-                        UserHashTag userHashTag = UserHashTag.builder()
-                                .usageCount((long) i)
-                                .user(user)
-                                .hashTag(hashTag)
-                                .build();
-                        userHashTags.add(userHashTag);
-                    }
-                }
+
+        for (User user : users) {
+            int numberOfTags = 1 + rand.nextInt(10);
+
+            for (int j = 0; j < numberOfTags; j++) {
+                HashTag hashTag = hashTags.get(rand.nextInt(hashTags.size()));
+
+                UserHashTag userHashTag = UserHashTag.builder()
+                        .usageCount((long) (1 + rand.nextInt(100)))
+                        .user(user)
+                        .hashTag(hashTag)
+                        .build();
+
+                userHashTags.add(userHashTag);
             }
-            startTagId += increment;
-            endTagId += increment;
         }
+
         userHashTagRepository.saveAll(userHashTags);
     }
 
     public void initBookMark() {
-        int startTagId = 1;
-        int endTagId = 5;
-        int increment = 10;
+        Random random = new Random();
         List<BookMark> bookMarks = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            User user = userRepository.findById((long) i).orElse(null);
-            if (user != null) {
-                for (int j = startTagId; j <= endTagId; j++) {
-                    Link link = linkRepository.findById((long) j).orElse(null);
-                    if (link != null) {
-                        BookMark bookMark = BookMark.builder()
-                                .user(user)
-                                .link(link)
-                                .build();
-                        bookMarks.add(bookMark);
-                    }
-                }
+        List<User> users = userRepository.findAll();
+        List<Link> links = linkRepository.findAll();
+
+        for (User user : users) {
+            int numBookMarks = random.nextInt(links.size()) + 1;
+            for (int j = 0; j < numBookMarks; j++) {
+                int linkIndex = random.nextInt(links.size());
+                Link link = links.get(linkIndex);
+
+                BookMark bookMark = BookMark.builder()
+                        .user(user)
+                        .link(link)
+                        .build();
+                bookMarks.add(bookMark);
             }
-            startTagId += increment;
-            endTagId += increment;
         }
         bookMarkRepository.saveAll(bookMarks);
     }
 
     public void initIsLinkRead() {
-        int startTagId = 1;
-        int endTagId = 5;
-        int increment = 10;
+        Random random = new Random();
         List<IsLinkRead> isLinkReads = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            User user = userRepository.findById((long) i).orElse(null);
-            if (user != null) {
-                for (int j = startTagId; j <= endTagId; j++) {
-                    Link link = linkRepository.findById((long) j).orElse(null);
-                    if (link != null) {
-                        IsLinkRead isLinkRead = IsLinkRead.builder()
-                                .user(user)
-                                .link(link)
-                                .build();
-                        isLinkReads.add(isLinkRead);
-                    }
-                }
+        List<User> users = userRepository.findAll();
+        List<Link> links = linkRepository.findAll();
+
+        for (User user : users) {
+            int numReadLinks = random.nextInt(links.size()) + 1;
+            for (int j = 0; j < numReadLinks; j++) {
+                int linkIndex = random.nextInt(links.size());
+                Link link = links.get(linkIndex);
+
+                IsLinkRead isLinkRead = IsLinkRead.builder()
+                        .user(user)
+                        .link(link)
+                        .build();
+                isLinkReads.add(isLinkRead);
             }
-            startTagId += increment;
-            endTagId += increment;
         }
         isLinkReadRepository.saveAll(isLinkReads);
     }
