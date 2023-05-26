@@ -13,7 +13,7 @@ import project.linkarchive.backend.user.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
-import project.linkarchive.backend.user.request.UpdateNickNameRequest;
+import project.linkarchive.backend.user.request.NickNameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
 import project.linkarchive.backend.user.response.ProfileImageResponse;
 
@@ -44,7 +44,7 @@ public class UserApiService {
         this.userProfileImageRepository = userProfileImageRepository;
     }
 
-    public void updateUserNickName(UpdateNickNameRequest request, Long userId) {
+    public void updateUserNickName(NickNameRequest request, Long userId) {
         validationNickNameLength(request);
 
         User user = getUserById(userId);
@@ -93,7 +93,7 @@ public class UserApiService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_PROFILE_IMAGE));
     }
 
-    private void validationNickNameLength(UpdateNickNameRequest request) {
+    private void validationNickNameLength(NickNameRequest request) {
         boolean isTooLong = request.getNickname().length() > MAXIMUM_NICKNAME_LENGTH;
         boolean isTooShort = request.getNickname().length() < MINIMUM_NICKNAME_LENGTH;
         if (isTooLong || isTooShort) {
@@ -114,7 +114,7 @@ public class UserApiService {
         }
     }
 
-    private void existUserNickName(UpdateNickNameRequest request, User user) {
+    private void existUserNickName(NickNameRequest request, User user) {
         if (userRepository.existsUserByNickname(request.getNickname()) &&
                 !user.getNickname().equals(request.getNickname())
         ) {

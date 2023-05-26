@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.linkarchive.backend.advice.success.SuccessResponse;
 import project.linkarchive.backend.security.AuthInfo;
-import project.linkarchive.backend.user.request.UpdateNickNameRequest;
+import project.linkarchive.backend.user.request.NickNameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
 import project.linkarchive.backend.user.response.ProfileImageResponse;
 import project.linkarchive.backend.user.service.UserApiService;
@@ -28,7 +28,7 @@ public class UserApiController {
     @PatchMapping("/user/{userId}/nickname")
     public ResponseEntity<SuccessResponse> updateUserNickname(
             @PathVariable("userId") Long userId,
-            @RequestBody UpdateNickNameRequest request
+            @RequestBody NickNameRequest request
     ) {
         userApiService.updateUserNickName(request, userId);
         return ResponseEntity.ok(new SuccessResponse(UPDATE_NICKNAME));

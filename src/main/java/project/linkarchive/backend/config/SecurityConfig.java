@@ -23,6 +23,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     public static final String[] EXCLUDE_PATHS = {
             "/health",
             "/auth/**",
+            "/nickname",
             "/user/{userId}",
             "/links/public/**",
             "/links/archive/public/**",
