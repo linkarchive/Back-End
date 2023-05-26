@@ -57,8 +57,8 @@ public class BookMarkQueryService {
         List<UserLinkResponse> userLinkResponseList = linkResponseList.stream()
                 .map(linkResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                    List<String> tagList = linkHashTagList.stream()
+                            .map(linkHashTag -> TagResponse.build(linkHashTag).getTag())
                             .collect(Collectors.toList());
 
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), userId);
@@ -79,8 +79,8 @@ public class BookMarkQueryService {
         List<UserLinkResponse> userLinkResponseList = linkResponseList.stream()
                 .map(linkResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                    List<String> tagList = linkHashTagList.stream()
+                            .map(linkHashTag -> TagResponse.build(linkHashTag).getTag())
                             .collect(Collectors.toList());
 
                     return UserLinkResponse.build(linkResponse, false, tagList);
@@ -99,8 +99,8 @@ public class BookMarkQueryService {
         List<UserLinkResponse> userLinkResponseList = linkResponseList.stream()
                 .map(linkResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                    List<String> tagList = linkHashTagList.stream()
+                            .map(linkHashTag -> TagResponse.build(linkHashTag).getTag())
                             .collect(Collectors.toList());
 
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId);

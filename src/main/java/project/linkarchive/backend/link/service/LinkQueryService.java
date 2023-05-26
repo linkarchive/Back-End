@@ -49,8 +49,8 @@ public class LinkQueryService {
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                    List<String> tagList = linkHashTagList.stream()
+                            .map(linkHashTag -> TagResponse.build(linkHashTag).getTag())
                             .collect(Collectors.toList());
 
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), userId);
@@ -71,8 +71,8 @@ public class LinkQueryService {
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                    List<String> tagList = linkHashTagList.stream()
+                            .map(linkHashTag -> TagResponse.build(linkHashTag).getTag())
                             .collect(Collectors.toList());
 
                     return UserLinkResponse.build(linkResponse, false, tagList);
@@ -91,8 +91,8 @@ public class LinkQueryService {
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                    List<String> tagList = linkHashTagList.stream()
+                            .map(linkHashTag -> TagResponse.build(linkHashTag).getTag())
                             .collect(Collectors.toList());
 
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId);
@@ -113,8 +113,8 @@ public class LinkQueryService {
         List<UserArchiveResponse> userArchiveResponseList = archiveResponseList.stream()
                 .map(archiveResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(archiveResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                    List<String> tagList = linkHashTagList.stream()
+                            .map(linkHashTag -> TagResponse.build(linkHashTag).getTag())
                             .collect(Collectors.toList());
 
                     return UserArchiveResponse.build(archiveResponse, false, tagList);
@@ -131,8 +131,8 @@ public class LinkQueryService {
         List<UserArchiveResponse> userArchiveResponseList = archiveResponseList.stream()
                 .map(archiveResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(archiveResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                    List<String> tagList = linkHashTagList.stream()
+                            .map(linkHashTag -> TagResponse.build(linkHashTag).getTag())
                             .collect(Collectors.toList());
 
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(archiveResponse.getLinkId(), loginUserId);

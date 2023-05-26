@@ -19,10 +19,10 @@ public class UserArchiveResponse {
     private String thumbnail;
     private Long bookMarkCount;
     private Boolean isRead;
-    private List<TagResponse> tagList;
+    private List<String> tagList;
 
     @Builder
-    public UserArchiveResponse(Long userId, String nickname, String profileImage, Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, Boolean isRead, List<TagResponse> tagList) {
+    public UserArchiveResponse(Long userId, String nickname, String profileImage, Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, Boolean isRead, List<String> tagList) {
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;
@@ -36,7 +36,7 @@ public class UserArchiveResponse {
         this.tagList = tagList;
     }
 
-    public static UserArchiveResponse build(ArchiveResponse response, Boolean isRead, List<TagResponse> tagList) {
+    public static UserArchiveResponse build(ArchiveResponse response, Boolean isRead, List<String> tagList) {
         return UserArchiveResponse.builder()
                 .userId(response.getUserId())
                 .nickname(response.getNickname())
