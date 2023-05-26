@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import project.linkarchive.backend.hashtag.domain.QHashTag;
 import project.linkarchive.backend.link.response.linkList.LinkResponse;
 import project.linkarchive.backend.link.response.linkList.QLinkResponse;
 
@@ -11,6 +12,9 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static project.linkarchive.backend.bookmark.domain.QBookMark.bookMark;
+import static project.linkarchive.backend.hashtag.domain.QHashTag.hashTag;
+import static project.linkarchive.backend.link.domain.QLink.link;
+import static project.linkarchive.backend.link.domain.QLinkHashTag.linkHashTag;
 
 
 @Repository
@@ -22,7 +26,7 @@ public class BookMarkRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<LinkResponse> getMarkLinkList(Long userId, Long lastMarkId, Pageable pageable) {
+    public List<LinkResponse> getMarkLinkList(Long userId, Long lastLinkId, Pageable pageable, String tag) {
         return queryFactory
                 .select(new QLinkResponse(
                         bookMark.link.id,
@@ -33,18 +37,23 @@ public class BookMarkRepositoryImpl {
                         bookMark.link.bookMarkCount
                 ))
                 .from(bookMark)
-                .leftJoin(bookMark.link)
+                .leftJoin(bookMark.link, link)
                 .where(
                         bookMark.user.id.eq(userId),
-                        ltMarkId(lastMarkId)
+                        ltLinkId(lastLinkId),
+                        containTag(tag)
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(bookMark.id.desc())
                 .fetch();
     }
 
-    private BooleanExpression ltMarkId(Long lastMarkId) {
+    private BooleanExpression ltLinkId(Long lastMarkId) {
         return lastMarkId != null ? bookMark.link.id.lt(lastMarkId) : null;
+    }
+
+    private BooleanExpression containTag(String tag) {
+        return tag != null ? linkHashTag.hashTag.tag.eq(tag) : null;
     }
 
 }

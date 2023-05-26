@@ -12,7 +12,9 @@ import project.linkarchive.backend.link.response.linkarchive.QArchiveResponse;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static project.linkarchive.backend.hashtag.domain.QHashTag.hashTag;
 import static project.linkarchive.backend.link.domain.QLink.link;
+import static project.linkarchive.backend.link.domain.QLinkHashTag.linkHashTag;
 
 @Repository
 public class LinkRepositoryImpl {
@@ -23,7 +25,7 @@ public class LinkRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<LinkResponse> getUserLinkList(Long userId, Pageable pageable, Long lastLinkLid) {
+    public List<LinkResponse> getUserLinkList(Long userId, Pageable pageable, Long lastLinkLid, String tag) {
         return queryFactory
                 .select(new QLinkResponse(
                         link.id,
@@ -36,14 +38,15 @@ public class LinkRepositoryImpl {
                 .from(link)
                 .where(
                         link.user.id.eq(userId),
-                        ltUrlId(lastLinkLid)
+                        ltUrlId(lastLinkLid),
+                        containTag(tag)
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(link.id.desc())
                 .fetch();
     }
 
-    public List<ArchiveResponse> getLinkArchive(Pageable pageable, Long lastLinkId) {
+    public List<ArchiveResponse> getLinkArchive(Pageable pageable, Long lastLinkId, String tag) {
         return queryFactory
                 .select(new QArchiveResponse(
                         link.user.id,
@@ -60,7 +63,8 @@ public class LinkRepositoryImpl {
                 .leftJoin(link.user)
                 .leftJoin(link.user.profileImage)
                 .where(
-                        ltUrlId(lastLinkId)
+                        ltUrlId(lastLinkId),
+                        containTag(tag)
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(link.id.desc())
@@ -69,6 +73,10 @@ public class LinkRepositoryImpl {
 
     private BooleanExpression ltUrlId(Long lastLinkId) {
         return lastLinkId != null ? link.id.lt(lastLinkId) : null;
+    }
+
+    private BooleanExpression containTag(String tag) {
+        return tag != null ? linkHashTag.hashTag.tag.eq(tag) : null;
     }
 
 }

@@ -73,11 +73,12 @@ public class LinkQueryController {
     // 내 링크 리스트 조회 - 로그인 필요 O
     @GetMapping("/links/user")
     public ResponseEntity<UserLinkListResponse> getUserLinkList(
+            @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable,
             AuthInfo authInfo
     ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(authInfo.getId(), pageable, lastLinkId);
+        UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(authInfo.getId(), pageable, lastLinkId, tag);
         return ResponseEntity.ok(userLinkListResponse);
     }
 
@@ -85,10 +86,11 @@ public class LinkQueryController {
     @GetMapping("/links/public/user/{userId}")
     public ResponseEntity<UserLinkListResponse> getPublicUserLinkList(
             @PathVariable("userId") Long userId,
+            @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable
     ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getPublicUserLinkList(userId, pageable, lastLinkId);
+        UserLinkListResponse userLinkListResponse = linkQueryService.getPublicUserLinkList(userId, pageable, lastLinkId, tag);
         return ResponseEntity.ok(userLinkListResponse);
     }
 
@@ -96,32 +98,35 @@ public class LinkQueryController {
     @GetMapping("/links/authentication/user/{userId}")
     public ResponseEntity<UserLinkListResponse> getAuthenticatedUserLinkList(
             @PathVariable("userId") Long userId,
+            @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable,
             AuthInfo authInfo
     ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getAuthenticatedUserLinkList(userId, pageable, lastLinkId, authInfo.getId());
+        UserLinkListResponse userLinkListResponse = linkQueryService.getAuthenticatedUserLinkList(userId, pageable, lastLinkId, authInfo.getId(), tag);
         return ResponseEntity.ok(userLinkListResponse);
     }
 
     // 사용자들의 링크 둘러보기 - 로그인 필요 X
     @GetMapping("/links/archive/public")
     public ResponseEntity<UserLinkArchiveResponse> getPublicLinkArchive(
+            @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable
     ) {
-        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getPublicLinkArchive(pageable, lastLinkId);
+        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getPublicLinkArchive(pageable, lastLinkId, tag);
         return ResponseEntity.ok(userLinkArchiveResponse);
     }
 
     // 사용자들의 링크 둘러보기 - 로그인 필요 O
     @GetMapping("/links/archive/authentication")
     public ResponseEntity<UserLinkArchiveResponse> getAuthenticatedLinkArchive(
+            @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable,
             AuthInfo authInfo
     ) {
-        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getAuthenticatedLinkArchive(pageable, lastLinkId, authInfo.getId());
+        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getAuthenticatedLinkArchive(pageable, lastLinkId, authInfo.getId(), tag);
         return ResponseEntity.ok(userLinkArchiveResponse);
     }
 

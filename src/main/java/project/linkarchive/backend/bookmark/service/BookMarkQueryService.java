@@ -47,10 +47,10 @@ public class BookMarkQueryService {
         this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
     }
 
-    public UserLinkListResponse getUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable) {
+    public UserLinkListResponse getUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable, String tag) {
         validateUserExists(userId);
 
-        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable);
+        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable, tag);
 
         boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
 
@@ -69,10 +69,10 @@ public class BookMarkQueryService {
         return new UserLinkListResponse(userLinkResponseList, hasNext);
     }
 
-    public UserLinkListResponse getPublicUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable) {
+    public UserLinkListResponse getPublicUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable, String tag) {
         validateUserExists(userId);
 
-        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable);
+        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable, tag);
 
         boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
 
@@ -89,10 +89,10 @@ public class BookMarkQueryService {
         return new UserLinkListResponse(userLinkResponseList, hasNext);
     }
 
-    public UserLinkListResponse getAuthenticatedUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable, Long loginUserId) {
+    public UserLinkListResponse getAuthenticatedUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable, Long loginUserId, String tag) {
         validateUserExists(userId);
 
-        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable);
+        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable, tag);
 
         boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
 
