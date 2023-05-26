@@ -20,20 +20,20 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig implements WebMvcConfigurer {
 
+//    public static final String[] EXCLUDE_PATHS = {
+//            "/health",
+//            "/auth/**",
+//            "/user/{userId}",
+//            "/links/public/user/{userId}",
+//            "/links/archive/public",
+//            "/mark/links/public/user/{userId}"
+//    };
+
     private final SecurityArgumentResolver securityArgumentResolver;
 
     public SecurityConfig(SecurityArgumentResolver securityArgumentResolver) {
         this.securityArgumentResolver = securityArgumentResolver;
     }
-
-    public static final String[] EXCLUDE_PATHS = {
-            "/health",
-            "/auth/**",
-            "/user/{userId}",
-            "/links/public/user/{userId}",
-            "/links/archive/public",
-            "/mark/links/public/user/{userId}"
-    };
 
     @Bean
     public SecurityFilterChain setupSecurity(
@@ -46,7 +46,12 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .formLogin().disable().headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                .antMatchers(EXCLUDE_PATHS).permitAll()
+                .antMatchers("/health",
+                        "/auth/**",
+                        "/user/{userId}",
+                        "/links/public/user/{userId}",
+                        "/links/archive/public",
+                        "/mark/links/public/user/{userId}").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new TokenAuthenticationFilter(oAuthService), UsernamePasswordAuthenticationFilter.class)
