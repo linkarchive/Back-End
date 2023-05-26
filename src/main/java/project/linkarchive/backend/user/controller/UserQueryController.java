@@ -38,7 +38,7 @@ public class UserQueryController {
         return ResponseEntity.ok(profileResponse);
     }
 
-    @GetMapping("/user/nickname")
+    @GetMapping("/nickname")
     public ResponseEntity<SuccessResponse> validationNickName(
             @RequestBody NickNameRequest request
     ) {

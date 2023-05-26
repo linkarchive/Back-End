@@ -42,9 +42,9 @@ public class UserQueryService {
     public void validationNickName(NickNameRequest request) {
         validationNickNameLength(request);
 
-        userRepository.findByNickname(request.getNickname()).orElseThrow(
-                () -> new AlreadyExistException(ALREADY_EXIST_NICKNAME)
-        );
+        if (userRepository.existsUserByNickname(request.getNickname())) {
+            throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
+        }
     }
 
     private User checkUserId(Long userId) {
