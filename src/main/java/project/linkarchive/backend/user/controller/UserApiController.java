@@ -44,7 +44,7 @@ public class UserApiController {
 
     @PatchMapping("/profile-image")
     public ResponseEntity<ProfileImageResponse> updateProfileImage(
-            @RequestParam(value = "image") MultipartFile image,
+            @RequestBody MultipartFile image,
             AuthInfo authInfo
     ) throws IOException {
         ProfileImageResponse profileImageResponse = userApiService.updateProfileImage(image, authInfo.getId());
