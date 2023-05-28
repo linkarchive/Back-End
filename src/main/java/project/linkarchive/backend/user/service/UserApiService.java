@@ -16,6 +16,8 @@ import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.request.NickNameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
 import project.linkarchive.backend.user.response.ProfileImageResponse;
+import project.linkarchive.backend.user.response.UpdateNicknameResponse;
+import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
 import java.io.IOException;
 
@@ -44,22 +46,26 @@ public class UserApiService {
         this.userProfileImageRepository = userProfileImageRepository;
     }
 
-    public void updateUserNickName(NickNameRequest request, Long userId) {
-        validationNickNameLength(request);
+    public UpdateNicknameResponse updateUserNickName(NickNameRequest request, Long userId) {
+//        validationNickNameLength(request);
 
         User user = getUserById(userId);
-        existUserNickName(request, user);
+//        existUserNickName(request, user);
 
         user.updateUserNickName(request);
+
+        return new UpdateNicknameResponse(user.getNickname());
     }
 
-    public void updateUserProfile(UpdateProfileRequest request, Long userId) {
+    public UpdateProfileResponse updateUserProfile(UpdateProfileRequest request, Long userId) {
         validationProfileRequest(request);
 
         User user = getUserById(userId);
         existUserNickName(request, user);
 
         user.updateUserProfile(request);
+
+        return new UpdateProfileResponse(user);
     }
 
     public ProfileImageResponse updateProfileImage(MultipartFile image, Long userId) throws IOException {

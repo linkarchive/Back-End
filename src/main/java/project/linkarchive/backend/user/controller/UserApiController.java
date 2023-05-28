@@ -9,10 +9,13 @@ import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.request.NickNameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
 import project.linkarchive.backend.user.response.ProfileImageResponse;
+import project.linkarchive.backend.user.response.UpdateNicknameResponse;
+import project.linkarchive.backend.user.response.UpdateProfileResponse;
 import project.linkarchive.backend.user.service.UserApiService;
 
 import java.io.IOException;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static project.linkarchive.backend.advice.success.SuccessCodeConst.*;
 
 @RestController
@@ -25,21 +28,21 @@ public class UserApiController {
     }
 
     @PatchMapping("/user/{userId}/nickname")
-    public ResponseEntity<SuccessResponse> updateUserNickname(
+    public ResponseEntity<UpdateNicknameResponse> updateUserNickname(
             @PathVariable("userId") Long userId,
             @RequestBody NickNameRequest request
     ) {
-        userApiService.updateUserNickName(request, userId);
-        return ResponseEntity.ok(new SuccessResponse(UPDATE_NICKNAME));
+        UpdateNicknameResponse updateNicknameResponse = userApiService.updateUserNickName(request, userId);
+        return ResponseEntity.ok(updateNicknameResponse);
     }
 
     @PatchMapping("/user")
-    public ResponseEntity<SuccessResponse> updateUserProfile(
+    public ResponseEntity<UpdateProfileResponse> updateUserProfile(
             @RequestBody UpdateProfileRequest request,
             AuthInfo authInfo
     ) {
-        userApiService.updateUserProfile(request, authInfo.getId());
-        return ResponseEntity.ok(new SuccessResponse(UPDATE_USER_PROFILE));
+        UpdateProfileResponse updateProfileResponse = userApiService.updateUserProfile(request, authInfo.getId());
+        return ResponseEntity.ok(updateProfileResponse);
     }
 
     @PatchMapping("/profile-image")
@@ -48,7 +51,7 @@ public class UserApiController {
             AuthInfo authInfo
     ) throws IOException {
         ProfileImageResponse profileImageResponse = userApiService.updateProfileImage(image, authInfo.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(profileImageResponse);
+        return ResponseEntity.ok().body(profileImageResponse);
     }
 
     @PostMapping("/nickname")
@@ -56,7 +59,7 @@ public class UserApiController {
             @RequestBody NickNameRequest request
     ) {
         userApiService.validationNickName(request);
-        return ResponseEntity.ok().body(new SuccessResponse(AVAILABLE_NICKNAME));
+        return ResponseEntity.status(CREATED).body(new SuccessResponse(AVAILABLE_NICKNAME));
     }
 
 }
