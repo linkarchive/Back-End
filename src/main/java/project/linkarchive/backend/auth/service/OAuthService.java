@@ -53,10 +53,8 @@ public class OAuthService {
     private String CLIENT_ID;
     @Value("${oauth.client.registration.kakao.redirect_uri}")
     private String REDIRECT_URI;
-
     @Value("${cloud.aws.s3.default-image}")
     private String DEFAULT_IMAGE;
-
     @Value("${jwt.key}")
     private String SECRET_KEY;
 
