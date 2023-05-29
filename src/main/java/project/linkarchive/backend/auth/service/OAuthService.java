@@ -101,7 +101,7 @@ public class OAuthService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", GRANT_TYPE);
         params.add("client_id", CLIENT_ID);
-        params.add("redirect_uri", REDIRECT_URI);
+        params.add("redirect_uri", redirectUri);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
