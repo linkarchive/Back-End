@@ -75,7 +75,8 @@ public class UserApiService {
         validateNotEmptyFile(image);
         validateContentType(image.getContentType());
 
-        String storedFileName = extractKey(s3Uploader.upload(image));
+        String storedFileName = s3Uploader.upload(image);
+        storedFileName = extractKey(storedFileName);
 
         String oldProfileImageName = profileImage.getProfileImageFilename();
         if (!oldProfileImageName.equals(defaultImage)) {
