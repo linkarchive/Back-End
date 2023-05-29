@@ -62,11 +62,12 @@ public class LinkQueryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
-        String title = document.select("meta[property=og:title]").attr("content");
-        String description = document.select("meta[property=og:description]").attr("content");
-        String thumbnail = document.select("meta[property=og:image]").attr("content");
+        String titleText = document.select("title").text();
+        String metaTitle = document.select("meta[property=og:title]").attr("content");
+        String metaDescription = document.select("meta[property=og:description]").attr("content");
+        String metaThumbnail = document.select("meta[property=og:image]").attr("content");
 
-        LinkMetaDataResponse linkMetaDataResponse = new LinkMetaDataResponse(title, description, thumbnail);
+        LinkMetaDataResponse linkMetaDataResponse = new LinkMetaDataResponse(titleText, metaTitle, metaDescription, metaThumbnail);
         return ResponseEntity.ok(linkMetaDataResponse);
     }
 
