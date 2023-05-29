@@ -5,14 +5,16 @@ import lombok.Getter;
 @Getter
 public class LinkMetaDataResponse {
 
-    private String title;
-    private String description;
-    private String thumbnail;
+    private String titleText;
+    private String metaTitle;
+    private String metaDescription;
+    private String metaThumbnail;
 
-    public LinkMetaDataResponse(String title, String description, String thumbnail) {
-        this.title = title;
-        this.description = description;
-        this.thumbnail = thumbnail;
+    public LinkMetaDataResponse(String titleText, String metaTitle, String metaDescription, String metaThumbnail) {
+        this.titleText = titleText;
+        this.metaTitle = metaTitle;
+        this.metaDescription = metaDescription;
+        this.metaThumbnail = metaThumbnail;
     }
 
 }
