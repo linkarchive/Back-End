@@ -86,8 +86,10 @@ public class OAuthService {
         String accessToken = jwtUtil.createAccessToken(findUser);
         String refreshToken = jwtUtil.createRefreshToken(findUser);
 
-        RefreshToken token = RefreshToken.build(refreshToken, findUser);
-        refreshTokenRepository.save(token);
+        if (!refreshTokenRepository.existsByUserId(findUser.getId())) {
+            RefreshToken token = RefreshToken.build(refreshToken, findUser);
+            refreshTokenRepository.save(token);
+        }
 
         return new LoginResponse(findUser, accessToken, refreshToken);
     }
