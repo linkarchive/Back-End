@@ -79,8 +79,8 @@ public class UserApiService {
 
         String oldProfileImageName = profileImage.getProfileImageFilename();
         if (!oldProfileImageName.equals(defaultImage)) {
-            String oldFilekey = extractKey(oldProfileImageName);
-            s3Uploader.deleteFile(oldFilekey);
+            String oldFileKey = extractKey(oldProfileImageName);
+            s3Uploader.deleteFile(oldFileKey);
         }
 
         profileImage.updateProfileImage(storedFileName);
