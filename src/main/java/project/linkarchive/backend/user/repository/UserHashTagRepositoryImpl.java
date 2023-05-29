@@ -10,7 +10,6 @@ import java.util.List;
 
 import static project.linkarchive.backend.user.domain.QUserHashTag.userHashTag;
 
-
 @Repository
 public class UserHashTagRepositoryImpl {
 
@@ -20,26 +19,28 @@ public class UserHashTagRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<TagResponse> getTagListLimitSize(Long userId, Long size) {
+    public List<TagResponse> getUserTagList(Long userId) {
         return queryFactory
                 .select(new QTagResponse(
+                        userHashTag.hashTag.id,
+                        userHashTag.hashTag.tag
+                ))
+                .from(userHashTag)
+                .where(userHashTag.user.id.eq(userId))
+                .orderBy(userHashTag.usageCount.desc())
+                .fetch();
+    }
+
+    public List<TagResponse> getLimitedTagList(Long userId, Long size) {
+        return queryFactory
+                .select(new QTagResponse(
+                        userHashTag.hashTag.id,
                         userHashTag.hashTag.tag
                 ))
                 .from(userHashTag)
                 .where(userHashTag.user.id.eq(userId))
                 .orderBy(userHashTag.usageCount.desc())
                 .limit(size)
-                .fetch();
-    }
-
-    public List<TagResponse> getUserTagList(Long userId) {
-        return queryFactory
-                .select(new QTagResponse(
-                        userHashTag.hashTag.tag
-                ))
-                .from(userHashTag)
-                .where(userHashTag.user.id.eq(userId))
-                .orderBy(userHashTag.usageCount.desc())
                 .fetch();
     }
 
