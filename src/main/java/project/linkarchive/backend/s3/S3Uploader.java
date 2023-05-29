@@ -27,17 +27,12 @@ import java.util.UUID;
 @Log4j2
 public class S3Uploader {
 
-    public final static int S3_KEY = 3;
-
     private final AmazonS3 amazonS3;
 
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
-    @Value("${cloud.aws.s3.default-image}")
-    private String defaultImage;
 
     public S3Uploader(AmazonS3 amazonS3, AmazonS3Client amazonS3Client) {
         this.amazonS3 = amazonS3;
@@ -92,10 +87,6 @@ public class S3Uploader {
         long mSec = expiration.getTime();
         mSec += expirationTimeInMinutes;
         expiration.setTime(mSec);
-
-        if (!objectKey.equals(defaultImage)) {
-            objectKey = objectKey.split("/")[S3_KEY];
-        }
 
         GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, objectKey)
                 .withMethod(HttpMethod.GET)

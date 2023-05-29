@@ -75,12 +75,12 @@ public class UserApiService {
         validateNotEmptyFile(image);
         validateContentType(image.getContentType());
 
-        String storedFileName = s3Uploader.upload(image);
+        String storedFileName = extractKey(s3Uploader.upload(image));
 
         String oldProfileImageName = profileImage.getProfileImageFilename();
         if (!oldProfileImageName.equals(defaultImage)) {
-        String key = oldProfileImageName.split("/")[S3_KEY];
-        s3Uploader.deleteFile(key);
+            String key = extractKey(oldProfileImageName);
+            s3Uploader.deleteFile(key);
         }
 
         profileImage.updateProfileImage(storedFileName);
@@ -159,6 +159,11 @@ public class UserApiService {
                 throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
             }
         }
+    }
+
+    private String extractKey(String fileUrl) {
+        String key = fileUrl.split("/")[S3_KEY];
+        return key;
     }
 
 }
