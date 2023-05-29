@@ -39,8 +39,4 @@ public class RefreshToken extends CreatedEntity {
                 .build();
     }
 
-    public void renewalToken(String token) {
-        this.refreshToken = token;
-    }
-
 }
