@@ -36,12 +36,11 @@ public class HashTagQueryService {
         return new TagListResponse(tagList);
     }
 
-    // 사용자 별 자주 사용하는 해시태그 N개 조회 007
-    public TagListResponse getTagList(Long userId, Long size) {
+    public TagListResponse getLimitedTagList(Long userId, Long size) {
         checkUserId(userId);
         checkSize(size);
 
-        List<TagResponse> tagResponses = userHashTagRepositoryImpl.getTagListLimitSize(userId, size);
+        List<TagResponse> tagResponses = userHashTagRepositoryImpl.getLimitedTagList(userId, size);
 
         return new TagListResponse(tagResponses);
     }

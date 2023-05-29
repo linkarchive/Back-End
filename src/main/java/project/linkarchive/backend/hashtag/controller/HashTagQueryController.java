@@ -25,13 +25,12 @@ public class HashTagQueryController {
         return ResponseEntity.ok(tagList);
     }
 
-    // 사용자 별 자주 사용하는 해시태그 N개 조회 007
     @GetMapping("/limited-tags/user/{userId}")
     public ResponseEntity<TagListResponse> getTagList(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "size") Long size
     ) {
-        TagListResponse tagList = hashTagQueryService.getTagList(userId, size);
+        TagListResponse tagList = hashTagQueryService.getLimitedTagList(userId, size);
         return ResponseEntity.ok(tagList);
     }
 
