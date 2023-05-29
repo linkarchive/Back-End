@@ -1,10 +1,11 @@
-package project.linkarchive.backend.user.domain;
+package project.linkarchive.backend.auth.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
+import project.linkarchive.backend.user.domain.User;
 
 import javax.persistence.*;
 
@@ -21,20 +22,23 @@ public class RefreshToken extends CreatedEntity {
     @Column(length = 500)
     private String refreshToken;
 
+    private String agent;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Builder
-    public RefreshToken(Long id, String refreshToken, User user) {
-        this.id = id;
+    public RefreshToken(String refreshToken, String agent, User user) {
         this.refreshToken = refreshToken;
+        this.agent = agent;
         this.user = user;
     }
 
-    public static RefreshToken build(String refreshToken, User user) {
+    public static RefreshToken build(String refreshToken, String userAgent, User user) {
         return RefreshToken.builder()
                 .refreshToken(refreshToken)
+                .agent(userAgent)
                 .user(user)
                 .build();
     }
