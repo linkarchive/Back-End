@@ -43,9 +43,7 @@ public class LinkApiService {
     }
 
     public void create(CreateLinkRequest request, Long userId) {
-        if (request.getTitle() == null || request.getTitle().length() < MINIMUM_TITLE_LENGTH) {
-            throw new LengthRequiredException(LENGTH_REQUIRED_TITLE);
-        }
+        validationTitleLength(request);
 
         User user = findUserById(userId);
         Set<String> tagsFromRequest = getTagsFromRequest(request);
@@ -53,6 +51,12 @@ public class LinkApiService {
 
         Link link = Link.build(request, user);
         addTagsToLinkAndIncrementUserTagCount(tagsFromRequest, link);
+    }
+
+    private void validationTitleLength(CreateLinkRequest request) {
+        if (request.getTitle() == null || request.getTitle().length() < MINIMUM_TITLE_LENGTH) {
+            throw new LengthRequiredException(LENGTH_REQUIRED_TITLE);
+        }
     }
 
     private User findUserById(Long userId) {
