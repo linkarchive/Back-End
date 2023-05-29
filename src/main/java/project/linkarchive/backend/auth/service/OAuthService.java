@@ -17,13 +17,13 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import project.linkarchive.backend.advice.exception.custom.InvalidException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.auth.domain.RefreshToken;
+import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.user.domain.ProfileImage;
-import project.linkarchive.backend.user.domain.RefreshToken;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.user.repository.RefreshTokenRepository;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.util.JwtUtil;
@@ -65,7 +65,7 @@ public class OAuthService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public LoginResponse login(String code, String redirectUri) {
+    public LoginResponse login(String code, String redirectUri, String userAgent) {
         OauthToken oauthToken = getToken(code, redirectUri);
         KakaoProfile kakaoProfile = getUserInfo(oauthToken.getAccess_token());
 
@@ -86,8 +86,8 @@ public class OAuthService {
         String accessToken = jwtUtil.createAccessToken(findUser);
         String refreshToken = jwtUtil.createRefreshToken(findUser);
 
-        if (!refreshTokenRepository.existsByUserId(findUser.getId())) {
-            RefreshToken token = RefreshToken.build(refreshToken, findUser);
+        if (!refreshTokenRepository.existsByUserIdAndAgent(findUser.getId(), userAgent)) {
+            RefreshToken token = RefreshToken.build(refreshToken, userAgent, findUser);
             refreshTokenRepository.save(token);
         }
 
@@ -101,7 +101,7 @@ public class OAuthService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", GRANT_TYPE);
         params.add("client_id", CLIENT_ID);
-        params.add("redirect_uri", redirectUri);
+        params.add("redirect_uri", REDIRECT_URI);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
