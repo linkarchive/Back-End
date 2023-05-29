@@ -25,6 +25,7 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 @Transactional
 public class LinkApiService {
 
+    public static final int MINIMUM_TITLE_LENGTH = 1;
     public static final int MINIMUM_TAG_LENGTH = 2;
     public static final int MAXIMUM_TAG_LENGTH = 8;
     public static final int MAX_TAG_COUNT = 10;
@@ -42,6 +43,10 @@ public class LinkApiService {
     }
 
     public void create(CreateLinkRequest request, Long userId) {
+        if (request.getTitle() == null || request.getTitle().length() < MINIMUM_TITLE_LENGTH) {
+            throw new LengthRequiredException(LENGTH_REQUIRED_TITLE);
+        }
+
         User user = findUserById(userId);
         Set<String> tagsFromRequest = getTagsFromRequest(request);
         exceededTagCount(tagsFromRequest);
