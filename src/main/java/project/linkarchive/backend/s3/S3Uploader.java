@@ -27,15 +27,12 @@ import java.util.UUID;
 @Log4j2
 public class S3Uploader {
 
-    private final AmazonS3 amazonS3;
-
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public S3Uploader(AmazonS3 amazonS3, AmazonS3Client amazonS3Client) {
-        this.amazonS3 = amazonS3;
+    public S3Uploader(AmazonS3Client amazonS3Client) {
         this.amazonS3Client = amazonS3Client;
     }
 
@@ -91,7 +88,7 @@ public class S3Uploader {
         GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, objectKey)
                 .withMethod(HttpMethod.GET)
                 .withExpiration(expiration);
-        URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
+        URL url = amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest);
 
         return url;
     }
