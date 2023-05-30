@@ -38,4 +38,11 @@ public class OAuthController {
                 .body(loginResponse);
     }
 
+//    @PostMapping("/logout/kakao")
+//    public ResponseEntity<LogoutResponse> logout(HttpServletRequest request) {
+//        String authorization = request.getHeader("Authorization");
+//
+//        return ResponseEntity.ok().body()
+//    }
+
 }

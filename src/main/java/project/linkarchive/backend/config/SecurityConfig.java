@@ -9,10 +9,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import project.linkarchive.backend.auth.service.OAuthService;
 import project.linkarchive.backend.security.AuthenticationEntryPointImpl;
 import project.linkarchive.backend.security.SecurityArgumentResolver;
 import project.linkarchive.backend.security.TokenAuthenticationFilter;
+import project.linkarchive.backend.util.JwtUtil;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain setupSecurity(
             HttpSecurity httpSecurity,
-            OAuthService oAuthService
+            JwtUtil jwtUtil
     ) throws Exception {
         return httpSecurity.cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -50,7 +50,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .antMatchers(EXCLUDE_PATHS).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilterBefore(new TokenAuthenticationFilter(oAuthService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new TokenAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new AuthenticationEntryPointImpl())
                 .and()

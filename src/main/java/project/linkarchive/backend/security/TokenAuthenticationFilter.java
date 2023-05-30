@@ -4,7 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import project.linkarchive.backend.auth.service.OAuthService;
+import project.linkarchive.backend.util.JwtUtil;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -14,10 +14,10 @@ import java.io.IOException;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-    private final OAuthService oAuthService;
+    private final JwtUtil jwtUtil;
 
-    public TokenAuthenticationFilter(OAuthService oAuthService) {
-        this.oAuthService = oAuthService;
+    public TokenAuthenticationFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -40,13 +40,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = tokenData[1];
-        if (!oAuthService.validate(token)) {
+        if (!jwtUtil.validate(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         // TODO: 탈퇴한 유저인 경우,, userId 존재 여부 검증 필요
-        Authentication authentication = new TokenAuthentication(token, oAuthService.getUserId(token));
+        Authentication authentication = new TokenAuthentication(token, jwtUtil.getUserId(token));
         authentication.setAuthenticated(true);
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(authentication);
