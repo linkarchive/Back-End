@@ -47,10 +47,10 @@ public class UserApiService {
     }
 
     public UpdateNicknameResponse updateUserNickName(NickNameRequest request, Long userId) {
-//        validationNickNameLength(request);
+        validationNickNameLength(request);
 
         User user = getUserById(userId);
-//        existUserNickName(request, user);
+        existUserNickName(request, user);
 
         user.updateUserNickName(request);
 
@@ -78,15 +78,17 @@ public class UserApiService {
         String storedFileName = s3Uploader.upload(image);
         storedFileName = extractKey(storedFileName);
 
-        String oldProfileImageName = profileImage.getProfileImageFilename();
-        if (!oldProfileImageName.equals(defaultImage)) {
-            String oldFileKey = extractKey(oldProfileImageName);
-            s3Uploader.deleteFile(oldFileKey);
+        if (!profileImage.getProfileImageFilename().equals(defaultImage)) {
+            s3Uploader.deleteFile(profileImage.getProfileImageFilename());
         }
 
         profileImage.updateProfileImage(storedFileName);
 
-        String profileImageUrl = s3Uploader.generatePresignedProfileImageUrl(storedFileName, EXPIRATION_TIME_IN_MINUTES).toString();
+        String profileImageUrl = s3Uploader.generatePresignedProfileImageUrl(
+                        storedFileName,
+                        EXPIRATION_TIME_IN_MINUTES)
+                .toString();
+
         return new ProfileImageResponse(profileImageUrl);
     }
 
