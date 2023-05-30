@@ -45,7 +45,7 @@ public class UserApiController {
         return ResponseEntity.ok(updateProfileResponse);
     }
 
-    @PatchMapping("/profile-image")
+    @PutMapping("/profile-image")
     public ResponseEntity<ProfileImageResponse> updateProfileImage(
             @RequestParam(value = "image") MultipartFile image,
             AuthInfo authInfo
