@@ -10,6 +10,7 @@ import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
+import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserHashTagRepository;
@@ -34,12 +35,15 @@ public class LinkApiService {
     private final HashTagRepository hashTagRepository;
     private final LinkHashTagRepository linkHashTagRepository;
     private final UserHashTagRepository userHashTagRepository;
+    private final LinkRepository linkRepository;
 
-    public LinkApiService(UserRepository userRepository, HashTagRepository hashTagRepository, LinkHashTagRepository linkHashTagRepository, UserHashTagRepository userHashTagRepository) {
+    public LinkApiService(UserRepository userRepository, HashTagRepository hashTagRepository, LinkHashTagRepository linkHashTagRepository, UserHashTagRepository userHashTagRepository,
+                          LinkRepository linkRepository) {
         this.userRepository = userRepository;
         this.hashTagRepository = hashTagRepository;
         this.linkHashTagRepository = linkHashTagRepository;
         this.userHashTagRepository = userHashTagRepository;
+        this.linkRepository = linkRepository;
     }
 
     public void create(CreateLinkRequest request, Long userId) {
@@ -51,6 +55,8 @@ public class LinkApiService {
 
         Link link = Link.build(request, user);
         addTagsToLinkAndIncrementUserTagCount(tagsFromRequest, link);
+
+        linkRepository.save(link);
     }
 
     private void validationTitleLength(CreateLinkRequest request) {
