@@ -24,7 +24,7 @@ public class BookMarkRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<LinkResponse> getMarkLinkList(Long userId, Long lastLinkId, Pageable pageable, String tag) {
+    public List<LinkResponse> getMyMarkLinkList(Long userId, Long lastLinkId, Pageable pageable, String tag) {
         return queryFactory
                 .select(new QLinkResponse(
                         bookMark.link.id,
@@ -35,11 +35,31 @@ public class BookMarkRepositoryImpl {
                         bookMark.link.bookMarkCount
                 ))
                 .from(bookMark)
-                .distinct()
-                .leftJoin(bookMark.link, link)
-                .leftJoin(link.linkHashTagList, linkHashTag)
+                .leftJoin(bookMark.link.linkHashTagList, linkHashTag)
                 .where(
                         bookMark.user.id.eq(userId),
+                        ltLinkId(lastLinkId),
+                        containTag(tag)
+                )
+                .limit(pageable.getPageSize() + 1)
+                .orderBy(bookMark.id.desc())
+                .fetch();
+    }
+
+    public List<LinkResponse> getUserMarkLinkList(String nickname, Long lastLinkId, Pageable pageable, String tag) {
+        return queryFactory
+                .select(new QLinkResponse(
+                        bookMark.link.id,
+                        bookMark.link.url,
+                        bookMark.link.title,
+                        bookMark.link.description,
+                        bookMark.link.thumbnail,
+                        bookMark.link.bookMarkCount
+                ))
+                .from(bookMark)
+                .leftJoin(bookMark.link.linkHashTagList, linkHashTag)
+                .where(
+                        bookMark.user.nickname.eq(nickname),
                         ltLinkId(lastLinkId),
                         containTag(tag)
                 )

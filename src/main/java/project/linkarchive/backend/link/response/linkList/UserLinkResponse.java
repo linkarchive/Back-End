@@ -9,8 +9,8 @@ import java.util.List;
 @Getter
 public class UserLinkResponse {
 
-    private Long urlId;
-    private String link;
+    private Long linkId;
+    private String url;
     private String title;
     private String description;
     private String thumbnail;
@@ -19,9 +19,9 @@ public class UserLinkResponse {
     private List<TagResponse> tagList;
 
     @Builder
-    public UserLinkResponse(Long urlId, String link, String title, String description, String thumbnail, Long bookMarkCount, Boolean isRead, List<TagResponse> tagList) {
-        this.urlId = urlId;
-        this.link = link;
+    public UserLinkResponse(Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, Boolean isRead, List<TagResponse> tagList) {
+        this.linkId = linkId;
+        this.url = url;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
@@ -32,8 +32,8 @@ public class UserLinkResponse {
 
     public static UserLinkResponse build(LinkResponse response, Boolean isRead, List<TagResponse> tagList) {
         return UserLinkResponse.builder()
-                .urlId(response.getLinkId())
-                .link(response.getUrl())
+                .linkId(response.getLinkId())
+                .url(response.getUrl())
                 .title(response.getTitle())
                 .description(response.getDescription())
                 .thumbnail(response.getThumbnail())

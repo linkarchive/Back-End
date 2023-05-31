@@ -2,13 +2,10 @@ package project.linkarchive.backend.user.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
-import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
-import project.linkarchive.backend.user.request.NickNameRequest;
 import project.linkarchive.backend.user.response.ProfileResponse;
 
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
@@ -27,8 +24,8 @@ public class UserQueryService {
         this.s3Uploader = s3Uploader;
     }
 
-    public ProfileResponse getUserProfile(Long userId) {
-        User user = checkUserId(userId);
+    public ProfileResponse getMyProfile(Long userId) {
+        User user = findUserById(userId);
         String profileImageUrl = s3Uploader.generatePresignedProfileImageUrl(
                         user.getProfileImage().getProfileImageFilename(),
                         EXPIRATION_TIME_IN_MINUTES)
@@ -37,8 +34,24 @@ public class UserQueryService {
         return new ProfileResponse(user, profileImageUrl);
     }
 
-    private User checkUserId(Long userId) {
+    public ProfileResponse getUserProfile(String nickname) {
+        User user = findUserByNickname(nickname);
+        String profileImageUrl = s3Uploader.generatePresignedProfileImageUrl(
+                        user.getProfileImage().getProfileImageFilename(),
+                        EXPIRATION_TIME_IN_MINUTES)
+                .toString();
+
+        return new ProfileResponse(user, profileImageUrl);
+    }
+
+    private User findUserById(Long userId) {
         User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+        return user;
+    }
+
+    private User findUserByNickname(String nickname) {
+        User user = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
         return user;
     }
