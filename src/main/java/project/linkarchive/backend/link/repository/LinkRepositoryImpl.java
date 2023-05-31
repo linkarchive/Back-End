@@ -12,9 +12,9 @@ import project.linkarchive.backend.link.response.linkarchive.QArchiveResponse;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static project.linkarchive.backend.hashtag.domain.QHashTag.hashTag;
 import static project.linkarchive.backend.link.domain.QLink.link;
 import static project.linkarchive.backend.link.domain.QLinkHashTag.linkHashTag;
+import static project.linkarchive.backend.user.domain.QProfileImage.profileImage;
 
 @Repository
 public class LinkRepositoryImpl {
@@ -36,6 +36,8 @@ public class LinkRepositoryImpl {
                         link.bookMarkCount
                 ))
                 .from(link)
+                .distinct()
+                .leftJoin(link.linkHashTagList, linkHashTag)
                 .where(
                         link.user.id.eq(userId),
                         ltUrlId(lastLinkLid),
@@ -60,8 +62,9 @@ public class LinkRepositoryImpl {
                         link.bookMarkCount
                 ))
                 .from(link)
-                .leftJoin(link.user)
-                .leftJoin(link.user.profileImage)
+                .distinct()
+                .leftJoin(link.user.profileImage, profileImage)
+                .leftJoin(link.linkHashTagList, linkHashTag)
                 .where(
                         ltUrlId(lastLinkId),
                         containTag(tag)

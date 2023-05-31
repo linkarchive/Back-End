@@ -4,7 +4,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import project.linkarchive.backend.hashtag.domain.QHashTag;
 import project.linkarchive.backend.link.response.linkList.LinkResponse;
 import project.linkarchive.backend.link.response.linkList.QLinkResponse;
 
@@ -12,7 +11,6 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static project.linkarchive.backend.bookmark.domain.QBookMark.bookMark;
-import static project.linkarchive.backend.hashtag.domain.QHashTag.hashTag;
 import static project.linkarchive.backend.link.domain.QLink.link;
 import static project.linkarchive.backend.link.domain.QLinkHashTag.linkHashTag;
 
@@ -37,7 +35,9 @@ public class BookMarkRepositoryImpl {
                         bookMark.link.bookMarkCount
                 ))
                 .from(bookMark)
+                .distinct()
                 .leftJoin(bookMark.link, link)
+                .leftJoin(link.linkHashTagList, linkHashTag)
                 .where(
                         bookMark.user.id.eq(userId),
                         ltLinkId(lastLinkId),
