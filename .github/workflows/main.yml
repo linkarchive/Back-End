@@ -17,10 +17,8 @@ jobs:
     runs-on: ubuntu-20.04
     
     steps:
-    - name: dev 브랜치로 이동
-      uses: actions/checkout@v3
-      with:
-        ref: dev
+    - name: Checkout code
+      uses: actions/checkout@v2
         
     - name: JDK 17 설치
       uses: actions/setup-java@v3
@@ -34,7 +32,7 @@ jobs:
       shell: bash
       
     - name: 프로젝트 빌드
-      run: ./gradlew clean build --exclude-task test
+      run: ./gradlew clean build
       shell: bash
   
   build-and-deploy:
@@ -75,7 +73,7 @@ jobs:
       shell: bash
       
     - name: 프로젝트 빌드
-      run: ./gradlew clean build --exclude-task test
+      run: ./gradlew clean build
       shell: bash
       
     - name: Make zip file
