@@ -26,6 +26,7 @@ public class TagResponse {
 
     public static TagResponse build(LinkHashTag linkHashTag) {
         return TagResponse.builder()
+                .tagId(linkHashTag.getHashTag().getId())
                 .tagName(linkHashTag.getHashTag().getTag())
                 .build();
     }

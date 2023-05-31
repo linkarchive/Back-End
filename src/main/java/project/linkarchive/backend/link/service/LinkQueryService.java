@@ -4,7 +4,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
-import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
 import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.isLinkRead.repository.IsLinkReadRepository;
 import project.linkarchive.backend.link.domain.LinkHashTag;
@@ -31,20 +30,18 @@ public class LinkQueryService {
     private final LinkRepositoryImpl linkRepositoryImpl;
     private final LinkHashTagRepository linkHashTagRepository;
     private final IsLinkReadRepository isLinkReadRepository;
-    private final BookMarkRepositoryImpl bookMarkRepositoryImpl;
 
-    public LinkQueryService(UserRepository userRepository, LinkRepositoryImpl linkRepositoryImpl, LinkHashTagRepository linkHashTagRepository, IsLinkReadRepository isLinkReadRepository, BookMarkRepositoryImpl bookMarkRepositoryImpl) {
+    public LinkQueryService(UserRepository userRepository, LinkRepositoryImpl linkRepositoryImpl, LinkHashTagRepository linkHashTagRepository, IsLinkReadRepository isLinkReadRepository) {
         this.userRepository = userRepository;
         this.linkRepositoryImpl = linkRepositoryImpl;
         this.linkHashTagRepository = linkHashTagRepository;
         this.isLinkReadRepository = isLinkReadRepository;
-        this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
     }
 
-    public UserLinkListResponse getUserLinkList(Long userId, Pageable pageable, Long lastLinkId, String tag) {
-        checkUserId(userId);
+    public UserLinkListResponse getMyLinkList(Long userId, Pageable pageable, Long lastLinkId, String tag) {
+        validationUserById(userId);
 
-        List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(userId, pageable, lastLinkId, tag);
+        List<LinkResponse> linkResponseList = linkRepositoryImpl.getMyLinkList(userId, pageable, lastLinkId, tag);
 
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
@@ -63,10 +60,10 @@ public class LinkQueryService {
         return new UserLinkListResponse(userLinkResponse, hasNext);
     }
 
-    public UserLinkListResponse getPublicUserLinkList(Long userId, Pageable pageable, Long lastLinkId, String tag) {
-        checkUserId(userId);
+    public UserLinkListResponse getPublicUserLinkList(String nickname, Pageable pageable, Long lastLinkId, String tag) {
+        validationUserByNickname(nickname);
 
-        List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(userId, pageable, lastLinkId, tag);
+        List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(nickname, pageable, lastLinkId, tag);
 
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
@@ -83,10 +80,10 @@ public class LinkQueryService {
         return new UserLinkListResponse(userLinkResponse, hasNext);
     }
 
-    public UserLinkListResponse getAuthenticatedUserLinkList(Long userId, Pageable pageable, Long lastLinkId, Long loginUserId, String tag) {
-        checkUserId(userId);
+    public UserLinkListResponse getAuthenticatedUserLinkList(String nickname, Pageable pageable, Long lastLinkId, Long loginUserId, String tag) {
+        validationUserByNickname(nickname);
 
-        List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(userId, pageable, lastLinkId, tag);
+        List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(nickname, pageable, lastLinkId, tag);
 
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
@@ -143,8 +140,13 @@ public class LinkQueryService {
         return new UserLinkArchiveResponse(userArchiveResponseList, hasNext);
     }
 
-    private void checkUserId(Long userId) {
+    private void validationUserById(Long userId) {
         userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+    }
+
+    private void validationUserByNickname(String nickname) {
+        userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 

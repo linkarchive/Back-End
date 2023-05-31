@@ -16,6 +16,7 @@ import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.link.response.linkList.LinkResponse;
 import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
 import project.linkarchive.backend.link.response.linkList.UserLinkResponse;
+import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.Comparator;
@@ -48,9 +49,9 @@ public class BookMarkQueryService {
     }
 
     public UserLinkListResponse getUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable, String tag) {
-        validateUserExists(userId);
+        validateUserById(userId);
 
-        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable, tag);
+        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMyMarkLinkList(userId, lastLinkId, pageable, tag);
 
         boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
 
@@ -69,10 +70,10 @@ public class BookMarkQueryService {
         return new UserLinkListResponse(userLinkResponseList, hasNext);
     }
 
-    public UserLinkListResponse getPublicUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable, String tag) {
-        validateUserExists(userId);
+    public UserLinkListResponse getPublicUserMarkedLinkList(String nickname, Long lastLinkId, Pageable pageable, String tag) {
+        validateUserByNickname(nickname);
 
-        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable, tag);
+        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getUserMarkLinkList(nickname, lastLinkId, pageable, tag);
 
         boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
 
@@ -89,10 +90,10 @@ public class BookMarkQueryService {
         return new UserLinkListResponse(userLinkResponseList, hasNext);
     }
 
-    public UserLinkListResponse getAuthenticatedUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable, Long loginUserId, String tag) {
-        validateUserExists(userId);
+    public UserLinkListResponse getAuthenticatedUserMarkedLinkList(String nickname, Long lastLinkId, Pageable pageable, Long loginUserId, String tag) {
+        validateUserByNickname(nickname);
 
-        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable, tag);
+        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getUserMarkLinkList(nickname, lastLinkId, pageable, tag);
 
         boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
 
@@ -111,10 +112,10 @@ public class BookMarkQueryService {
         return new UserLinkListResponse(userLinkResponseList, hasNext);
     }
 
-    public TagListResponse getMarkTagList(Long userId) {
-        validateUserExists(userId);
+    public TagListResponse getMarkTagList(String nickname) {
+        User user = getUserByNickname(nickname);
 
-        List<BookMark> bookMarkList = bookMarkRepository.findByUserId(userId);
+        List<BookMark> bookMarkList = bookMarkRepository.findByUserId(user.getId());
 
         Map<String, Integer> tagCountMap = new HashMap<>();
         bookMarkList.forEach(bookMark -> {
@@ -133,10 +134,10 @@ public class BookMarkQueryService {
         return new TagListResponse(tagList);
     }
 
-    public TagListResponse getMarkTagLimitList(Long userId, Long size) {
-        validateUserExists(userId);
+    public TagListResponse getMarkTagLimitList(String nickname, Long size) {
+        User user = getUserByNickname(nickname);
         validateSizeDoesNotExceedMax(size);
-        List<BookMark> bookMarkList = bookMarkRepository.findByUserId(userId);
+        List<BookMark> bookMarkList = bookMarkRepository.findByUserId(user.getId());
 
         Map<String, Integer> tagCountMap = new HashMap<>();
         bookMarkList.forEach(bookMark -> {
@@ -156,8 +157,18 @@ public class BookMarkQueryService {
         return new TagListResponse(tagList);
     }
 
-    private void validateUserExists(Long userId) {
+    private void validateUserById(Long userId) {
         userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+    }
+
+    private void validateUserByNickname(String nickname) {
+        userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+    }
+
+    private User getUserByNickname(String nickname) {
+        return userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 

@@ -21,7 +21,6 @@ public class BookMarkQueryController {
         this.bookMarkQueryService = bookMarkQueryService;
     }
 
-    // 내 북마크 리스트 조회 - 로그인 필요 O
     @GetMapping("/mark/links/user")
     public ResponseEntity<UserLinkListResponse> getUserMarkedLinkList(
             @RequestParam(value = "tag", required = false) String tag,
@@ -33,47 +32,43 @@ public class BookMarkQueryController {
         return ResponseEntity.ok(userLinkListResponse);
     }
 
-    // 사용자별 북마크 리스트 조회 - 로그인 필요 X
-    @GetMapping("/mark/links/public/user/{userId}")
+    @GetMapping("/mark/links/public/user/{nickname}")
     public ResponseEntity<UserLinkListResponse> getPublicUserMarkedLinkList(
+            @PathVariable("nickname") String nickname,
             @RequestParam(value = "tag", required = false) String tag,
-            @PathVariable("userId") Long userId,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable
     ) {
-        UserLinkListResponse userLinkListResponse = bookMarkQueryService.getPublicUserMarkedLinkList(userId, lastLinkId, pageable, tag);
+        UserLinkListResponse userLinkListResponse = bookMarkQueryService.getPublicUserMarkedLinkList(nickname, lastLinkId, pageable, tag);
         return ResponseEntity.ok(userLinkListResponse);
     }
 
-    // 사용자별 북마크 리스트 조회 - 로그인 필요 O
-    @GetMapping("/mark/links/authentication/user/{userId}")
+    @GetMapping("/mark/links/authentication/user/{nickname}")
     public ResponseEntity<UserLinkListResponse> getAuthenticatedUserMarkedLinkList(
+            @PathVariable("nickname") String nickname,
             @RequestParam(value = "tag", required = false) String tag,
-            @PathVariable("userId") Long userId,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable,
             AuthInfo authInfo
     ) {
-        UserLinkListResponse userLinkListResponse = bookMarkQueryService.getAuthenticatedUserMarkedLinkList(userId, lastLinkId, pageable, authInfo.getId(), tag);
+        UserLinkListResponse userLinkListResponse = bookMarkQueryService.getAuthenticatedUserMarkedLinkList(nickname, lastLinkId, pageable, authInfo.getId(), tag);
         return ResponseEntity.ok(userLinkListResponse);
     }
 
-    // 사용자 별 북마크 리스트 중 해시태그 리스트 조회 011
-    @GetMapping("/marks/tags/user/{userId}")
+    @GetMapping("/mark/tags/user/{nickname}")
     public ResponseEntity<TagListResponse> getMarkTagList(
-            @PathVariable("userId") Long userId
+            @PathVariable("nickname") String nickname
     ) {
-        TagListResponse tagList = bookMarkQueryService.getMarkTagList(userId);
+        TagListResponse tagList = bookMarkQueryService.getMarkTagList(nickname);
         return ResponseEntity.ok(tagList);
     }
 
-    // 사용자 별 북마크 리스트 중 해시태그 N개 조회 009
-    @GetMapping("/marks/limited-tags/user/{userId}")
+    @GetMapping("/mark/limited-tags/user/{nickname}")
     public ResponseEntity<TagListResponse> getMarkTagLimitList(
-            @PathVariable("userId") Long userId,
+            @PathVariable("nickname") String nickname,
             @RequestParam("size") Long size
     ) {
-        TagListResponse tagList = bookMarkQueryService.getMarkTagLimitList(userId, size);
+        TagListResponse tagList = bookMarkQueryService.getMarkTagLimitList(nickname, size);
         return ResponseEntity.ok(tagList);
     }
 

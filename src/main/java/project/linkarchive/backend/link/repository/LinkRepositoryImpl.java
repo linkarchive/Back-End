@@ -25,7 +25,7 @@ public class LinkRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<LinkResponse> getUserLinkList(Long userId, Pageable pageable, Long lastLinkLid, String tag) {
+    public List<LinkResponse> getMyLinkList(Long userId, Pageable pageable, Long lastLinkLid, String tag) {
         return queryFactory
                 .select(new QLinkResponse(
                         link.id,
@@ -40,6 +40,29 @@ public class LinkRepositoryImpl {
                 .leftJoin(link.linkHashTagList, linkHashTag)
                 .where(
                         link.user.id.eq(userId),
+                        ltUrlId(lastLinkLid),
+                        containTag(tag)
+                )
+                .limit(pageable.getPageSize() + 1)
+                .orderBy(link.id.desc())
+                .fetch();
+    }
+
+    public List<LinkResponse> getUserLinkList(String nickname, Pageable pageable, Long lastLinkLid, String tag) {
+        return queryFactory
+                .select(new QLinkResponse(
+                        link.id,
+                        link.url,
+                        link.title,
+                        link.description,
+                        link.thumbnail,
+                        link.bookMarkCount
+                ))
+                .from(link)
+                .distinct()
+                .leftJoin(link.linkHashTagList, linkHashTag)
+                .where(
+                        link.user.nickname.eq(nickname),
                         ltUrlId(lastLinkLid),
                         containTag(tag)
                 )
