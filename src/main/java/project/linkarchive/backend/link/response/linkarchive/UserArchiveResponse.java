@@ -44,7 +44,7 @@ public class UserArchiveResponse {
                 .nickname(response.getNickname())
                 .profileImage(response.getProfileImage())
                 .linkId(response.getLinkId())
-                .url(response.getLink())
+                .url(response.getUrl())
                 .title(response.getTitle())
                 .description(response.getDescription())
                 .thumbnail(response.getThumbnail())
