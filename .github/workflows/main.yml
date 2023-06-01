@@ -29,7 +29,6 @@ jobs:
         cache: gradle
         
     - name: make application.yml
-      if: contains(github.ref, 'dev') 
       run: |
         cd ./src/test/resources
         touch ./application-test.yml
