@@ -13,7 +13,7 @@ class UserTest extends SetUpData {
 
     @DisplayName("유저 build method - Domain")
     @Test
-    public void testUserConstructor() {
+    void testUserConstructor() {
         String socialId = user.getSocialId();
         String email = user.getEmail();
         String nickname = "";
@@ -31,7 +31,7 @@ class UserTest extends SetUpData {
 
     @DisplayName("유저 updateUserProfile - Domain")
     @Test
-    public void testUpdateUserProfile() {
+    void testUpdateUserProfile() {
         String newNickname = "New Test Nickname";
         String newIntroduce = "New Test Introduce";
 
