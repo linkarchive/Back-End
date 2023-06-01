@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.isLinkRead.repository.IsLinkReadRepository;
 import project.linkarchive.backend.link.domain.LinkHashTag;
@@ -27,15 +28,17 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NO
 public class LinkQueryService {
 
     private final UserRepository userRepository;
-    private final LinkRepositoryImpl linkRepositoryImpl;
     private final LinkHashTagRepository linkHashTagRepository;
     private final IsLinkReadRepository isLinkReadRepository;
+    private final BookMarkRepository bookMarkRepository;
+    private final LinkRepositoryImpl linkRepositoryImpl;
 
-    public LinkQueryService(UserRepository userRepository, LinkRepositoryImpl linkRepositoryImpl, LinkHashTagRepository linkHashTagRepository, IsLinkReadRepository isLinkReadRepository) {
+    public LinkQueryService(UserRepository userRepository, LinkHashTagRepository linkHashTagRepository, IsLinkReadRepository isLinkReadRepository, BookMarkRepository bookMarkRepository, LinkRepositoryImpl linkRepositoryImpl) {
         this.userRepository = userRepository;
-        this.linkRepositoryImpl = linkRepositoryImpl;
         this.linkHashTagRepository = linkHashTagRepository;
         this.isLinkReadRepository = isLinkReadRepository;
+        this.bookMarkRepository = bookMarkRepository;
+        this.linkRepositoryImpl = linkRepositoryImpl;
     }
 
     public UserLinkListResponse getMyLinkList(Long userId, Pageable pageable, Long lastLinkId, String tag) {
@@ -51,8 +54,9 @@ public class LinkQueryService {
                             .collect(Collectors.toList());
 
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), userId);
+                    Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), userId);
 
-                    return UserLinkResponse.build(linkResponse, isRead, tagList);
+                    return UserLinkResponse.build(linkResponse, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
 
         boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
@@ -72,7 +76,7 @@ public class LinkQueryService {
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
-                    return UserLinkResponse.build(linkResponse, false, tagList);
+                    return UserLinkResponse.build(linkResponse, false, false, tagList);
                 }).collect(Collectors.toList());
 
         boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
@@ -93,8 +97,9 @@ public class LinkQueryService {
                             .collect(Collectors.toList());
 
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId);
+                    Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId);
 
-                    return UserLinkResponse.build(linkResponse, isRead, tagList);
+                    return UserLinkResponse.build(linkResponse, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
 
         boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
@@ -114,7 +119,7 @@ public class LinkQueryService {
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
-                    return UserArchiveResponse.build(archiveResponse, false, tagList);
+                    return UserArchiveResponse.build(archiveResponse, false, false, tagList);
                 }).collect(Collectors.toList());
 
         return new UserLinkArchiveResponse(userArchiveResponseList, hasNext);
@@ -133,8 +138,9 @@ public class LinkQueryService {
                             .collect(Collectors.toList());
 
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(archiveResponse.getLinkId(), loginUserId);
+                    Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(archiveResponse.getLinkId(), loginUserId);
 
-                    return UserArchiveResponse.build(archiveResponse, isRead, tagList);
+                    return UserArchiveResponse.build(archiveResponse, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
 
         return new UserLinkArchiveResponse(userArchiveResponseList, hasNext);

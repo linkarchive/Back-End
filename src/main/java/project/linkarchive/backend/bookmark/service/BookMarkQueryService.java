@@ -63,8 +63,9 @@ public class BookMarkQueryService {
                             .collect(Collectors.toList());
 
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), userId);
+                    Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), userId);
 
-                    return UserMarkResponse.build(markResponse, isRead, tagList);
+                    return UserMarkResponse.build(markResponse, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
 
         return new UserMarkListResponse(userMarkResponseList, hasNext);
@@ -84,7 +85,7 @@ public class BookMarkQueryService {
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
-                    return UserMarkResponse.build(markResponse, false, tagList);
+                    return UserMarkResponse.build(markResponse, false, false, tagList);
                 }).collect(Collectors.toList());
 
         return new UserMarkListResponse(userMarkResponseList, hasNext);
@@ -105,8 +106,9 @@ public class BookMarkQueryService {
                             .collect(Collectors.toList());
 
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), loginUserId);
+                    Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), loginUserId);
 
-                    return UserMarkResponse.build(markResponse, isRead, tagList);
+                    return UserMarkResponse.build(markResponse, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
 
         return new UserMarkListResponse(userMarkResponseList, hasNext);
