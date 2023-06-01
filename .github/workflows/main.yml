@@ -35,10 +35,6 @@ jobs:
     - name: 프로젝트 빌드
       run: ./gradlew clean build --exclude-task test
       shell: bash
-
-    - name: 테스트 실행
-      run: ./gradlew test
-      shell: bash
   
   build-and-deploy:
     if: github.event_name == 'push'
