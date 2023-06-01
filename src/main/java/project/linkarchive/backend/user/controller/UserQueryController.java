@@ -21,15 +21,15 @@ public class UserQueryController {
     public ResponseEntity<ProfileResponse> getProfile(
             AuthInfo authInfo
     ) {
-        ProfileResponse profileResponse = userQueryService.getUserProfile(authInfo.getId());
+        ProfileResponse profileResponse = userQueryService.getMyProfile(authInfo.getId());
         return ResponseEntity.ok(profileResponse);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/{nickname}")
     public ResponseEntity<ProfileResponse> getUserProfile(
-            @PathVariable(value = "userId") Long userId
+            @PathVariable("nickname") String nickname
     ) {
-        ProfileResponse profileResponse = userQueryService.getUserProfile(userId);
+        ProfileResponse profileResponse = userQueryService.getUserProfile(nickname);
         return ResponseEntity.ok(profileResponse);
     }
 

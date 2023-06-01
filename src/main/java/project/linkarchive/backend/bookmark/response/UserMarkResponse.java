@@ -1,4 +1,4 @@
-package project.linkarchive.backend.link.response.linkList;
+package project.linkarchive.backend.bookmark.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,8 +7,9 @@ import project.linkarchive.backend.hashtag.response.TagResponse;
 import java.util.List;
 
 @Getter
-public class UserLinkResponse {
+public class UserMarkResponse {
 
+    private Long markId;
     private Long linkId;
     private String url;
     private String title;
@@ -19,7 +20,8 @@ public class UserLinkResponse {
     private List<TagResponse> tagList;
 
     @Builder
-    public UserLinkResponse(Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, Boolean isRead, List<TagResponse> tagList) {
+    public UserMarkResponse(Long markId, Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, Boolean isRead, List<TagResponse> tagList) {
+        this.markId = markId;
         this.linkId = linkId;
         this.url = url;
         this.title = title;
@@ -30,8 +32,9 @@ public class UserLinkResponse {
         this.tagList = tagList;
     }
 
-    public static UserLinkResponse build(LinkResponse response, Boolean isRead, List<TagResponse> tagList) {
-        return UserLinkResponse.builder()
+    public static UserMarkResponse build(MarkResponse response, Boolean isRead, List<TagResponse> tagList) {
+        return UserMarkResponse.builder()
+                .markId(response.getMarkId())
                 .linkId(response.getLinkId())
                 .url(response.getUrl())
                 .title(response.getTitle())

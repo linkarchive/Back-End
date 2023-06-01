@@ -8,14 +8,15 @@ import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
+import project.linkarchive.backend.bookmark.response.MarkResponse;
+import project.linkarchive.backend.bookmark.response.UserMarkListResponse;
+import project.linkarchive.backend.bookmark.response.UserMarkResponse;
 import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.isLinkRead.repository.IsLinkReadRepository;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
-import project.linkarchive.backend.link.response.linkList.LinkResponse;
-import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
-import project.linkarchive.backend.link.response.linkList.UserLinkResponse;
+import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.Comparator;
@@ -47,74 +48,74 @@ public class BookMarkQueryService {
         this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
     }
 
-    public UserLinkListResponse getUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable, String tag) {
-        validateUserExists(userId);
+    public UserMarkListResponse getMyMarkLinkList(Long userId, Long lastMarkId, Pageable pageable, String tag) {
+        validateUserById(userId);
 
-        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable, tag);
+        List<MarkResponse> markResponseList = bookMarkRepositoryImpl.getMyMarkLinkList(userId, lastMarkId, pageable, tag);
 
-        boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
+        boolean hasNext = isHasNextLinkList(pageable, markResponseList);
 
-        List<UserLinkResponse> userLinkResponseList = linkResponseList.stream()
-                .map(linkResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
+        List<UserMarkResponse> userMarkResponseList = markResponseList.stream()
+                .map(markResponse -> {
+                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(markResponse.getLinkId());
                     List<TagResponse> tagList = linkHashTagList.stream()
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
-                    Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), userId);
+                    Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), userId);
 
-                    return UserLinkResponse.build(linkResponse, isRead, tagList);
+                    return UserMarkResponse.build(markResponse, isRead, tagList);
                 }).collect(Collectors.toList());
 
-        return new UserLinkListResponse(userLinkResponseList, hasNext);
+        return new UserMarkListResponse(userMarkResponseList, hasNext);
     }
 
-    public UserLinkListResponse getPublicUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable, String tag) {
-        validateUserExists(userId);
+    public UserMarkListResponse getPublicUserMarkedLinkList(String nickname, Long lastMarkId, Pageable pageable, String tag) {
+        validateUserByNickname(nickname);
 
-        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable, tag);
+        List<MarkResponse> markResponseList = bookMarkRepositoryImpl.getUserMarkLinkList(nickname, lastMarkId, pageable, tag);
 
-        boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
+        boolean hasNext = isHasNextLinkList(pageable, markResponseList);
 
-        List<UserLinkResponse> userLinkResponseList = linkResponseList.stream()
-                .map(linkResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
+        List<UserMarkResponse> userMarkResponseList = markResponseList.stream()
+                .map(markResponse -> {
+                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(markResponse.getLinkId());
                     List<TagResponse> tagList = linkHashTagList.stream()
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
-                    return UserLinkResponse.build(linkResponse, false, tagList);
+                    return UserMarkResponse.build(markResponse, false, tagList);
                 }).collect(Collectors.toList());
 
-        return new UserLinkListResponse(userLinkResponseList, hasNext);
+        return new UserMarkListResponse(userMarkResponseList, hasNext);
     }
 
-    public UserLinkListResponse getAuthenticatedUserMarkedLinkList(Long userId, Long lastLinkId, Pageable pageable, Long loginUserId, String tag) {
-        validateUserExists(userId);
+    public UserMarkListResponse getAuthenticatedUserMarkedLinkList(String nickname, Long lastMarkId, Pageable pageable, Long loginUserId, String tag) {
+        validateUserByNickname(nickname);
 
-        List<LinkResponse> linkResponseList = bookMarkRepositoryImpl.getMarkLinkList(userId, lastLinkId, pageable, tag);
+        List<MarkResponse> markResponseList = bookMarkRepositoryImpl.getUserMarkLinkList(nickname, lastMarkId, pageable, tag);
 
-        boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
+        boolean hasNext = isHasNextLinkList(pageable, markResponseList);
 
-        List<UserLinkResponse> userLinkResponseList = linkResponseList.stream()
-                .map(linkResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
+        List<UserMarkResponse> userMarkResponseList = markResponseList.stream()
+                .map(markResponse -> {
+                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(markResponse.getLinkId());
                     List<TagResponse> tagList = linkHashTagList.stream()
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
-                    Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId);
+                    Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), loginUserId);
 
-                    return UserLinkResponse.build(linkResponse, isRead, tagList);
+                    return UserMarkResponse.build(markResponse, isRead, tagList);
                 }).collect(Collectors.toList());
 
-        return new UserLinkListResponse(userLinkResponseList, hasNext);
+        return new UserMarkListResponse(userMarkResponseList, hasNext);
     }
 
-    public TagListResponse getMarkTagList(Long userId) {
-        validateUserExists(userId);
+    public TagListResponse getMarkTagList(String nickname) {
+        User user = getUserByNickname(nickname);
 
-        List<BookMark> bookMarkList = bookMarkRepository.findByUserId(userId);
+        List<BookMark> bookMarkList = bookMarkRepository.findByUserId(user.getId());
 
         Map<String, Integer> tagCountMap = new HashMap<>();
         bookMarkList.forEach(bookMark -> {
@@ -133,10 +134,10 @@ public class BookMarkQueryService {
         return new TagListResponse(tagList);
     }
 
-    public TagListResponse getMarkTagLimitList(Long userId, Long size) {
-        validateUserExists(userId);
+    public TagListResponse getMarkTagLimitList(String nickname, Long size) {
+        User user = getUserByNickname(nickname);
         validateSizeDoesNotExceedMax(size);
-        List<BookMark> bookMarkList = bookMarkRepository.findByUserId(userId);
+        List<BookMark> bookMarkList = bookMarkRepository.findByUserId(user.getId());
 
         Map<String, Integer> tagCountMap = new HashMap<>();
         bookMarkList.forEach(bookMark -> {
@@ -156,8 +157,18 @@ public class BookMarkQueryService {
         return new TagListResponse(tagList);
     }
 
-    private void validateUserExists(Long userId) {
+    private void validateUserById(Long userId) {
         userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+    }
+
+    private void validateUserByNickname(String nickname) {
+        userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+    }
+
+    private User getUserByNickname(String nickname) {
+        return userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
@@ -167,7 +178,7 @@ public class BookMarkQueryService {
         }
     }
 
-    private boolean isHasNextLinkList(Pageable pageable, List<LinkResponse> linkResponseList) {
+    private boolean isHasNextLinkList(Pageable pageable, List<MarkResponse> linkResponseList) {
         boolean hasNext = false;
         if (linkResponseList.size() > pageable.getPageSize()) {
             linkResponseList.remove(linkResponseList.size() - 1);

@@ -12,9 +12,9 @@ import project.linkarchive.backend.link.response.linkarchive.QArchiveResponse;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static project.linkarchive.backend.hashtag.domain.QHashTag.hashTag;
 import static project.linkarchive.backend.link.domain.QLink.link;
 import static project.linkarchive.backend.link.domain.QLinkHashTag.linkHashTag;
+import static project.linkarchive.backend.user.domain.QProfileImage.profileImage;
 
 @Repository
 public class LinkRepositoryImpl {
@@ -25,7 +25,7 @@ public class LinkRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<LinkResponse> getUserLinkList(Long userId, Pageable pageable, Long lastLinkLid, String tag) {
+    public List<LinkResponse> getMyLinkList(Long userId, Pageable pageable, Long lastLinkLid, String tag) {
         return queryFactory
                 .select(new QLinkResponse(
                         link.id,
@@ -36,8 +36,33 @@ public class LinkRepositoryImpl {
                         link.bookMarkCount
                 ))
                 .from(link)
+                .distinct()
+                .leftJoin(link.linkHashTagList, linkHashTag)
                 .where(
                         link.user.id.eq(userId),
+                        ltUrlId(lastLinkLid),
+                        containTag(tag)
+                )
+                .limit(pageable.getPageSize() + 1)
+                .orderBy(link.id.desc())
+                .fetch();
+    }
+
+    public List<LinkResponse> getUserLinkList(String nickname, Pageable pageable, Long lastLinkLid, String tag) {
+        return queryFactory
+                .select(new QLinkResponse(
+                        link.id,
+                        link.url,
+                        link.title,
+                        link.description,
+                        link.thumbnail,
+                        link.bookMarkCount
+                ))
+                .from(link)
+                .distinct()
+                .leftJoin(link.linkHashTagList, linkHashTag)
+                .where(
+                        link.user.nickname.eq(nickname),
                         ltUrlId(lastLinkLid),
                         containTag(tag)
                 )
@@ -60,8 +85,9 @@ public class LinkRepositoryImpl {
                         link.bookMarkCount
                 ))
                 .from(link)
-                .leftJoin(link.user)
-                .leftJoin(link.user.profileImage)
+                .distinct()
+                .leftJoin(link.user.profileImage, profileImage)
+                .leftJoin(link.linkHashTagList, linkHashTag)
                 .where(
                         ltUrlId(lastLinkId),
                         containTag(tag)

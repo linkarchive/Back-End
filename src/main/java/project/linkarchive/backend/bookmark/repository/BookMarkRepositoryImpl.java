@@ -4,18 +4,14 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import project.linkarchive.backend.hashtag.domain.QHashTag;
-import project.linkarchive.backend.link.response.linkList.LinkResponse;
-import project.linkarchive.backend.link.response.linkList.QLinkResponse;
+import project.linkarchive.backend.bookmark.response.MarkResponse;
+import project.linkarchive.backend.bookmark.response.QMarkResponse;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 import static project.linkarchive.backend.bookmark.domain.QBookMark.bookMark;
-import static project.linkarchive.backend.hashtag.domain.QHashTag.hashTag;
-import static project.linkarchive.backend.link.domain.QLink.link;
 import static project.linkarchive.backend.link.domain.QLinkHashTag.linkHashTag;
-
 
 @Repository
 public class BookMarkRepositoryImpl {
@@ -26,9 +22,10 @@ public class BookMarkRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<LinkResponse> getMarkLinkList(Long userId, Long lastLinkId, Pageable pageable, String tag) {
+    public List<MarkResponse> getMyMarkLinkList(Long userId, Long lastMarkId, Pageable pageable, String tag) {
         return queryFactory
-                .select(new QLinkResponse(
+                .select(new QMarkResponse(
+                        bookMark.id,
                         bookMark.link.id,
                         bookMark.link.url,
                         bookMark.link.title,
@@ -37,10 +34,33 @@ public class BookMarkRepositoryImpl {
                         bookMark.link.bookMarkCount
                 ))
                 .from(bookMark)
-                .leftJoin(bookMark.link, link)
+                .distinct()
+                .leftJoin(bookMark.link.linkHashTagList, linkHashTag)
                 .where(
                         bookMark.user.id.eq(userId),
-                        ltLinkId(lastLinkId),
+                        ltLinkId(lastMarkId),
+                        containTag(tag)
+                )
+                .limit(pageable.getPageSize() + 1)
+                .orderBy(bookMark.id.desc())
+                .fetch();
+    }
+
+    public List<MarkResponse> getUserMarkLinkList(String nickname, Long lastMarkId, Pageable pageable, String tag) {
+        return queryFactory
+                .select(new QMarkResponse(
+                        bookMark.id,
+                        bookMark.link.id,
+                        bookMark.link.url,
+                        bookMark.link.title,
+                        bookMark.link.description,
+                        bookMark.link.thumbnail,
+                        bookMark.link.bookMarkCount
+                ))
+                .from(bookMark)
+                .where(
+                        bookMark.user.nickname.eq(nickname),
+                        ltLinkId(lastMarkId),
                         containTag(tag)
                 )
                 .limit(pageable.getPageSize() + 1)
@@ -49,7 +69,7 @@ public class BookMarkRepositoryImpl {
     }
 
     private BooleanExpression ltLinkId(Long lastMarkId) {
-        return lastMarkId != null ? bookMark.link.id.lt(lastMarkId) : null;
+        return lastMarkId != null ? bookMark.id.lt(lastMarkId) : null;
     }
 
     private BooleanExpression containTag(String tag) {
