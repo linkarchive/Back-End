@@ -16,8 +16,6 @@ class UserRepositoryTest extends RepositoryTest {
     @DisplayName("User Repository - findBySocialId")
     @Test
     void testFindBySocialId() {
-        userRepository.save(user);
-
         User findUser = userRepository.findBySocialId(user.getSocialId())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
 
@@ -34,8 +32,6 @@ class UserRepositoryTest extends RepositoryTest {
     @DisplayName("User Repository - existsUserByNickname")
     @Test
     void testExistsUserByNickname() {
-        userRepository.save(user);
-
         Boolean exist = userRepository.existsUserByNickname(user.getNickname());
 
         Assertions.assertTrue(exist, user.getNickname());
@@ -44,8 +40,6 @@ class UserRepositoryTest extends RepositoryTest {
     @DisplayName("User Repository - findByNickname")
     @Test
     void testFindByNickname() {
-        userRepository.save(user);
-
         User findUser = userRepository.findByNickname(user.getNickname())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
 
