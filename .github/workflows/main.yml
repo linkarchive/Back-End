@@ -27,17 +27,6 @@ jobs:
         java-version: '17'
         distribution: 'corretto'
         cache: gradle
-        
-    - name: make test application.yml
-      if: contains(github.ref, 'dev') 
-      run: |
-        cd ./src/test/resources
-        touch ./application.yml
-        echo "${{ secrets.YML_BASE_TEST }}" > ./application.yml
-        touch ./application-test.yml
-        echo "${{ secrets.YML_TEST }}" > ./application-test.yml
-        touch ./application-oauth.yml
-      shell: bash
 
     - name: gradlew에 실행 권한 부여
       run: chmod +x ./gradlew
@@ -88,17 +77,6 @@ jobs:
         echo "${{ secrets.YML_JWT }}" > ./application-jwt.yml
       shell: bash
       
-    - name: make test application.yml
-      if: contains(github.ref, 'dev') 
-      run: |
-        cd ./src/test/resources
-        touch ./application.yml
-        echo "${{ secrets.YML_BASE_TEST }}" > ./application.yml
-        touch ./application-test.yml
-        echo "${{ secrets.YML_TEST }}" > ./application-test.yml
-        touch ./application-oauth.yml
-      shell: bash
-
     - name: gradlew에 실행 권한 부여
       run: chmod +x ./gradlew
       shell: bash
