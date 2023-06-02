@@ -13,7 +13,7 @@ import project.linkarchive.backend.user.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
-import project.linkarchive.backend.user.request.NickNameRequest;
+import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
 import project.linkarchive.backend.user.response.ProfileImageResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
@@ -32,6 +32,7 @@ public class UserApiService {
     public static final int MAXIMUM_INTRODUCE_LENGTH = 20;
     public final static int EXPIRATION_TIME_IN_MINUTES = 1000 * 60 * 60;
     public final static int S3_KEY = 3;
+    public final static String IMAGE_CONTENT_TYPE = "^image/(jpeg|jpg|png)$";
 
     private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
@@ -46,30 +47,29 @@ public class UserApiService {
         this.userProfileImageRepository = userProfileImageRepository;
     }
 
-    public UpdateNicknameResponse updateUserNickName(NickNameRequest request, Long userId) {
-        validationNickNameLength(request);
+    public UpdateNicknameResponse updateUserNickName(UpdateNicknameRequest request, Long userId) {
+        validateNicknameLength(request);
 
         User user = getUserById(userId);
-        existUserNickName(request, user);
+        existUserByNickname(request, user);
 
-        user.updateUserNickName(request);
+        user.updateNickName(request);
 
         return new UpdateNicknameResponse(user.getNickname());
     }
 
     public UpdateProfileResponse updateUserProfile(UpdateProfileRequest request, Long userId) {
-        validationProfileRequest(request);
+        validateProfileLength(request);
 
         User user = getUserById(userId);
-        existUserNickName(request, user);
+        existUserByNickname(request, user);
 
-        user.updateUserProfile(request);
+        user.updateProfile(request);
 
         return new UpdateProfileResponse(user);
     }
 
     public ProfileImageResponse updateProfileImage(MultipartFile image, Long userId) throws IOException {
-        getUserById(userId);
         ProfileImage profileImage = getProfileImageByUserId(userId);
 
         validateNotEmptyFile(image);
@@ -92,8 +92,8 @@ public class UserApiService {
         return new ProfileImageResponse(profileImageUrl);
     }
 
-    public void validationNickName(NickNameRequest request) {
-        validationNickNameLength(request);
+    public void validateNickName(UpdateNicknameRequest request) {
+        validateNicknameLength(request);
 
         if (userRepository.existsUserByNickname(request.getNickname())) {
             throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
@@ -110,38 +110,48 @@ public class UserApiService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_PROFILE_IMAGE));
     }
 
-    private void validationNickNameLength(NickNameRequest request) {
-        boolean isTooLong = request.getNickname().length() > MAXIMUM_NICKNAME_LENGTH;
-        boolean isTooShort = request.getNickname().length() < MINIMUM_NICKNAME_LENGTH;
+    private void validateNicknameLength(UpdateNicknameRequest request) {
+        boolean isTooLong = isTooLong(request.getNickname(), MAXIMUM_NICKNAME_LENGTH);
+        boolean isTooShort = isTooShort(request.getNickname(), MINIMUM_NICKNAME_LENGTH);
         if (isTooLong || isTooShort) {
             throw new LengthRequiredException(LENGTH_REQUIRED_NICKNAME);
         }
     }
 
-    private void validationProfileRequest(UpdateProfileRequest request) {
-        boolean isNicknameTooLong = request.getNickname().length() > MAXIMUM_NICKNAME_LENGTH;
-        boolean isNicknameTooShort = request.getNickname().length() < MINIMUM_NICKNAME_LENGTH;
+    private void validateProfileLength(UpdateProfileRequest request) {
+        boolean isNicknameTooLong = isTooLong(request.getNickname(), MAXIMUM_NICKNAME_LENGTH);
+        boolean isNicknameTooShort = isTooShort(request.getNickname(), MINIMUM_NICKNAME_LENGTH);
         if (isNicknameTooLong || isNicknameTooShort) {
             throw new LengthRequiredException(LENGTH_REQUIRED_NICKNAME);
         }
 
-        boolean isIntroduceTooLong = request.getIntroduce().length() > MAXIMUM_INTRODUCE_LENGTH;
+        boolean isIntroduceTooLong = isTooLong(request.getIntroduce(), MAXIMUM_INTRODUCE_LENGTH);
         if (isIntroduceTooLong) {
             throw new LengthRequiredException(LENGTH_REQUIRED_INTRODUCE);
         }
     }
 
-    private void existUserNickName(NickNameRequest request, User user) {
-        if (userRepository.existsUserByNickname(request.getNickname()) &&
-                !user.getNickname().equals(request.getNickname())
+    private boolean isTooLong(String value, int maxLength) {
+        return value.length() > maxLength;
+    }
+
+    private boolean isTooShort(String value, int minLength) {
+        return value.length() < minLength;
+    }
+
+    private void existUserByNickname(UpdateNicknameRequest request, User user) {
+        String nickname = request.getNickname();
+        if (userRepository.existsUserByNickname(nickname) &&
+                !user.getNickname().equals(nickname)
         ) {
             throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
         }
     }
 
-    private void existUserNickName(UpdateProfileRequest request, User user) {
-        if (userRepository.existsUserByNickname(request.getNickname()) &&
-                !user.getNickname().equals(request.getNickname())
+    private void existUserByNickname(UpdateProfileRequest request, User user) {
+        String nickname = request.getNickname();
+        if (userRepository.existsUserByNickname(nickname) &&
+                !user.getNickname().equals(nickname)
         ) {
             throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
         }
@@ -154,18 +164,13 @@ public class UserApiService {
     }
 
     private void validateContentType(String contentType) {
-
-        if (contentType != null) {
-            if (!(contentType.contains("image/jpeg")
-                    || contentType.contains("image/jpg")
-                    || contentType.contains("image/png"))) {
-                throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
-            }
+        if (contentType != null && !contentType.matches(IMAGE_CONTENT_TYPE)) {
+            throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
         }
     }
 
-    private String extractKey(String fileUrl) {
-        String key = fileUrl.split("/")[S3_KEY];
+    private String extractKey(String fileName) {
+        String key = fileName.split("/")[S3_KEY];
         return key;
     }
 
