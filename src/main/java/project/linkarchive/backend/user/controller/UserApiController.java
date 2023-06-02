@@ -7,7 +7,7 @@ import project.linkarchive.backend.advice.success.SuccessResponse;
 import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
-import project.linkarchive.backend.user.response.ProfileImageResponse;
+import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
 import project.linkarchive.backend.user.service.UserApiService;

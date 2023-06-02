@@ -9,13 +9,13 @@ import project.linkarchive.backend.advice.exception.custom.LengthRequiredExcepti
 import project.linkarchive.backend.advice.exception.custom.NotAcceptableException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.s3.S3Uploader;
-import project.linkarchive.backend.user.domain.ProfileImage;
+import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.user.repository.UserProfileImageRepository;
+import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
-import project.linkarchive.backend.user.response.ProfileImageResponse;
+import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
@@ -36,12 +36,12 @@ public class UserApiService {
 
     private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
-    private final UserProfileImageRepository userProfileImageRepository;
+    private final ProfileImageRepository userProfileImageRepository;
 
     @Value("${cloud.aws.s3.default-image}")
     private String defaultImage;
 
-    public UserApiService(S3Uploader s3Uploader, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository) {
+    public UserApiService(S3Uploader s3Uploader, UserRepository userRepository, ProfileImageRepository userProfileImageRepository) {
         this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;

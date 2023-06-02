@@ -7,7 +7,7 @@ import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.domain.LinkHashTag;
-import project.linkarchive.backend.user.domain.ProfileImage;
+import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.domain.UserHashTag;
 

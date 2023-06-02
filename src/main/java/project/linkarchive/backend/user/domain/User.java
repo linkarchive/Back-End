@@ -8,6 +8,7 @@ import project.linkarchive.backend.advice.entityBase.TimeEntity;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
+import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
 

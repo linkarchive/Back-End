@@ -7,9 +7,9 @@ import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
-import project.linkarchive.backend.user.domain.ProfileImage;
+import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.user.repository.UserProfileImageRepository;
+import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.util.JwtUtil;
 
@@ -25,13 +25,13 @@ public class OAuthService {
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
-    private final UserProfileImageRepository userProfileImageRepository;
+    private final ProfileImageRepository userProfileImageRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${cloud.aws.s3.default-image}")
     private String DEFAULT_IMAGE;
 
-    public OAuthService(JwtUtil jwtUtil, UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
+    public OAuthService(JwtUtil jwtUtil, UserRepository userRepository, ProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
