@@ -1,7 +1,5 @@
 package project.linkarchive.backend.user.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,7 +57,7 @@ public class UserApiController {
     public ResponseEntity<SuccessResponse> validationNickName(
             @RequestBody UpdateNicknameRequest nicknameRequest
     ) {
-        userApiService.validationNickName(nicknameRequest);
+        userApiService.validateNickName(nicknameRequest);
         return ResponseEntity.status(CREATED).body(new SuccessResponse(AVAILABLE_NICKNAME));
     }
 
