@@ -44,7 +44,7 @@ class UserTest extends SetUpData {
 
     @DisplayName("유저 updateUserNickName - Domain")
     @Test
-    public void testUpdateUserNickName() {
+    void testUpdateUserNickName() {
         String newNickname = "New Test Nickname";
 
         NickNameRequest nickNameRequest = new NickNameRequest(newNickname);
