@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UpdateProfileRequest implements NicknameRequest{
+public class UpdateProfileRequest {
 
     private String nickname;
     private String introduce;
@@ -14,11 +14,6 @@ public class UpdateProfileRequest implements NicknameRequest{
     public UpdateProfileRequest(String nickname, String introduce) {
         this.nickname = nickname;
         this.introduce = introduce;
-    }
-
-    @Override
-    public String getNickname() {
-        return null;
     }
 
 }

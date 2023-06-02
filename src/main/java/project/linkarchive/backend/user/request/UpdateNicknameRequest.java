@@ -6,17 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UpdateNicknameRequest implements NicknameRequest {
+public class UpdateNicknameRequest {
 
     private String nickname;
 
     public UpdateNicknameRequest(String nickname) {
         this.nickname = nickname;
-    }
-
-    @Override
-    public String getNickname() {
-        return null;
     }
 
 }
