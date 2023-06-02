@@ -1,17 +1,7 @@
 package project.linkarchive.backend.user.request;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+public interface NicknameRequest {
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NickNameRequest {
-
-    private String nickname;
-
-    public NickNameRequest(String nickname) {
-        this.nickname = nickname;
-    }
+    String getNickname();
 
 }
