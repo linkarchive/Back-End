@@ -22,4 +22,9 @@ public class Constants {
 
     public static final Long USAGE_COUNT = 10L;
 
+    public static final String NEW_NICKNAME = "New Test Nickname";
+    public static final String NEW_INTRODUCE = "New Test Introduce";
+
+    public static final String NEW_PROFILE_IMAGE_FILENAME = "New Test ProfileImageFilename";
+
 }

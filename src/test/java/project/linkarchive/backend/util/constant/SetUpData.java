@@ -10,6 +10,8 @@ import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.domain.UserHashTag;
+import project.linkarchive.backend.user.request.UpdateNicknameRequest;
+import project.linkarchive.backend.user.request.UpdateProfileRequest;
 
 import static project.linkarchive.backend.util.constant.Constants.*;
 
@@ -24,6 +26,9 @@ public class SetUpData {
     public LinkHashTag linkHashTag;
     public BookMark bookMark;
     public IsLinkRead isLinkRead;
+
+    public UpdateNicknameRequest updateNicknameRequest;
+    public UpdateProfileRequest updateProfileRequest;
 
     @BeforeEach
     public void setup() {
@@ -79,6 +84,10 @@ public class SetUpData {
                 .user(user)
                 .link(link)
                 .build();
+
+        updateNicknameRequest = new UpdateNicknameRequest(NEW_NICKNAME);
+
+        updateProfileRequest = new UpdateProfileRequest(NEW_NICKNAME, NEW_INTRODUCE);
 
     }
 

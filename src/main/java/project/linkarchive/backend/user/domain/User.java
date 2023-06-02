@@ -60,13 +60,13 @@ public class User extends TimeEntity {
                 .build();
     }
 
+    public void updateNickName(UpdateNicknameRequest request) {
+        this.nickname = request.getNickname();
+    }
+
     public void updateProfile(UpdateProfileRequest request) {
         this.nickname = request.getNickname();
         this.introduce = request.getIntroduce();
     }
-    
-    public void updateNickName(UpdateNicknameRequest request) {
-        this.nickname = request.getNickname();
-    }
-    
+
 }
