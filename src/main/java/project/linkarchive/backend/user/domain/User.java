@@ -8,7 +8,8 @@ import project.linkarchive.backend.advice.entityBase.TimeEntity;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
-import project.linkarchive.backend.user.request.NickNameRequest;
+import project.linkarchive.backend.profileImage.domain.ProfileImage;
+import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
 
 import javax.persistence.*;
@@ -43,8 +44,7 @@ public class User extends TimeEntity {
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
     @Builder
-    public User(Long id, String socialId, String email, String nickname, String introduce) {
-        this.id = id;
+    public User(String socialId, String email, String nickname, String introduce) {
         this.socialId = socialId;
         this.email = email;
         this.nickname = nickname;
@@ -60,13 +60,13 @@ public class User extends TimeEntity {
                 .build();
     }
 
-    public void updateUserProfile(UpdateProfileRequest request) {
+    public void updateNickName(UpdateNicknameRequest request) {
+        this.nickname = request.getNickname();
+    }
+
+    public void updateProfile(UpdateProfileRequest request) {
         this.nickname = request.getNickname();
         this.introduce = request.getIntroduce();
     }
-    
-    public void updateUserNickName(NickNameRequest request) {
-        this.nickname = request.getNickname();
-    }
-    
+
 }

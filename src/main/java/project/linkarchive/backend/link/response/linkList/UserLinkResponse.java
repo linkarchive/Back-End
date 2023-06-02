@@ -16,10 +16,11 @@ public class UserLinkResponse {
     private String thumbnail;
     private Long bookMarkCount;
     private Boolean isRead;
+    private Boolean isMark;
     private List<TagResponse> tagList;
 
     @Builder
-    public UserLinkResponse(Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, Boolean isRead, List<TagResponse> tagList) {
+    public UserLinkResponse(Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
         this.linkId = linkId;
         this.url = url;
         this.title = title;
@@ -27,10 +28,11 @@ public class UserLinkResponse {
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
         this.isRead = isRead;
+        this.isMark = isMark;
         this.tagList = tagList;
     }
 
-    public static UserLinkResponse build(LinkResponse response, Boolean isRead, List<TagResponse> tagList) {
+    public static UserLinkResponse build(LinkResponse response, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
         return UserLinkResponse.builder()
                 .linkId(response.getLinkId())
                 .url(response.getUrl())
@@ -39,6 +41,7 @@ public class UserLinkResponse {
                 .thumbnail(response.getThumbnail())
                 .bookMarkCount(response.getBookMarkCount())
                 .isRead(isRead)
+                .isMark(isMark)
                 .tagList(tagList)
                 .build();
     }

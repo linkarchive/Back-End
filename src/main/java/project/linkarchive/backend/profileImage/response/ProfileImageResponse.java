@@ -1,4 +1,4 @@
-package project.linkarchive.backend.user.response;
+package project.linkarchive.backend.profileImage.response;
 
 import lombok.AccessLevel;
 import lombok.Getter;

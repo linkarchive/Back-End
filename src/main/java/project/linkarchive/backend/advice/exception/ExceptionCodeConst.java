@@ -27,7 +27,9 @@ public enum ExceptionCodeConst {
     LENGTH_REQUIRED_TITLE(416, "LENGTH_REQUIRED_TITLE", "링크의 제목을 입력해주세요."),
 
     EXCEEDED_TAG_LIMIT_10(416, "EXCEEDED_TAG_LIMIT", "태그의 개수가 10개를 초과할 수 없습니다."),
-    EXCEEDED_TAG_SIZE(416, "EXCEEDED_TAG_SIZE", "해시태그 조회 갯수를 초과했습니다.");
+    EXCEEDED_TAG_SIZE(416, "EXCEEDED_TAG_SIZE", "해시태그 조회 갯수를 초과했습니다."),
+
+    INTERNAL_SERVER_ERROR(500, "INTERNAL_SERVER_ERROR", "서버 내부 오류가 발생했습니다.");
 
     private final int status;
     private final String code;
