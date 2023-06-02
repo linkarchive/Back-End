@@ -14,7 +14,7 @@ import java.util.List;
 
 import static project.linkarchive.backend.link.domain.QLink.link;
 import static project.linkarchive.backend.link.domain.QLinkHashTag.linkHashTag;
-import static project.linkarchive.backend.user.domain.QProfileImage.profileImage;
+import static project.linkarchive.backend.profileImage.domain.QProfileImage.profileImage;
 
 @Repository
 public class LinkRepositoryImpl {
