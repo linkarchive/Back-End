@@ -1,5 +1,6 @@
 package project.linkarchive.backend.advice.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,6 +39,11 @@ public class ExceptionController {
     @ExceptionHandler(ExceededException.class)
     public ResponseEntity<ExceptionResponse> handleNotFoundUserException(ExceededException businessException) {
         return ResponseEntity.status(REQUESTED_RANGE_NOT_SATISFIABLE).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionResponse> handleGenericException(Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionCodeConst.INTERNAL_SERVER_ERROR));
     }
 
 }

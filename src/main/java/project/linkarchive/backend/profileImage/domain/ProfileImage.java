@@ -1,11 +1,11 @@
-package project.linkarchive.backend.user.domain;
+package project.linkarchive.backend.profileImage.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
-import project.linkarchive.backend.auth.response.KakaoProfile;
+import project.linkarchive.backend.user.domain.User;
 
 import javax.persistence.*;
 
@@ -26,8 +26,7 @@ public class ProfileImage extends TimeEntity {
     private User user;
 
     @Builder
-    public ProfileImage(Long id, String profileImageFilename, User user) {
-        this.id = id;
+    public ProfileImage(String profileImageFilename, User user) {
         this.profileImageFilename = profileImageFilename;
         this.user = user;
     }

@@ -3,7 +3,7 @@ package project.linkarchive.backend.user.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.linkarchive.backend.auth.response.KakaoProfile;
-import project.linkarchive.backend.user.request.NickNameRequest;
+import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
 import project.linkarchive.backend.util.constant.SetUpData;
 
@@ -36,7 +36,7 @@ class UserTest extends SetUpData {
         String newIntroduce = "New Test Introduce";
 
         UpdateProfileRequest updateProfileRequest = new UpdateProfileRequest(newNickname, newIntroduce);
-        user.updateUserProfile(updateProfileRequest);
+        user.updateProfile(updateProfileRequest);
 
         assertEquals(newNickname, user.getNickname());
         assertEquals(newIntroduce, user.getIntroduce());
@@ -47,8 +47,8 @@ class UserTest extends SetUpData {
     void testUpdateUserNickName() {
         String newNickname = "New Test Nickname";
 
-        NickNameRequest nickNameRequest = new NickNameRequest(newNickname);
-        user.updateUserNickName(nickNameRequest);
+        UpdateNicknameRequest nickNameRequest = new UpdateNicknameRequest(newNickname);
+        user.updateNickName(nickNameRequest);
 
         assertEquals(newNickname, user.getNickname());
     }

@@ -8,7 +8,7 @@ import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.response.ProfileResponse;
 
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,35 +25,34 @@ public class UserQueryService {
     }
 
     public ProfileResponse getMyProfile(Long userId) {
-        User user = findUserById(userId);
-        String profileImageUrl = s3Uploader.generatePresignedProfileImageUrl(
-                        user.getProfileImage().getProfileImageFilename(),
-                        EXPIRATION_TIME_IN_MINUTES)
-                .toString();
+        User user = getUserById(userId);
+        String profileImageUrl = generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
 
         return new ProfileResponse(user, profileImageUrl);
     }
 
     public ProfileResponse getUserProfile(String nickname) {
-        User user = findUserByNickname(nickname);
-        String profileImageUrl = s3Uploader.generatePresignedProfileImageUrl(
-                        user.getProfileImage().getProfileImageFilename(),
-                        EXPIRATION_TIME_IN_MINUTES)
-                .toString();
+        User user = getUserByNickname(nickname);
+        String profileImageUrl = generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
 
         return new ProfileResponse(user, profileImageUrl);
     }
 
-    private User findUserById(Long userId) {
-        User user = userRepository.findById(userId)
+    private User getUserById(Long userId) {
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-        return user;
     }
 
-    private User findUserByNickname(String nickname) {
-        User user = userRepository.findByNickname(nickname)
+    private User getUserByNickname(String nickname) {
+        return userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-        return user;
+    }
+
+    private String generateProfileImageUrl(String profileImageFilename) {
+        return s3Uploader.generatePresignedProfileImageUrl(
+                        profileImageFilename,
+                        EXPIRATION_TIME_IN_MINUTES)
+                .toString();
     }
 
 }
