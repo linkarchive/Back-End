@@ -29,18 +29,18 @@ public class UserApiController {
     @PatchMapping("/user/{userId}/nickname")
     public ResponseEntity<UpdateNicknameResponse> updateUserNickname(
             @PathVariable("userId") Long userId,
-            @RequestBody UpdateNicknameRequest nicknameRequest
+            @RequestBody UpdateNicknameRequest request
     ) {
-        UpdateNicknameResponse updateNicknameResponse = userApiService.updateUserNickName(nicknameRequest, userId);
+        UpdateNicknameResponse updateNicknameResponse = userApiService.updateUserNickName(request, userId);
         return ResponseEntity.ok(updateNicknameResponse);
     }
 
     @PatchMapping("/user")
     public ResponseEntity<UpdateProfileResponse> updateUserProfile(
-            @RequestBody UpdateProfileRequest profileRequest,
+            @RequestBody UpdateProfileRequest request,
             AuthInfo authInfo
     ) {
-        UpdateProfileResponse updateProfileResponse = userApiService.updateUserProfile(profileRequest, authInfo.getId());
+        UpdateProfileResponse updateProfileResponse = userApiService.updateUserProfile(request, authInfo.getId());
         return ResponseEntity.ok(updateProfileResponse);
     }
 
@@ -55,9 +55,9 @@ public class UserApiController {
 
     @PostMapping("/nickname")
     public ResponseEntity<SuccessResponse> validationNickName(
-            @RequestBody UpdateNicknameRequest nicknameRequest
+            @RequestBody UpdateNicknameRequest request
     ) {
-        userApiService.validateNickName(nicknameRequest);
+        userApiService.validateNickName(request);
         return ResponseEntity.status(CREATED).body(new SuccessResponse(AVAILABLE_NICKNAME));
     }
 
