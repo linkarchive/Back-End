@@ -1,6 +1,5 @@
 package project.linkarchive.backend.security;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.security.core.AuthenticationException;
@@ -17,13 +16,11 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 
     public static final String JSON = "application/json";
     public static final String ENCODING = "UTF-8";
     public static final String MESSAGE = "message";
-
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
