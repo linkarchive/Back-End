@@ -3,12 +3,12 @@ package project.linkarchive.backend.user.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.linkarchive.backend.auth.response.KakaoProfile;
-import project.linkarchive.backend.util.constant.SetUpData;
+import project.linkarchive.backend.util.setUpData.UserSetUpData;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static project.linkarchive.backend.util.constant.Constants.*;
 
-class UserTest extends SetUpData {
+class UserTest extends UserSetUpData {
 
     @DisplayName("유저 getSocialId - Domain")
     @Test
@@ -16,7 +16,7 @@ class UserTest extends SetUpData {
         String socialId = user.getSocialId();
 
         assertNotNull(socialId);
-        assertEquals(socialId, user.getSocialId());
+        assertEquals(SOCIAL_ID, socialId);
     }
 
     @DisplayName("유저 getEmail - Domain")
@@ -25,7 +25,7 @@ class UserTest extends SetUpData {
         String email = user.getEmail();
 
         assertNotNull(email);
-        assertEquals(email, user.getEmail());
+        assertEquals(EMAIL, email);
     }
 
     @DisplayName("유저 getNickname - Domain")
@@ -34,7 +34,7 @@ class UserTest extends SetUpData {
         String nickname = user.getNickname();
 
         assertNotNull(nickname);
-        assertEquals(nickname, user.getNickname());
+        assertEquals(NICKNAME, nickname);
     }
 
     @DisplayName("유저 getIntroduce - Domain")
@@ -43,74 +43,73 @@ class UserTest extends SetUpData {
         String introduce = user.getIntroduce();
 
         assertNotNull(introduce);
-        assertEquals(introduce, user.getIntroduce());
+        assertEquals(INTRODUCE, introduce);
     }
 
     @DisplayName("유저 Builder 패턴 - Domain")
     @Test
     void testBuilder() {
-        String socialId = user.getSocialId();
-        String email = user.getEmail();
-        String nickname = user.getNickname();
-        String introduce = user.getIntroduce();
-
         User getUser = User.builder()
-                .socialId(socialId)
-                .email(email)
-                .nickname(nickname)
-                .introduce(introduce)
+                .socialId(SOCIAL_ID)
+                .email(EMAIL)
+                .nickname(NICKNAME)
+                .introduce(INTRODUCE)
                 .build();
 
         assertNotNull(getUser);
-        assertEquals(socialId, getUser.getSocialId());
-        assertEquals(email, getUser.getEmail());
-        assertEquals(nickname, getUser.getNickname());
-        assertEquals(introduce, getUser.getIntroduce());
+        assertEquals(SOCIAL_ID, getUser.getSocialId());
+        assertEquals(EMAIL, getUser.getEmail());
+        assertEquals(NICKNAME, getUser.getNickname());
+        assertEquals(INTRODUCE, getUser.getIntroduce());
     }
 
     @DisplayName("유저 Build method - Domain")
     @Test
     void testBuild() {
-        String socialId = user.getSocialId();
-        String email = user.getEmail();
-        String nickname = "";
-        String introduce = "";
-
-        KakaoProfile kakaoProfile = new KakaoProfile(socialId, email);
+        KakaoProfile kakaoProfile = new KakaoProfile(SOCIAL_ID, EMAIL);
 
         User getUser = User.build(kakaoProfile);
 
-        assertNotNull(kakaoProfile);
         assertNotNull(getUser);
-        assertEquals(socialId, getUser.getSocialId());
-        assertEquals(email, getUser.getEmail());
-        assertEquals(nickname, getUser.getNickname());
-        assertEquals(introduce, getUser.getIntroduce());
+        assertEquals(SOCIAL_ID, getUser.getSocialId());
+        assertEquals(EMAIL, getUser.getEmail());
+        assertEquals(EMPTY, getUser.getNickname());
+        assertEquals(EMPTY, getUser.getIntroduce());
+        assertNotEquals(NICKNAME, getUser.getNickname());
+        assertNotEquals(INTRODUCE, getUser.getIntroduce());
     }
 
     @DisplayName("유저 updateUserProfile - Domain")
     @Test
     void testUpdateUserProfile() {
-        String newNickname = updateProfileRequest.getNickname();
-        String newIntroduce = updateProfileRequest.getIntroduce();
+        String oldNickname = user.getNickname();
+        String oldIntroduce = user.getIntroduce();
 
         user.updateProfile(updateProfileRequest);
 
-        assertNotNull(newNickname);
-        assertNotNull(newIntroduce);
-        assertEquals(newNickname, user.getNickname());
-        assertEquals(newIntroduce, user.getIntroduce());
+        String updatedNickname = user.getNickname();
+        String updatedIntroduce = user.getIntroduce();
+
+        assertNotNull(updatedNickname);
+        assertNotNull(updatedIntroduce);
+        assertNotEquals(oldNickname, updatedNickname);
+        assertNotEquals(oldIntroduce, updatedIntroduce);
+        assertEquals(NEW_NICKNAME, updatedNickname);
+        assertEquals(NEW_INTRODUCE, updatedIntroduce);
     }
 
     @DisplayName("유저 updateUserNickName - Domain")
     @Test
     void testUpdateUserNickName() {
-        String newNickname = updateNicknameRequest.getNickname();
+        String oldNickname = user.getNickname();
 
         user.updateNickName(updateNicknameRequest);
 
-        assertNotNull(newNickname);
-        assertEquals(newNickname, user.getNickname());
+        String updatedNickname = user.getNickname();
+
+        assertNotNull(updatedNickname);
+        assertNotEquals(oldNickname, updatedNickname);
+        assertEquals(NEW_NICKNAME, updatedNickname);
     }
 
 }
