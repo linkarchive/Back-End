@@ -2,7 +2,6 @@ package project.linkarchive.backend.auth.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.advice.exception.custom.InvalidException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.auth.domain.RefreshToken;
@@ -17,10 +16,6 @@ import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.util.JwtUtil;
 
 import javax.transaction.Transactional;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
@@ -72,27 +67,28 @@ public class OAuthService {
         return new LoginResponse(findUser, accessToken, refreshToken);
     }
 
-    public LoginResponse checkToken(String refreshToken, Long userId){
+    public LoginResponse checkToken(String refreshToken, Long userId) {
         String[] tokenData = refreshToken.split(" ");
         String token = tokenData[1];
 
         if (jwtUtil.isUnexpiredToken(token)) {
-            // 만료시간 보여주면 좋을듯
-            throw new InvalidException(ExceptionCodeConst.NOT_ACCEPTABLE_CONTENT_TYPE);
+            return reissueToken(token, userId);
+        } else {
+            throw new InvalidException(INVALID_TOKEN);
         }
-        return reissueToken(refreshToken, userId);
     }
 
-    public LoginResponse reissueToken(String oldRefreshToken, Long userId){
-        RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId).orElseThrow(()-> new NotFoundException(NOT_FOUND_USER));
+    public LoginResponse reissueToken(String oldRefreshToken, Long userId) {
+        RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+        String savedRefreshToken = refreshToken.getRefreshToken();
 
-        if(!refreshToken.getRefreshToken().equals(oldRefreshToken)){
+        if (!savedRefreshToken.equals(oldRefreshToken)) {
             throw new InvalidException(INVALID_REFRESH_TOKEN);
         }
 
-            User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException(NOT_FOUND_USER));
-            String newAccessToken = jwtUtil.createAccessToken(user);
-            String newRefreshToken = jwtUtil.createRefreshToken(user);
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+        String newAccessToken = jwtUtil.createAccessToken(user);
+        String newRefreshToken = jwtUtil.createRefreshToken(user);
 
         if (refreshTokenRepository.existsByUserIdAndAgent(refreshToken.getUser().getId(), refreshToken.getAgent())) {
             RefreshToken reissuedToken = RefreshToken.build(newRefreshToken, refreshToken.getAgent(), user);
