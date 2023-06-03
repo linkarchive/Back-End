@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum ExceptionCodeConst {
 
-    NOT_TOKEN(400, "BAD_REQUEST", "로그인 필요 - 토큰이 없습니다."),
+    NOT_TOKEN(400, "NOT_TOKEN", "로그인 필요 - 토큰이 없습니다."),
 
     INVALID_TOKEN(401, "INVALID_TOKEN", "로그인 필요 - 잘못된 토큰입니다."),
     INVALID_AUTHORIZATION_CODE(401, "INVALID_AUTHORIZATION_CODE", "잘못된 인가코드입니다."),

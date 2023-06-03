@@ -126,7 +126,7 @@ public class JwtUtil {
     public Long getUserId(String token) {
         Long userId;
 
-        if (validate(token)) {
+        if (validateTokenSignKey(token)) {
             userId = Long.valueOf(Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
@@ -140,7 +140,7 @@ public class JwtUtil {
         return userId;
     }
 
-    public boolean validate(String token) {
+    public boolean validateTokenSignKey(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
             return true;

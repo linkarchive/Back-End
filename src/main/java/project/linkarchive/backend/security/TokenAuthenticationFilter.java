@@ -47,7 +47,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         String token = tokenData[1];
 
-        if (!jwtUtil.validate(token)) {
+        if (!jwtUtil.validateTokenSignKey(token)) {
             request.setAttribute("exception", ExceptionCodeConst.INVALID_TOKEN);
             filterChain.doFilter(request, response);
             return;
