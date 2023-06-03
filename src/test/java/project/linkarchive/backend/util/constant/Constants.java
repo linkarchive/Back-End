@@ -2,6 +2,8 @@ package project.linkarchive.backend.util.constant;
 
 public class Constants {
 
+    public static final String EMPTY = "";
+
     public static final String SOCIAL_ID = "Test Social Id";
     public static final String EMAIL = "Test Email";
     public static final String NICKNAME = "Test Nickname";
