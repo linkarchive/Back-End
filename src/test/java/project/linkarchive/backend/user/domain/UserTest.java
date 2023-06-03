@@ -70,7 +70,6 @@ class UserTest extends SetUpData {
 
         User getUser = User.build(kakaoProfile);
 
-        assertNotNull(kakaoProfile);
         assertNotNull(getUser);
         assertEquals(SOCIAL_ID, getUser.getSocialId());
         assertEquals(EMAIL, getUser.getEmail());
@@ -83,6 +82,9 @@ class UserTest extends SetUpData {
     @DisplayName("유저 updateUserProfile - Domain")
     @Test
     void testUpdateUserProfile() {
+        String oldNickname = user.getNickname();
+        String oldIntroduce = user.getIntroduce();
+
         user.updateProfile(updateProfileRequest);
 
         String updatedNickname = user.getNickname();
@@ -90,6 +92,8 @@ class UserTest extends SetUpData {
 
         assertNotNull(updatedNickname);
         assertNotNull(updatedIntroduce);
+        assertNotEquals(oldNickname, updatedNickname);
+        assertNotEquals(oldIntroduce, updatedIntroduce);
         assertEquals(NEW_NICKNAME, updatedNickname);
         assertEquals(NEW_INTRODUCE, updatedIntroduce);
     }
@@ -97,12 +101,14 @@ class UserTest extends SetUpData {
     @DisplayName("유저 updateUserNickName - Domain")
     @Test
     void testUpdateUserNickName() {
+        String oldNickname = user.getNickname();
+
         user.updateNickName(updateNicknameRequest);
 
         String updatedNickname = user.getNickname();
 
-
         assertNotNull(updatedNickname);
+        assertNotEquals(oldNickname, updatedNickname);
         assertEquals(NEW_NICKNAME, updatedNickname);
     }
 
