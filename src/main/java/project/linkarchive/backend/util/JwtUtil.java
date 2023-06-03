@@ -66,14 +66,14 @@ public class JwtUtil {
         return jwtToken;
     }
 
-    public OauthToken getToken(String code, String redirectUri) {
+    public OauthToken getToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", GRANT_TYPE);
         params.add("client_id", CLIENT_ID);
-        params.add("redirect_uri", redirectUri);
+        params.add("redirect_uri", REDIRECT_URI);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
@@ -126,7 +126,7 @@ public class JwtUtil {
     public Long getUserId(String token) {
         Long userId;
 
-        if (validateTokenSignKey(token)) {
+        if (isUnexpiredToken(token)) {
             userId = Long.valueOf(Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
@@ -140,7 +140,7 @@ public class JwtUtil {
         return userId;
     }
 
-    public boolean validateTokenSignKey(String token) {
+    public boolean isUnexpiredToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
             return true;

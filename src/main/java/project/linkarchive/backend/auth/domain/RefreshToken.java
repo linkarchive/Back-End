@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
 import project.linkarchive.backend.user.domain.User;
+import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 
 import javax.persistence.*;
 
@@ -41,6 +42,10 @@ public class RefreshToken extends CreatedEntity {
                 .agent(userAgent)
                 .user(user)
                 .build();
+    }
+
+    public void updateRefreshToken(RefreshToken refreshToken) {
+        this.refreshToken = refreshToken.getRefreshToken();
     }
 
 }

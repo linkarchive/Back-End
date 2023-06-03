@@ -27,7 +27,8 @@ public class SecurityConfig implements WebMvcConfigurer {
             "/user/{userId}",
             "/links/public/**",
             "/links/archive/public/**",
-            "/mark/links/public/**"
+            "/mark/links/public/**",
+            "/token-reissue"
     };
 
     private final SecurityArgumentResolver securityArgumentResolver;
