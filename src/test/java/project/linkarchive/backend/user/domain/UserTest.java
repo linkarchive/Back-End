@@ -3,12 +3,12 @@ package project.linkarchive.backend.user.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.linkarchive.backend.auth.response.KakaoProfile;
-import project.linkarchive.backend.util.constant.SetUpData;
+import project.linkarchive.backend.util.setUpData.UserSetUpData;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-class UserTest extends SetUpData {
+class UserTest extends UserSetUpData {
 
     @DisplayName("유저 getSocialId - Domain")
     @Test
