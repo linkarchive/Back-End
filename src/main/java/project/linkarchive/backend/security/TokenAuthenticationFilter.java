@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.INVALID_TOKEN;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_TOKEN;
+
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
@@ -26,7 +29,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String tokenHeader = request.getHeader("Authorization");
 
         if (tokenHeader == null) {
-            request.setAttribute("exception", ExceptionCodeConst.NOT_TOKEN);
+            request.setAttribute("exception", NOT_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }
@@ -34,13 +37,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String[] tokenData = tokenHeader.split(" ");
 
         if (tokenData.length != 2) {
-            request.setAttribute("exception", ExceptionCodeConst.INVALID_TOKEN);
+            request.setAttribute("exception", INVALID_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }
 
         if (!tokenData[0].equalsIgnoreCase("bearer")) {
-            request.setAttribute("exception", ExceptionCodeConst.INVALID_TOKEN);
+            request.setAttribute("exception", INVALID_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }
@@ -48,7 +51,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String token = tokenData[1];
 
         if (!jwtUtil.validateTokenSignKey(token)) {
-            request.setAttribute("exception", ExceptionCodeConst.INVALID_TOKEN);
+            request.setAttribute("exception", INVALID_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }
