@@ -1,4 +1,4 @@
-package project.linkarchive.backend.util.constant;
+package project.linkarchive.backend.util.setUpData;
 
 import org.junit.jupiter.api.BeforeEach;
 import project.linkarchive.backend.auth.domain.RefreshToken;
@@ -7,28 +7,44 @@ import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.domain.LinkHashTag;
+import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.domain.UserHashTag;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static project.linkarchive.backend.util.constant.Constants.*;
 
 public class SetUpData {
 
     public User user;
+
     public ProfileImage profileImage;
+
     public RefreshToken refreshToken;
+
     public Link link;
+
     public HashTag hashTag;
+    public HashTag hashTag2;
+
     public UserHashTag userHashTag;
+
     public LinkHashTag linkHashTag;
+
     public BookMark bookMark;
+
     public IsLinkRead isLinkRead;
+
+    public List<String> tags = new ArrayList<>();
 
     public UpdateNicknameRequest updateNicknameRequest;
     public UpdateProfileRequest updateProfileRequest;
+    public CreateLinkRequest createLinkRequest;
 
     @BeforeEach
     public void setup() {
@@ -64,6 +80,10 @@ public class SetUpData {
                 .tag(TAG)
                 .build();
 
+        hashTag2 = HashTag.builder()
+                .tag(TAG2)
+                .build();
+
         userHashTag = UserHashTag.builder()
                 .usageCount(USAGE_COUNT)
                 .user(user)
@@ -85,9 +105,14 @@ public class SetUpData {
                 .link(link)
                 .build();
 
+        tags.add(hashTag.getTag());
+        tags.add(hashTag2.getTag());
+
         updateNicknameRequest = new UpdateNicknameRequest(NEW_NICKNAME);
 
         updateProfileRequest = new UpdateProfileRequest(NEW_NICKNAME, NEW_INTRODUCE);
+
+        createLinkRequest = new CreateLinkRequest(URL, TITLE, DESCRIPTION, THUMBNAIL, tags);
 
     }
 

@@ -5,13 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.util.RepositoryTest;
+import project.linkarchive.backend.util.repository.UserSetUpRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
-class UserRepositoryTest extends RepositoryTest {
+class UserRepositoryTest extends UserSetUpRepository {
 
     @DisplayName("User Repository - findBySocialId")
     @Test
