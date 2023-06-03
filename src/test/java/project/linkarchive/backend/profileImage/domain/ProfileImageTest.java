@@ -3,14 +3,14 @@ package project.linkarchive.backend.profileImage.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.util.constant.SetUpData;
+import project.linkarchive.backend.util.setUpData.ProfileImageSetUpData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static project.linkarchive.backend.util.constant.Constants.NEW_PROFILE_IMAGE_FILENAME;
 import static project.linkarchive.backend.util.constant.Constants.PROFILE_IMAGE_FILENAME;
 
-class ProfileImageTest extends SetUpData {
+class ProfileImageTest extends ProfileImageSetUpData {
 
     @DisplayName("프로필 이미지 getProfileImageFileName - Domain")
     @Test
