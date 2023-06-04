@@ -3,6 +3,7 @@ package project.linkarchive.backend.util.setUpData;
 import org.junit.jupiter.api.BeforeEach;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.domain.UserHashTag;
+import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.user.domain.User;
 
@@ -36,6 +37,20 @@ public class UserHashTagSetUpData extends SetUpData {
                 .build();
 
         for (int i = 0; i < 10; i++) {
+            Link link = Link.builder()
+                    .url(URL + i)
+                    .title(TITLE)
+                    .description(DESCRIPTION)
+                    .thumbnail(THUMBNAIL)
+                    .bookMarkCount(BOOKMARK_COUNT)
+                    .user(user)
+                    .build();
+
+            LinkHashTag linkHashTag = LinkHashTag.builder()
+                    .link(link)
+                    .hashTag(hashTag)
+                    .build();
+
             linkHashTagList.add(linkHashTag);
         }
 
