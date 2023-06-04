@@ -34,7 +34,7 @@ public class LinkHashTag extends CreatedEntity {
         this.hashTag = hashTag;
     }
 
-    public static LinkHashTag of(Link link, HashTag hashTag) {
+    public static LinkHashTag build(Link link, HashTag hashTag) {
         return LinkHashTag.builder()
                 .link(link)
                 .hashTag(hashTag)
