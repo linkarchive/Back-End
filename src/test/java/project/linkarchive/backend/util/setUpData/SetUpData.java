@@ -10,7 +10,7 @@ import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.user.domain.UserHashTag;
+import project.linkarchive.backend.hashtag.domain.UserHashTag;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
 
