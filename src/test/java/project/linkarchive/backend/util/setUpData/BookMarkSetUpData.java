@@ -1,15 +1,14 @@
 package project.linkarchive.backend.util.setUpData;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import project.linkarchive.backend.hashtag.domain.HashTag;
+import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.link.domain.Link;
-import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.user.domain.User;
 
 import static project.linkarchive.backend.util.constant.Constants.*;
+import static project.linkarchive.backend.util.constant.Constants.INTRODUCE;
 
-public class LinkSetUpData extends SetUpData {
+public class BookMarkSetUpData extends SetUpData {
 
     @BeforeEach
     public void setup() {
@@ -30,15 +29,10 @@ public class LinkSetUpData extends SetUpData {
                 .user(user)
                 .build();
 
-        for (int i = 0; i < 10; i++) {
-            HashTag hashTag = HashTag.builder()
-                    .tag(TAG + i)
-                    .build();
-
-            tagList.add(hashTag.getTag());
-        }
-
-        createLinkRequest = new CreateLinkRequest(URL, TITLE, DESCRIPTION, THUMBNAIL, tagList);
+        bookMark = BookMark.builder()
+                .user(user)
+                .link(link)
+                .build();
 
     }
 

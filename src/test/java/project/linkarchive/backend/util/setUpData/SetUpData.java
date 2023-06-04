@@ -29,7 +29,7 @@ public class SetUpData {
     public BookMark bookMark;
     public IsLinkRead isLinkRead;
 
-    public List<String> tags = new ArrayList<>();
+    public List<String> tagList = new ArrayList<>();
     public List<LinkHashTag> linkHashTagList = new ArrayList<>();
 
     public UpdateNicknameRequest updateNicknameRequest;
