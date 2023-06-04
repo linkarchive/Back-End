@@ -7,7 +7,9 @@
 //import project.linkarchive.backend.bookmark.domain.BookMark;
 //import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 //import project.linkarchive.backend.hashtag.domain.HashTag;
+//import project.linkarchive.backend.hashtag.domain.UserHashTag;
 //import project.linkarchive.backend.hashtag.repository.HashTagRepository;
+//import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 //import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
 //import project.linkarchive.backend.isLinkRead.repository.IsLinkReadRepository;
 //import project.linkarchive.backend.link.domain.Link;
@@ -15,10 +17,8 @@
 //import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 //import project.linkarchive.backend.link.repository.LinkRepository;
 //import project.linkarchive.backend.profileImage.domain.ProfileImage;
+//import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 //import project.linkarchive.backend.user.domain.User;
-//import project.linkarchive.backend.user.domain.UserHashTag;
-//import project.linkarchive.backend.user.repository.UserHashTagRepository;
-//import project.linkarchive.backend.profileImage.repository.UserProfileImageRepository;
 //import project.linkarchive.backend.user.repository.UserRepository;
 //
 //import java.util.ArrayList;
@@ -31,7 +31,7 @@
 //public class DataInit {
 //
 //    private final UserRepository userRepository;
-//    private final UserProfileImageRepository userProfileImageRepository;
+//    private final ProfileImageRepository profileImageRepository;
 //    private final LinkRepository linkRepository;
 //    private final HashTagRepository hashTagRepository;
 //    private final LinkHashTagRepository linkHashTagRepository;
@@ -39,10 +39,9 @@
 //    private final BookMarkRepository bookMarkRepository;
 //    private final IsLinkReadRepository isLinkReadRepository;
 //
-//    public DataInit(UserRepository userRepository, UserProfileImageRepository userProfileImageRepository, LinkRepository linkRepository, HashTagRepository hashTagRepository, LinkHashTagRepository linkHashTagRepository, UserHashTagRepository userHashTagRepository, BookMarkRepository bookMarkRepository,
-//                    IsLinkReadRepository isLinkReadRepository) {
+//    public DataInit(UserRepository userRepository, ProfileImageRepository profileImageRepository, LinkRepository linkRepository, HashTagRepository hashTagRepository, LinkHashTagRepository linkHashTagRepository, UserHashTagRepository userHashTagRepository, BookMarkRepository bookMarkRepository, IsLinkReadRepository isLinkReadRepository) {
 //        this.userRepository = userRepository;
-//        this.userProfileImageRepository = userProfileImageRepository;
+//        this.profileImageRepository = profileImageRepository;
 //        this.linkRepository = linkRepository;
 //        this.hashTagRepository = hashTagRepository;
 //        this.linkHashTagRepository = linkHashTagRepository;
@@ -88,7 +87,7 @@
 //                    .build();
 //            profileImages.add(profileImage);
 //        }
-//        userProfileImageRepository.saveAll(profileImages);
+//        profileImageRepository.saveAll(profileImages);
 //    }
 //
 //    public void initLink() {
