@@ -40,9 +40,6 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
             exceptionHandler(response,NOT_FOUND_USER);
         }
 
-        if(exception.equals(EXPIRED_TOKEN)){
-            exceptionHandler(response, EXPIRED_TOKEN);
-        }
     }
 
     public void exceptionHandler(HttpServletResponse response, ExceptionCodeConst error) throws IOException {

@@ -31,7 +31,7 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 public class JwtUtil {
 
     private static final Long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 2L;
-    private static final Long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30L;
+    private static final Long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 30L;
 
     @Value("${oauth.client.registration.kakao.grant_type}")
     private String GRANT_TYPE;
@@ -66,14 +66,14 @@ public class JwtUtil {
         return jwtToken;
     }
 
-    public OauthToken getToken(String code) {
+    public OauthToken getToken(String code, String redirectUri) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", GRANT_TYPE);
         params.add("client_id", CLIENT_ID);
-        params.add("redirect_uri", REDIRECT_URI);
+        params.add("redirect_uri", redirectUri);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
@@ -126,7 +126,7 @@ public class JwtUtil {
     public Long getUserId(String token) {
         Long userId;
 
-        if (isUnexpiredToken(token)) {
+        if (isValidatedToken(token)) {
             userId = Long.valueOf(Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
@@ -140,7 +140,7 @@ public class JwtUtil {
         return userId;
     }
 
-    public boolean isUnexpiredToken(String token) {
+    public boolean isValidatedToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
             return true;

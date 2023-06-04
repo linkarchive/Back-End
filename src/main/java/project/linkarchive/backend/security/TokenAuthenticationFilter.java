@@ -12,9 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.INVALID_TOKEN;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_TOKEN;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
+
+    private final static int TOKEN_LENGTH = 2;
+    private final static String TOKEN_TYPE = "bearer";
+    private final static int TOKEN_TYPE_INDEX = 0;
+    private final static int TOKEN_DATA_INDEX = 1;
 
     private final JwtUtil jwtUtil;
 
@@ -34,22 +40,22 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         String[] tokenData = tokenHeader.split(" ");
 
-        if (tokenData.length != 2) {
+        if (tokenData.length != TOKEN_LENGTH) {
             request.setAttribute("exception", INVALID_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }
 
-        if (!tokenData[0].equalsIgnoreCase("bearer")) {
+        if (!tokenData[TOKEN_TYPE_INDEX].equalsIgnoreCase(TOKEN_TYPE)) {
             request.setAttribute("exception", INVALID_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = tokenData[1];
+        String token = tokenData[TOKEN_DATA_INDEX];
 
-        if (!jwtUtil.isUnexpiredToken(token)) {
-            request.setAttribute("exception", EXPIRED_TOKEN);
+        if (!jwtUtil.isValidatedToken(token)) {
+            request.setAttribute("exception", INVALID_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }

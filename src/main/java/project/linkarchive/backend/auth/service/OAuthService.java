@@ -23,6 +23,9 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 @Transactional
 public class OAuthService {
 
+    private final static int TOKEN_DATA_INDEX = 1;
+    private final static String REGEX = " ";
+
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final ProfileImageRepository userProfileImageRepository;
@@ -38,8 +41,8 @@ public class OAuthService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public LoginResponse login(String code, String userAgent) {
-        OauthToken oauthToken = jwtUtil.getToken(code);
+    public LoginResponse login(String code, String redirectUrl, String userAgent) {
+        OauthToken oauthToken = jwtUtil.getToken(code, redirectUrl);
         KakaoProfile kakaoProfile = jwtUtil.getUserInfo(oauthToken.getAccess_token());
 
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
@@ -67,35 +70,25 @@ public class OAuthService {
         return new LoginResponse(findUser, accessToken, refreshToken);
     }
 
-    public LoginResponse checkToken(String refreshToken, Long userId) {
-        String[] tokenData = refreshToken.split(" ");
-        String token = tokenData[1];
+    public LoginResponse reissueToken(String rt) {
+        String[] tokenData = rt.split(REGEX);
+        String token = tokenData[TOKEN_DATA_INDEX];
 
-        if (jwtUtil.isUnexpiredToken(token)) {
-            return reissueToken(token, userId);
+        RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(token).orElseThrow(() -> new InvalidException(IS_NOT_REFRESH_TOKEN));
+
+        if (jwtUtil.isValidatedToken(token)) {
+            User user = userRepository.findById(refreshToken.getUser().getId()).orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+            String newAccessToken = jwtUtil.createAccessToken(user);
+            String newRefreshToken = jwtUtil.createRefreshToken(user);
+
+            if (refreshTokenRepository.existsByUserIdAndAgent(refreshToken.getUser().getId(), refreshToken.getAgent())) {
+                RefreshToken reissuedToken = RefreshToken.build(newRefreshToken, refreshToken.getAgent(), user);
+                refreshToken.updateRefreshToken(reissuedToken);
+            }
+            return new LoginResponse(user, newAccessToken, newRefreshToken);
+
         } else {
             throw new InvalidException(INVALID_TOKEN);
         }
-    }
-
-    public LoginResponse reissueToken(String oldRefreshToken, Long userId) {
-        RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-        String savedRefreshToken = refreshToken.getRefreshToken();
-
-        if (!savedRefreshToken.equals(oldRefreshToken)) {
-            throw new InvalidException(INVALID_REFRESH_TOKEN);
-        }
-
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-        String newAccessToken = jwtUtil.createAccessToken(user);
-        String newRefreshToken = jwtUtil.createRefreshToken(user);
-
-        if (refreshTokenRepository.existsByUserIdAndAgent(refreshToken.getUser().getId(), refreshToken.getAgent())) {
-            RefreshToken reissuedToken = RefreshToken.build(newRefreshToken, refreshToken.getAgent(), user);
-            refreshToken.updateRefreshToken(reissuedToken);
-        }
-
-        return new LoginResponse(user, newAccessToken, newRefreshToken);
-
     }
 }

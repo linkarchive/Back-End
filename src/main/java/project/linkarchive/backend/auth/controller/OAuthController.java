@@ -2,12 +2,8 @@ package project.linkarchive.backend.auth.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
-import project.linkarchive.backend.advice.exception.custom.InvalidException;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.service.OAuthService;
-import project.linkarchive.backend.security.AuthInfo;
-import project.linkarchive.backend.util.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,11 +14,9 @@ public class OAuthController {
     public static final String HEADER_STRING = "Authorization";
 
     private final OAuthService oAuthService;
-    private final JwtUtil jwtUtil;
 
-    public OAuthController(OAuthService oAuthService, JwtUtil jwtUtil) {
+    public OAuthController(OAuthService oAuthService) {
         this.oAuthService = oAuthService;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/auth/kakao")
@@ -30,12 +24,12 @@ public class OAuthController {
             @RequestParam("code") String code,
             HttpServletRequest request
     ) {
-//        String referer = request.getHeader("Referer");
-//        String redirectUri = referer + "auth/kakao";
+        String referer = request.getHeader("Referer");
+        String redirectUri = referer + "auth/kakao";
 
         String userAgent = request.getHeader("User-Agent");
 
-        LoginResponse loginResponse = oAuthService.login(code, userAgent);
+        LoginResponse loginResponse = oAuthService.login(code, redirectUri, userAgent);
 
         return ResponseEntity.ok()
                 .header(HEADER_STRING, TOKEN_PREFIX + loginResponse.getAccessToken())
@@ -44,24 +38,8 @@ public class OAuthController {
 
     @GetMapping("/token-reissue")
     public LoginResponse reissueToken(
-            @RequestHeader("Authorization") String refreshToken,
-            AuthInfo authInfo
+            @RequestHeader("Authorization") String refreshToken
     ) {
-        return oAuthService.checkToken(refreshToken, authInfo.getId());
-//        String[] tokenData = refreshToken.split(" ");
-//        String token = tokenData[1];
-//
-//        if (jwtUtil.isUnexpiredToken(token)) {
-//            // 만료시간 보여주면 좋을듯
-//            throw new InvalidException(ExceptionCodeConst.NOT_ACCEPTABLE_CONTENT_TYPE);
-//        }
-//        return oAuthService.reissueToken(refreshToken, authInfo.getId());
+        return oAuthService.reissueToken(refreshToken);
     }
 }
-
-//    @PostMapping("/logout/kakao")
-//    public ResponseEntity<LogoutResponse> logout(HttpServletRequest request) {
-//        String authorization = request.getHeader("Authorization");
-//
-//        return ResponseEntity.ok().body()
-//    }
