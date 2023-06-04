@@ -45,7 +45,7 @@ public class HashTagApiService {
                         },
                         () -> {
                             List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByHashTagId(hashTag.getId());
-                            UserHashTag getHashTag = UserHashTag.build(user, hashTag, linkHashTagList);
+                            UserHashTag getHashTag = UserHashTag.build(linkHashTagList, user, hashTag);
 
                             userHashTagRepository.save(getHashTag);
                         });
@@ -60,6 +60,5 @@ public class HashTagApiService {
         return hashTagRepository.findByTag(request.getTag())
                 .orElseGet(() -> HashTag.build(request));
     }
-
 
 }

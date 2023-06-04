@@ -38,16 +38,12 @@ public class UserHashTag extends CreatedEntity {
         this.hashTag = hashTag;
     }
 
-    public static UserHashTag build(User user, HashTag hashTag, List<LinkHashTag> linkHashTagList) {
+    public static UserHashTag build(List<LinkHashTag> linkHashTagList, User user, HashTag hashTag) {
         return UserHashTag.builder()
                 .usageCount((long) linkHashTagList.size())
                 .user(user)
                 .hashTag(hashTag)
                 .build();
-    }
-
-    public void increaseUserHashTagCount(Long count) {
-        this.usageCount = ++count;
     }
 
 }

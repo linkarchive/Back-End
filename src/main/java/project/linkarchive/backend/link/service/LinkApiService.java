@@ -96,7 +96,7 @@ public class LinkApiService {
                         .orElseGet(() -> HashTag.build(tag)))
                 .forEach(hashTag -> {
                     userHashTagRepository.findByHashTagId(hashTag.getId())
-                            .ifPresent(tag -> tag.increaseUserHashTagCount(tag.getUsageCount()));
+                            .ifPresent(tag -> userHashTagRepository.increaseUsageCount(tag.getId()));
                     linkHashTagRepository.save(LinkHashTag.build(link, hashTag));
                 });
     }
