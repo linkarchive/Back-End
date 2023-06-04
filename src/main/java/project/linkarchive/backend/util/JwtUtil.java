@@ -31,7 +31,7 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 public class JwtUtil {
 
     private static final Long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 2L;
-    private static final Long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 30L;
+    private static final Long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 *30L;
 
     @Value("${oauth.client.registration.kakao.grant_type}")
     private String GRANT_TYPE;
