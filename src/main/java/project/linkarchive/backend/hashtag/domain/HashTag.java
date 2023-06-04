@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
 import project.linkarchive.backend.hashtag.request.CreateTagRequest;
 import project.linkarchive.backend.link.domain.LinkHashTag;
-import project.linkarchive.backend.user.domain.UserHashTag;
 
 import javax.persistence.*;
 import java.util.ArrayList;

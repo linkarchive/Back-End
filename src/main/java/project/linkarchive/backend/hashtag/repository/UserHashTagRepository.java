@@ -1,7 +1,7 @@
-package project.linkarchive.backend.user.repository;
+package project.linkarchive.backend.hashtag.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import project.linkarchive.backend.user.domain.UserHashTag;
+import project.linkarchive.backend.hashtag.domain.UserHashTag;
 
 import java.util.Optional;
 

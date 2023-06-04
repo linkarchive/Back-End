@@ -1,4 +1,4 @@
-package project.linkarchive.backend.user.repository;
+package project.linkarchive.backend.hashtag.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
