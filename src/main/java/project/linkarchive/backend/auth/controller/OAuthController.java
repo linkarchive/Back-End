@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.service.OAuthService;
+import project.linkarchive.backend.util.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,9 +15,12 @@ public class OAuthController {
     public static final String HEADER_STRING = "Authorization";
 
     private final OAuthService oAuthService;
+    private final JwtUtil jwtUtil;
 
-    public OAuthController(OAuthService oAuthService) {
+
+    public OAuthController(OAuthService oAuthService, JwtUtil jwtUtil) {
         this.oAuthService = oAuthService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/auth/kakao")
@@ -36,10 +40,10 @@ public class OAuthController {
                 .body(loginResponse);
     }
 
-    @GetMapping("/token-reissue")
+    @GetMapping("/token-renewal")
     public LoginResponse reissueToken(
             @RequestHeader("Authorization") String refreshToken
     ) {
-        return oAuthService.reissueToken(refreshToken);
+        return jwtUtil.renewToken(refreshToken);
     }
 }
