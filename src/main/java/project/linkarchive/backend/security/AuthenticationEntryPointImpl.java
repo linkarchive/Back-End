@@ -32,7 +32,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         }
 
         if (exception.equals(INVALID_TOKEN)) {
-            exceptionHandler(response,INVALID_TOKEN);
+            exceptionHandler(response, INVALID_TOKEN);
             return;
         }
 

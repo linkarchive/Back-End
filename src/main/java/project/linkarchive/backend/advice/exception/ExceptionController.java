@@ -16,6 +16,11 @@ public class ExceptionController {
         return ResponseEntity.status(BAD_REQUEST).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ExceptionResponse> handleNotFoundUserException(UnauthorizedException businessException) {
+        return ResponseEntity.status(UNAUTHORIZED).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleNotFoundUserException(NotFoundException businessException) {
         return ResponseEntity.status(NOT_FOUND).body(new ExceptionResponse(businessException.getExceptionCodeConst()));

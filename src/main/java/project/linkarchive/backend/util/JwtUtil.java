@@ -17,6 +17,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import project.linkarchive.backend.advice.exception.custom.InvalidException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.advice.exception.custom.UnauthorizedException;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
 import project.linkarchive.backend.auth.response.KakaoProfile;
@@ -148,7 +149,7 @@ public class JwtUtil {
                     .getBody()
                     .getId());
         } else {
-            throw new InvalidException(INVALID_TOKEN);
+            throw new UnauthorizedException(INVALID_TOKEN);
         }
 
         return userId;
@@ -184,7 +185,7 @@ public class JwtUtil {
             return new LoginResponse(user, newAccessToken, newRefreshToken);
 
         } else {
-            throw new InvalidException(INVALID_TOKEN);
+            throw new UnauthorizedException(INVALID_TOKEN);
         }
     }
 
