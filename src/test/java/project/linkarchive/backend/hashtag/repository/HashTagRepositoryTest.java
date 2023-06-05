@@ -11,7 +11,7 @@ import project.linkarchive.backend.util.repository.HashTagSetUpRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUNT_HASHTAG;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_HASHTAG;
 
 class HashTagRepositoryTest extends HashTagSetUpRepository {
 
@@ -19,7 +19,7 @@ class HashTagRepositoryTest extends HashTagSetUpRepository {
     @Test
     void testFindByTag() {
         HashTag getHashTag = hashTagRepository.findByTag(Constants.TAG)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUNT_HASHTAG));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_HASHTAG));
 
         Assertions.assertAll(
                 () -> assertNotNull(getHashTag),
@@ -33,7 +33,7 @@ class HashTagRepositoryTest extends HashTagSetUpRepository {
     void testFindByTagNotFound() {
         assertThrows(NotFoundException.class, () -> {
             hashTagRepository.findByTag(Constants.EMPTY)
-                    .orElseThrow(() -> new NotFoundException(NOT_FOUNT_HASHTAG));
+                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_HASHTAG));
         });
     }
 
