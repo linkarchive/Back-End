@@ -13,7 +13,7 @@ import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.user.repository.UserHashTagRepository;
+import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.LinkedHashSet;
@@ -96,8 +96,8 @@ public class LinkApiService {
                         .orElseGet(() -> HashTag.build(tag)))
                 .forEach(hashTag -> {
                     userHashTagRepository.findByHashTagId(hashTag.getId())
-                            .ifPresent(tag -> tag.increaseUserHashTagCount(tag.getUsageCount()));
-                    linkHashTagRepository.save(LinkHashTag.of(link, hashTag));
+                            .ifPresent(tag -> userHashTagRepository.increaseUsageCount(tag.getId()));
+                    linkHashTagRepository.save(LinkHashTag.build(link, hashTag));
                 });
     }
 

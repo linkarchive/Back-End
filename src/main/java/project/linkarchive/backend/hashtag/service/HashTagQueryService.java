@@ -6,7 +6,7 @@ import project.linkarchive.backend.advice.exception.custom.ExceededException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
-import project.linkarchive.backend.user.repository.UserHashTagRepositoryImpl;
+import project.linkarchive.backend.hashtag.repository.UserHashTagRepositoryImpl;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.List;

@@ -6,10 +6,8 @@ import project.linkarchive.backend.user.domain.User;
 
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-public class ProfileImageSetUpData {
+public class ProfileImageSetUpData extends SetUpData {
 
-    public User user;
-    public ProfileImage profileImage;
 
     @BeforeEach
     public void setup() {

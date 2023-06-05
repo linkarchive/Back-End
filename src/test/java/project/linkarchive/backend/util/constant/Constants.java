@@ -22,7 +22,6 @@ public class Constants {
     public static final Long BOOKMARK_COUNT = 10L;
 
     public static final String TAG = "Test Tag";
-    public static final String TAG2 = "Test Tag2";
 
     public static final Long USAGE_COUNT = 10L;
 

@@ -7,12 +7,7 @@ import project.linkarchive.backend.user.request.UpdateProfileRequest;
 
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-public class UserSetUpData {
-
-    public User user;
-
-    public UpdateNicknameRequest updateNicknameRequest;
-    public UpdateProfileRequest updateProfileRequest;
+public class UserSetUpData extends SetUpData {
 
     @BeforeEach
     public void setup() {

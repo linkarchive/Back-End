@@ -1,4 +1,4 @@
-package project.linkarchive.backend.user.repository;
+package project.linkarchive.backend.hashtag.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -8,7 +8,7 @@ import project.linkarchive.backend.hashtag.response.TagResponse;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static project.linkarchive.backend.user.domain.QUserHashTag.userHashTag;
+import static project.linkarchive.backend.hashtag.domain.QUserHashTag.userHashTag;
 
 @Repository
 public class UserHashTagRepositoryImpl {

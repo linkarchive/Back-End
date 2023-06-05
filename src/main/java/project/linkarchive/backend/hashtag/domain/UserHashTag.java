@@ -1,12 +1,12 @@
-package project.linkarchive.backend.user.domain;
+package project.linkarchive.backend.hashtag.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
-import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.link.domain.LinkHashTag;
+import project.linkarchive.backend.user.domain.User;
 
 import javax.persistence.*;
 import java.util.List;
@@ -38,16 +38,12 @@ public class UserHashTag extends CreatedEntity {
         this.hashTag = hashTag;
     }
 
-    public static UserHashTag build(User user, HashTag hashTag, List<LinkHashTag> linkHashTagList) {
+    public static UserHashTag build(List<LinkHashTag> linkHashTagList, User user, HashTag hashTag) {
         return UserHashTag.builder()
                 .usageCount((long) linkHashTagList.size())
                 .user(user)
                 .hashTag(hashTag)
                 .build();
-    }
-
-    public void increaseUserHashTagCount(Long count) {
-        this.usageCount = ++count;
     }
 
 }

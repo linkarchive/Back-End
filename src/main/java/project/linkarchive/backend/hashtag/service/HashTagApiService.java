@@ -10,8 +10,8 @@ import project.linkarchive.backend.hashtag.request.CreateTagRequest;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.user.domain.UserHashTag;
-import project.linkarchive.backend.user.repository.UserHashTagRepository;
+import project.linkarchive.backend.hashtag.domain.UserHashTag;
+import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class HashTagApiService {
                         },
                         () -> {
                             List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByHashTagId(hashTag.getId());
-                            UserHashTag getHashTag = UserHashTag.build(user, hashTag, linkHashTagList);
+                            UserHashTag getHashTag = UserHashTag.build(linkHashTagList, user, hashTag);
 
                             userHashTagRepository.save(getHashTag);
                         });
@@ -60,6 +60,5 @@ public class HashTagApiService {
         return hashTagRepository.findByTag(request.getTag())
                 .orElseGet(() -> HashTag.build(request));
     }
-
 
 }
