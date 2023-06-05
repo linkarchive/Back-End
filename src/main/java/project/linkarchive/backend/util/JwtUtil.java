@@ -169,7 +169,7 @@ public class JwtUtil {
         String token = tokenData[TOKEN_DATA_INDEX];
 
         RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(token)
-                .orElseThrow(() -> new InvalidException(IS_NOT_REFRESH_TOKEN));
+                .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
 
         if (isValidatedToken(token)) {
             User user = userRepository.findById(refreshToken.getUser().getId())

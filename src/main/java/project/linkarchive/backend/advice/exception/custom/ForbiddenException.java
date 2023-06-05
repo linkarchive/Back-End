@@ -1,14 +1,10 @@
 package project.linkarchive.backend.advice.exception.custom;
 
-import lombok.Getter;
 import project.linkarchive.backend.advice.exception.BusinessException;
 import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 
-@Getter
-public class UnauthorizedException extends BusinessException {
-
-    public UnauthorizedException(ExceptionCodeConst exceptionCodeConst) {
+public class ForbiddenException extends BusinessException {
+    public ForbiddenException(ExceptionCodeConst exceptionCodeConst) {
         super(exceptionCodeConst);
     }
-
 }

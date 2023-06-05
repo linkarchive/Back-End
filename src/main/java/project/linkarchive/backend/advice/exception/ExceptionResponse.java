@@ -1,8 +1,10 @@
 package project.linkarchive.backend.advice.exception;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class ExceptionResponse {
 
     private int status;

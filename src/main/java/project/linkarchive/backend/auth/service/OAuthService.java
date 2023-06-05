@@ -34,8 +34,8 @@ public class OAuthService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public LoginResponse login(String code, String redirectUrl, String userAgent) {
-        OauthToken oauthToken = jwtUtil.getToken(code, redirectUrl);
+    public LoginResponse login(String code, String redirectUri, String userAgent) {
+        OauthToken oauthToken = jwtUtil.getToken(code, redirectUri);
         KakaoProfile kakaoProfile = jwtUtil.getUserInfo(oauthToken.getAccess_token());
 
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
