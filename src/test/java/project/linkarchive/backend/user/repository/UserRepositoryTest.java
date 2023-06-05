@@ -9,6 +9,7 @@ import project.linkarchive.backend.util.repository.UserSetUpRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 class UserRepositoryTest extends UserSetUpRepository {
@@ -20,6 +21,7 @@ class UserRepositoryTest extends UserSetUpRepository {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
 
         assertAll(
+                () -> assertNotNull(findUser),
                 () -> assertThat(findUser.getId()).isEqualTo(user.getId()),
                 () -> assertThat(findUser.getSocialId()).isEqualTo(user.getSocialId()),
                 () -> assertThat(findUser.getNickname()).isEqualTo(user.getNickname()),
@@ -43,8 +45,8 @@ class UserRepositoryTest extends UserSetUpRepository {
         User findUser = userRepository.findByNickname(user.getNickname())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
 
-
         assertAll(
+                () -> assertNotNull(findUser),
                 () -> assertThat(findUser.getId()).isEqualTo(user.getId()),
                 () -> assertThat(findUser.getSocialId()).isEqualTo(user.getSocialId()),
                 () -> assertThat(findUser.getNickname()).isEqualTo(user.getNickname()),

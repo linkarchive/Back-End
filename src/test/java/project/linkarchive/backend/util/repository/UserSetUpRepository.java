@@ -1,6 +1,5 @@
 package project.linkarchive.backend.util.repository;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -18,11 +17,6 @@ public class UserSetUpRepository extends UserSetUpData {
     @BeforeEach
     void repositorySetup() {
         userRepository.save(user);
-    }
-
-    @AfterEach
-    void cleanUp() {
-        userRepository.delete(user);
     }
 
 }
