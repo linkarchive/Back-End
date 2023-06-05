@@ -96,7 +96,7 @@ class LinkTest extends LinkSetUpData {
         assertEquals(TITLE, getLink.getTitle());
         assertEquals(DESCRIPTION, getLink.getDescription());
         assertEquals(THUMBNAIL, getLink.getThumbnail());
-        assertEquals(EMPTY_COUNT, getLink.getBookMarkCount());
+        assertEquals(EMPTY_LONG_VAL, getLink.getBookMarkCount());
         assertEquals(user, getLink.getUser());
     }
 

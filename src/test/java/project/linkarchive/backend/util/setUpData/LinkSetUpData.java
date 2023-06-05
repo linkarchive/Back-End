@@ -1,7 +1,6 @@
 package project.linkarchive.backend.util.setUpData;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.request.CreateLinkRequest;

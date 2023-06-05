@@ -4,7 +4,7 @@ public class Constants {
 
     public static final String EMPTY = "";
     public static final Long EMPTY_LONG_VAL = 0L;
-    public static final Long EMPTY_COUNT = 0L;
+    public static final Long MODIFY_LONG_VAL = 1L;
 
     public static final String SOCIAL_ID = "Test Social Id";
     public static final String EMAIL = "Test Email";
