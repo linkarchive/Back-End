@@ -5,7 +5,7 @@ import project.linkarchive.backend.profileImage.domain.ProfileImage;
 
 import java.util.Optional;
 
-public interface ProfileImageRepository extends JpaRepository<ProfileImage, Long> {//
+public interface ProfileImageRepository extends JpaRepository<ProfileImage, Long> {
 
     Optional<ProfileImage> findByUserId(Long userId);
 

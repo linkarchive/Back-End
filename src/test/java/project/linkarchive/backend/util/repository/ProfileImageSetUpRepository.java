@@ -4,19 +4,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import project.linkarchive.backend.user.repository.UserRepository;
-import project.linkarchive.backend.util.setUpData.UserSetUpData;
+import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
+import project.linkarchive.backend.util.setUpData.ProfileImageSetUpData;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class UserSetUpRepository extends UserSetUpData {
+public class ProfileImageSetUpRepository extends ProfileImageSetUpData {
 
     @Autowired
-    protected UserRepository userRepository;
+    protected ProfileImageRepository profileImageRepository;
 
     @BeforeEach
-    void repositorySetup() {
-        userRepository.save(user);
+    void repositorySetUp() {
+        profileImageRepository.save(profileImage);
     }
 
 }

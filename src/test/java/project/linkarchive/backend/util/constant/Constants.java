@@ -3,6 +3,7 @@ package project.linkarchive.backend.util.constant;
 public class Constants {
 
     public static final String EMPTY = "";
+    public static final Long EMPTY_LONG_VAL = 0L;
     public static final Long EMPTY_COUNT = 0L;
 
     public static final String SOCIAL_ID = "Test Social Id";
