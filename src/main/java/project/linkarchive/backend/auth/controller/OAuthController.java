@@ -1,10 +1,10 @@
 package project.linkarchive.backend.auth.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import project.linkarchive.backend.auth.response.AccessTokenResponse;
 import project.linkarchive.backend.auth.response.LoginResponse;
+import project.linkarchive.backend.auth.response.RefreshTokenResponse;
 import project.linkarchive.backend.auth.service.OAuthService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,11 +38,17 @@ public class OAuthController {
                 .body(loginResponse);
     }
 
-//    @PostMapping("/logout/kakao")
-//    public ResponseEntity<LogoutResponse> logout(HttpServletRequest request) {
-//        String authorization = request.getHeader("Authorization");
-//
-//        return ResponseEntity.ok().body()
-//    }
+    @PostMapping("/publish/access-token")
+    public AccessTokenResponse refreshAccessToken(
+            @RequestHeader("Authorization") String refreshToken
+    ) {
+        return oAuthService.publishAccessToken(refreshToken);
+    }
 
+    @PostMapping("/publish/refresh-token")
+    public RefreshTokenResponse renewToken(
+            @RequestHeader("Authorization") String refreshToken
+    ) {
+        return oAuthService.publishRefreshToken(refreshToken);
+    }
 }

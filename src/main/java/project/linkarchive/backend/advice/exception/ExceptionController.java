@@ -12,8 +12,18 @@ import static org.springframework.http.HttpStatus.*;
 public class ExceptionController {
 
     @ExceptionHandler(InvalidException.class)
-    public ResponseEntity<ExceptionResponse> handleNotFoundUserException(InvalidException businessException) {
+    public ResponseEntity<ExceptionResponse> handleInvalidException(InvalidException businessException) {
         return ResponseEntity.status(BAD_REQUEST).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ExceptionResponse> handleUnauthorizedException(UnauthorizedException businessException) {
+        return ResponseEntity.status(UNAUTHORIZED).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ExceptionResponse> handleForbiddenException(ForbiddenException businessException) {
+        return ResponseEntity.status(FORBIDDEN).body(new ExceptionResponse(businessException.getExceptionCodeConst()));
     }
 
     @ExceptionHandler(NotFoundException.class)

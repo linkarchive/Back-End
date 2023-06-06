@@ -17,9 +17,15 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import project.linkarchive.backend.advice.exception.custom.InvalidException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.advice.exception.custom.UnauthorizedException;
+import project.linkarchive.backend.auth.domain.RefreshToken;
+import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
+import project.linkarchive.backend.auth.response.AccessTokenResponse;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.OauthToken;
+import project.linkarchive.backend.auth.response.RefreshTokenResponse;
 import project.linkarchive.backend.user.domain.User;
+import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.security.Key;
 import java.util.Date;
@@ -32,6 +38,8 @@ public class JwtUtil {
 
     private static final Long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 2L;
     private static final Long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30L;
+    private final static int TOKEN_DATA_INDEX = 1;
+    private final static String BLANK = " ";
 
     @Value("${oauth.client.registration.kakao.grant_type}")
     private String GRANT_TYPE;
@@ -41,6 +49,14 @@ public class JwtUtil {
     private String REDIRECT_URI;
     @Value("${jwt.key}")
     private String SECRET_KEY;
+
+    private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
+
+    public JwtUtil(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository) {
+        this.userRepository = userRepository;
+        this.refreshTokenRepository = refreshTokenRepository;
+    }
 
     public String createAccessToken(User user) {
         return createJwtToken(user, ACCESS_TOKEN_EXPIRATION_TIME);
@@ -87,7 +103,7 @@ public class JwtUtil {
                     kakaoTokenRequest,
                     String.class);
         } catch (HttpClientErrorException e) {
-            throw new InvalidException(INVALID_AUTHORIZATION_CODE);
+            throw new UnauthorizedException(INVALID_AUTHORIZATION_CODE);
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -126,7 +142,7 @@ public class JwtUtil {
     public Long getUserId(String token) {
         Long userId;
 
-        if (validateTokenSignKey(token)) {
+        if (isValidatedToken(token)) {
             userId = Long.valueOf(Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
@@ -134,18 +150,63 @@ public class JwtUtil {
                     .getBody()
                     .getId());
         } else {
-            throw new InvalidException(INVALID_TOKEN);
+            throw new UnauthorizedException(INVALID_TOKEN);
         }
 
         return userId;
     }
 
-    public boolean validateTokenSignKey(String token) {
+    public boolean isValidatedToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
             return true;
         } catch (JwtException e) {
             return false;
+        }
+    }
+
+    public AccessTokenResponse publishAccessToken(String refreshToken) {
+        String[] tokenData = refreshToken.split(BLANK);
+        String token = tokenData[TOKEN_DATA_INDEX];
+
+        RefreshToken savedRefreshToken = refreshTokenRepository.findByRefreshToken(token)
+                .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
+
+        if (isValidatedToken(token)) {
+            User user = userRepository.findById(savedRefreshToken.getUser().getId())
+                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+
+            String newAccessToken = createAccessToken(user);
+
+            return new AccessTokenResponse(newAccessToken);
+
+        } else {
+            throw new UnauthorizedException(INVALID_TOKEN);
+        }
+    }
+
+    public RefreshTokenResponse publishRefreshToken(String refreshToken) {
+        String[] tokenData = refreshToken.split(BLANK);
+        String token = tokenData[TOKEN_DATA_INDEX];
+
+        RefreshToken savedRefreshToken = refreshTokenRepository.findByRefreshToken(token)
+                .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
+
+        if (isValidatedToken(token)) {
+            User user = userRepository.findById(savedRefreshToken.getUser().getId())
+                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+
+            String newAccessToken = createAccessToken(user);
+            String newRefreshToken = createRefreshToken(user);
+
+            if (refreshTokenRepository.existsByUserIdAndAgent(savedRefreshToken.getUser().getId(), savedRefreshToken.getAgent())) {
+                RefreshToken refreshedToken = RefreshToken.build(newRefreshToken, savedRefreshToken.getAgent(), user);
+                savedRefreshToken.updateRefreshToken(refreshedToken);
+            }
+            return new RefreshTokenResponse(newAccessToken, newRefreshToken);
+
+        } else {
+            throw new UnauthorizedException(INVALID_TOKEN);
         }
     }
 

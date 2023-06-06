@@ -3,9 +3,9 @@ package project.linkarchive.backend.advice.exception.custom;
 import project.linkarchive.backend.advice.exception.BusinessException;
 import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 
-public class NotAcceptableException extends BusinessException {
+public class UnauthorizedException extends BusinessException {
 
-    public NotAcceptableException(ExceptionCodeConst exceptionCodeConst) {
+    public UnauthorizedException(ExceptionCodeConst exceptionCodeConst) {
         super(exceptionCodeConst);
     }
 

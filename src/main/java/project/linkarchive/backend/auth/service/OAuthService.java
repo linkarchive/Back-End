@@ -4,20 +4,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
-import project.linkarchive.backend.auth.response.KakaoProfile;
-import project.linkarchive.backend.auth.response.LoginResponse;
-import project.linkarchive.backend.auth.response.OauthToken;
+import project.linkarchive.backend.auth.response.*;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
-import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
+import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.util.JwtUtil;
 
 import javax.transaction.Transactional;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 @Service
 @Transactional
@@ -67,9 +61,15 @@ public class OAuthService {
         return new LoginResponse(findUser, accessToken, refreshToken);
     }
 
-    private Date toDate(LocalDateTime localDateTime) {
-        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-        return Date.from(instant);
+    public AccessTokenResponse publishAccessToken(String refreshToken) {
+
+        return jwtUtil.publishAccessToken(refreshToken);
+
+    }
+
+    public RefreshTokenResponse publishRefreshToken(String refreshToken) {
+
+        return jwtUtil.publishRefreshToken(refreshToken);
     }
 
 }

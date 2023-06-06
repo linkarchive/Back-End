@@ -4,7 +4,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.util.JwtUtil;
 
 import javax.servlet.FilterChain;
@@ -17,6 +16,11 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.IN
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_TOKEN;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
+
+    private final static int TOKEN_LENGTH = 2;
+    private final static String TOKEN_TYPE = "bearer";
+    private final static int TOKEN_TYPE_INDEX = 0;
+    private final static int TOKEN_DATA_INDEX = 1;
 
     private final JwtUtil jwtUtil;
 
@@ -36,21 +40,21 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         String[] tokenData = tokenHeader.split(" ");
 
-        if (tokenData.length != 2) {
+        if (tokenData.length != TOKEN_LENGTH) {
             request.setAttribute("exception", INVALID_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }
 
-        if (!tokenData[0].equalsIgnoreCase("bearer")) {
+        if (!tokenData[TOKEN_TYPE_INDEX].equalsIgnoreCase(TOKEN_TYPE)) {
             request.setAttribute("exception", INVALID_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = tokenData[1];
+        String token = tokenData[TOKEN_DATA_INDEX];
 
-        if (!jwtUtil.validateTokenSignKey(token)) {
+        if (!jwtUtil.isValidatedToken(token)) {
             request.setAttribute("exception", INVALID_TOKEN);
             filterChain.doFilter(request, response);
             return;
