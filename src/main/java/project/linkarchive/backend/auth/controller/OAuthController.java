@@ -2,7 +2,9 @@ package project.linkarchive.backend.auth.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.linkarchive.backend.auth.response.AccessTokenResponse;
 import project.linkarchive.backend.auth.response.LoginResponse;
+import project.linkarchive.backend.auth.response.RefreshTokenResponse;
 import project.linkarchive.backend.auth.service.OAuthService;
 import project.linkarchive.backend.util.JwtUtil;
 
@@ -40,10 +42,17 @@ public class OAuthController {
                 .body(loginResponse);
     }
 
-    @GetMapping("/token-renewal")
-    public LoginResponse reissueToken(
+    @GetMapping("/publish/access-token")
+    public AccessTokenResponse refreshAccessToken(
             @RequestHeader("Authorization") String refreshToken
     ) {
-        return jwtUtil.renewToken(refreshToken);
+        return jwtUtil.publishAccessToken(refreshToken);
+    }
+
+    @GetMapping("/publish/refresh-token")
+    public RefreshTokenResponse renewToken(
+            @RequestHeader("Authorization") String refreshToken
+    ) {
+        return jwtUtil.publishRefreshToken(refreshToken);
     }
 }

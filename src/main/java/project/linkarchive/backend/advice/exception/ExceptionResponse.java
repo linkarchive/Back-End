@@ -1,7 +1,6 @@
 package project.linkarchive.backend.advice.exception;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class ExceptionResponse {
