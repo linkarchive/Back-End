@@ -38,14 +38,14 @@ public class OAuthController {
                 .body(loginResponse);
     }
 
-    @GetMapping("/publish/access-token")
+    @PostMapping("/publish/access-token")
     public AccessTokenResponse refreshAccessToken(
             @RequestHeader("Authorization") String refreshToken
     ) {
         return oAuthService.publishAccessToken(refreshToken);
     }
 
-    @GetMapping("/publish/refresh-token")
+    @PostMapping("/publish/refresh-token")
     public RefreshTokenResponse renewToken(
             @RequestHeader("Authorization") String refreshToken
     ) {
