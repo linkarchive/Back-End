@@ -49,6 +49,6 @@ public class SecurityExceptionHandler implements AuthenticationEntryPoint, Acces
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        handler.resolveException(request, response, null, new ForbiddenException(ACCESS_DENIED));
+        handler.resolveException(request, response, null, new ForbiddenException(FORBIDDEN_ACCESS));
     }
 }
