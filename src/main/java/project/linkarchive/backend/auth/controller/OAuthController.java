@@ -26,12 +26,12 @@ public class OAuthController {
             @RequestParam("code") String code,
             HttpServletRequest request
     ) {
-//        String referer = request.getHeader("Referer");
-//        String redirectUri = referer + "auth/kakao";
+        String referer = request.getHeader("Referer");
+        String redirectUri = referer + "auth/kakao";
 
         String userAgent = request.getHeader("User-Agent");
 
-        LoginResponse loginResponse = oAuthService.login(code, userAgent);
+        LoginResponse loginResponse = oAuthService.login(code, redirectUri, userAgent);
 
         return ResponseEntity.ok()
                 .header(HEADER_STRING, TOKEN_PREFIX + loginResponse.getAccessToken())
