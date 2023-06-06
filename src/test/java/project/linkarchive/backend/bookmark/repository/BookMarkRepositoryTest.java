@@ -53,7 +53,15 @@ class BookMarkRepositoryTest extends BookMarkSetUpRepository {
                 () -> assertThat(getBookMark.getLink().getThumbnail()).isEqualTo(bookMark.getLink().getThumbnail()),
                 () -> assertThat(getBookMark.getLink().getBookMarkCount()).isEqualTo(bookMark.getLink().getBookMarkCount())
         );
+    }
 
+    @DisplayName("북마크 Repository - findByLinkIdAndUserId NotFound")
+    @Test
+    void testFindByLinkIdAndUserIdNotFound() {
+        assertThrows(NotFoundException.class, () -> {
+            bookMarkRepository.findByLinkIdAndUserId(EMPTY_LONG_VAL, EMPTY_LONG_VAL)
+                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_BOOKMARK));
+        });
     }
 
     @DisplayName("북마크 Repository - findByUserId")
