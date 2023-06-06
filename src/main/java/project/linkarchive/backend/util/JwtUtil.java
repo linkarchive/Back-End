@@ -103,7 +103,7 @@ public class JwtUtil {
                     kakaoTokenRequest,
                     String.class);
         } catch (HttpClientErrorException e) {
-            throw new InvalidException(INVALID_AUTHORIZATION_CODE);
+            throw new UnauthorizedException(INVALID_AUTHORIZATION_CODE);
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
