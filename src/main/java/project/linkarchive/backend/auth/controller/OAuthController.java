@@ -6,7 +6,6 @@ import project.linkarchive.backend.auth.response.AccessTokenResponse;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.RefreshTokenResponse;
 import project.linkarchive.backend.auth.service.OAuthService;
-import project.linkarchive.backend.util.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,12 +16,9 @@ public class OAuthController {
     public static final String HEADER_STRING = "Authorization";
 
     private final OAuthService oAuthService;
-    private final JwtUtil jwtUtil;
 
-
-    public OAuthController(OAuthService oAuthService, JwtUtil jwtUtil) {
+    public OAuthController(OAuthService oAuthService) {
         this.oAuthService = oAuthService;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/auth/kakao")
@@ -30,12 +26,12 @@ public class OAuthController {
             @RequestParam("code") String code,
             HttpServletRequest request
     ) {
-        String referer = request.getHeader("Referer");
-        String redirectUri = referer + "auth/kakao";
+//        String referer = request.getHeader("Referer");
+//        String redirectUri = referer + "auth/kakao";
 
         String userAgent = request.getHeader("User-Agent");
 
-        LoginResponse loginResponse = oAuthService.login(code, redirectUri, userAgent);
+        LoginResponse loginResponse = oAuthService.login(code, userAgent);
 
         return ResponseEntity.ok()
                 .header(HEADER_STRING, TOKEN_PREFIX + loginResponse.getAccessToken())
@@ -46,13 +42,13 @@ public class OAuthController {
     public AccessTokenResponse refreshAccessToken(
             @RequestHeader("Authorization") String refreshToken
     ) {
-        return jwtUtil.publishAccessToken(refreshToken);
+        return oAuthService.publishAccessToken(refreshToken);
     }
 
     @GetMapping("/publish/refresh-token")
     public RefreshTokenResponse renewToken(
             @RequestHeader("Authorization") String refreshToken
     ) {
-        return jwtUtil.publishRefreshToken(refreshToken);
+        return oAuthService.publishRefreshToken(refreshToken);
     }
 }

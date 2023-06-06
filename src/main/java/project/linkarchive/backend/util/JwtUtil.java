@@ -20,7 +20,10 @@ import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.advice.exception.custom.UnauthorizedException;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
-import project.linkarchive.backend.auth.response.*;
+import project.linkarchive.backend.auth.response.AccessTokenResponse;
+import project.linkarchive.backend.auth.response.KakaoProfile;
+import project.linkarchive.backend.auth.response.OauthToken;
+import project.linkarchive.backend.auth.response.RefreshTokenResponse;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 
@@ -79,14 +82,14 @@ public class JwtUtil {
         return jwtToken;
     }
 
-    public OauthToken getToken(String code, String redirectUri) {
+    public OauthToken getToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", GRANT_TYPE);
         params.add("client_id", CLIENT_ID);
-        params.add("redirect_uri", redirectUri);
+        params.add("redirect_uri", REDIRECT_URI);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);

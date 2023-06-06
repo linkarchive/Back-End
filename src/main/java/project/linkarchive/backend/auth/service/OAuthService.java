@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
-import project.linkarchive.backend.auth.response.KakaoProfile;
-import project.linkarchive.backend.auth.response.LoginResponse;
-import project.linkarchive.backend.auth.response.OauthToken;
+import project.linkarchive.backend.auth.response.*;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.user.domain.User;
@@ -34,8 +32,8 @@ public class OAuthService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public LoginResponse login(String code, String redirectUri, String userAgent) {
-        OauthToken oauthToken = jwtUtil.getToken(code, redirectUri);
+    public LoginResponse login(String code, String userAgent) {
+        OauthToken oauthToken = jwtUtil.getToken(code);
         KakaoProfile kakaoProfile = jwtUtil.getUserInfo(oauthToken.getAccess_token());
 
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
@@ -63,5 +61,15 @@ public class OAuthService {
         return new LoginResponse(findUser, accessToken, refreshToken);
     }
 
+    public AccessTokenResponse publishAccessToken(String refreshToken) {
+
+        return jwtUtil.publishAccessToken(refreshToken);
+
+    }
+
+    public RefreshTokenResponse publishRefreshToken(String refreshToken) {
+
+        return jwtUtil.publishRefreshToken(refreshToken);
+    }
 
 }
