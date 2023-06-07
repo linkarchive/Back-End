@@ -16,6 +16,7 @@ import project.linkarchive.backend.link.response.linkList.UserLinkResponse;
 import project.linkarchive.backend.link.response.linkarchive.ArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
+import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.List;
@@ -27,13 +28,17 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NO
 @Transactional(readOnly = true)
 public class LinkQueryService {
 
+    public final static int EXPIRATION_TIME_IN_MINUTES = 1000 * 60 * 60;
+
+    private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
     private final LinkHashTagRepository linkHashTagRepository;
     private final IsLinkReadRepository isLinkReadRepository;
     private final BookMarkRepository bookMarkRepository;
     private final LinkRepositoryImpl linkRepositoryImpl;
 
-    public LinkQueryService(UserRepository userRepository, LinkHashTagRepository linkHashTagRepository, IsLinkReadRepository isLinkReadRepository, BookMarkRepository bookMarkRepository, LinkRepositoryImpl linkRepositoryImpl) {
+    public LinkQueryService(S3Uploader s3Uploader, UserRepository userRepository, LinkHashTagRepository linkHashTagRepository, IsLinkReadRepository isLinkReadRepository, BookMarkRepository bookMarkRepository, LinkRepositoryImpl linkRepositoryImpl) {
+        this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
         this.linkHashTagRepository = linkHashTagRepository;
         this.isLinkReadRepository = isLinkReadRepository;
@@ -119,7 +124,9 @@ public class LinkQueryService {
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
-                    return UserArchiveResponse.build(archiveResponse, false, false, tagList);
+                    String profileImage = generateProfileImageUrl(archiveResponse.getProfileImage());
+
+                    return UserArchiveResponse.build(archiveResponse, profileImage, false, false, tagList);
                 }).collect(Collectors.toList());
 
         return new UserLinkArchiveResponse(userArchiveResponseList, hasNext);
@@ -140,7 +147,9 @@ public class LinkQueryService {
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(archiveResponse.getLinkId(), loginUserId);
                     Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(archiveResponse.getLinkId(), loginUserId);
 
-                    return UserArchiveResponse.build(archiveResponse, isRead, isMark, tagList);
+                    String profileImage = generateProfileImageUrl(archiveResponse.getProfileImage());
+
+                    return UserArchiveResponse.build(archiveResponse, profileImage, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
 
         return new UserLinkArchiveResponse(userArchiveResponseList, hasNext);
@@ -174,6 +183,13 @@ public class LinkQueryService {
         }
 
         return hasNext;
+    }
+
+    private String generateProfileImageUrl(String profileImageFilename) {
+        return s3Uploader.generatePresignedProfileImageUrl(
+                        profileImageFilename,
+                        EXPIRATION_TIME_IN_MINUTES)
+                .toString();
     }
 
 }
