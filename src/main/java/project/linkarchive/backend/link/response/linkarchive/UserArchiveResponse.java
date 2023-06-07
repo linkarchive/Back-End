@@ -38,11 +38,11 @@ public class UserArchiveResponse {
         this.tagList = tagList;
     }
 
-    public static UserArchiveResponse build(ArchiveResponse response, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
+    public static UserArchiveResponse build(ArchiveResponse response, String preSignedUrl, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
         return UserArchiveResponse.builder()
                 .userId(response.getUserId())
                 .nickname(response.getNickname())
-                .profileImage(response.getProfileImage())
+                .profileImage(preSignedUrl)
                 .linkId(response.getLinkId())
                 .url(response.getUrl())
                 .title(response.getTitle())
