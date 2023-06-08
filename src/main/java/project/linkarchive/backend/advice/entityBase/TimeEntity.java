@@ -6,7 +6,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
@@ -14,6 +15,6 @@ import java.time.LocalDateTime;
 public class TimeEntity extends CreatedEntity {
 
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
 }
