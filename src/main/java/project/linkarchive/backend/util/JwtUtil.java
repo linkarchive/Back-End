@@ -15,7 +15,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import project.linkarchive.backend.advice.exception.custom.InvalidException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.advice.exception.custom.UnauthorizedException;
 import project.linkarchive.backend.auth.domain.RefreshToken;
@@ -40,7 +39,8 @@ public class JwtUtil {
     private static final Long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30L;
     private final static int TOKEN_DATA_INDEX = 1;
     private final static String BLANK = " ";
-
+    private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     @Value("${oauth.client.registration.kakao.grant_type}")
     private String GRANT_TYPE;
     @Value("${oauth.client.registration.kakao.client_id}")
@@ -49,9 +49,6 @@ public class JwtUtil {
     private String REDIRECT_URI;
     @Value("${jwt.key}")
     private String SECRET_KEY;
-
-    private final UserRepository userRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
 
     public JwtUtil(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository) {
         this.userRepository = userRepository;
@@ -179,7 +176,6 @@ public class JwtUtil {
             String newAccessToken = createAccessToken(user);
 
             return new AccessTokenResponse(newAccessToken);
-
         } else {
             throw new UnauthorizedException(INVALID_TOKEN);
         }
@@ -203,8 +199,8 @@ public class JwtUtil {
                 RefreshToken refreshedToken = RefreshToken.build(newRefreshToken, savedRefreshToken.getAgent(), user);
                 savedRefreshToken.updateRefreshToken(refreshedToken);
             }
-            return new RefreshTokenResponse(newAccessToken, newRefreshToken);
 
+            return new RefreshTokenResponse(newAccessToken, newRefreshToken);
         } else {
             throw new UnauthorizedException(INVALID_TOKEN);
         }
