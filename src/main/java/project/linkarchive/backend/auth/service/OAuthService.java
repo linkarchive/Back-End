@@ -2,6 +2,7 @@ package project.linkarchive.backend.auth.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
 import project.linkarchive.backend.auth.response.*;
@@ -12,6 +13,8 @@ import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.util.JwtUtil;
 
 import javax.transaction.Transactional;
+
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 @Service
 @Transactional
@@ -51,24 +54,26 @@ public class OAuthService {
                 });
 
         String accessToken = jwtUtil.createAccessToken(findUser);
-        String refreshToken = jwtUtil.createRefreshToken(findUser);
 
         if (!refreshTokenRepository.existsByUserIdAndAgent(findUser.getId(), userAgent)) {
+            String refreshToken = jwtUtil.createRefreshToken(findUser);
             RefreshToken token = RefreshToken.build(refreshToken, userAgent, findUser);
             refreshTokenRepository.save(token);
-        }
 
-        return new LoginResponse(findUser, accessToken, refreshToken);
+            return new LoginResponse(findUser, accessToken, refreshToken);
+        } else {
+            RefreshToken refreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent)
+                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+
+            return new LoginResponse(findUser, accessToken, refreshToken.getRefreshToken());
+        }
     }
 
     public AccessTokenResponse publishAccessToken(String refreshToken) {
-
         return jwtUtil.publishAccessToken(refreshToken);
-
     }
 
     public RefreshTokenResponse publishRefreshToken(String refreshToken) {
-
         return jwtUtil.publishRefreshToken(refreshToken);
     }
 

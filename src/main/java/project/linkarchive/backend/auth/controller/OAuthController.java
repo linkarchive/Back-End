@@ -39,14 +39,14 @@ public class OAuthController {
     }
 
     @PostMapping("/publish/access-token")
-    public AccessTokenResponse refreshAccessToken(
+    public AccessTokenResponse publishAccessToken(
             @RequestHeader("Authorization") String refreshToken
     ) {
         return oAuthService.publishAccessToken(refreshToken);
     }
 
     @PostMapping("/publish/refresh-token")
-    public RefreshTokenResponse renewToken(
+    public RefreshTokenResponse publishRefreshToken(
             @RequestHeader("Authorization") String refreshToken
     ) {
         return oAuthService.publishRefreshToken(refreshToken);
