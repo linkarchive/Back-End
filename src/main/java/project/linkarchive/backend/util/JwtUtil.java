@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +16,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import project.linkarchive.backend.advice.exception.custom.InvalidException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.advice.exception.custom.UnauthorizedException;
 import project.linkarchive.backend.auth.domain.RefreshToken;
@@ -153,6 +155,57 @@ public class JwtUtil {
         return userId;
     }
 
+    public AccessTokenResponse publishAccessToken(String accessToken, String refreshToken) {
+        String getAccessToken = getTokenWithoutBearer(accessToken);
+        String getRefreshToken = getTokenWithoutBearer(refreshToken);
+        RefreshToken savedRefreshToken;
+
+        if (!isValidatedToken(getAccessToken)) {
+            savedRefreshToken = refreshTokenRepository.findByRefreshToken(getRefreshToken)
+                    .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
+        } else {
+            throw new InvalidException(ACCESS_TOKEN_STILL_VALID);
+        }
+
+        if (isValidatedToken(getRefreshToken)) {
+            User user = userRepository.findById(savedRefreshToken.getUser().getId())
+                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+            String newAccessToken = createAccessToken(user);
+
+            return new AccessTokenResponse(newAccessToken);
+        } else {
+            throw new UnauthorizedException(INVALID_TOKEN);
+        }
+
+    }
+
+    public RefreshTokenResponse publishRefreshToken(String refreshToken) {
+        String getRefreshToken = getTokenWithoutBearer(refreshToken);
+
+        RefreshToken findRefreshToken = refreshTokenRepository.findByRefreshToken(getRefreshToken)
+            .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
+        User user;
+
+        if (isValidatedToken(getRefreshToken)) {
+            user = userRepository.findById(findRefreshToken.getUser().getId())
+                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+        } else {
+            throw new UnauthorizedException(INVALID_TOKEN);
+        }
+
+        if (refreshTokenRepository.existsByUserIdAndAgent(findRefreshToken.getUser().getId(), findRefreshToken.getAgent())) {
+            String newAccessToken = createAccessToken(user);
+            String newRefreshToken = createRefreshToken(user);
+
+            RefreshToken refreshedToken = RefreshToken.build(newRefreshToken, findRefreshToken.getAgent(), user);
+            findRefreshToken.updateRefreshToken(refreshedToken);
+
+            return new RefreshTokenResponse(newAccessToken, newRefreshToken);
+        } else {
+            throw new NotFoundException(NOT_FOUND_TOKEN);
+        }
+    }
+
     public boolean isValidatedToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
@@ -162,52 +215,15 @@ public class JwtUtil {
         }
     }
 
-    public AccessTokenResponse publishAccessToken(String refreshToken) {
-        String[] tokenData = refreshToken.split(BLANK);
-        String token = tokenData[TOKEN_DATA_INDEX];
-
-        RefreshToken savedRefreshToken = refreshTokenRepository.findByRefreshToken(token)
-                .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
-
-        if (isValidatedToken(token)) {
-            User user = userRepository.findById(savedRefreshToken.getUser().getId())
-                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-
-            String newAccessToken = createAccessToken(user);
-
-            return new AccessTokenResponse(newAccessToken);
-        } else {
-            throw new UnauthorizedException(INVALID_TOKEN);
-        }
-    }
-
-    public RefreshTokenResponse publishRefreshToken(String refreshToken) {
-        String[] tokenData = refreshToken.split(BLANK);
-        String token = tokenData[TOKEN_DATA_INDEX];
-
-        RefreshToken savedRefreshToken = refreshTokenRepository.findByRefreshToken(token)
-                .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
-
-        if (isValidatedToken(token)) {
-            User user = userRepository.findById(savedRefreshToken.getUser().getId())
-                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-
-            String newAccessToken = createAccessToken(user);
-            String newRefreshToken = createRefreshToken(user);
-
-            if (refreshTokenRepository.existsByUserIdAndAgent(savedRefreshToken.getUser().getId(), savedRefreshToken.getAgent())) {
-                RefreshToken refreshedToken = RefreshToken.build(newRefreshToken, savedRefreshToken.getAgent(), user);
-                savedRefreshToken.updateRefreshToken(refreshedToken);
-            }
-
-            return new RefreshTokenResponse(newAccessToken, newRefreshToken);
-        } else {
-            throw new UnauthorizedException(INVALID_TOKEN);
-        }
-    }
-
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    }
+
+    private String getTokenWithoutBearer(String token) {
+        String[] tokenData = token.split(BLANK);
+        String tokenWithoutBearer = tokenData[TOKEN_DATA_INDEX];
+
+        return tokenWithoutBearer;
     }
 
 }

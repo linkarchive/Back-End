@@ -4,15 +4,16 @@ import lombok.Getter;
 
 @Getter
 public enum ExceptionCodeConst {
+    BAD_REQUEST_TOKEN(400, "BAD_REQUEST_TOKEN", "잘못된 토큰 요청입니다."),
+    ACCESS_TOKEN_STILL_VALID(400, "ACCESS_TOKEN_STILL_VALID", "엑세스 토큰의 만료시간이 남아있습니다."),
 
-    NOT_TOKEN(400, "NOT_TOKEN", "토큰이 없습니다."),
-
-    INVALID_TOKEN(401, "INVALID_TOKEN", "유효하지 않은 토큰입니다."),
+    INVALID_TOKEN(401, "INVALID_TOKEN", "유효하지 않은 토큰입니다. 로그인이 필요합니다."),
     INVALID_AUTHORIZATION_CODE(401, "INVALID_AUTHORIZATION_CODE", "잘못된 인가코드입니다."),
 
     FORBIDDEN_ACCESS(403, "FORBIDDEN_ACCESS","권한이 없습니다."),
 
     NOT_FOUND_USER(404, "NOT_FOUND_USER", "유저가 존재하지 않습니다."),
+    NOT_FOUND_TOKEN(404, "NOT_FOUND_TOKEN", "토큰이 존재하지 않습니다."),
     NOT_FOUND_PROFILE_IMAGE(404, "NOT_FOUND_PROFILE_IMAGE", "프로필 이미지가 존재하지 않습니다."),
     NOT_FOUND_LINK(404, "NOT_FOUND_URL", "존재하지 않는 Link 입니다."),
     NOT_FOUND_BOOKMARK(404, "NOT_FOUND_BOOKMARK", "존재하지 않는 북마크입니다."),

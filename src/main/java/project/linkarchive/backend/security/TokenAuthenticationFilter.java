@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.INVALID_TOKEN;
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_TOKEN;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.BAD_REQUEST_TOKEN;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
@@ -33,7 +33,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String tokenHeader = request.getHeader("Authorization");
 
         if (tokenHeader == null) {
-            request.setAttribute("exception", NOT_TOKEN);
+            request.setAttribute("exception", BAD_REQUEST_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }

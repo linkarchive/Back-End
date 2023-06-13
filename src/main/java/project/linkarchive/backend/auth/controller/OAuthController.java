@@ -33,16 +33,15 @@ public class OAuthController {
 
         LoginResponse loginResponse = oAuthService.login(code, redirectUri, userAgent);
 
-        return ResponseEntity.ok()
-                .header(HEADER_STRING, TOKEN_PREFIX + loginResponse.getAccessToken())
-                .body(loginResponse);
+        return ResponseEntity.ok().body(loginResponse);
     }
 
     @PostMapping("/publish/access-token")
     public AccessTokenResponse publishAccessToken(
-            @RequestHeader("Authorization") String refreshToken
+            @RequestHeader("Authorization") String refreshToken,
+            @RequestHeader("accessToken") String accessToken
     ) {
-        return oAuthService.publishAccessToken(refreshToken);
+        return oAuthService.publishAccessToken(accessToken, refreshToken);
     }
 
     @PostMapping("/publish/refresh-token")
@@ -51,4 +50,5 @@ public class OAuthController {
     ) {
         return oAuthService.publishRefreshToken(refreshToken);
     }
+
 }

@@ -33,8 +33,8 @@ public class SecurityExceptionHandler implements AuthenticationEntryPoint, Acces
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         ExceptionCodeConst exception = (ExceptionCodeConst) request.getAttribute("exception");
 
-        if (exception.equals(NOT_TOKEN)) {
-            handler.resolveException(request, response, null, new InvalidException(NOT_TOKEN));
+        if (exception.equals(BAD_REQUEST_TOKEN)) {
+            handler.resolveException(request, response, null, new InvalidException(BAD_REQUEST_TOKEN));
         }
 
         if (exception.equals(INVALID_TOKEN)) {
