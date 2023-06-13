@@ -2,6 +2,7 @@ package project.linkarchive.backend.auth.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.linkarchive.backend.auth.request.AccessTokenRequest;
 import project.linkarchive.backend.auth.response.AccessTokenResponse;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.RefreshTokenResponse;
@@ -39,9 +40,9 @@ public class OAuthController {
     @PostMapping("/publish/access-token")
     public AccessTokenResponse publishAccessToken(
             @RequestHeader("Authorization") String refreshToken,
-            @RequestHeader("accessToken") String accessToken
-    ) {
-        return oAuthService.publishAccessToken(accessToken, refreshToken);
+            @RequestBody AccessTokenRequest accessTokenRequest
+            ) {
+        return oAuthService.publishAccessToken(accessTokenRequest.getAccessToken(), refreshToken);
     }
 
     @PostMapping("/publish/refresh-token")
