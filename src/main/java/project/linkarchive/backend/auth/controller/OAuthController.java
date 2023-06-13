@@ -40,9 +40,10 @@ public class OAuthController {
 
     @PostMapping("/publish/access-token")
     public AccessTokenResponse publishAccessToken(
-            @RequestHeader("Authorization") String refreshToken
+            @RequestHeader("Authorization") String refreshToken,
+            @RequestHeader("accessToken") String accessToken
     ) {
-        return oAuthService.publishAccessToken(refreshToken);
+        return oAuthService.publishAccessToken(accessToken, refreshToken);
     }
 
     @PostMapping("/publish/refresh-token")

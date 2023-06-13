@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +16,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import project.linkarchive.backend.advice.exception.custom.InvalidException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.advice.exception.custom.UnauthorizedException;
 import project.linkarchive.backend.auth.domain.RefreshToken;
@@ -32,6 +34,7 @@ import java.util.Date;
 import static org.springframework.http.HttpMethod.POST;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
+@Slf4j
 @Component
 public class JwtUtil {
 
@@ -162,33 +165,35 @@ public class JwtUtil {
         }
     }
 
-    public AccessTokenResponse publishAccessToken(String refreshToken) {
-        String[] tokenData = refreshToken.split(BLANK);
-        String token = tokenData[TOKEN_DATA_INDEX];
+    public AccessTokenResponse publishAccessToken(String accessToken, String refreshToken) {
+        String accessTokenWithoutBearer = getOnlyToken(accessToken);
+        String refreshTokenWithoutBearer = getOnlyToken(refreshToken);
 
-        RefreshToken savedRefreshToken = refreshTokenRepository.findByRefreshToken(token)
-                .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
+        if (!isValidatedToken(accessTokenWithoutBearer)) { // 엑세스 토큰이 유효하지 않을 떄 엑세스 토큰을 새로 발급할 수 있음
+            RefreshToken savedRefreshToken = refreshTokenRepository.findByRefreshToken(refreshTokenWithoutBearer)
+                    .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
 
-        if (isValidatedToken(token)) {
-            User user = userRepository.findById(savedRefreshToken.getUser().getId())
-                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+            if (isValidatedToken(refreshTokenWithoutBearer)) { // + 엑세스 토큰을 새로 발급하기 위해서는 리프레시 토큰은 유효해야함
+                User user = userRepository.findById(savedRefreshToken.getUser().getId())
+                        .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
 
-            String newAccessToken = createAccessToken(user);
+                String newAccessToken = createAccessToken(user);
 
-            return new AccessTokenResponse(newAccessToken);
-        } else {
-            throw new UnauthorizedException(INVALID_TOKEN);
+                return new AccessTokenResponse(newAccessToken);
+            } else {
+                throw new UnauthorizedException(INVALID_TOKEN);
+            }
         }
+        throw new InvalidException(ACCESS_TOKEN_STILL_VALID);
     }
 
     public RefreshTokenResponse publishRefreshToken(String refreshToken) {
-        String[] tokenData = refreshToken.split(BLANK);
-        String token = tokenData[TOKEN_DATA_INDEX];
+        String refreshTokenWithoutBearer = getOnlyToken(refreshToken);
 
-        RefreshToken savedRefreshToken = refreshTokenRepository.findByRefreshToken(token)
+        RefreshToken savedRefreshToken = refreshTokenRepository.findByRefreshToken(refreshTokenWithoutBearer)
                 .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
 
-        if (isValidatedToken(token)) {
+        if (isValidatedToken(refreshTokenWithoutBearer)) {
             User user = userRepository.findById(savedRefreshToken.getUser().getId())
                     .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
 
@@ -210,4 +215,10 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
+    private String getOnlyToken(String token) {
+        String[] tokenData = token.split(BLANK);
+        String tokenWithoutBearer = tokenData[TOKEN_DATA_INDEX];
+
+        return tokenWithoutBearer;
+    }
 }
