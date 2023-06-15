@@ -6,7 +6,7 @@ public class DataConstants {
     public static final String BLANK = " ";
     public static final String IMAGE_CONTENT_TYPE = "^image/(jpeg|jpg|png)$";
     public static final String BEARER = "bearer";
-    public static final String AUTH_KAKAO = "/auth/kakao";
+    public static final String AUTH_KAKAO = "auth/kakao";
 
     public static final int TOKEN_TYPE_INDEX = 0;
     public static final int TOKEN_DATA_INDEX = 1;
