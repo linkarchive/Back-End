@@ -38,7 +38,7 @@ public class OAuthController {
     public AccessTokenResponse publishAccessToken(
             @RequestHeader("Authorization") String refreshToken,
             @RequestBody AccessTokenRequest accessTokenRequest
-            ) {
+    ) {
         return oAuthService.publishAccessToken(accessTokenRequest.getAccessToken(), refreshToken);
     }
 

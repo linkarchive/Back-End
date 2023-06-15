@@ -11,7 +11,7 @@ import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.List;
 
-import static project.linkarchive.backend.advice.data.Constants.MAX_SIZE;
+import static project.linkarchive.backend.advice.data.DataConstants.MAX_SIZE;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.EXCEEDED_TAG_SIZE;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 

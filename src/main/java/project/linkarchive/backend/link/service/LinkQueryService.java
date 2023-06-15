@@ -22,7 +22,7 @@ import project.linkarchive.backend.user.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static project.linkarchive.backend.advice.data.Constants.IMAGE_EXPIRATION_TIME;
+import static project.linkarchive.backend.advice.data.DataConstants.IMAGE_EXPIRATION_TIME;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 @Service

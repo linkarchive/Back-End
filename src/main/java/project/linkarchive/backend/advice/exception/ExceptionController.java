@@ -52,7 +52,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> handleGenericException(Exception e) {
+    public ResponseEntity<ExceptionResponse> handleInternalServerError(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionCodeConst.INTERNAL_SERVER_ERROR));
     }
 

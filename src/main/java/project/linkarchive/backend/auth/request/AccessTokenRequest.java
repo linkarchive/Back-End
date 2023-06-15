@@ -12,4 +12,5 @@ public class AccessTokenRequest {
     public AccessTokenRequest(String accessToken) {
         this.accessToken = accessToken;
     }
+
 }

@@ -31,7 +31,7 @@ import java.security.Key;
 import java.util.Date;
 
 import static org.springframework.http.HttpMethod.POST;
-import static project.linkarchive.backend.advice.data.Constants.*;
+import static project.linkarchive.backend.advice.data.DataConstants.*;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Component
@@ -39,7 +39,7 @@ public class JwtUtil {
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    
+
     @Value("${oauth.client.registration.kakao.grant_type}")
     private String GRANT_TYPE;
     @Value("${oauth.client.registration.kakao.client_id}")

@@ -7,20 +7,20 @@ import project.linkarchive.backend.advice.exception.custom.LengthRequiredExcepti
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
+import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static project.linkarchive.backend.advice.data.Constants.*;
+import static project.linkarchive.backend.advice.data.DataConstants.*;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Service

@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static project.linkarchive.backend.advice.data.Constants.*;
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.INVALID_TOKEN;
+import static project.linkarchive.backend.advice.data.DataConstants.*;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.BAD_REQUEST_TOKEN;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.INVALID_TOKEN;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
@@ -26,8 +26,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
+
         String tokenHeader = request.getHeader("Authorization");
 
         if (tokenHeader == null) {

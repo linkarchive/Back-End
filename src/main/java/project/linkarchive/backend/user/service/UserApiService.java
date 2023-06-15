@@ -8,20 +8,20 @@ import project.linkarchive.backend.advice.exception.custom.AlreadyExistException
 import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
 import project.linkarchive.backend.advice.exception.custom.NotAcceptableException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
-import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
-import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
+import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
+import project.linkarchive.backend.s3.S3Uploader;
+import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
-import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
 import java.io.IOException;
 
-import static project.linkarchive.backend.advice.data.Constants.*;
+import static project.linkarchive.backend.advice.data.DataConstants.*;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Service

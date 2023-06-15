@@ -8,7 +8,7 @@ import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.response.ProfileResponse;
 
-import static project.linkarchive.backend.advice.data.Constants.IMAGE_EXPIRATION_TIME;
+import static project.linkarchive.backend.advice.data.DataConstants.IMAGE_EXPIRATION_TIME;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 @Service
