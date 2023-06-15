@@ -12,15 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.INVALID_TOKEN;
+import static project.linkarchive.backend.advice.data.DataConstants.*;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.BAD_REQUEST_TOKEN;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.INVALID_TOKEN;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
-
-    private final static int TOKEN_LENGTH = 2;
-    private final static String TOKEN_TYPE = "bearer";
-    private final static int TOKEN_TYPE_INDEX = 0;
-    private final static int TOKEN_DATA_INDEX = 1;
 
     private final JwtUtil jwtUtil;
 
@@ -29,7 +25,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
         String tokenHeader = request.getHeader("Authorization");
 
         if (tokenHeader == null) {
@@ -46,7 +44,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        if (!tokenData[TOKEN_TYPE_INDEX].equalsIgnoreCase(TOKEN_TYPE)) {
+        if (!tokenData[TOKEN_TYPE_INDEX].equalsIgnoreCase(BEARER)) {
             request.setAttribute("exception", INVALID_TOKEN);
             filterChain.doFilter(request, response);
             return;
@@ -67,4 +65,5 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.setContext(securityContext);
         filterChain.doFilter(request, response);
     }
+
 }

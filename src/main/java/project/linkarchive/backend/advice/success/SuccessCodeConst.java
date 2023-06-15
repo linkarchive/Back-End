@@ -17,9 +17,9 @@ public enum SuccessCodeConst {
     BOOK_MARK(201, "BOOK_MARK", "북마크 되었습니다."),
     LINK_READ(201, "LINK_READ", "링크를 읽었어요");
 
-    private int status;
-    private String code;
-    private String message;
+    private final int status;
+    private final String code;
+    private final String message;
 
     SuccessCodeConst(int status, String code, String message) {
         this.status = status;

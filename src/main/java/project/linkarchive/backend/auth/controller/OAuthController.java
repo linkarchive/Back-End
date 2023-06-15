@@ -13,26 +13,30 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class OAuthController {
 
-    public static final String TOKEN_PREFIX = "Bearer ";
-    public static final String HEADER_STRING = "Authorization";
-
     private final OAuthService oAuthService;
 
     public OAuthController(OAuthService oAuthService) {
         this.oAuthService = oAuthService;
     }
 
+    @PostMapping("/backend/auth/kakao")
+    public ResponseEntity<LoginResponse> loginByBackEnd(
+            @RequestParam("code") String code,
+            @RequestHeader("Referer") String referer,
+            @RequestHeader("User-Agent") String userAgent
+    ) {
+        LoginResponse loginResponse = oAuthService.loginForBackEnd(code, referer, userAgent);
+
+        return ResponseEntity.ok().body(loginResponse);
+    }
+
     @PostMapping("/auth/kakao")
     public ResponseEntity<LoginResponse> login(
             @RequestParam("code") String code,
-            HttpServletRequest request
+            @RequestHeader("Referer") String referer,
+            @RequestHeader("User-Agent") String userAgent
     ) {
-        String referer = request.getHeader("Referer");
-        String redirectUri = referer + "auth/kakao";
-
-        String userAgent = request.getHeader("User-Agent");
-
-        LoginResponse loginResponse = oAuthService.login(code, redirectUri, userAgent);
+        LoginResponse loginResponse = oAuthService.login(code, referer, userAgent);
 
         return ResponseEntity.ok().body(loginResponse);
     }
@@ -41,7 +45,7 @@ public class OAuthController {
     public AccessTokenResponse publishAccessToken(
             @RequestHeader("Authorization") String refreshToken,
             @RequestBody AccessTokenRequest accessTokenRequest
-            ) {
+    ) {
         return oAuthService.publishAccessToken(accessTokenRequest.getAccessToken(), refreshToken);
     }
 

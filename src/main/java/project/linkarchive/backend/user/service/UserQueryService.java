@@ -8,13 +8,12 @@ import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.response.ProfileResponse;
 
+import static project.linkarchive.backend.advice.data.DataConstants.IMAGE_EXPIRATION_TIME;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 @Service
 @Transactional(readOnly = true)
 public class UserQueryService {
-
-    public final static int EXPIRATION_TIME_IN_MINUTES = 1000 * 60 * 60;
 
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
@@ -51,7 +50,7 @@ public class UserQueryService {
     private String generateProfileImageUrl(String profileImageFilename) {
         return s3Uploader.generatePresignedProfileImageUrl(
                         profileImageFilename,
-                        EXPIRATION_TIME_IN_MINUTES)
+                        IMAGE_EXPIRATION_TIME)
                 .toString();
     }
 

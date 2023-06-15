@@ -23,6 +23,7 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 @Slf4j
 @Component
 public class SecurityExceptionHandler implements AuthenticationEntryPoint, AccessDeniedHandler {
+
     private final HandlerExceptionResolver handler;
 
     public SecurityExceptionHandler(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver handler) {
@@ -51,4 +52,5 @@ public class SecurityExceptionHandler implements AuthenticationEntryPoint, Acces
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         handler.resolveException(request, response, null, new ForbiddenException(FORBIDDEN_ACCESS));
     }
+
 }

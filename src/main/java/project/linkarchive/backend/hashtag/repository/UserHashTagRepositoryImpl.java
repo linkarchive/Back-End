@@ -31,7 +31,7 @@ public class UserHashTagRepositoryImpl {
                 .fetch();
     }
 
-    public List<TagResponse> getLimitedTagList(Long userId, Long size) {
+    public List<TagResponse> getLimitedTagList(Long userId, int size) {
         return queryFactory
                 .select(new QTagResponse(
                         userHashTag.hashTag.id,

@@ -28,7 +28,7 @@ public class HashTagQueryController {
     @GetMapping("/limited-tags/user/{userId}")
     public ResponseEntity<TagListResponse> getTagList(
             @PathVariable("userId") Long userId,
-            @RequestParam(value = "size") Long size
+            @RequestParam(value = "size") int size
     ) {
         TagListResponse tagList = hashTagQueryService.getLimitedTagList(userId, size);
         return ResponseEntity.ok(tagList);

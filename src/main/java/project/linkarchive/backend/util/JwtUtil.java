@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -32,17 +31,15 @@ import java.security.Key;
 import java.util.Date;
 
 import static org.springframework.http.HttpMethod.POST;
+import static project.linkarchive.backend.advice.data.DataConstants.*;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Component
 public class JwtUtil {
 
-    private static final Long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 2L;
-    private static final Long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30L;
-    private final static int TOKEN_DATA_INDEX = 1;
-    private final static String BLANK = " ";
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+
     @Value("${oauth.client.registration.kakao.grant_type}")
     private String GRANT_TYPE;
     @Value("${oauth.client.registration.kakao.client_id}")
@@ -81,18 +78,51 @@ public class JwtUtil {
         return jwtToken;
     }
 
-    public OauthToken getToken(String code, String redirectUri) {
+    public OauthToken getTokenForBackEnd(String code, String referer) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", GRANT_TYPE);
         params.add("client_id", CLIENT_ID);
-        params.add("redirect_uri", redirectUri);
+        params.add("redirect_uri", REDIRECT_URI);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
+        RestTemplate rt = new RestTemplate();
+        ResponseEntity<String> response;
+        try {
+            response = rt.exchange(
+                    "https://kauth.kakao.com/oauth/token",
+                    POST,
+                    kakaoTokenRequest,
+                    String.class);
+        } catch (HttpClientErrorException e) {
+            throw new UnauthorizedException(INVALID_AUTHORIZATION_CODE);
+        }
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        OauthToken oauthToken;
+        try {
+            oauthToken = objectMapper.readValue(response.getBody(), OauthToken.class);
+        } catch (JsonProcessingException e) {
+            throw new NotFoundException(NOT_FOUND_USER);
+        }
+
+        return oauthToken;
+    }
+
+    public OauthToken getToken(String code, String referer) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", GRANT_TYPE);
+        params.add("client_id", CLIENT_ID);
+        params.add("redirect_uri", referer + AUTH_KAKAO);
+        params.add("code", code);
+
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response;
         try {
@@ -183,7 +213,7 @@ public class JwtUtil {
         String getRefreshToken = getTokenWithoutBearer(refreshToken);
 
         RefreshToken findRefreshToken = refreshTokenRepository.findByRefreshToken(getRefreshToken)
-            .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
+                .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
         User user;
 
         if (isValidatedToken(getRefreshToken)) {

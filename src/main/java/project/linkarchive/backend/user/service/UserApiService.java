@@ -8,31 +8,25 @@ import project.linkarchive.backend.advice.exception.custom.AlreadyExistException
 import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
 import project.linkarchive.backend.advice.exception.custom.NotAcceptableException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
-import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
-import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
+import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
+import project.linkarchive.backend.s3.S3Uploader;
+import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
-import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
 import java.io.IOException;
 
+import static project.linkarchive.backend.advice.data.DataConstants.*;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Service
 @Transactional
 public class UserApiService {
-
-    public static final int MINIMUM_NICKNAME_LENGTH = 2;
-    public static final int MAXIMUM_NICKNAME_LENGTH = 16;
-    public static final int MAXIMUM_INTRODUCE_LENGTH = 20;
-    public final static int EXPIRATION_TIME_IN_MINUTES = 1000 * 60 * 60;
-    public final static int S3_KEY = 3;
-    public final static String IMAGE_CONTENT_TYPE = "^image/(jpeg|jpg|png)$";
 
     private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
@@ -86,7 +80,7 @@ public class UserApiService {
 
         String profileImageUrl = s3Uploader.generatePresignedProfileImageUrl(
                         storedFileName,
-                        EXPIRATION_TIME_IN_MINUTES)
+                        IMAGE_EXPIRATION_TIME)
                 .toString();
 
         return new ProfileImageResponse(profileImageUrl);

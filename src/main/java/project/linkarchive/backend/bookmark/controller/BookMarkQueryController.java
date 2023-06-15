@@ -66,7 +66,7 @@ public class BookMarkQueryController {
     @GetMapping("/mark/limited-tags/user/{nickname}")
     public ResponseEntity<TagListResponse> getMarkTagLimitList(
             @PathVariable("nickname") String nickname,
-            @RequestParam("size") Long size
+            @RequestParam("size") int size
     ) {
         TagListResponse tagList = bookMarkQueryService.getMarkTagLimitList(nickname, size);
         return ResponseEntity.ok(tagList);

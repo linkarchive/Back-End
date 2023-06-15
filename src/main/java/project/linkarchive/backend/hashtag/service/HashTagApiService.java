@@ -5,13 +5,13 @@ import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.hashtag.domain.HashTag;
+import project.linkarchive.backend.hashtag.domain.UserHashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
+import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 import project.linkarchive.backend.hashtag.request.CreateTagRequest;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.hashtag.domain.UserHashTag;
-import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.List;

@@ -26,10 +26,10 @@ import java.util.UUID;
 @Log4j2
 public class S3Uploader {
 
+    private final AmazonS3 amazonS3;
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
-    private final AmazonS3 amazonS3;
 
     public S3Uploader(AmazonS3 amazonS3) {
         this.amazonS3 = amazonS3;
