@@ -1,6 +1,6 @@
 package project.linkarchive.backend.advice.data;
 
-public class Constants {
+public class DataConstants {
 
     public static final String EMPTY = "";
     public static final String BLANK = " ";
@@ -23,6 +23,5 @@ public class Constants {
 
     public static final Long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 2L;
     public static final Long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30L;
-
 
 }
