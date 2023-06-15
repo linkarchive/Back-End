@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.springframework.http.HttpStatus.*;
+import static project.linkarchive.backend.advice.data.DataConstants.*;
 
 @RestController
 public class LinkQueryController {
@@ -62,7 +63,7 @@ public class LinkQueryController {
         }
 
         String metaTitle = document.select("meta[property=og:title]").attr("content");
-        if (metaTitle.equals(DataConstants.EMPTY)) {
+        if (metaTitle.equals(EMPTY)) {
             metaTitle = document.select("title").text();
         }
         String metaDescription = document.select("meta[property=og:description]").attr("content");

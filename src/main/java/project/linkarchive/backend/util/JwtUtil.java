@@ -78,18 +78,51 @@ public class JwtUtil {
         return jwtToken;
     }
 
-    public OauthToken getToken(String code, String redirectUri) {
+    public OauthToken getTokenForBackEnd(String code, String referer) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", GRANT_TYPE);
         params.add("client_id", CLIENT_ID);
-        params.add("redirect_uri", redirectUri);
+        params.add("redirect_uri", REDIRECT_URI);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
+        RestTemplate rt = new RestTemplate();
+        ResponseEntity<String> response;
+        try {
+            response = rt.exchange(
+                    "https://kauth.kakao.com/oauth/token",
+                    POST,
+                    kakaoTokenRequest,
+                    String.class);
+        } catch (HttpClientErrorException e) {
+            throw new UnauthorizedException(INVALID_AUTHORIZATION_CODE);
+        }
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        OauthToken oauthToken;
+        try {
+            oauthToken = objectMapper.readValue(response.getBody(), OauthToken.class);
+        } catch (JsonProcessingException e) {
+            throw new NotFoundException(NOT_FOUND_USER);
+        }
+
+        return oauthToken;
+    }
+
+    public OauthToken getToken(String code, String referer) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", GRANT_TYPE);
+        params.add("client_id", CLIENT_ID);
+        params.add("redirect_uri", referer + AUTH_KAKAO);
+        params.add("code", code);
+
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response;
         try {
