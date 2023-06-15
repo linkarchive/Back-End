@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -32,17 +31,15 @@ import java.security.Key;
 import java.util.Date;
 
 import static org.springframework.http.HttpMethod.POST;
+import static project.linkarchive.backend.advice.data.Constants.*;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Component
 public class JwtUtil {
 
-    private static final Long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 2L;
-    private static final Long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30L;
-    private final static int TOKEN_DATA_INDEX = 1;
-    private final static String BLANK = " ";
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    
     @Value("${oauth.client.registration.kakao.grant_type}")
     private String GRANT_TYPE;
     @Value("${oauth.client.registration.kakao.client_id}")
@@ -183,7 +180,7 @@ public class JwtUtil {
         String getRefreshToken = getTokenWithoutBearer(refreshToken);
 
         RefreshToken findRefreshToken = refreshTokenRepository.findByRefreshToken(getRefreshToken)
-            .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
+                .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
         User user;
 
         if (isValidatedToken(getRefreshToken)) {

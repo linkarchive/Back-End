@@ -20,16 +20,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static project.linkarchive.backend.advice.data.Constants.*;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Service
 @Transactional
 public class LinkApiService {
-
-    public static final int MINIMUM_TITLE_LENGTH = 1;
-    public static final int MINIMUM_TAG_LENGTH = 2;
-    public static final int MAXIMUM_TAG_LENGTH = 8;
-    public static final int MAX_TAG_COUNT = 10;
 
     private final UserRepository userRepository;
     private final HashTagRepository hashTagRepository;

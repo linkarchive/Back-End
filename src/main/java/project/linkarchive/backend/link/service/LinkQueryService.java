@@ -22,13 +22,12 @@ import project.linkarchive.backend.user.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static project.linkarchive.backend.advice.data.Constants.IMAGE_EXPIRATION_TIME;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 @Service
 @Transactional(readOnly = true)
 public class LinkQueryService {
-
-    public final static int EXPIRATION_TIME_IN_MINUTES = 1000 * 60 * 60;
 
     private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
@@ -188,7 +187,7 @@ public class LinkQueryService {
     private String generateProfileImageUrl(String profileImageFilename) {
         return s3Uploader.generatePresignedProfileImageUrl(
                         profileImageFilename,
-                        EXPIRATION_TIME_IN_MINUTES)
+                        IMAGE_EXPIRATION_TIME)
                 .toString();
     }
 

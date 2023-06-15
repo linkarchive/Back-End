@@ -25,14 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static project.linkarchive.backend.advice.data.Constants.MAX_SIZE;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.EXCEEDED_TAG_SIZE;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 @Service
 @Transactional(readOnly = true)
 public class BookMarkQueryService {
-
-    public static final Long MAX_SIZE = 30L;
 
     private final UserRepository userRepository;
     private final BookMarkRepository bookMarkRepository;
@@ -136,7 +135,7 @@ public class BookMarkQueryService {
         return new TagListResponse(tagList);
     }
 
-    public TagListResponse getMarkTagLimitList(String nickname, Long size) {
+    public TagListResponse getMarkTagLimitList(String nickname, int size) {
         User user = getUserByNickname(nickname);
         validateSizeDoesNotExceedMax(size);
         List<BookMark> bookMarkList = bookMarkRepository.findByUserId(user.getId());
@@ -174,7 +173,7 @@ public class BookMarkQueryService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
-    private void validateSizeDoesNotExceedMax(Long size) {
+    private void validateSizeDoesNotExceedMax(int size) {
         if (size > MAX_SIZE) {
             throw new ExceededException(EXCEEDED_TAG_SIZE);
         }
