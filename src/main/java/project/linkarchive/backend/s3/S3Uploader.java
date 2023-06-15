@@ -38,6 +38,7 @@ public class S3Uploader {
     public String upload(MultipartFile multipartFile) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+        // exception codeConst 로 ~
         return upload(uploadFile);
     }
 
@@ -53,8 +54,11 @@ public class S3Uploader {
     }
 
     private String upload(File uploadFile) {
-        String fileName = UUID.randomUUID() + uploadFile.getName();
+        String fileName = UUID.randomUUID().toString();
+        System.out.println("fileName = " + fileName);
         String uploadImageUrl = putS3(uploadFile, fileName);
+
+        System.out.println("uploadImageUrl = " + uploadImageUrl);
 
         removeNewFile(uploadFile);
 
@@ -92,7 +96,7 @@ public class S3Uploader {
         return url;
     }
 
-    public void deleteFile(String key) throws IOException {
+    public void deleteFile(String key) {
         try {
             amazonS3.deleteObject(bucket, key);
         } catch (SdkClientException e) {
