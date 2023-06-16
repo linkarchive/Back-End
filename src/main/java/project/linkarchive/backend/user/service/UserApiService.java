@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
-import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
-import project.linkarchive.backend.advice.exception.custom.NotAcceptableException;
-import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.advice.exception.custom.*;
+import project.linkarchive.backend.badword.BadWordFiltering;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
@@ -29,13 +27,15 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 public class UserApiService {
 
     private final S3Uploader s3Uploader;
+    private final BadWordFiltering badWordFiltering;
     private final UserRepository userRepository;
     private final ProfileImageRepository userProfileImageRepository;
 
     @Value("${cloud.aws.s3.default-image}")
     private String defaultImage;
 
-    public UserApiService(S3Uploader s3Uploader, UserRepository userRepository, ProfileImageRepository userProfileImageRepository) {
+    public UserApiService(BadWordFiltering badWordFiltering, S3Uploader s3Uploader, UserRepository userRepository, ProfileImageRepository userProfileImageRepository) {
+        this.badWordFiltering = badWordFiltering;
         this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
@@ -54,7 +54,7 @@ public class UserApiService {
 
     public UpdateProfileResponse updateUserProfile(UpdateProfileRequest request, Long userId) {
         validateNickname(request.getNickname());
-        validateIntroduceLength(request.getIntroduce());
+        validateIntroduce(request.getIntroduce());
 
         User user = getUserById(userId);
         existUserByNickname(request.getNickname(), user);
@@ -111,6 +111,7 @@ public class UserApiService {
     private void validateNickname(String nickname) {
         validateNicknamePattern(nickname);
         validateNicknameLength(nickname);
+        validateWordFiltering(nickname);
     }
 
     private void validateNicknamePattern(String nickname) {
@@ -125,6 +126,11 @@ public class UserApiService {
         if (isTooLong || isTooShort) {
             throw new LengthRequiredException(LENGTH_REQUIRED_NICKNAME);
         }
+    }
+
+    private void validateIntroduce(String introduce) {
+        validateIntroduceLength(introduce);
+        validateWordFiltering(introduce);
     }
 
     private void validateIntroduceLength(String introduce) {
@@ -165,6 +171,12 @@ public class UserApiService {
     private String extractKey(String fileName) {
         String key = fileName.split("/")[S3_KEY];
         return key;
+    }
+
+    private void validateWordFiltering(String word) {
+        if (badWordFiltering.filter(word)) {
+            throw new InvalidException(INVALID_BAD_WORD);
+        }
     }
 
 }
