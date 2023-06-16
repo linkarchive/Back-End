@@ -1,7 +1,13 @@
 package project.linkarchive.backend.badword;
 
-public enum BadWordList {
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-    시발, 씨발, 개새기, 개새끼
+public class BadWordList {
+
+    public static final Set<String> badWords = new HashSet<>(Arrays.asList(
+            "시발", "씨발"
+    ));
 
 }
