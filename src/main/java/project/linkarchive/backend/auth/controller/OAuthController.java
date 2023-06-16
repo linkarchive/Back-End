@@ -8,8 +8,6 @@ import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.RefreshTokenResponse;
 import project.linkarchive.backend.auth.service.OAuthService;
 
-import javax.servlet.http.HttpServletRequest;
-
 @RestController
 public class OAuthController {
 
@@ -19,13 +17,12 @@ public class OAuthController {
         this.oAuthService = oAuthService;
     }
 
-    @PostMapping("/backend/auth/kakao")
+    @PostMapping("/auth/kakao/backend")
     public ResponseEntity<LoginResponse> loginByBackEnd(
             @RequestParam("code") String code,
-            @RequestHeader("Referer") String referer,
             @RequestHeader("User-Agent") String userAgent
     ) {
-        LoginResponse loginResponse = oAuthService.loginForBackEnd(code, referer, userAgent);
+        LoginResponse loginResponse = oAuthService.loginForBackEnd(code, userAgent);
 
         return ResponseEntity.ok().body(loginResponse);
     }
