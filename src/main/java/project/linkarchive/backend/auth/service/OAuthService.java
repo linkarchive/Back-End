@@ -14,6 +14,7 @@ import project.linkarchive.backend.util.JwtUtil;
 
 import javax.transaction.Transactional;
 
+import static project.linkarchive.backend.advice.data.DataConstants.AUTH_KAKAO;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 @Service
@@ -35,8 +36,8 @@ public class OAuthService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public LoginResponse loginForBackEnd(String code, String referer, String userAgent) {
-        OauthToken oauthToken = jwtUtil.getTokenForBackEnd(code, referer);
+    public LoginResponse loginForBackEnd(String code, String userAgent) {
+        OauthToken oauthToken = jwtUtil.getTokenForBackEnd(code);
         KakaoProfile kakaoProfile = jwtUtil.getUserInfo(oauthToken.getAccess_token());
 
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
@@ -54,23 +55,24 @@ public class OAuthService {
                 });
 
         String accessToken = jwtUtil.createAccessToken(findUser);
+        String refreshToken;
 
         if (!refreshTokenRepository.existsByUserIdAndAgent(findUser.getId(), userAgent)) {
-            String refreshToken = jwtUtil.createRefreshToken(findUser);
+            refreshToken = jwtUtil.createRefreshToken(findUser);
             RefreshToken token = RefreshToken.build(refreshToken, userAgent, findUser);
             refreshTokenRepository.save(token);
-
-            return new LoginResponse(findUser, accessToken, refreshToken);
         } else {
-            RefreshToken refreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent)
+            RefreshToken findRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent)
                     .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-
-            return new LoginResponse(findUser, accessToken, refreshToken.getRefreshToken());
+            refreshToken = findRefreshToken.getRefreshToken();
         }
+
+        return new LoginResponse(findUser, accessToken, refreshToken);
     }
 
     public LoginResponse login(String code, String referer, String userAgent) {
-        OauthToken oauthToken = jwtUtil.getToken(code, referer);
+        String redirectUri = referer + AUTH_KAKAO;
+        OauthToken oauthToken = jwtUtil.getToken(code, redirectUri);
         KakaoProfile kakaoProfile = jwtUtil.getUserInfo(oauthToken.getAccess_token());
 
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
@@ -88,19 +90,19 @@ public class OAuthService {
                 });
 
         String accessToken = jwtUtil.createAccessToken(findUser);
+        String refreshToken;
 
         if (!refreshTokenRepository.existsByUserIdAndAgent(findUser.getId(), userAgent)) {
-            String refreshToken = jwtUtil.createRefreshToken(findUser);
+            refreshToken = jwtUtil.createRefreshToken(findUser);
             RefreshToken token = RefreshToken.build(refreshToken, userAgent, findUser);
             refreshTokenRepository.save(token);
-
-            return new LoginResponse(findUser, accessToken, refreshToken);
         } else {
-            RefreshToken refreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent)
+            RefreshToken findRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent)
                     .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-
-            return new LoginResponse(findUser, accessToken, refreshToken.getRefreshToken());
+            refreshToken = findRefreshToken.getRefreshToken();
         }
+
+        return new LoginResponse(findUser, accessToken, refreshToken);
     }
 
     public AccessTokenResponse publishAccessToken(String accessToken, String refreshToken) {
