@@ -42,10 +42,10 @@ public class UserApiService {
     }
 
     public UpdateNicknameResponse updateUserNickName(UpdateNicknameRequest request, Long userId) {
-        validateNicknameLength(request);
+        validateNickname(request.getNickname());
 
         User user = getUserById(userId);
-        existUserByNickname(request, user);
+        existUserByNickname(request.getNickname(), user);
 
         user.updateNickName(request);
 
@@ -53,10 +53,11 @@ public class UserApiService {
     }
 
     public UpdateProfileResponse updateUserProfile(UpdateProfileRequest request, Long userId) {
-        validateProfileLength(request);
+        validateNickname(request.getNickname());
+        validateIntroduceLength(request.getIntroduce());
 
         User user = getUserById(userId);
-        existUserByNickname(request, user);
+        existUserByNickname(request.getNickname(), user);
 
         user.updateProfile(request);
 
@@ -86,12 +87,9 @@ public class UserApiService {
         return new ProfileImageResponse(profileImageUrl);
     }
 
-    public void validateNickName(UpdateNicknameRequest request) {
-        validateNicknameLength(request);
-
-        if (userRepository.existsUserByNickname(request.getNickname())) {
-            throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
-        }
+    public void checkNickName(String nickname) {
+        validateNickname(nickname);
+        validateUserByNickname(nickname);
     }
 
     private User getUserById(Long userId) {
@@ -104,22 +102,33 @@ public class UserApiService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_PROFILE_IMAGE));
     }
 
-    private void validateNicknameLength(UpdateNicknameRequest request) {
-        boolean isTooLong = isTooLong(request.getNickname(), MAXIMUM_NICKNAME_LENGTH);
-        boolean isTooShort = isTooShort(request.getNickname(), MINIMUM_NICKNAME_LENGTH);
+    private void validateUserByNickname(String nickname) {
+        if (userRepository.existsUserByNickname(nickname)) {
+            throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
+        }
+    }
+
+    private void validateNickname(String nickname) {
+        validateNicknamePattern(nickname);
+        validateNicknameLength(nickname);
+    }
+
+    private void validateNicknamePattern(String nickname) {
+        if (!PATTERN_REGAX.matcher(nickname).matches()) {
+            throw new NotAcceptableException(INVALID_NICKNAME);
+        }
+    }
+
+    private void validateNicknameLength(String nickname) {
+        boolean isTooLong = isTooLong(nickname, MAXIMUM_NICKNAME_LENGTH);
+        boolean isTooShort = isTooShort(nickname, MINIMUM_NICKNAME_LENGTH);
         if (isTooLong || isTooShort) {
             throw new LengthRequiredException(LENGTH_REQUIRED_NICKNAME);
         }
     }
 
-    private void validateProfileLength(UpdateProfileRequest request) {
-        boolean isNicknameTooLong = isTooLong(request.getNickname(), MAXIMUM_NICKNAME_LENGTH);
-        boolean isNicknameTooShort = isTooShort(request.getNickname(), MINIMUM_NICKNAME_LENGTH);
-        if (isNicknameTooLong || isNicknameTooShort) {
-            throw new LengthRequiredException(LENGTH_REQUIRED_NICKNAME);
-        }
-
-        boolean isIntroduceTooLong = isTooLong(request.getIntroduce(), MAXIMUM_INTRODUCE_LENGTH);
+    private void validateIntroduceLength(String introduce) {
+        boolean isIntroduceTooLong = isTooLong(introduce, MAXIMUM_INTRODUCE_LENGTH);
         if (isIntroduceTooLong) {
             throw new LengthRequiredException(LENGTH_REQUIRED_INTRODUCE);
         }
@@ -133,17 +142,7 @@ public class UserApiService {
         return value.length() < minLength;
     }
 
-    private void existUserByNickname(UpdateNicknameRequest request, User user) {
-        String nickname = request.getNickname();
-        if (userRepository.existsUserByNickname(nickname) &&
-                !user.getNickname().equals(nickname)
-        ) {
-            throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
-        }
-    }
-
-    private void existUserByNickname(UpdateProfileRequest request, User user) {
-        String nickname = request.getNickname();
+    private void existUserByNickname(String nickname, User user) {
         if (userRepository.existsUserByNickname(nickname) &&
                 !user.getNickname().equals(nickname)
         ) {

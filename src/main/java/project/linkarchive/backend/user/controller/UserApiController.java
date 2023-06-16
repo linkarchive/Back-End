@@ -57,7 +57,7 @@ public class UserApiController {
     public ResponseEntity<SuccessResponse> validationNickName(
             @RequestBody UpdateNicknameRequest request
     ) {
-        userApiService.validateNickName(request);
+        userApiService.checkNickName(request.getNickname());
         return ResponseEntity.status(CREATED).body(new SuccessResponse(AVAILABLE_NICKNAME));
     }
 
