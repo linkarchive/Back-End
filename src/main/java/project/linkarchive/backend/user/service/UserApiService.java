@@ -71,8 +71,7 @@ public class UserApiService {
         validateContentType(image.getContentType());
 
         String storedFileName = s3Uploader.upload(image);
-        System.out.println("storedFileName = " + storedFileName);
-//        storedFileName = extractKey(storedFileName);
+        storedFileName = extractKey(storedFileName);
 
         if (!profileImage.getProfileImageFilename().equals(defaultImage)) {
             s3Uploader.deleteFile(profileImage.getProfileImageFilename());

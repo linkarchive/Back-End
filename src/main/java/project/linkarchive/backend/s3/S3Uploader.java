@@ -55,10 +55,7 @@ public class S3Uploader {
 
     private String upload(File uploadFile) {
         String fileName = UUID.randomUUID().toString();
-        System.out.println("fileName = " + fileName);
         String uploadImageUrl = putS3(uploadFile, fileName);
-
-        System.out.println("uploadImageUrl = " + uploadImageUrl);
 
         removeNewFile(uploadFile);
 
