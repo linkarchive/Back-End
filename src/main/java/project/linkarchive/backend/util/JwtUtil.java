@@ -78,7 +78,7 @@ public class JwtUtil {
         return jwtToken;
     }
 
-    public OauthToken getTokenForBackEnd(String code, String referer) {
+    public OauthToken getTokenForBackEnd(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
@@ -119,7 +119,7 @@ public class JwtUtil {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", GRANT_TYPE);
         params.add("client_id", CLIENT_ID);
-        params.add("redirect_uri", referer + AUTH_KAKAO);
+        params.add("redirect_uri", referer);
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);

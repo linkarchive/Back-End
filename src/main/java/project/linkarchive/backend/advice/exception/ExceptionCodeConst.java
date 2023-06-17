@@ -10,6 +10,7 @@ public enum ExceptionCodeConst {
 
     INVALID_TOKEN(401, "INVALID_TOKEN", "유효하지 않은 토큰입니다. 로그인이 필요합니다."),
     INVALID_AUTHORIZATION_CODE(401, "INVALID_AUTHORIZATION_CODE", "잘못된 인가코드입니다."),
+    INVALID_BAD_WORD(400, "INVALID_BAD_WORD", "욕설은 허용하지 않습니다."),
 
     FORBIDDEN_ACCESS(403, "FORBIDDEN_ACCESS", "권한이 없습니다."),
 
@@ -22,6 +23,7 @@ public enum ExceptionCodeConst {
 
     EMPTY_UPLOAD_FILE(406, "EMPTY_UPLOAD_FILE", "파일을 찾을 수 없습니다."),
     NOT_ACCEPTABLE_CONTENT_TYPE(406, "NOT_ACCEPTABLE_CONTENT_TYPE", "jpeg, jpg, png 파일만 업로드 할 수 있습니다."),
+    INVALID_NICKNAME(406, "INVALID_NICKNAME", "유효하지 않는 닉네임입니다."),
 
     ALREADY_EXIST_TAG(409, "ALREADY_EXIST_TAG", "이미 존재하는 태그입니다."),
     ALREADY_EXIST_BOOKMARK(409, "ALREADY_EXIST_BOOKMARK", "이미 마크가 된 Link 입니다."),

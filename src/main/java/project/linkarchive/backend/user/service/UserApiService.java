@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
-import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
-import project.linkarchive.backend.advice.exception.custom.NotAcceptableException;
-import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.advice.exception.custom.*;
+import project.linkarchive.backend.badword.BadWordFiltering;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
@@ -29,23 +27,25 @@ import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 public class UserApiService {
 
     private final S3Uploader s3Uploader;
+    private final BadWordFiltering badWordFiltering;
     private final UserRepository userRepository;
     private final ProfileImageRepository userProfileImageRepository;
 
     @Value("${cloud.aws.s3.default-image}")
     private String defaultImage;
 
-    public UserApiService(S3Uploader s3Uploader, UserRepository userRepository, ProfileImageRepository userProfileImageRepository) {
+    public UserApiService(BadWordFiltering badWordFiltering, S3Uploader s3Uploader, UserRepository userRepository, ProfileImageRepository userProfileImageRepository) {
+        this.badWordFiltering = badWordFiltering;
         this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
     }
 
     public UpdateNicknameResponse updateUserNickName(UpdateNicknameRequest request, Long userId) {
-        validateNicknameLength(request);
+        validateNickname(request.getNickname());
 
         User user = getUserById(userId);
-        existUserByNickname(request, user);
+        existUserByNickname(request.getNickname(), user);
 
         user.updateNickName(request);
 
@@ -53,10 +53,11 @@ public class UserApiService {
     }
 
     public UpdateProfileResponse updateUserProfile(UpdateProfileRequest request, Long userId) {
-        validateProfileLength(request);
+        validateNickname(request.getNickname());
+        validateIntroduce(request.getIntroduce());
 
         User user = getUserById(userId);
-        existUserByNickname(request, user);
+        existUserByNickname(request.getNickname(), user);
 
         user.updateProfile(request);
 
@@ -87,12 +88,9 @@ public class UserApiService {
         return new ProfileImageResponse(profileImageUrl);
     }
 
-    public void validateNickName(UpdateNicknameRequest request) {
-        validateNicknameLength(request);
-
-        if (userRepository.existsUserByNickname(request.getNickname())) {
-            throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
-        }
+    public void checkNickName(String nickname) {
+        validateNickname(nickname);
+        validateUserByNickname(nickname);
     }
 
     private User getUserById(Long userId) {
@@ -105,22 +103,39 @@ public class UserApiService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_PROFILE_IMAGE));
     }
 
-    private void validateNicknameLength(UpdateNicknameRequest request) {
-        boolean isTooLong = isTooLong(request.getNickname(), MAXIMUM_NICKNAME_LENGTH);
-        boolean isTooShort = isTooShort(request.getNickname(), MINIMUM_NICKNAME_LENGTH);
+    private void validateUserByNickname(String nickname) {
+        if (userRepository.existsUserByNickname(nickname)) {
+            throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
+        }
+    }
+
+    private void validateNickname(String nickname) {
+        validateNicknamePattern(nickname);
+        validateNicknameLength(nickname);
+        validateWordFiltering(nickname);
+    }
+
+    private void validateNicknamePattern(String nickname) {
+        if (!PATTERN_REGAX.matcher(nickname).matches()) {
+            throw new NotAcceptableException(INVALID_NICKNAME);
+        }
+    }
+
+    private void validateNicknameLength(String nickname) {
+        boolean isTooLong = isTooLong(nickname, MAXIMUM_NICKNAME_LENGTH);
+        boolean isTooShort = isTooShort(nickname, MINIMUM_NICKNAME_LENGTH);
         if (isTooLong || isTooShort) {
             throw new LengthRequiredException(LENGTH_REQUIRED_NICKNAME);
         }
     }
 
-    private void validateProfileLength(UpdateProfileRequest request) {
-        boolean isNicknameTooLong = isTooLong(request.getNickname(), MAXIMUM_NICKNAME_LENGTH);
-        boolean isNicknameTooShort = isTooShort(request.getNickname(), MINIMUM_NICKNAME_LENGTH);
-        if (isNicknameTooLong || isNicknameTooShort) {
-            throw new LengthRequiredException(LENGTH_REQUIRED_NICKNAME);
-        }
+    private void validateIntroduce(String introduce) {
+        validateIntroduceLength(introduce);
+        validateWordFiltering(introduce);
+    }
 
-        boolean isIntroduceTooLong = isTooLong(request.getIntroduce(), MAXIMUM_INTRODUCE_LENGTH);
+    private void validateIntroduceLength(String introduce) {
+        boolean isIntroduceTooLong = isTooLong(introduce, MAXIMUM_INTRODUCE_LENGTH);
         if (isIntroduceTooLong) {
             throw new LengthRequiredException(LENGTH_REQUIRED_INTRODUCE);
         }
@@ -134,17 +149,7 @@ public class UserApiService {
         return value.length() < minLength;
     }
 
-    private void existUserByNickname(UpdateNicknameRequest request, User user) {
-        String nickname = request.getNickname();
-        if (userRepository.existsUserByNickname(nickname) &&
-                !user.getNickname().equals(nickname)
-        ) {
-            throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
-        }
-    }
-
-    private void existUserByNickname(UpdateProfileRequest request, User user) {
-        String nickname = request.getNickname();
+    private void existUserByNickname(String nickname, User user) {
         if (userRepository.existsUserByNickname(nickname) &&
                 !user.getNickname().equals(nickname)
         ) {
@@ -167,6 +172,12 @@ public class UserApiService {
     private String extractKey(String fileName) {
         String key = fileName.split("/")[S3_KEY];
         return key;
+    }
+
+    private void validateWordFiltering(String word) {
+        if (badWordFiltering.filter(word)) {
+            throw new InvalidException(INVALID_BAD_WORD);
+        }
     }
 
 }
