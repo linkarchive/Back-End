@@ -24,6 +24,7 @@ public enum ExceptionCodeConst {
     EMPTY_UPLOAD_FILE(406, "EMPTY_UPLOAD_FILE", "파일을 찾을 수 없습니다."),
     NOT_ACCEPTABLE_CONTENT_TYPE(406, "NOT_ACCEPTABLE_CONTENT_TYPE", "jpeg, jpg, png 파일만 업로드 할 수 있습니다."),
     INVALID_NICKNAME(406, "INVALID_NICKNAME", "유효하지 않는 닉네임입니다."),
+    CONVERSION_FAILED(406, "CONVERSION_FAILED", "MultipartFile -> File 변환 실패"),
 
     ALREADY_EXIST_TAG(409, "ALREADY_EXIST_TAG", "이미 존재하는 태그입니다."),
     ALREADY_EXIST_BOOKMARK(409, "ALREADY_EXIST_BOOKMARK", "이미 마크가 된 Link 입니다."),

@@ -10,7 +10,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.advice.exception.custom.NotAcceptableException;
 
 import java.io.File;
@@ -21,6 +20,9 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.CONVERSION_FAILED;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_ACCEPTABLE_CONTENT_TYPE;
 
 @Service
 @Log4j2
@@ -37,7 +39,7 @@ public class S3Uploader {
 
     public String upload(MultipartFile multipartFile) throws IOException {
         File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+                .orElseThrow(() -> new NotAcceptableException(CONVERSION_FAILED));
         return upload(uploadFile);
     }
 
@@ -53,7 +55,7 @@ public class S3Uploader {
     }
 
     private String upload(File uploadFile) {
-        String fileName = UUID.randomUUID() + uploadFile.getName();
+        String fileName = UUID.randomUUID().toString();
         String uploadImageUrl = putS3(uploadFile, fileName);
 
         removeNewFile(uploadFile);
@@ -92,11 +94,11 @@ public class S3Uploader {
         return url;
     }
 
-    public void deleteFile(String key) throws IOException {
+    public void deleteFile(String key) {
         try {
             amazonS3.deleteObject(bucket, key);
         } catch (SdkClientException e) {
-            throw new NotAcceptableException(ExceptionCodeConst.NOT_ACCEPTABLE_CONTENT_TYPE);
+            throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
         }
     }
 
