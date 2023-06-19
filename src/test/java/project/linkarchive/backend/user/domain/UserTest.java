@@ -58,9 +58,9 @@ class UserTest extends UserSetUpData {
         assertEquals(INTRODUCE, getUser.getIntroduce());
     }
 
-    @DisplayName("유저 Build method - Domain")
+    @DisplayName("유저 create method - Domain")
     @Test
-    void testBuild() {
+    void testCreate() {
         KakaoProfile kakaoProfile = new KakaoProfile(SOCIAL_ID, EMAIL);
         User getUser = User.create(kakaoProfile);
 
