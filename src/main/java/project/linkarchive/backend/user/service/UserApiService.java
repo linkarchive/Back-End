@@ -140,6 +140,12 @@ public class UserApiService {
         }
     }
 
+    private void validateWordFiltering(String word) {
+        if (badWordFiltering.filter(word)) {
+            throw new InvalidException(INVALID_BAD_WORD);
+        }
+    }
+
     private boolean isTooLong(String value, int maxLength) {
         return value.length() > maxLength;
     }
@@ -149,8 +155,7 @@ public class UserApiService {
     }
 
     private void existUserByNickname(String nickname, User user) {
-        if (userRepository.existsUserByNickname(nickname) &&
-                !user.getNickname().equals(nickname)
+        if (userRepository.existsUserByNickname(nickname) && !user.getNickname().equals(nickname)
         ) {
             throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
         }
@@ -171,12 +176,6 @@ public class UserApiService {
     private String extractKey(String fileName) {
         String key = fileName.split("/")[S3_KEY];
         return key;
-    }
-
-    private void validateWordFiltering(String word) {
-        if (badWordFiltering.filter(word)) {
-            throw new InvalidException(INVALID_BAD_WORD);
-        }
     }
 
 }

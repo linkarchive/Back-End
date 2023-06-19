@@ -17,6 +17,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static project.linkarchive.backend.advice.data.DataConstants.EMPTY;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -52,12 +54,12 @@ public class User extends TimeEntity {
         this.introduce = introduce;
     }
 
-    public static User build(KakaoProfile kakaoProfile) {
+    public static User create(KakaoProfile kakaoProfile) {
         return User.builder()
-                .socialId(kakaoProfile.id)
-                .nickname("")
+                .socialId(kakaoProfile.getId())
+                .nickname(EMPTY)
                 .email(kakaoProfile.getKakaoAccount().getEmail())
-                .introduce("")
+                .introduce(EMPTY)
                 .build();
     }
 
