@@ -2,6 +2,7 @@ package project.linkarchive.backend.user.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import project.linkarchive.backend.auth.response.KakaoAccount;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.util.setUpData.UserSetUpData;
 
@@ -61,7 +62,7 @@ class UserTest extends UserSetUpData {
     @DisplayName("유저 create method - Domain")
     @Test
     void testCreate() {
-        KakaoProfile kakaoProfile = new KakaoProfile(SOCIAL_ID, EMAIL);
+        KakaoProfile kakaoProfile = new KakaoProfile(SOCIAL_ID, new KakaoAccount(EMAIL));
         User getUser = User.create(kakaoProfile);
 
         assertEquals(SOCIAL_ID, getUser.getSocialId());
