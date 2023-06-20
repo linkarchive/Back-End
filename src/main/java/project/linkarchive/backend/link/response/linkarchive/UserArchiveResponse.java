@@ -25,7 +25,7 @@ public class UserArchiveResponse {
     private List<TagResponse> tagList;
 
     @Builder
-    public UserArchiveResponse(Long userId, String nickname, String profileImage, Long linkId, String url, String title, String description, String thumbnail,LocalDateTime linkCreatedTime, Long bookMarkCount, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
+    public UserArchiveResponse(Long userId, String nickname, String profileImage, Long linkId, String url, String title, String description, String thumbnail, LocalDateTime linkCreatedTime, Long bookMarkCount, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;

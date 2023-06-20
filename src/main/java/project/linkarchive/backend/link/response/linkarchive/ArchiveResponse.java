@@ -2,7 +2,6 @@ package project.linkarchive.backend.link.response.linkarchive;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
