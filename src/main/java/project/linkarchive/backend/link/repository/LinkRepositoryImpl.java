@@ -84,6 +84,7 @@ public class LinkRepositoryImpl {
                         link.title,
                         link.description,
                         link.thumbnail,
+                        link.createdAt,
                         link.bookMarkCount
                 ))
                 .from(link)
