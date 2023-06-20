@@ -14,11 +14,11 @@ public class KakaoProfile {
     public String id;
 
     @JsonProperty("kakao_account")
-    public KakaoEmail kakaoEmail;
+    public KakaoAccount kakaoAccount;
 
-    public KakaoProfile(String id, KakaoEmail kakaoEmail) {
+    public KakaoProfile(String id, KakaoAccount kakaoAccount) {
         this.id = id;
-        this.kakaoEmail = kakaoEmail;
+        this.kakaoAccount = kakaoAccount;
     }
 
 }

@@ -17,6 +17,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.querydsl.codegen.utils.Symbols.EMPTY;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -55,9 +57,9 @@ public class User extends TimeEntity {
     public static User build(KakaoProfile kakaoProfile) {
         return User.builder()
                 .socialId(kakaoProfile.id)
-                .nickname("")
-                .email(kakaoProfile.getKakaoEmail().getEmail())
-                .introduce("")
+                .nickname(EMPTY)
+                .email(kakaoProfile.getKakaoAccount().getEmail())
+                .introduce(EMPTY)
                 .build();
     }
 
