@@ -33,7 +33,8 @@ public class LinkRepositoryImpl {
                         link.title,
                         link.description,
                         link.thumbnail,
-                        link.bookMarkCount
+                        link.bookMarkCount,
+                        link.createdAt
                 ))
                 .from(link)
                 .distinct()
@@ -56,7 +57,8 @@ public class LinkRepositoryImpl {
                         link.title,
                         link.description,
                         link.thumbnail,
-                        link.bookMarkCount
+                        link.bookMarkCount,
+                        link.createdAt
                 ))
                 .from(link)
                 .distinct()
