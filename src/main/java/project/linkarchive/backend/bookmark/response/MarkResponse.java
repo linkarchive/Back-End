@@ -3,6 +3,8 @@ package project.linkarchive.backend.bookmark.response;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class MarkResponse {
 
@@ -13,9 +15,10 @@ public class MarkResponse {
     private String description;
     private String thumbnail;
     private Long bookMarkCount;
+    private LocalDateTime bookMarkedTime;
 
     @QueryProjection
-    public MarkResponse(Long markId, Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount) {
+    public MarkResponse(Long markId, Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, LocalDateTime bookMarkedTime) {
         this.markId = markId;
         this.linkId = linkId;
         this.url = url;
@@ -23,6 +26,7 @@ public class MarkResponse {
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
+        this.bookMarkedTime = bookMarkedTime;
     }
 
 }
