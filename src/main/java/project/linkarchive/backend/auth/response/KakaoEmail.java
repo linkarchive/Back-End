@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class KakaoAccount {
+public class KakaoEmail {
 
     public String email;
 
-    public KakaoAccount(String email){
+    public KakaoEmail(String email){
         this.email = email;
     }
 }

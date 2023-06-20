@@ -56,7 +56,7 @@ public class User extends TimeEntity {
         return User.builder()
                 .socialId(kakaoProfile.id)
                 .nickname("")
-                .email(kakaoProfile.getKakaoAccount().getEmail())
+                .email(kakaoProfile.getKakaoEmail().getEmail())
                 .introduce("")
                 .build();
     }
