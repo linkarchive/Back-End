@@ -48,7 +48,7 @@ public class OAuthService {
                     return user;
                 })
                 .orElseGet(() -> {
-                    User user = User.build(kakaoProfile);
+                    User user = User.create(kakaoProfile);
                     userProfileImageRepository.save(ProfileImage.build(DEFAULT_IMAGE, user));
 
                     return user;
@@ -83,7 +83,7 @@ public class OAuthService {
                     return user;
                 })
                 .orElseGet(() -> {
-                    User user = User.build(kakaoProfile);
+                    User user = User.create(kakaoProfile);
                     userProfileImageRepository.save(ProfileImage.build(DEFAULT_IMAGE, user));
 
                     return user;
