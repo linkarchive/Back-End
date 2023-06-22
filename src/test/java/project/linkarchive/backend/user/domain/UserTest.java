@@ -92,7 +92,6 @@ class UserTest extends UserSetUpData {
 
         user.updateNickName(updateNicknameRequest);
 
-
         assertNotEquals(oldNickname, user.getNickname());
         assertEquals(NEW_NICKNAME, user.getNickname());
     }
