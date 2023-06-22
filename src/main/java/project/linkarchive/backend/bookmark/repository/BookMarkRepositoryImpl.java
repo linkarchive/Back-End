@@ -31,7 +31,8 @@ public class BookMarkRepositoryImpl {
                         bookMark.link.title,
                         bookMark.link.description,
                         bookMark.link.thumbnail,
-                        bookMark.link.bookMarkCount
+                        bookMark.link.bookMarkCount,
+                        bookMark.createdAt
                 ))
                 .from(bookMark)
                 .distinct()
@@ -55,7 +56,8 @@ public class BookMarkRepositoryImpl {
                         bookMark.link.title,
                         bookMark.link.description,
                         bookMark.link.thumbnail,
-                        bookMark.link.bookMarkCount
+                        bookMark.link.bookMarkCount,
+                        bookMark.createdAt
                 ))
                 .from(bookMark)
                 .where(

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import project.linkarchive.backend.hashtag.response.TagResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,12 +17,13 @@ public class UserMarkResponse {
     private String description;
     private String thumbnail;
     private Long bookMarkCount;
+    private LocalDateTime bookMarkedTime;
     private Boolean isRead;
     private Boolean isMark;
     private List<TagResponse> tagList;
 
     @Builder
-    public UserMarkResponse(Long markId, Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
+    public UserMarkResponse(Long markId, Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, LocalDateTime bookMarkedTime, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
         this.markId = markId;
         this.linkId = linkId;
         this.url = url;
@@ -29,6 +31,7 @@ public class UserMarkResponse {
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
+        this.bookMarkedTime = bookMarkedTime;
         this.isRead = isRead;
         this.isMark = isMark;
         this.tagList = tagList;
@@ -43,6 +46,7 @@ public class UserMarkResponse {
                 .description(response.getDescription())
                 .thumbnail(response.getThumbnail())
                 .bookMarkCount(response.getBookMarkCount())
+                .bookMarkedTime(response.getBookMarkedTime())
                 .isRead(isRead)
                 .isMark(isMark)
                 .tagList(tagList)
