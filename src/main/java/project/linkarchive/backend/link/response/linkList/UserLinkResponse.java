@@ -9,6 +9,7 @@ import java.util.List;
 
 @Getter
 public class UserLinkResponse {
+
     private Long linkId;
     private String url;
     private String title;
