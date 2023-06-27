@@ -5,10 +5,18 @@ import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.domain.UserHashTag;
 import project.linkarchive.backend.hashtag.request.CreateTagRequest;
+import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
+import project.linkarchive.backend.link.response.LinkMetaDataResponse;
+import project.linkarchive.backend.link.response.linkList.LinkResponse;
+import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
+import project.linkarchive.backend.link.response.linkList.UserLinkResponse;
+import project.linkarchive.backend.link.response.linkarchive.ArchiveResponse;
+import project.linkarchive.backend.link.response.linkarchive.UserArchiveResponse;
+import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
@@ -30,11 +38,24 @@ public class SetUpData {
     public IsLinkRead isLinkRead;
 
     public List<String> tagList = new ArrayList<>();
+    public List<TagResponse> tagResponseList = new ArrayList<>();
     public List<LinkHashTag> linkHashTagList = new ArrayList<>();
+    public List<UserArchiveResponse> userArchiveResponseList = new ArrayList<>();
+    public List<UserLinkResponse> userLinkResponseList = new ArrayList<>();
 
     public UpdateNicknameRequest updateNicknameRequest;
     public UpdateProfileRequest updateProfileRequest;
     public CreateLinkRequest createLinkRequest;
     public CreateTagRequest createTagRequest;
+
+    public ArchiveResponse archiveResponse;
+    public UserArchiveResponse userArchiveResponse;
+    public UserLinkArchiveResponse userLinkArchiveResponse;
+    public LinkResponse linkResponse;
+    public UserLinkListResponse userLinkListResponse;
+    public UserLinkResponse userLinkResponse;
+    public LinkMetaDataResponse linkMetaDataResponse;
+
+    public TagResponse tagResponse;
 
 }
