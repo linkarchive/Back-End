@@ -53,7 +53,7 @@ public class SetUpData {
     public UserLinkArchiveResponse userLinkArchiveResponse;
     public LinkResponse linkResponse;
     public UserLinkListResponse userLinkListResponse;
-    public UserLinkResponse userLinkResponse;
+    public UserLinkResponse getUserLinkResponse;
     public LinkMetaDataResponse linkMetaDataResponse;
 
     public TagResponse tagResponse;

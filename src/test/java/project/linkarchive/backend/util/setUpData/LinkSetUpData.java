@@ -56,7 +56,7 @@ public class LinkSetUpData extends SetUpData {
 
     private void setUpTagList() {
         for (int i = 1; i <= 10; i++) {
-            HashTag hashTag = HashTag.builder()
+            hashTag = HashTag.builder()
                     .tag(TAG + i)
                     .build();
             tagList.add(hashTag.getTag());
@@ -69,7 +69,7 @@ public class LinkSetUpData extends SetUpData {
 
     private void setupTagResponseList() {
         for (String tag : tagList) {
-            TagResponse tagResponse = new TagResponse(tag);
+            tagResponse = new TagResponse(tag);
             tagResponseList.add(tagResponse);
         }
     }
@@ -80,7 +80,7 @@ public class LinkSetUpData extends SetUpData {
 
     private void setupUserArchiveResponseList() {
         for (int i = 1; i <= 10; i++) {
-            UserArchiveResponse userArchiveResponse = new UserArchiveResponse((long) i, NICKNAME, PROFILE_IMAGE_FILENAME, ID, URL, TITLE, DESCRIPTION, THUMBNAIL, CREATED_AT, BOOKMARK_COUNT, IS_READ, IS_MARK, tagResponseList);
+            userArchiveResponse = new UserArchiveResponse((long) i, NICKNAME, PROFILE_IMAGE_FILENAME, (long) i, URL, TITLE, DESCRIPTION, THUMBNAIL, CREATED_AT, BOOKMARK_COUNT, IS_READ, IS_MARK, tagResponseList);
             userArchiveResponseList.add(userArchiveResponse);
         }
     }
@@ -95,8 +95,8 @@ public class LinkSetUpData extends SetUpData {
 
     private void setUpUserLinkResponseList() {
         for (int i = 1; i <= 10; i++) {
-            userLinkResponse = new UserLinkResponse((long) i, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, IS_READ, IS_MARK, CREATED_AT, tagResponseList);
-            userLinkResponseList.add(userLinkResponse);
+            getUserLinkResponse = new UserLinkResponse((long) i, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, IS_READ, IS_MARK, CREATED_AT, tagResponseList);
+            userLinkResponseList.add(getUserLinkResponse);
         }
     }
 
@@ -105,7 +105,7 @@ public class LinkSetUpData extends SetUpData {
     }
 
     private void setUpLinkMetaDataResponse() {
-        linkMetaDataResponse = new LinkMetaDataResponse(META_TILE, META_DESCRIPTION, META_THUMBNAIL);
+        linkMetaDataResponse = new LinkMetaDataResponse(META_TITLE, META_DESCRIPTION, META_THUMBNAIL);
     }
 
 }

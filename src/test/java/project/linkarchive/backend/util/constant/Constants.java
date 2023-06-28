@@ -25,9 +25,11 @@ public class Constants {
     public static final String THUMBNAIL = "Test Thumbnail";
     public static final Long BOOKMARK_COUNT = 10L;
 
-    public static final String META_TILE = "Test Meta Title";
+    public static final String META_TITLE = "Test Meta Title";
     public static final String META_DESCRIPTION = "Test Meta Description";
     public static final String META_THUMBNAIL = "Test Meta Thumbnail";
+
+    public static final String PRE_SIGNED_URL = "Test Pre_Signed Url";
 
     public static final String TAG = "Test Tag";
 
