@@ -24,5 +24,4 @@ class ArchiveResponseTest extends LinkSetUpData {
         assertEquals(BOOKMARK_COUNT, archiveResponse.getBookMarkCount());
     }
 
-
 }
