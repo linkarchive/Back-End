@@ -41,7 +41,7 @@ public class UserArchiveResponse {
         this.tagList = tagList;
     }
 
-    public static UserArchiveResponse build(ArchiveResponse response, String preSignedUrl, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
+    public static UserArchiveResponse create(ArchiveResponse response, String preSignedUrl, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
         return UserArchiveResponse.builder()
                 .userId(response.getUserId())
                 .nickname(response.getNickname())

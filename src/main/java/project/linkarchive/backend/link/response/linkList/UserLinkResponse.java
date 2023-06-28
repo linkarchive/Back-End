@@ -35,7 +35,7 @@ public class UserLinkResponse {
         this.tagList = tagList;
     }
 
-    public static UserLinkResponse build(LinkResponse response, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
+    public static UserLinkResponse create(LinkResponse response, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
         return UserLinkResponse.builder()
                 .linkId(response.getLinkId())
                 .url(response.getUrl())
