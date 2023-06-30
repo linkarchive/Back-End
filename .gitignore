@@ -50,8 +50,6 @@ out/
 **.yml
 !appspec.yml
 !application-tmp.yml
-!application.yml
-!application-local.yml
 !test.yml
 
 **.sql

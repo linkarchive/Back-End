@@ -20,7 +20,6 @@ public class UserSetUpData extends SetUpData {
                 .build();
 
         updateNicknameRequest = new UpdateNicknameRequest(NEW_NICKNAME);
-
         updateProfileRequest = new UpdateProfileRequest(NEW_NICKNAME, NEW_INTRODUCE);
 
     }

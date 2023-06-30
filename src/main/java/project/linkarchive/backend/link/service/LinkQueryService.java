@@ -60,7 +60,7 @@ public class LinkQueryService {
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), userId);
                     Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), userId);
 
-                    return UserLinkResponse.build(linkResponse, isRead, isMark, tagList);
+                    return UserLinkResponse.create(linkResponse, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
 
         boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
@@ -80,7 +80,7 @@ public class LinkQueryService {
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
-                    return UserLinkResponse.build(linkResponse, false, false, tagList);
+                    return UserLinkResponse.create(linkResponse, false, false, tagList);
                 }).collect(Collectors.toList());
 
         boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
@@ -103,7 +103,7 @@ public class LinkQueryService {
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId);
                     Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId);
 
-                    return UserLinkResponse.build(linkResponse, isRead, isMark, tagList);
+                    return UserLinkResponse.create(linkResponse, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
 
         boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
@@ -125,7 +125,7 @@ public class LinkQueryService {
 
                     String profileImage = generateProfileImageUrl(archiveResponse.getProfileImage());
 
-                    return UserArchiveResponse.build(archiveResponse, profileImage, false, false, tagList);
+                    return UserArchiveResponse.create(archiveResponse, profileImage, false, false, tagList);
                 }).collect(Collectors.toList());
 
         return new UserLinkArchiveResponse(userArchiveResponseList, hasNext);
@@ -148,7 +148,7 @@ public class LinkQueryService {
 
                     String profileImage = generateProfileImageUrl(archiveResponse.getProfileImage());
 
-                    return UserArchiveResponse.build(archiveResponse, profileImage, isRead, isMark, tagList);
+                    return UserArchiveResponse.create(archiveResponse, profileImage, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
 
         return new UserLinkArchiveResponse(userArchiveResponseList, hasNext);
