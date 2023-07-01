@@ -71,7 +71,6 @@ public class UserApiService {
         validateContentType(image.getContentType());
 
         String storedFileName = s3Uploader.upload(image);
-        storedFileName = extractKey(storedFileName);
 
         if (!profileImage.getProfileImageFilename().equals(defaultImage)) {
             s3Uploader.deleteFile(profileImage.getProfileImageFilename());
@@ -172,10 +171,4 @@ public class UserApiService {
             throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
         }
     }
-
-    private String extractKey(String fileName) {
-        String key = fileName.split("/")[S3_KEY];
-        return key;
-    }
-
 }

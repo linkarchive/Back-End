@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import static project.linkarchive.backend.advice.data.DataConstants.S3_KEY;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.CONVERSION_FAILED;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_ACCEPTABLE_CONTENT_TYPE;
 
@@ -59,8 +60,9 @@ public class S3Uploader {
         String uploadImageUrl = putS3(uploadFile, fileName);
 
         removeNewFile(uploadFile);
+        String s3Key = extractKey(uploadImageUrl);
 
-        return uploadImageUrl;
+        return s3Key;
     }
 
     private String putS3(File uploadFile, String fileName) {
@@ -100,6 +102,10 @@ public class S3Uploader {
         } catch (SdkClientException e) {
             throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
         }
+    }
+    private String extractKey(String fileName) {
+        String key = fileName.split("/")[S3_KEY];
+        return key;
     }
 
 }
