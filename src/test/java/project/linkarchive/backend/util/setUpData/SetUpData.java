@@ -21,6 +21,9 @@ import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
+import project.linkarchive.backend.user.response.ProfileResponse;
+import project.linkarchive.backend.user.response.UpdateNicknameResponse;
+import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,17 +40,14 @@ public class SetUpData {
     public BookMark bookMark;
     public IsLinkRead isLinkRead;
 
-    public List<String> tagList = new ArrayList<>();
-    public List<TagResponse> tagResponseList = new ArrayList<>();
-    public List<LinkHashTag> linkHashTagList = new ArrayList<>();
-    public List<UserArchiveResponse> userArchiveResponseList = new ArrayList<>();
-    public List<UserLinkResponse> userLinkResponseList = new ArrayList<>();
-
     public UpdateNicknameRequest updateNicknameRequest;
     public UpdateProfileRequest updateProfileRequest;
     public CreateLinkRequest createLinkRequest;
     public CreateTagRequest createTagRequest;
 
+    public ProfileResponse profileResponse;
+    public UpdateNicknameResponse updateNicknameResponse;
+    public UpdateProfileResponse updateProfileResponse;
     public ArchiveResponse archiveResponse;
     public UserArchiveResponse userArchiveResponse;
     public UserLinkArchiveResponse userLinkArchiveResponse;
@@ -55,7 +55,12 @@ public class SetUpData {
     public UserLinkListResponse userLinkListResponse;
     public UserLinkResponse getUserLinkResponse;
     public LinkMetaDataResponse linkMetaDataResponse;
-
     public TagResponse tagResponse;
+
+    public List<UserArchiveResponse> userArchiveResponseList = new ArrayList<>();
+    public List<UserLinkResponse> userLinkResponseList = new ArrayList<>();
+    public List<String> tagList = new ArrayList<>();
+    public List<TagResponse> tagResponseList = new ArrayList<>();
+    public List<LinkHashTag> linkHashTagList = new ArrayList<>();
 
 }
