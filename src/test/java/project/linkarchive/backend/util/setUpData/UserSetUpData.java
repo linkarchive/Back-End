@@ -1,27 +1,43 @@
 package project.linkarchive.backend.util.setUpData;
 
-import org.junit.jupiter.api.BeforeEach;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
+import project.linkarchive.backend.user.response.ProfileResponse;
+import project.linkarchive.backend.user.response.UpdateNicknameResponse;
+import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
 import static project.linkarchive.backend.util.constant.Constants.*;
 
 public class UserSetUpData extends SetUpData {
 
-    @BeforeEach
-    public void setup() {
-
+    public void setUpUser() {
         user = User.builder()
                 .socialId(SOCIAL_ID)
                 .nickname(NICKNAME)
                 .email(EMAIL)
                 .introduce(INTRODUCE)
                 .build();
+    }
 
+    public void setUpUpdateNicknameRequest() {
         updateNicknameRequest = new UpdateNicknameRequest(NEW_NICKNAME);
-        updateProfileRequest = new UpdateProfileRequest(NEW_NICKNAME, NEW_INTRODUCE);
+    }
 
+    public void setUpUpdateProfileRequest() {
+        updateProfileRequest = new UpdateProfileRequest(NEW_NICKNAME, NEW_INTRODUCE);
+    }
+
+    public void setUpProfileResponse() {
+        profileResponse = new ProfileResponse(user, PRE_SIGNED_URL);
+    }
+
+    public void setUpUpdateNicknameResponse() {
+        updateNicknameResponse = new UpdateNicknameResponse(NEW_NICKNAME);
+    }
+
+    public void setUpUpdateProfileResponse() {
+        updateProfileResponse = new UpdateProfileResponse(user);
     }
 
 }

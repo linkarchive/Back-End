@@ -1,21 +1,30 @@
 package project.linkarchive.backend.user.response;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import project.linkarchive.backend.util.setUpData.UserSetUpData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static project.linkarchive.backend.util.constant.Constants.NICKNAME;
+import static project.linkarchive.backend.util.constant.Constants.NEW_NICKNAME;
 
-class UpdateNicknameResponseTest {
+class UpdateNicknameResponseTest extends UserSetUpData {
+
+    @BeforeEach
+    public void setup() {
+        setUpUser();
+    }
 
     @DisplayName("UpdateNicknameResponse - DTO")
     @Test
     void testUpdateNicknameResponse() {
-        UpdateNicknameResponse updateNicknameResponse = new UpdateNicknameResponse(NICKNAME);
+        setUpUpdateNicknameRequest();
+        user.updateNickName(updateNicknameRequest);
 
-        assertNotNull(updateNicknameResponse);
-        assertEquals(NICKNAME, updateNicknameResponse.getNickname());
+        setUpUpdateNicknameResponse();
+        String newNickname = updateNicknameResponse.getNickname();
+
+        assertEquals(NEW_NICKNAME, newNickname);
     }
 
 }
