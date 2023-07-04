@@ -33,8 +33,12 @@ public class LinkApiService {
     private final UserHashTagRepository userHashTagRepository;
     private final LinkRepository linkRepository;
 
-    public LinkApiService(UserRepository userRepository, HashTagRepository hashTagRepository, LinkHashTagRepository linkHashTagRepository, UserHashTagRepository userHashTagRepository,
-                          LinkRepository linkRepository) {
+    public LinkApiService(UserRepository userRepository,
+                          HashTagRepository hashTagRepository,
+                          LinkHashTagRepository linkHashTagRepository,
+                          UserHashTagRepository userHashTagRepository,
+                          LinkRepository linkRepository
+    ) {
         this.userRepository = userRepository;
         this.hashTagRepository = hashTagRepository;
         this.linkHashTagRepository = linkHashTagRepository;
@@ -55,6 +59,14 @@ public class LinkApiService {
         linkRepository.save(link);
     }
 
+    public void delete(Long linkId, Long userId) {
+        findUserById(userId);
+
+        Link link = linkRepository.findByIdAndUserId(linkId, userId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_LINK));
+        link.delete();
+    }
+
     private void validationTitleLength(CreateLinkRequest request) {
         if (request.getTitle() == null || request.getTitle().length() < MINIMUM_TITLE_LENGTH) {
             throw new LengthRequiredException(LENGTH_REQUIRED_TITLE);
@@ -68,7 +80,7 @@ public class LinkApiService {
 
     private Set<String> getTagsFromRequest(CreateLinkRequest request) {
         return request.getTags().stream()
-                .peek(tag -> validationTagLength(tag))
+                .peek(this::validationTagLength)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
