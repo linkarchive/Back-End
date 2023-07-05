@@ -7,12 +7,16 @@ import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
 import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
+import project.linkarchive.backend.link.enums.LinkStatus;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.user.domain.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static project.linkarchive.backend.link.enums.LinkStatus.TRASH;
+import static project.linkarchive.backend.link.enums.LinkStatus.USE;
 
 @Entity
 @Getter
@@ -29,9 +33,12 @@ public class Link extends TimeEntity {
 
     @Column(length = 500)
     private String description;
-
+//
     private String thumbnail;
     private Long bookMarkCount;
+
+    @Enumerated(EnumType.STRING)
+    private LinkStatus linkStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -47,13 +54,14 @@ public class Link extends TimeEntity {
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
     @Builder
-    public Link(Long id, String url, String title, String description, String thumbnail, Long bookMarkCount, User user) {
+    public Link(Long id, String url, String title, String description, String thumbnail, Long bookMarkCount, LinkStatus linkStatus, User user) {
         this.id = id;
         this.url = url;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
+        this.linkStatus = USE;
         this.user = user;
     }
 
@@ -64,8 +72,13 @@ public class Link extends TimeEntity {
                 .description(request.getDescription())
                 .thumbnail(request.getThumbnail())
                 .bookMarkCount(0L)
+                .linkStatus(USE)
                 .user(user)
                 .build();
+    }
+
+    public void delete() {
+        this.linkStatus = TRASH;
     }
 
 }

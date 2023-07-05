@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import project.linkarchive.backend.link.domain.Link;
 
+import java.util.Optional;
+
 public interface LinkRepository extends JpaRepository<Link, Long> {
 
     @Modifying
@@ -15,5 +17,7 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
     @Modifying
     @Query("UPDATE Link l SET l.bookMarkCount = l.bookMarkCount - 1 WHERE l.id = :linkId")
     void decreaseBookMarkCount(@Param("linkId") Long linkId);
+
+    Optional<Link> findByIdAndUserId(Long linkId, Long userId);
 
 }
