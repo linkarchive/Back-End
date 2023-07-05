@@ -14,6 +14,7 @@ import java.util.List;
 
 import static project.linkarchive.backend.link.domain.QLink.link;
 import static project.linkarchive.backend.link.domain.QLinkHashTag.linkHashTag;
+import static project.linkarchive.backend.link.enums.LinkStatus.ACTIVE;
 import static project.linkarchive.backend.profileImage.domain.QProfileImage.profileImage;
 
 @Repository
@@ -43,6 +44,7 @@ public class LinkRepositoryImpl {
                 .leftJoin(link.linkHashTagList, linkHashTag)
                 .where(
                         link.user.id.eq(userId),
+                        link.linkStatus.eq(ACTIVE),
                         ltUrlId(lastLinkLid),
                         containTag(tag)
                 )
@@ -69,6 +71,7 @@ public class LinkRepositoryImpl {
                 .leftJoin(link.linkHashTagList, linkHashTag)
                 .where(
                         link.user.nickname.eq(nickname),
+                        link.linkStatus.eq(ACTIVE),
                         ltUrlId(lastLinkLid),
                         containTag(tag)
                 )
@@ -92,12 +95,13 @@ public class LinkRepositoryImpl {
                         link.linkStatus,
                         link.createdAt,
                         link.updatedAt
-                        ))
+                ))
                 .from(link)
                 .distinct()
                 .leftJoin(link.user.profileImage, profileImage)
                 .leftJoin(link.linkHashTagList, linkHashTag)
                 .where(
+                        link.linkStatus.eq(ACTIVE),
                         ltUrlId(lastLinkId),
                         containTag(tag)
                 )
