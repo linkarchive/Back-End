@@ -1,6 +1,10 @@
 package project.linkarchive.backend.util.constant;
 
+import project.linkarchive.backend.link.enums.LinkStatus;
+
 import java.time.LocalDateTime;
+
+import static project.linkarchive.backend.link.enums.LinkStatus.ACTIVE;
 
 public class Constants {
 
@@ -24,6 +28,7 @@ public class Constants {
     public static final String DESCRIPTION = "Test Description";
     public static final String THUMBNAIL = "Test Thumbnail";
     public static final Long BOOKMARK_COUNT = 10L;
+    public static final LinkStatus LINK_STATUS = ACTIVE;
 
     public static final String META_TITLE = "Test Meta Title";
     public static final String META_DESCRIPTION = "Test Meta Description";
@@ -43,6 +48,7 @@ public class Constants {
 
     public static final String NEW_PROFILE_IMAGE_FILENAME = "New Test ProfileImageFilename";
 
-    public static final LocalDateTime CREATED_AT = LocalDateTime.of(2023, 4, 19, 12, 34, 56);
+    public static final LocalDateTime CREATED_AT = LocalDateTime.of(1995, 4, 19, 12, 34, 56);
+    public static final LocalDateTime UPDATED_AT = LocalDateTime.of(2023, 4, 19, 12, 34, 56);
 
 }

@@ -3,6 +3,7 @@ package project.linkarchive.backend.bookmark.response;
 import lombok.Builder;
 import lombok.Getter;
 import project.linkarchive.backend.hashtag.response.TagResponse;
+import project.linkarchive.backend.link.enums.LinkStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,13 +18,14 @@ public class UserMarkResponse {
     private String description;
     private String thumbnail;
     private Long bookMarkCount;
-    private LocalDateTime bookMarkedTime;
+    private LinkStatus linkStatus;
     private Boolean isRead;
     private Boolean isMark;
     private List<TagResponse> tagList;
+    private LocalDateTime bookMarkedTime;
 
     @Builder
-    public UserMarkResponse(Long markId, Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, LocalDateTime bookMarkedTime, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
+    public UserMarkResponse(Long markId, Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, LinkStatus linkStatus, Boolean isRead, Boolean isMark, List<TagResponse> tagList, LocalDateTime bookMarkedTime) {
         this.markId = markId;
         this.linkId = linkId;
         this.url = url;
@@ -31,10 +33,11 @@ public class UserMarkResponse {
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
-        this.bookMarkedTime = bookMarkedTime;
+        this.linkStatus = linkStatus;
         this.isRead = isRead;
         this.isMark = isMark;
         this.tagList = tagList;
+        this.bookMarkedTime = bookMarkedTime;
     }
 
     public static UserMarkResponse build(MarkResponse response, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
@@ -46,10 +49,11 @@ public class UserMarkResponse {
                 .description(response.getDescription())
                 .thumbnail(response.getThumbnail())
                 .bookMarkCount(response.getBookMarkCount())
-                .bookMarkedTime(response.getBookMarkedTime())
+                .linkStatus(response.getLinkStatus())
                 .isRead(isRead)
                 .isMark(isMark)
                 .tagList(tagList)
+                .bookMarkedTime(response.getBookMarkedTime())
                 .build();
     }
 

@@ -75,12 +75,12 @@ public class LinkSetUpData extends SetUpData {
     }
 
     private void setUpArchiveResponse() {
-        archiveResponse = new ArchiveResponse(ID, NICKNAME, PROFILE_IMAGE_FILENAME, ID, URL, TITLE, DESCRIPTION, THUMBNAIL, CREATED_AT, BOOKMARK_COUNT);
+        archiveResponse = new ArchiveResponse(ID, NICKNAME, PROFILE_IMAGE_FILENAME, ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, LINK_STATUS, CREATED_AT, UPDATED_AT);
     }
 
     private void setupUserArchiveResponseList() {
         for (int i = 1; i <= 10; i++) {
-            userArchiveResponse = new UserArchiveResponse((long) i, NICKNAME, PROFILE_IMAGE_FILENAME, (long) i, URL, TITLE, DESCRIPTION, THUMBNAIL, CREATED_AT, BOOKMARK_COUNT, IS_READ, IS_MARK, tagResponseList);
+            userArchiveResponse = new UserArchiveResponse((long) i, NICKNAME, PROFILE_IMAGE_FILENAME, (long) i, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, LINK_STATUS, IS_READ, IS_MARK, tagResponseList, CREATED_AT, UPDATED_AT);
             userArchiveResponseList.add(userArchiveResponse);
         }
     }
@@ -90,12 +90,12 @@ public class LinkSetUpData extends SetUpData {
     }
 
     private void setUpLinkResponse() {
-        linkResponse = new LinkResponse(ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, CREATED_AT);
+        linkResponse = new LinkResponse(ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, LINK_STATUS, CREATED_AT, UPDATED_AT);
     }
 
     private void setUpUserLinkResponseList() {
         for (int i = 1; i <= 10; i++) {
-            getUserLinkResponse = new UserLinkResponse((long) i, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, IS_READ, IS_MARK, CREATED_AT, tagResponseList);
+            getUserLinkResponse = new UserLinkResponse((long) i, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, LINK_STATUS, IS_READ, IS_MARK, tagResponseList, CREATED_AT, UPDATED_AT);
             userLinkResponseList.add(getUserLinkResponse);
         }
     }
