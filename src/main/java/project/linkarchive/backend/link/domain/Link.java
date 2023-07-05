@@ -15,8 +15,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static project.linkarchive.backend.link.enums.LinkStatus.ACTIVE;
 import static project.linkarchive.backend.link.enums.LinkStatus.TRASH;
-import static project.linkarchive.backend.link.enums.LinkStatus.USE;
 
 @Entity
 @Getter
@@ -33,7 +33,7 @@ public class Link extends TimeEntity {
 
     @Column(length = 500)
     private String description;
-//
+    //
     private String thumbnail;
     private Long bookMarkCount;
 
@@ -61,7 +61,7 @@ public class Link extends TimeEntity {
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
-        this.linkStatus = USE;
+        this.linkStatus = ACTIVE;
         this.user = user;
     }
 
@@ -72,7 +72,7 @@ public class Link extends TimeEntity {
                 .description(request.getDescription())
                 .thumbnail(request.getThumbnail())
                 .bookMarkCount(0L)
-                .linkStatus(USE)
+                .linkStatus(ACTIVE)
                 .user(user)
                 .build();
     }
