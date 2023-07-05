@@ -34,7 +34,9 @@ public class LinkRepositoryImpl {
                         link.description,
                         link.thumbnail,
                         link.bookMarkCount,
-                        link.createdAt
+                        link.linkStatus,
+                        link.createdAt,
+                        link.updatedAt
                 ))
                 .from(link)
                 .distinct()
@@ -58,7 +60,9 @@ public class LinkRepositoryImpl {
                         link.description,
                         link.thumbnail,
                         link.bookMarkCount,
-                        link.createdAt
+                        link.linkStatus,
+                        link.createdAt,
+                        link.updatedAt
                 ))
                 .from(link)
                 .distinct()
@@ -84,9 +88,11 @@ public class LinkRepositoryImpl {
                         link.title,
                         link.description,
                         link.thumbnail,
+                        link.bookMarkCount,
+                        link.linkStatus,
                         link.createdAt,
-                        link.bookMarkCount
-                ))
+                        link.updatedAt
+                        ))
                 .from(link)
                 .distinct()
                 .leftJoin(link.user.profileImage, profileImage)

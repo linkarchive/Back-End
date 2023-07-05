@@ -32,6 +32,7 @@ public class BookMarkRepositoryImpl {
                         bookMark.link.description,
                         bookMark.link.thumbnail,
                         bookMark.link.bookMarkCount,
+                        bookMark.link.linkStatus,
                         bookMark.createdAt
                 ))
                 .from(bookMark)
@@ -57,6 +58,7 @@ public class BookMarkRepositoryImpl {
                         bookMark.link.description,
                         bookMark.link.thumbnail,
                         bookMark.link.bookMarkCount,
+                        bookMark.link.linkStatus,
                         bookMark.createdAt
                 ))
                 .from(bookMark)
