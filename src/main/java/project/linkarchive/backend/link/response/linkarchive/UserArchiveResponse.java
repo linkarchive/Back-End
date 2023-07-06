@@ -18,14 +18,15 @@ public class UserArchiveResponse {
     private String title;
     private String description;
     private String thumbnail;
-    private LocalDateTime linkCreatedTime;
     private Long bookMarkCount;
     private Boolean isRead;
     private Boolean isMark;
     private List<TagResponse> tagList;
+    private LocalDateTime linkCreatedTime;
+    private LocalDateTime linkUpdatedTime;
 
     @Builder
-    public UserArchiveResponse(Long userId, String nickname, String profileImage, Long linkId, String url, String title, String description, String thumbnail, LocalDateTime linkCreatedTime, Long bookMarkCount, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
+    public UserArchiveResponse(Long userId, String nickname, String profileImage, Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, Boolean isRead, Boolean isMark, List<TagResponse> tagList, LocalDateTime linkCreatedTime, LocalDateTime linkUpdatedTime) {
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;
@@ -34,11 +35,12 @@ public class UserArchiveResponse {
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
-        this.linkCreatedTime = linkCreatedTime;
         this.bookMarkCount = bookMarkCount;
         this.isRead = isRead;
         this.isMark = isMark;
         this.tagList = tagList;
+        this.linkCreatedTime = linkCreatedTime;
+        this.linkUpdatedTime = linkUpdatedTime;
     }
 
     public static UserArchiveResponse create(ArchiveResponse response, String preSignedUrl, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
@@ -51,11 +53,12 @@ public class UserArchiveResponse {
                 .title(response.getTitle())
                 .description(response.getDescription())
                 .thumbnail(response.getThumbnail())
-                .linkCreatedTime(response.getLinkCreatedTime())
                 .bookMarkCount(response.getBookMarkCount())
                 .isRead(isRead)
                 .isMark(isMark)
                 .tagList(tagList)
+                .linkCreatedTime(response.getLinkCreatedTime())
+                .linkUpdatedTime(response.getLinkUpdatedTime())
                 .build();
     }
 

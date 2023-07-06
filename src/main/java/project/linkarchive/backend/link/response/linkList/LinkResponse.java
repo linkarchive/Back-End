@@ -15,9 +15,10 @@ public class LinkResponse {
     private String thumbnail;
     private Long bookMarkCount;
     private LocalDateTime linkCreatedTime;
+    private LocalDateTime linkUpdatedTime;
 
     @QueryProjection
-    public LinkResponse(Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, LocalDateTime linkCreatedTime) {
+    public LinkResponse(Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, LocalDateTime linkCreatedTime, LocalDateTime linkUpdatedTime) {
         this.linkId = linkId;
         this.url = url;
         this.title = title;
@@ -25,6 +26,7 @@ public class LinkResponse {
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
         this.linkCreatedTime = linkCreatedTime;
+        this.linkUpdatedTime = linkUpdatedTime;
     }
 
 }

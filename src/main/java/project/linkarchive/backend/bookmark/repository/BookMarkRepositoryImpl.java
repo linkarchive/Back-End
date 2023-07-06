@@ -12,6 +12,7 @@ import java.util.List;
 
 import static project.linkarchive.backend.bookmark.domain.QBookMark.bookMark;
 import static project.linkarchive.backend.link.domain.QLinkHashTag.linkHashTag;
+import static project.linkarchive.backend.link.enums.LinkStatus.ACTIVE;
 
 @Repository
 public class BookMarkRepositoryImpl {
@@ -39,6 +40,7 @@ public class BookMarkRepositoryImpl {
                 .leftJoin(bookMark.link.linkHashTagList, linkHashTag)
                 .where(
                         bookMark.user.id.eq(userId),
+                        bookMark.link.linkStatus.eq(ACTIVE),
                         ltLinkId(lastMarkId),
                         containTag(tag)
                 )
@@ -62,6 +64,7 @@ public class BookMarkRepositoryImpl {
                 .from(bookMark)
                 .where(
                         bookMark.user.nickname.eq(nickname),
+                        bookMark.link.linkStatus.eq(ACTIVE),
                         ltLinkId(lastMarkId),
                         containTag(tag)
                 )
