@@ -35,7 +35,6 @@ public class LinkRepositoryImpl {
                         link.description,
                         link.thumbnail,
                         link.bookMarkCount,
-                        link.linkStatus,
                         link.createdAt,
                         link.updatedAt
                 ))
@@ -62,7 +61,6 @@ public class LinkRepositoryImpl {
                         link.description,
                         link.thumbnail,
                         link.bookMarkCount,
-                        link.linkStatus,
                         link.createdAt,
                         link.updatedAt
                 ))
@@ -92,7 +90,6 @@ public class LinkRepositoryImpl {
                         link.description,
                         link.thumbnail,
                         link.bookMarkCount,
-                        link.linkStatus,
                         link.createdAt,
                         link.updatedAt
                 ))
