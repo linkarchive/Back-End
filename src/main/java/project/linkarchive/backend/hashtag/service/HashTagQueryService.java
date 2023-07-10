@@ -27,25 +27,25 @@ public class HashTagQueryService {
         this.userHashTagRepositoryImpl = userHashTagRepositoryImpl;
     }
 
-    public TagListResponse getUserTagList(Long userId) {
-        checkUserId(userId);
+    public TagListResponse getUserTagList(String nickname) {
+        getUserById(nickname);
 
-        List<TagResponse> tagList = userHashTagRepositoryImpl.getUserTagList(userId);
+        List<TagResponse> tagList = userHashTagRepositoryImpl.getUserTagList(nickname);
 
         return new TagListResponse(tagList);
     }
 
-    public TagListResponse getLimitedTagList(Long userId, int size) {
-        checkUserId(userId);
+    public TagListResponse getLimitedTagList(String nickname, int size) {
+        getUserById(nickname);
         checkSize(size);
 
-        List<TagResponse> tagResponses = userHashTagRepositoryImpl.getLimitedTagList(userId, size);
+        List<TagResponse> tagResponses = userHashTagRepositoryImpl.getLimitedTagList(nickname, size);
 
         return new TagListResponse(tagResponses);
     }
 
-    private void checkUserId(Long userId) {
-        userRepository.findById(userId)
+    private void getUserById(String nickname) {
+        userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 

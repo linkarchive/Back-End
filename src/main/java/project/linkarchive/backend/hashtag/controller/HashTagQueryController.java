@@ -17,20 +17,20 @@ public class HashTagQueryController {
         this.hashTagQueryService = hashTagQueryService;
     }
 
-    @GetMapping("/tags/user/{userId}")
+    @GetMapping("/tags/user/{nickname}")
     public ResponseEntity<TagListResponse> getUserTagList(
-            @PathVariable(name = "userId") Long userId
+            @PathVariable("nickname") String nickname
     ) {
-        TagListResponse tagList = hashTagQueryService.getUserTagList(userId);
+        TagListResponse tagList = hashTagQueryService.getUserTagList(nickname);
         return ResponseEntity.ok(tagList);
     }
 
-    @GetMapping("/limited-tags/user/{userId}")
+    @GetMapping("/limited-tags/user/{nickname}")
     public ResponseEntity<TagListResponse> getTagList(
-            @PathVariable("userId") Long userId,
-            @RequestParam(value = "size") int size
+            @PathVariable("nickname") String nickname,
+            @RequestParam("size") int size
     ) {
-        TagListResponse tagList = hashTagQueryService.getLimitedTagList(userId, size);
+        TagListResponse tagList = hashTagQueryService.getLimitedTagList(nickname, size);
         return ResponseEntity.ok(tagList);
     }
 
