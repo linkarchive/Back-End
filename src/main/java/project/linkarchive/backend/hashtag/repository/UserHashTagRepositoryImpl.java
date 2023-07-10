@@ -19,26 +19,26 @@ public class UserHashTagRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<TagResponse> getUserTagList(Long userId) {
+    public List<TagResponse> getUserTagList(String nickname) {
         return queryFactory
                 .select(new QTagResponse(
                         userHashTag.hashTag.id,
                         userHashTag.hashTag.tag
                 ))
                 .from(userHashTag)
-                .where(userHashTag.user.id.eq(userId))
+                .where(userHashTag.user.nickname.eq(nickname))
                 .orderBy(userHashTag.usageCount.desc())
                 .fetch();
     }
 
-    public List<TagResponse> getLimitedTagList(Long userId, int size) {
+    public List<TagResponse> getLimitedTagList(String nickname, int size) {
         return queryFactory
                 .select(new QTagResponse(
                         userHashTag.hashTag.id,
                         userHashTag.hashTag.tag
                 ))
                 .from(userHashTag)
-                .where(userHashTag.user.id.eq(userId))
+                .where(userHashTag.user.nickname.eq(nickname))
                 .orderBy(userHashTag.usageCount.desc())
                 .limit(size)
                 .fetch();
