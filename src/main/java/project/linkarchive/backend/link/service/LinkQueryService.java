@@ -65,7 +65,7 @@ public class LinkQueryService {
                 .map(linkResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
                     List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                            .map(TagResponse::create)
                             .collect(Collectors.toList());
 
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), userId);
@@ -89,7 +89,7 @@ public class LinkQueryService {
                 .map(linkResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
                     List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                            .map(TagResponse::create)
                             .collect(Collectors.toList());
 
                     Boolean isRead = (loginUserId != null) ? isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId) : false;
@@ -112,7 +112,7 @@ public class LinkQueryService {
                 .map(archiveResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(archiveResponse.getLinkId());
                     List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                            .map(TagResponse::create)
                             .collect(Collectors.toList());
 
                     Boolean isRead = (loginUserId != null) ? isLinkReadRepository.existsByLinkIdAndUserId(archiveResponse.getLinkId(), loginUserId) : false;
@@ -135,7 +135,7 @@ public class LinkQueryService {
                 .map(trashLinkResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(trashLinkResponse.getLinkId());
                     List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                            .map(TagResponse::create)
                             .collect(Collectors.toList());
 
                     return TrashLinkListResponse.create(trashLinkResponse, tagList);

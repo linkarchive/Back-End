@@ -37,7 +37,7 @@ public class UserMarkResponse {
         this.bookMarkedTime = bookMarkedTime;
     }
 
-    public static UserMarkResponse build(MarkResponse response, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
+    public static UserMarkResponse create(MarkResponse response, Boolean isRead, Boolean isMark, List<TagResponse> tagList) {
         return UserMarkResponse.builder()
                 .markId(response.getMarkId())
                 .linkId(response.getLinkId())
