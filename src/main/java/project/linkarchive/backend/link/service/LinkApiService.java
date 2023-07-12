@@ -6,6 +6,7 @@ import project.linkarchive.backend.advice.exception.custom.ExceededException;
 import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.hashtag.domain.HashTag;
+import project.linkarchive.backend.hashtag.domain.UserHashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 import project.linkarchive.backend.link.domain.Link;
@@ -54,7 +55,7 @@ public class LinkApiService {
         exceededTagCount(tagsFromRequest);
 
         Link link = Link.build(request, user);
-        addTagsToLinkAndIncrementUserTagCount(tagsFromRequest, link);
+        addTagsToLinkAndIncrementUserTagCount(user, tagsFromRequest, link);
 
         linkRepository.save(link);
     }
@@ -98,13 +99,20 @@ public class LinkApiService {
         }
     }
 
-    private void addTagsToLinkAndIncrementUserTagCount(Set<String> tagsFromRequest, Link link) {
+    private void addTagsToLinkAndIncrementUserTagCount(User user, Set<String> tagsFromRequest, Link link) {
         tagsFromRequest.stream()
                 .map(tag -> hashTagRepository.findByTag(tag)
                         .orElseGet(() -> HashTag.build(tag)))
                 .forEach(hashTag -> {
                     userHashTagRepository.findByHashTagId(hashTag.getId())
-                            .ifPresent(tag -> userHashTagRepository.increaseUsageCount(tag.getId()));
+                            .ifPresentOrElse(
+                                    tag -> userHashTagRepository.increaseUsageCount(tag.getId()),
+                                    () -> {
+                                        UserHashTag userHashTag = UserHashTag.create(HASHTAG_CREATE_COUNT, user, hashTag);
+                                        userHashTagRepository.save(userHashTag);
+                                    }
+                            );
+
                     linkHashTagRepository.save(LinkHashTag.build(link, hashTag));
                 });
     }
