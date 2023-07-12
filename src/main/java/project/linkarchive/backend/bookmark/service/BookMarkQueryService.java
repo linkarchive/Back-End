@@ -62,13 +62,13 @@ public class BookMarkQueryService {
                 .map(markResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(markResponse.getLinkId());
                     List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                            .map(TagResponse::create)
                             .collect(Collectors.toList());
 
                     Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), userId);
                     Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), userId);
 
-                    return UserMarkResponse.build(markResponse, isRead, isMark, tagList);
+                    return UserMarkResponse.create(markResponse, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
 
         boolean hasNext = isHasNextLinkList(pageable, markResponseList);
@@ -86,13 +86,13 @@ public class BookMarkQueryService {
                 .map(markResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(markResponse.getLinkId());
                     List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
+                            .map(TagResponse::create)
                             .collect(Collectors.toList());
 
                     Boolean isRead = (loginUserId != null) ? isLinkReadRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), loginUserId) : false;
                     Boolean isMark = (loginUserId != null) ? bookMarkRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), loginUserId) : false;
 
-                    return UserMarkResponse.build(markResponse, isRead, isMark, tagList);
+                    return UserMarkResponse.create(markResponse, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
 
         boolean hasNext = isHasNextLinkList(pageable, markResponseList);
@@ -104,18 +104,22 @@ public class BookMarkQueryService {
         User user = findUserByNickname(nickname);
 
         List<BookMark> bookMarkList = bookMarkRepository.findByUserId(user.getId());
+        Map<String, Long> tagIdMap = new HashMap<>();
         Map<String, Integer> tagCountMap = new HashMap<>();
+
         bookMarkList.forEach(bookMark -> {
             List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(bookMark.getLink().getId());
             linkHashTagList.forEach(urlHashTag -> {
-                String tag = urlHashTag.getHashTag().getTag();
-                tagCountMap.put(tag, tagCountMap.getOrDefault(tag, 0) + 1);
+                Long tagId = urlHashTag.getHashTag().getId();
+                String tagName = urlHashTag.getHashTag().getTag();
+                tagIdMap.put(tagName, tagId);
+                tagCountMap.put(tagName, tagCountMap.getOrDefault(tagName, 0) + 1);
             });
         });
 
         List<TagResponse> tagList = tagCountMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .map(entry -> new TagResponse(entry.getKey()))
+                .map(entry -> new TagResponse(tagIdMap.get(entry.getKey()), entry.getKey()))
                 .collect(Collectors.toList());
 
         return new TagListResponse(tagList);
@@ -126,19 +130,23 @@ public class BookMarkQueryService {
         isSizeNotExceedMax(size);
 
         List<BookMark> bookMarkList = bookMarkRepository.findByUserId(user.getId());
+        Map<String, Long> tagIdMap = new HashMap<>();
         Map<String, Integer> tagCountMap = new HashMap<>();
+
         bookMarkList.forEach(bookMark -> {
             List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(bookMark.getLink().getId());
             linkHashTagList.forEach(urlHashTag -> {
-                String tag = urlHashTag.getHashTag().getTag();
-                tagCountMap.put(tag, tagCountMap.getOrDefault(tag, 0) + 1);
+                Long tagId = urlHashTag.getHashTag().getId();
+                String tagName = urlHashTag.getHashTag().getTag();
+                tagIdMap.put(tagName, tagId);
+                tagCountMap.put(tagName, tagCountMap.getOrDefault(tagName, 0) + 1);
             });
         });
 
         List<TagResponse> tagList = tagCountMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .limit(size)
-                .map(entry -> new TagResponse(entry.getKey()))
+                .map(entry -> new TagResponse(tagIdMap.get(entry.getKey()), entry.getKey()))
                 .collect(Collectors.toList());
 
         return new TagListResponse(tagList);
