@@ -20,11 +20,7 @@ public class TagResponse {
         this.tagName = tagName;
     }
 
-    public TagResponse(String tagName) {
-        this.tagName = tagName;
-    }
-
-    public static TagResponse build(LinkHashTag linkHashTag) {
+    public static TagResponse create(LinkHashTag linkHashTag) {
         return TagResponse.builder()
                 .tagId(linkHashTag.getHashTag().getId())
                 .tagName(linkHashTag.getHashTag().getTag())
