@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.linkarchive.backend.link.response.LinkMetaDataResponse;
 import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
+import project.linkarchive.backend.link.response.trash.UserTrashLinkListResponse;
 import project.linkarchive.backend.link.service.LinkQueryService;
 import project.linkarchive.backend.security.AuthInfo;
 
@@ -107,5 +108,15 @@ public class LinkQueryController {
         return ResponseEntity.ok(userLinkArchiveResponse);
     }
 
+    @GetMapping("/links/trash")
+    public ResponseEntity<UserTrashLinkListResponse> getLinkTrashList(
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "linkId", required = false) Long lastLinkId,
+            @PageableDefault Pageable pageable,
+            AuthInfo authInfo
+    ) {
+        UserTrashLinkListResponse userTrashLinkListResponse = linkQueryService.getTrashLinkList(tag, lastLinkId, pageable, authInfo.getId());
+        return ResponseEntity.ok(userTrashLinkListResponse);
+    }
 
 }
