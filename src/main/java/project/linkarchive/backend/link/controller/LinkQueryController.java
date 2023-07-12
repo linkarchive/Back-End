@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import project.linkarchive.backend.advice.data.DataConstants;
 import project.linkarchive.backend.link.response.LinkMetaDataResponse;
 import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
+import project.linkarchive.backend.link.response.trash.UserTrashLinkListResponse;
 import project.linkarchive.backend.link.service.LinkQueryService;
 import project.linkarchive.backend.security.AuthInfo;
 
@@ -22,7 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.springframework.http.HttpStatus.*;
-import static project.linkarchive.backend.advice.data.DataConstants.*;
+import static project.linkarchive.backend.advice.data.DataConstants.EMPTY;
 
 @RestController
 public class LinkQueryController {
@@ -126,6 +126,17 @@ public class LinkQueryController {
     ) {
         UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getAuthenticatedLinkArchive(pageable, lastLinkId, authInfo.getId(), tag);
         return ResponseEntity.ok(userLinkArchiveResponse);
+    }
+
+    @GetMapping("/links/trash")
+    public ResponseEntity<UserTrashLinkListResponse> getLinkTrashList(
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "linkId", required = false) Long lastLinkId,
+            @PageableDefault Pageable pageable,
+            AuthInfo authInfo
+    ) {
+        UserTrashLinkListResponse userTrashLinkListResponse = linkQueryService.getTrashLinkList(tag, lastLinkId, pageable, authInfo.getId());
+        return ResponseEntity.ok(userTrashLinkListResponse);
     }
 
 }

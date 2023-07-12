@@ -9,6 +9,7 @@ import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.isLinkRead.repository.IsLinkReadRepository;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
+import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.link.repository.LinkRepositoryImpl;
 import project.linkarchive.backend.link.response.linkList.LinkResponse;
 import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
@@ -16,6 +17,9 @@ import project.linkarchive.backend.link.response.linkList.UserLinkResponse;
 import project.linkarchive.backend.link.response.linkarchive.ArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
+import project.linkarchive.backend.link.response.trash.TrashLinkListResponse;
+import project.linkarchive.backend.link.response.trash.TrashLinkResponse;
+import project.linkarchive.backend.link.response.trash.UserTrashLinkListResponse;
 import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.repository.UserRepository;
 
@@ -31,14 +35,16 @@ public class LinkQueryService {
 
     private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
+    private final LinkRepository linkRepository;
     private final LinkHashTagRepository linkHashTagRepository;
     private final IsLinkReadRepository isLinkReadRepository;
     private final BookMarkRepository bookMarkRepository;
     private final LinkRepositoryImpl linkRepositoryImpl;
 
-    public LinkQueryService(S3Uploader s3Uploader, UserRepository userRepository, LinkHashTagRepository linkHashTagRepository, IsLinkReadRepository isLinkReadRepository, BookMarkRepository bookMarkRepository, LinkRepositoryImpl linkRepositoryImpl) {
+    public LinkQueryService(S3Uploader s3Uploader, UserRepository userRepository, LinkRepository linkRepository, LinkHashTagRepository linkHashTagRepository, IsLinkReadRepository isLinkReadRepository, BookMarkRepository bookMarkRepository, LinkRepositoryImpl linkRepositoryImpl) {
         this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
+        this.linkRepository = linkRepository;
         this.linkHashTagRepository = linkHashTagRepository;
         this.isLinkReadRepository = isLinkReadRepository;
         this.bookMarkRepository = bookMarkRepository;
@@ -46,7 +52,7 @@ public class LinkQueryService {
     }
 
     public UserLinkListResponse getMyLinkList(Long userId, Pageable pageable, Long lastLinkId, String tag) {
-        validationUserById(userId);
+        getUserById(userId);
 
         List<LinkResponse> linkResponseList = linkRepositoryImpl.getMyLinkList(userId, pageable, lastLinkId, tag);
 
@@ -69,7 +75,7 @@ public class LinkQueryService {
     }
 
     public UserLinkListResponse getPublicUserLinkList(String nickname, Pageable pageable, Long lastLinkId, String tag) {
-        validationUserByNickname(nickname);
+        getUserByNickname(nickname);
 
         List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(nickname, pageable, lastLinkId, tag);
 
@@ -89,7 +95,7 @@ public class LinkQueryService {
     }
 
     public UserLinkListResponse getAuthenticatedUserLinkList(String nickname, Pageable pageable, Long lastLinkId, Long loginUserId, String tag) {
-        validationUserByNickname(nickname);
+        getUserByNickname(nickname);
 
         List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(nickname, pageable, lastLinkId, tag);
 
@@ -154,12 +160,30 @@ public class LinkQueryService {
         return new UserLinkArchiveResponse(userArchiveResponseList, hasNext);
     }
 
-    private void validationUserById(Long userId) {
+    public UserTrashLinkListResponse getTrashLinkList(String tag, Long lastLinkId, Pageable pageable, Long loginUserId) {
+        List<TrashLinkResponse> trashLinkResponseList = linkRepositoryImpl.getTrashLinkList(tag, lastLinkId, pageable, loginUserId);
+
+        boolean hasNext = isHasNextLinkTrash(pageable, trashLinkResponseList);
+
+        List<TrashLinkListResponse> trashLinkListResponseList = trashLinkResponseList.stream()
+                .map(trashLinkResponse -> {
+                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(trashLinkResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashTagList.stream()
+                            .map(TagResponse::build)
+                            .collect(Collectors.toList());
+
+                    return TrashLinkListResponse.create(trashLinkResponse, tagList);
+                }).collect(Collectors.toList());
+
+        return new UserTrashLinkListResponse(trashLinkListResponseList, hasNext);
+    }
+
+    private void getUserById(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
-    private void validationUserByNickname(String nickname) {
+    private void getUserByNickname(String nickname) {
         userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
@@ -178,6 +202,16 @@ public class LinkQueryService {
         boolean hasNext = false;
         if (archiveResponseList.size() > pageable.getPageSize()) {
             archiveResponseList.remove(archiveResponseList.size() - 1);
+            hasNext = true;
+        }
+
+        return hasNext;
+    }
+
+    private boolean isHasNextLinkTrash(Pageable pageable, List<TrashLinkResponse> trashLinkResponseList) {
+        boolean hasNext = false;
+        if (trashLinkResponseList.size() > pageable.getPageSize()) {
+            trashLinkResponseList.remove(trashLinkResponseList.size() - 1);
             hasNext = true;
         }
 
