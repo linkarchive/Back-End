@@ -62,6 +62,8 @@ public class BookMarkRepositoryImpl {
                         bookMark.createdAt
                 ))
                 .from(bookMark)
+                .distinct()
+                .leftJoin(bookMark.link.linkHashTagList, linkHashTag)
                 .where(
                         bookMark.user.nickname.eq(nickname),
                         bookMark.link.linkStatus.eq(ACTIVE),
