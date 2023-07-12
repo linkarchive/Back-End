@@ -3,6 +3,7 @@ package project.linkarchive.backend.bookmark.controller;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,30 +29,19 @@ public class BookMarkQueryController {
             @PageableDefault Pageable pageable,
             AuthInfo authInfo
     ) {
-        UserMarkListResponse userMarkListResponse = bookMarkQueryService.getMyMarkLinkList(authInfo.getId(), lastMarkId, pageable, tag);
+        UserMarkListResponse userMarkListResponse = bookMarkQueryService.getMyMarkedLinkList(authInfo.getId(), lastMarkId, pageable, tag);
         return ResponseEntity.ok(userMarkListResponse);
     }
 
-    @GetMapping("/mark/links/public/user/{nickname}")
-    public ResponseEntity<UserMarkListResponse> getPublicUserMarkedLinkList(
-            @PathVariable("nickname") String nickname,
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "markId", required = false) Long lastMarkId,
-            @PageableDefault Pageable pageable
-    ) {
-        UserMarkListResponse userMarkListResponse = bookMarkQueryService.getPublicUserMarkedLinkList(nickname, lastMarkId, pageable, tag);
-        return ResponseEntity.ok(userMarkListResponse);
-    }
-
-    @GetMapping("/mark/links/authentication/user/{nickname}")
+    @GetMapping("/mark/links/user/{nickname}")
     public ResponseEntity<UserMarkListResponse> getAuthenticatedUserMarkedLinkList(
             @PathVariable("nickname") String nickname,
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "markId", required = false) Long lastMarkId,
             @PageableDefault Pageable pageable,
-            AuthInfo authInfo
+            @Nullable AuthInfo authInfo
     ) {
-        UserMarkListResponse userMarkListResponse = bookMarkQueryService.getAuthenticatedUserMarkedLinkList(nickname, lastMarkId, pageable, authInfo.getId(), tag);
+        UserMarkListResponse userMarkListResponse = bookMarkQueryService.getUserMarkedLinkList(nickname, lastMarkId, pageable, authInfo, tag);
         return ResponseEntity.ok(userMarkListResponse);
     }
 

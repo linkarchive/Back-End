@@ -9,7 +9,6 @@ import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.isLinkRead.repository.IsLinkReadRepository;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
-import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.link.repository.LinkRepositoryImpl;
 import project.linkarchive.backend.link.response.linkList.LinkResponse;
 import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
@@ -21,6 +20,7 @@ import project.linkarchive.backend.link.response.trash.TrashLinkListResponse;
 import project.linkarchive.backend.link.response.trash.TrashLinkResponse;
 import project.linkarchive.backend.link.response.trash.UserTrashLinkListResponse;
 import project.linkarchive.backend.s3.S3Uploader;
+import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.List;
@@ -35,16 +35,21 @@ public class LinkQueryService {
 
     private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
-    private final LinkRepository linkRepository;
     private final LinkHashTagRepository linkHashTagRepository;
     private final IsLinkReadRepository isLinkReadRepository;
     private final BookMarkRepository bookMarkRepository;
     private final LinkRepositoryImpl linkRepositoryImpl;
 
-    public LinkQueryService(S3Uploader s3Uploader, UserRepository userRepository, LinkRepository linkRepository, LinkHashTagRepository linkHashTagRepository, IsLinkReadRepository isLinkReadRepository, BookMarkRepository bookMarkRepository, LinkRepositoryImpl linkRepositoryImpl) {
+    public LinkQueryService(
+            S3Uploader s3Uploader,
+            UserRepository userRepository,
+            LinkHashTagRepository linkHashTagRepository,
+            IsLinkReadRepository isLinkReadRepository,
+            BookMarkRepository bookMarkRepository,
+            LinkRepositoryImpl linkRepositoryImpl
+    ) {
         this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
-        this.linkRepository = linkRepository;
         this.linkHashTagRepository = linkHashTagRepository;
         this.isLinkReadRepository = isLinkReadRepository;
         this.bookMarkRepository = bookMarkRepository;
@@ -74,8 +79,10 @@ public class LinkQueryService {
         return new UserLinkListResponse(userLinkResponse, hasNext);
     }
 
-    public UserLinkListResponse getPublicUserLinkList(String nickname, Pageable pageable, Long lastLinkId, String tag) {
+    public UserLinkListResponse getUserLinkList(String nickname, Pageable pageable, Long lastLinkId, AuthInfo authInfo, String tag) {
         getUserByNickname(nickname);
+
+        Long loginUserId = authInfo != null ? authInfo.getId() : null;
 
         List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(nickname, pageable, lastLinkId, tag);
 
@@ -86,28 +93,9 @@ public class LinkQueryService {
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
-                    return UserLinkResponse.create(linkResponse, false, false, tagList);
-                }).collect(Collectors.toList());
 
-        boolean hasNext = isHasNextLinkList(pageable, linkResponseList);
-
-        return new UserLinkListResponse(userLinkResponse, hasNext);
-    }
-
-    public UserLinkListResponse getAuthenticatedUserLinkList(String nickname, Pageable pageable, Long lastLinkId, Long loginUserId, String tag) {
-        getUserByNickname(nickname);
-
-        List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(nickname, pageable, lastLinkId, tag);
-
-        List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
-                .map(linkResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
-                            .collect(Collectors.toList());
-
-                    Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId);
-                    Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId);
+                    Boolean isRead = (loginUserId != null) ? isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId) : false;
+                    Boolean isMark = (loginUserId != null) ? bookMarkRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId) : false;
 
                     return UserLinkResponse.create(linkResponse, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
@@ -117,10 +105,10 @@ public class LinkQueryService {
         return new UserLinkListResponse(userLinkResponse, hasNext);
     }
 
-    public UserLinkArchiveResponse getPublicLinkArchive(Pageable pageable, Long lastLinkId, String tag) {
+    public UserLinkArchiveResponse getLinkArchive(Pageable pageable, Long lastLinkId, AuthInfo authInfo, String tag) {
         List<ArchiveResponse> archiveResponseList = linkRepositoryImpl.getLinkArchive(pageable, lastLinkId, tag);
 
-        boolean hasNext = isHasNextLinkArchive(pageable, archiveResponseList);
+        Long loginUserId = authInfo != null ? authInfo.getId() : null;
 
         List<UserArchiveResponse> userArchiveResponseList = archiveResponseList.stream()
                 .map(archiveResponse -> {
@@ -129,41 +117,21 @@ public class LinkQueryService {
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
-                    String profileImage = generateProfileImageUrl(archiveResponse.getProfileImage());
-
-                    return UserArchiveResponse.create(archiveResponse, profileImage, false, false, tagList);
-                }).collect(Collectors.toList());
-
-        return new UserLinkArchiveResponse(userArchiveResponseList, hasNext);
-    }
-
-    public UserLinkArchiveResponse getAuthenticatedLinkArchive(Pageable pageable, Long lastLinkId, Long loginUserId, String tag) {
-        List<ArchiveResponse> archiveResponseList = linkRepositoryImpl.getLinkArchive(pageable, lastLinkId, tag);
-
-        boolean hasNext = isHasNextLinkArchive(pageable, archiveResponseList);
-
-        List<UserArchiveResponse> userArchiveResponseList = archiveResponseList.stream()
-                .map(archiveResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(archiveResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
-                            .collect(Collectors.toList());
-
-                    Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(archiveResponse.getLinkId(), loginUserId);
-                    Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(archiveResponse.getLinkId(), loginUserId);
+                    Boolean isRead = (loginUserId != null) ? isLinkReadRepository.existsByLinkIdAndUserId(archiveResponse.getLinkId(), loginUserId) : false;
+                    Boolean isMark = (loginUserId != null) ? bookMarkRepository.existsByLinkIdAndUserId(archiveResponse.getLinkId(), loginUserId) : false;
 
                     String profileImage = generateProfileImageUrl(archiveResponse.getProfileImage());
 
                     return UserArchiveResponse.create(archiveResponse, profileImage, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
 
+        boolean hasNext = isHasNextLinkArchive(pageable, archiveResponseList);
+
         return new UserLinkArchiveResponse(userArchiveResponseList, hasNext);
     }
 
     public UserTrashLinkListResponse getTrashLinkList(String tag, Long lastLinkId, Pageable pageable, Long loginUserId) {
         List<TrashLinkResponse> trashLinkResponseList = linkRepositoryImpl.getTrashLinkList(tag, lastLinkId, pageable, loginUserId);
-
-        boolean hasNext = isHasNextLinkTrash(pageable, trashLinkResponseList);
 
         List<TrashLinkListResponse> trashLinkListResponseList = trashLinkResponseList.stream()
                 .map(trashLinkResponse -> {
@@ -174,6 +142,8 @@ public class LinkQueryService {
 
                     return TrashLinkListResponse.create(trashLinkResponse, tagList);
                 }).collect(Collectors.toList());
+
+        boolean hasNext = isHasNextLinkTrash(pageable, trashLinkResponseList);
 
         return new UserTrashLinkListResponse(trashLinkListResponseList, hasNext);
     }

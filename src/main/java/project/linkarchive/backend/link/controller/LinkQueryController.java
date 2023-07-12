@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -84,47 +85,26 @@ public class LinkQueryController {
         return ResponseEntity.ok(userLinkListResponse);
     }
 
-    @GetMapping("/links/public/user/{nickname}")
-    public ResponseEntity<UserLinkListResponse> getPublicUserLinkList(
-            @PathVariable("nickname") String nickname,
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "linkId", required = false) Long lastLinkId,
-            @PageableDefault Pageable pageable
-    ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getPublicUserLinkList(nickname, pageable, lastLinkId, tag);
-        return ResponseEntity.ok(userLinkListResponse);
-    }
-
-    @GetMapping("/links/authentication/user/{nickname}")
-    public ResponseEntity<UserLinkListResponse> getAuthenticatedUserLinkList(
+    @GetMapping("/links/user/{nickname}")
+    public ResponseEntity<UserLinkListResponse> getUserLinkList(
             @PathVariable("nickname") String nickname,
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable,
-            AuthInfo authInfo
+            @Nullable AuthInfo authInfo
     ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getAuthenticatedUserLinkList(nickname, pageable, lastLinkId, authInfo.getId(), tag);
+        UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(nickname, pageable, lastLinkId, authInfo, tag);
         return ResponseEntity.ok(userLinkListResponse);
     }
 
-    @GetMapping("/links/archive/public")
-    public ResponseEntity<UserLinkArchiveResponse> getPublicLinkArchive(
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "linkId", required = false) Long lastLinkId,
-            @PageableDefault Pageable pageable
-    ) {
-        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getPublicLinkArchive(pageable, lastLinkId, tag);
-        return ResponseEntity.ok(userLinkArchiveResponse);
-    }
-
-    @GetMapping("/links/archive/authentication")
-    public ResponseEntity<UserLinkArchiveResponse> getAuthenticatedLinkArchive(
+    @GetMapping("/links/archive")
+    public ResponseEntity<UserLinkArchiveResponse> getLinkArchive(
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable,
-            AuthInfo authInfo
+            @Nullable AuthInfo authInfo
     ) {
-        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getAuthenticatedLinkArchive(pageable, lastLinkId, authInfo.getId(), tag);
+        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getLinkArchive(pageable, lastLinkId, authInfo, tag);
         return ResponseEntity.ok(userLinkArchiveResponse);
     }
 
