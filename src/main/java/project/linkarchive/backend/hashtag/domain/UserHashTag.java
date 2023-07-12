@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.user.domain.User;
@@ -38,9 +39,9 @@ public class UserHashTag extends CreatedEntity {
         this.hashTag = hashTag;
     }
 
-    public static UserHashTag build(List<LinkHashTag> linkHashTagList, User user, HashTag hashTag) {
+    public static UserHashTag create(Long usageCount, User user, HashTag hashTag) {
         return UserHashTag.builder()
-                .usageCount((long) linkHashTagList.size())
+                .usageCount(usageCount)
                 .user(user)
                 .hashTag(hashTag)
                 .build();

@@ -10,15 +10,10 @@ import project.linkarchive.backend.hashtag.domain.UserHashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 import project.linkarchive.backend.hashtag.request.CreateTagRequest;
-import project.linkarchive.backend.link.domain.LinkHashTag;
-import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 
-import java.util.List;
-
-import static project.linkarchive.backend.advice.data.DataConstants.MAXIMUM_TAG_LENGTH;
-import static project.linkarchive.backend.advice.data.DataConstants.MINIMUM_TAG_LENGTH;
+import static project.linkarchive.backend.advice.data.DataConstants.*;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
 @Service
@@ -28,13 +23,11 @@ public class HashTagApiService {
     private final UserRepository userRepository;
     private final HashTagRepository hashTagRepository;
     private final UserHashTagRepository userHashTagRepository;
-    private final LinkHashTagRepository linkHashTagRepository;
 
-    public HashTagApiService(UserRepository userRepository, HashTagRepository hashTagRepository, UserHashTagRepository userHashTagRepository, LinkHashTagRepository linkHashTagRepository) {
+    public HashTagApiService(UserRepository userRepository, HashTagRepository hashTagRepository, UserHashTagRepository userHashTagRepository) {
         this.userRepository = userRepository;
         this.hashTagRepository = hashTagRepository;
         this.userHashTagRepository = userHashTagRepository;
-        this.linkHashTagRepository = linkHashTagRepository;
     }
 
     public void create(CreateTagRequest request, Long userId) {
@@ -47,9 +40,7 @@ public class HashTagApiService {
                             throw new AlreadyExistException(ALREADY_EXIST_TAG);
                         },
                         () -> {
-                            List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByHashTagId(hashTag.getId());
-                            UserHashTag getHashTag = UserHashTag.build(linkHashTagList, user, hashTag);
-
+                            UserHashTag getHashTag = UserHashTag.create(HASHTAG_DEFAULT_COUNT, user, hashTag);
                             userHashTagRepository.save(getHashTag);
                         });
     }
