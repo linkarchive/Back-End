@@ -16,6 +16,7 @@ import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.isLinkRead.repository.IsLinkReadRepository;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
+import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 
@@ -47,7 +48,7 @@ public class BookMarkQueryService {
         this.bookMarkRepositoryImpl = bookMarkRepositoryImpl;
     }
 
-    public UserMarkListResponse getMyMarkLinkList(Long userId, Long lastMarkId, Pageable pageable, String tag) {
+    public UserMarkListResponse getMyMarkedLinkList(Long userId, Long lastMarkId, Pageable pageable, String tag) {
         validateUserById(userId);
 
         List<MarkResponse> markResponseList = bookMarkRepositoryImpl.getMyMarkLinkList(userId, lastMarkId, pageable, tag);
@@ -70,8 +71,10 @@ public class BookMarkQueryService {
         return new UserMarkListResponse(userMarkResponseList, hasNext);
     }
 
-    public UserMarkListResponse getPublicUserMarkedLinkList(String nickname, Long lastMarkId, Pageable pageable, String tag) {
+    public UserMarkListResponse getUserMarkedLinkList(String nickname, Long lastMarkId, Pageable pageable, AuthInfo authInfo, String tag) {
         validateUserByNickname(nickname);
+
+        Long loginUserId = authInfo != null ? authInfo.getId() : null;
 
         List<MarkResponse> markResponseList = bookMarkRepositoryImpl.getUserMarkLinkList(nickname, lastMarkId, pageable, tag);
 
@@ -84,28 +87,8 @@ public class BookMarkQueryService {
                             .map(TagResponse::build)
                             .collect(Collectors.toList());
 
-                    return UserMarkResponse.build(markResponse, false, false, tagList);
-                }).collect(Collectors.toList());
-
-        return new UserMarkListResponse(userMarkResponseList, hasNext);
-    }
-
-    public UserMarkListResponse getAuthenticatedUserMarkedLinkList(String nickname, Long lastMarkId, Pageable pageable, Long loginUserId, String tag) {
-        validateUserByNickname(nickname);
-
-        List<MarkResponse> markResponseList = bookMarkRepositoryImpl.getUserMarkLinkList(nickname, lastMarkId, pageable, tag);
-
-        boolean hasNext = isHasNextLinkList(pageable, markResponseList);
-
-        List<UserMarkResponse> userMarkResponseList = markResponseList.stream()
-                .map(markResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(markResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
-                            .map(TagResponse::build)
-                            .collect(Collectors.toList());
-
-                    Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), loginUserId);
-                    Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), loginUserId);
+                    Boolean isRead = (loginUserId != null) ? isLinkReadRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), loginUserId) : false;
+                    Boolean isMark = (loginUserId != null) ? bookMarkRepository.existsByLinkIdAndUserId(markResponse.getLinkId(), loginUserId) : false;
 
                     return UserMarkResponse.build(markResponse, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
