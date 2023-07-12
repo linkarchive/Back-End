@@ -24,7 +24,7 @@ public class LinkSetUpData extends SetUpData {
         setUpLink();
         setUpTagList();
         setUpCreateLinkRequest();
-        setupTagResponseList();
+//        setupTagResponseList();
         setUpArchiveResponse();
         setupUserArchiveResponseList();
         setUpUserLinkArchiveResponse();
@@ -67,12 +67,12 @@ public class LinkSetUpData extends SetUpData {
         createLinkRequest = new CreateLinkRequest(URL, TITLE, DESCRIPTION, THUMBNAIL, tagList);
     }
 
-    private void setupTagResponseList() {
-        for (String tag : tagList) {
-            tagResponse = new TagResponse(tag);
-            tagResponseList.add(tagResponse);
-        }
-    }
+//    private void setupTagResponseList() {
+//        for (String tag : tagList) {
+//            tagResponse = new TagResponse(tag);
+//            tagResponseList.add(tagResponse);
+//        }
+//    }
 
     private void setUpArchiveResponse() {
         archiveResponse = new ArchiveResponse(ID, NICKNAME, PROFILE_IMAGE_FILENAME, ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, CREATED_AT, UPDATED_AT);
