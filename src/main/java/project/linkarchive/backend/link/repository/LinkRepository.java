@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import project.linkarchive.backend.link.domain.Link;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface LinkRepository extends JpaRepository<Link, Long> {
@@ -19,5 +20,7 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
     void decreaseBookMarkCount(@Param("linkId") Long linkId);
 
     Optional<Link> findByIdAndUserId(Long linkId, Long userId);
+
+    List<Link> findByUserId(Long userId);
 
 }
