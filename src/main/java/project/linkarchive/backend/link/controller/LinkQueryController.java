@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.link.response.LinkMetaDataResponse;
 import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
@@ -117,6 +118,14 @@ public class LinkQueryController {
     ) {
         UserTrashLinkListResponse userTrashLinkListResponse = linkQueryService.getTrashLinkList(tag, lastLinkId, pageable, authInfo.getId());
         return ResponseEntity.ok(userTrashLinkListResponse);
+    }
+
+    @GetMapping("/links/tags/user/{nickname}")
+    public ResponseEntity<TagListResponse> getLinkTagList(
+            @PathVariable("nickname") String nickname
+    ) {
+        TagListResponse tagList = linkQueryService.getLinkTagList(nickname);
+        return ResponseEntity.ok(tagList);
     }
 
 }

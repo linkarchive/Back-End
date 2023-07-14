@@ -5,10 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
+import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.isLinkRead.repository.IsLinkReadRepository;
+import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
+import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.link.repository.LinkRepositoryImpl;
 import project.linkarchive.backend.link.response.linkList.LinkResponse;
 import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
@@ -21,9 +24,13 @@ import project.linkarchive.backend.link.response.trash.TrashLinkResponse;
 import project.linkarchive.backend.link.response.trash.UserTrashLinkListResponse;
 import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.security.AuthInfo;
+import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static project.linkarchive.backend.advice.data.DataConstants.IMAGE_EXPIRATION_TIME;
@@ -35,6 +42,7 @@ public class LinkQueryService {
 
     private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
+    private final LinkRepository linkRepository;
     private final LinkHashTagRepository linkHashTagRepository;
     private final IsLinkReadRepository isLinkReadRepository;
     private final BookMarkRepository bookMarkRepository;
@@ -43,6 +51,7 @@ public class LinkQueryService {
     public LinkQueryService(
             S3Uploader s3Uploader,
             UserRepository userRepository,
+            LinkRepository linkRepository,
             LinkHashTagRepository linkHashTagRepository,
             IsLinkReadRepository isLinkReadRepository,
             BookMarkRepository bookMarkRepository,
@@ -50,6 +59,7 @@ public class LinkQueryService {
     ) {
         this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
+        this.linkRepository = linkRepository;
         this.linkHashTagRepository = linkHashTagRepository;
         this.isLinkReadRepository = isLinkReadRepository;
         this.bookMarkRepository = bookMarkRepository;
@@ -146,6 +156,31 @@ public class LinkQueryService {
         return new UserTrashLinkListResponse(trashLinkListResponseList, hasNext);
     }
 
+    public TagListResponse getLinkTagList(String nickname) {
+        User user = findUserByNickname(nickname);
+
+        List<Link> linkList = linkRepository.findByUserId(user.getId());
+        Map<String, Long> tagIdMap = new HashMap<>();
+        Map<String, Integer> tagCountMap = new HashMap<>();
+
+        linkList.forEach(link -> {
+            List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(link.getId());
+            linkHashTagList.forEach(linkHashTag -> {
+                Long tagId = linkHashTag.getHashTag().getId();
+                String tagName = linkHashTag.getHashTag().getTag();
+                tagIdMap.put(tagName, tagId);
+                tagCountMap.put(tagName, tagCountMap.getOrDefault(tagName, 0) + 1);
+            });
+        });
+
+        List<TagResponse> tagList = tagCountMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .map(entry -> new TagResponse(tagIdMap.get(entry.getKey()), entry.getKey()))
+                .collect(Collectors.toList());
+
+        return new TagListResponse(tagList);
+    }
+
     private void getUserById(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
@@ -153,6 +188,11 @@ public class LinkQueryService {
 
     private void getUserByNickname(String nickname) {
         userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+    }
+
+    private User findUserByNickname(String nickname) {
+        return userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
