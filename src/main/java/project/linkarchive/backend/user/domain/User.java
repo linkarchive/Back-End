@@ -22,7 +22,7 @@ import static project.linkarchive.backend.advice.data.DataConstants.EMPTY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = {@Index(name = "index_nickname", columnList = "nickname", unique = true)})
+@Table(name = "`user`", indexes = {@Index(name = "index_nickname", columnList = "nickname", unique = true)})
 public class User extends TimeEntity {
 
     @Id
