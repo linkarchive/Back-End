@@ -33,13 +33,24 @@ class UserTest extends UserSetUpData {
     @DisplayName("유저 getNickname - Domain")
     @Test
     void testGetNickname() {
-        assertEquals(NICKNAME, user.getNickname());
+        assertEquals(EMPTY, user.getNickname());
     }
 
     @DisplayName("유저 getIntroduce - Domain")
     @Test
     void testGetIntroduce() {
-        assertEquals(INTRODUCE, user.getIntroduce());
+        assertEquals(EMPTY, user.getIntroduce());
+    }
+
+    @DisplayName("유저 생성자 - Domain")
+    @Test
+    void testUserConstructor() {
+        User getUser = new User(SOCIAL_ID, EMAIL, EMPTY, EMPTY);
+
+        assertEquals(SOCIAL_ID, getUser.getSocialId());
+        assertEquals(EMAIL, getUser.getEmail());
+        assertEquals(EMPTY, getUser.getNickname());
+        assertEquals(EMPTY, getUser.getIntroduce());
     }
 
     @DisplayName("유저 Builder 패턴 - Domain")
@@ -48,14 +59,14 @@ class UserTest extends UserSetUpData {
         User getUser = User.builder()
                 .socialId(SOCIAL_ID)
                 .email(EMAIL)
-                .nickname(NICKNAME)
-                .introduce(INTRODUCE)
+                .nickname(EMPTY)
+                .introduce(EMPTY)
                 .build();
 
         assertEquals(SOCIAL_ID, getUser.getSocialId());
         assertEquals(EMAIL, getUser.getEmail());
-        assertEquals(NICKNAME, getUser.getNickname());
-        assertEquals(INTRODUCE, getUser.getIntroduce());
+        assertEquals(EMPTY, getUser.getNickname());
+        assertEquals(EMPTY, getUser.getIntroduce());
     }
 
     @DisplayName("유저 create method - Domain")
