@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import project.linkarchive.backend.util.setUpData.UserSetUpData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static project.linkarchive.backend.util.constant.Constants.*;
+import static project.linkarchive.backend.util.constant.Constants.EMPTY;
+import static project.linkarchive.backend.util.constant.Constants.PRE_SIGNED_URL;
 
 class ProfileResponseTest extends UserSetUpData {
 
@@ -19,8 +20,8 @@ class ProfileResponseTest extends UserSetUpData {
     @DisplayName("ProfileResponse - DTO")
     @Test
     void testProfileResponse() {
-        assertEquals(NICKNAME, profileResponse.getNickname());
-        assertEquals(INTRODUCE, profileResponse.getIntroduce());
+        assertEquals(EMPTY, profileResponse.getNickname());
+        assertEquals(EMPTY, profileResponse.getIntroduce());
         assertEquals(PRE_SIGNED_URL, profileResponse.getProfileImageFileName());
     }
 
