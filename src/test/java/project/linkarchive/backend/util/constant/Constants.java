@@ -17,6 +17,8 @@ public class Constants {
     public static final String EMAIL = "Test Email";
     public static final String NICKNAME = "Test Nickname";
     public static final String INTRODUCE = "Test Introduce";
+    public static final String NONE_SOCIAL_ID = "Test None Social Id";
+    public static final String NONE_NICKNAME = "Test None Nickname";
 
     public static final String PROFILE_IMAGE_FILENAME = "Test ProfileImage FileName";
 
