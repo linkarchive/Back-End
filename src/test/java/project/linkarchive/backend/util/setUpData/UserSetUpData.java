@@ -14,9 +14,9 @@ public class UserSetUpData extends SetUpData {
     public void setUpUser() {
         user = User.builder()
                 .socialId(SOCIAL_ID)
-                .nickname(NICKNAME)
+                .nickname(EMPTY)
                 .email(EMAIL)
-                .introduce(INTRODUCE)
+                .introduce(EMPTY)
                 .build();
     }
 
