@@ -18,6 +18,12 @@ class UserTest extends UserSetUpData {
         setUpUser();
     }
 
+    @DisplayName("유저 getUserId - Domain")
+    @Test
+    void testGetUserId() {
+        assertEquals(USER_ID, user.getId());
+    }
+
     @DisplayName("유저 getSocialId - Domain")
     @Test
     void testGetSocialId() {
@@ -45,8 +51,9 @@ class UserTest extends UserSetUpData {
     @DisplayName("유저 생성자 - Domain")
     @Test
     void testUserConstructor() {
-        User getUser = new User(SOCIAL_ID, EMAIL, EMPTY, EMPTY);
+        User getUser = new User(USER_ID, SOCIAL_ID, EMAIL, EMPTY, EMPTY);
 
+        assertEquals(USER_ID, getUser.getId());
         assertEquals(SOCIAL_ID, getUser.getSocialId());
         assertEquals(EMAIL, getUser.getEmail());
         assertEquals(EMPTY, getUser.getNickname());
@@ -57,12 +64,14 @@ class UserTest extends UserSetUpData {
     @Test
     void testBuilder() {
         User getUser = User.builder()
+                .id(USER_ID)
                 .socialId(SOCIAL_ID)
                 .email(EMAIL)
                 .nickname(EMPTY)
                 .introduce(EMPTY)
                 .build();
 
+        assertEquals(USER_ID, getUser.getId());
         assertEquals(SOCIAL_ID, getUser.getSocialId());
         assertEquals(EMAIL, getUser.getEmail());
         assertEquals(EMPTY, getUser.getNickname());

@@ -13,6 +13,7 @@ public class Constants {
     public static final Long MODIFY_LONG_VAL = 1L;
     public static final Long ID = 1L;
 
+    public static final Long USER_ID = 1L;
     public static final String SOCIAL_ID = "Test Social Id";
     public static final String EMAIL = "Test Email";
     public static final String NICKNAME = "Test Nickname";

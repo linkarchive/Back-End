@@ -48,7 +48,8 @@ public class User extends TimeEntity {
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
     @Builder
-    public User(String socialId, String email, String nickname, String introduce) {
+    public User(Long id, String socialId, String email, String nickname, String introduce) {
+        this.id = id;
         this.socialId = socialId;
         this.email = email;
         this.nickname = nickname;
