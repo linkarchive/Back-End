@@ -30,37 +30,37 @@ import java.util.List;
 
 public class SetUpData {
 
-    public User user;
-    public ProfileImage profileImage;
-    public RefreshToken refreshToken;
-    public Link link;
-    public HashTag hashTag;
-    public UserHashTag userHashTag;
-    public LinkHashTag linkHashTag;
-    public BookMark bookMark;
-    public IsLinkRead isLinkRead;
+    protected User user;
+    protected ProfileImage profileImage;
+    protected RefreshToken refreshToken;
+    protected Link link;
+    protected HashTag hashTag;
+    protected UserHashTag userHashTag;
+    protected LinkHashTag linkHashTag;
+    protected BookMark bookMark;
+    protected IsLinkRead isLinkRead;
 
-    public UpdateNicknameRequest updateNicknameRequest;
-    public UpdateProfileRequest updateProfileRequest;
-    public CreateLinkRequest createLinkRequest;
-    public CreateTagRequest createTagRequest;
+    protected UpdateNicknameRequest updateNicknameRequest;
+    protected UpdateProfileRequest updateProfileRequest;
+    protected CreateLinkRequest createLinkRequest;
+    protected CreateTagRequest createTagRequest;
 
-    public ProfileResponse profileResponse;
-    public UpdateNicknameResponse updateNicknameResponse;
-    public UpdateProfileResponse updateProfileResponse;
-    public ArchiveResponse archiveResponse;
-    public UserArchiveResponse userArchiveResponse;
-    public UserLinkArchiveResponse userLinkArchiveResponse;
-    public LinkResponse linkResponse;
-    public UserLinkListResponse userLinkListResponse;
-    public UserLinkResponse getUserLinkResponse;
-    public LinkMetaDataResponse linkMetaDataResponse;
-    public TagResponse tagResponse;
+    protected ProfileResponse profileResponse;
+    protected UpdateNicknameResponse updateNicknameResponse;
+    protected UpdateProfileResponse updateProfileResponse;
+    protected ArchiveResponse archiveResponse;
+    protected UserArchiveResponse userArchiveResponse;
+    protected UserLinkArchiveResponse userLinkArchiveResponse;
+    protected LinkResponse linkResponse;
+    protected UserLinkListResponse userLinkListResponse;
+    protected UserLinkResponse getUserLinkResponse;
+    protected LinkMetaDataResponse linkMetaDataResponse;
+    protected TagResponse tagResponse;
 
-    public List<UserArchiveResponse> userArchiveResponseList = new ArrayList<>();
-    public List<UserLinkResponse> userLinkResponseList = new ArrayList<>();
-    public List<String> tagList = new ArrayList<>();
-    public List<TagResponse> tagResponseList = new ArrayList<>();
-    public List<LinkHashTag> linkHashTagList = new ArrayList<>();
+    protected List<UserArchiveResponse> userArchiveResponseList = new ArrayList<>();
+    protected List<UserLinkResponse> userLinkResponseList = new ArrayList<>();
+    protected List<String> tagList = new ArrayList<>();
+    protected List<TagResponse> tagResponseList = new ArrayList<>();
+    protected List<LinkHashTag> linkHashTagList = new ArrayList<>();
 
 }
