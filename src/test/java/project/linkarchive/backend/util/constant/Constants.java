@@ -14,42 +14,42 @@ public class Constants {
     public static final Long ID = 1L;
 
     public static final Long USER_ID = 1L;
-    public static final String SOCIAL_ID = "Test Social Id";
-    public static final String EMAIL = "Test Email";
-    public static final String NICKNAME = "Test Nickname";
-    public static final String INTRODUCE = "Test Introduce";
-    public static final String NONE_SOCIAL_ID = "Test None Social Id";
-    public static final String NONE_NICKNAME = "Test None Nickname";
+    public static final String SOCIAL_ID = "Test_Social_Id";
+    public static final String EMAIL = "Test_Email";
+    public static final String NICKNAME = "TestNickname";
+    public static final String INTRODUCE = "Test_Introduce";
+    public static final String NONE_SOCIAL_ID = "Test_None_Social_Id";
+    public static final String NONE_NICKNAME = "Test_None_Nickname";
 
-    public static final String PROFILE_IMAGE_FILENAME = "Test ProfileImage FileName";
+    public static final String PROFILE_IMAGE_FILENAME = "Test_ProfileImage_FileName";
 
-    public static final String REFRESH_TOKEN = "Test RefreshToken";
-    public static final String AGENT = "Test Agent";
+    public static final String REFRESH_TOKEN = "Test_RefreshToken";
+    public static final String AGENT = "Test_Agent";
 
-    public static final String URL = "Test Url";
-    public static final String TITLE = "Test Title";
-    public static final String DESCRIPTION = "Test Description";
-    public static final String THUMBNAIL = "Test Thumbnail";
+    public static final String URL = "Test_Url";
+    public static final String TITLE = "Test_Title";
+    public static final String DESCRIPTION = "Test_Description";
+    public static final String THUMBNAIL = "Test_Thumbnail";
     public static final Long BOOKMARK_COUNT = 10L;
     public static final LinkStatus LINK_STATUS = ACTIVE;
 
-    public static final String META_TITLE = "Test Meta Title";
-    public static final String META_DESCRIPTION = "Test Meta Description";
-    public static final String META_THUMBNAIL = "Test Meta Thumbnail";
+    public static final String META_TITLE = "Test_Meta_Title";
+    public static final String META_DESCRIPTION = "Test_Meta_Description";
+    public static final String META_THUMBNAIL = "Test_Meta_Thumbnail";
 
-    public static final String PRE_SIGNED_URL = "Test Pre_Signed Url";
+    public static final String PRE_SIGNED_URL = "Test_Pre_Signed_Url";
 
-    public static final String TAG = "Test Tag";
+    public static final String TAG = "Test_Tag";
 
     public static final Long USAGE_COUNT = 10L;
     public static final Boolean IS_MARK = true;
     public static final Boolean IS_READ = true;
     public static final Boolean HAS_NEXT = true;
 
-    public static final String NEW_NICKNAME = "New Test Nickname";
-    public static final String NEW_INTRODUCE = "New Test Introduce";
+    public static final String NEW_NICKNAME = "NewTestNickname";
+    public static final String NEW_INTRODUCE = "New_Test_Introduce";
 
-    public static final String NEW_PROFILE_IMAGE_FILENAME = "New Test ProfileImageFilename";
+    public static final String NEW_PROFILE_IMAGE_FILENAME = "New_Test_ProfileImageFilename";
 
     public static final LocalDateTime CREATED_AT = LocalDateTime.of(1995, 4, 19, 12, 34, 56);
     public static final LocalDateTime UPDATED_AT = LocalDateTime.of(2023, 4, 19, 12, 34, 56);
