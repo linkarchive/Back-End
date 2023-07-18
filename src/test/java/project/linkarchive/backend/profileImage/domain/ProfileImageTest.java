@@ -1,66 +1,79 @@
 package project.linkarchive.backend.profileImage.domain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.util.setUpData.ProfileImageSetUpData;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static project.linkarchive.backend.util.constant.Constants.NEW_PROFILE_IMAGE_FILENAME;
-import static project.linkarchive.backend.util.constant.Constants.PROFILE_IMAGE_FILENAME;
+import static org.junit.jupiter.api.Assertions.*;
+import static project.linkarchive.backend.util.constant.Constants.*;
 
 class ProfileImageTest extends ProfileImageSetUpData {
+
+    @BeforeEach
+    public void setup() {
+        setUpUser();
+        setUpProfileImage();
+    }
+
+    @DisplayName("프로필 이미지 getProfileImageId - Domain")
+    @Test
+    void testGetProfileImageId() {
+        assertEquals(PROFILE_IMAGE_ID, profileImage.getId());
+    }
 
     @DisplayName("프로필 이미지 getProfileImageFileName - Domain")
     @Test
     void testGetProfileImageFilename() {
-        String profileImageFilename = profileImage.getProfileImageFilename();
-
-        assertNotNull(profileImageFilename);
-        assertEquals(PROFILE_IMAGE_FILENAME, profileImageFilename);
+        assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getProfileImageFilename());
     }
 
     @DisplayName("프로필 이미지 getUser - Domain")
     @Test
     void testGetUser() {
-        User getUser = profileImage.getUser();
+        assertEquals(user, profileImage.getUser());
+    }
 
-        assertNotNull(getUser);
-        assertEquals(user, getUser);
+    @DisplayName("프로필 이미지 생성자 - Domain")
+    @Test
+    void testProfileImageConstructor() {
+        profileImage = new ProfileImage(PROFILE_IMAGE_ID, PROFILE_IMAGE_FILENAME, user);
+
+        assertEquals(PROFILE_IMAGE_ID, profileImage.getId());
+        assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getProfileImageFilename());
+        assertEquals(user, profileImage.getUser());
     }
 
     @DisplayName("프로필 이미지 Builder 패턴 - Domain")
     @Test
     void testBuilder() {
-        ProfileImage getProfileImage = ProfileImage.builder()
+        profileImage = ProfileImage.builder()
                 .profileImageFilename(PROFILE_IMAGE_FILENAME)
                 .user(user)
                 .build();
 
-        assertNotNull(getProfileImage);
-        assertEquals(PROFILE_IMAGE_FILENAME, getProfileImage.getProfileImageFilename());
-        assertEquals(user, getProfileImage.getUser());
+        assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getProfileImageFilename());
+        assertEquals(user, profileImage.getUser());
     }
 
-    @DisplayName("프로필 이미지 Build 메서드 - Domain")
+    @DisplayName("프로필 이미지 create 메서드 - Domain")
     @Test
-    void testBuild() {
-        ProfileImage getProfileImage = ProfileImage.build(PROFILE_IMAGE_FILENAME, user);
+    void testCreate() {
+        profileImage = ProfileImage.create(PROFILE_IMAGE_FILENAME, user);
 
-        assertNotNull(getProfileImage);
-        assertEquals(PROFILE_IMAGE_FILENAME, getProfileImage.getProfileImageFilename());
-        assertEquals(user, getProfileImage.getUser());
+        assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getProfileImageFilename());
+        assertEquals(user, profileImage.getUser());
     }
 
     @DisplayName("프로필 이미지 UpdateProfileImage - Domain")
     @Test
     void testUpdateProfileImage() {
-        profileImage.updateProfileImage(NEW_PROFILE_IMAGE_FILENAME);
+        String old_ProfileImageFilename = profileImage.getProfileImageFilename();
 
+        profileImage.updateProfileImage(NEW_PROFILE_IMAGE_FILENAME);
         String updatedProfileImageFileName = profileImage.getProfileImageFilename();
 
-        assertNotNull(updatedProfileImageFileName);
+        assertNotEquals(old_ProfileImageFilename, updatedProfileImageFileName);
         assertEquals(NEW_PROFILE_IMAGE_FILENAME, updatedProfileImageFileName);
     }
 
