@@ -15,7 +15,7 @@ import project.linkarchive.backend.user.service.UserApiService;
 import java.io.IOException;
 
 import static org.springframework.http.HttpStatus.CREATED;
-import static project.linkarchive.backend.advice.success.SuccessCodeConst.AVAILABLE_NICKNAME;
+import static project.linkarchive.backend.advice.success.SuccessCodeConst.*;
 
 @RestController
 public class UserApiController {
@@ -59,6 +59,24 @@ public class UserApiController {
     ) {
         userApiService.checkNickName(request.getNickname());
         return ResponseEntity.status(CREATED).body(new SuccessResponse(AVAILABLE_NICKNAME));
+    }
+
+    @PostMapping("/follow/{id}")
+    public ResponseEntity<SuccessResponse> followUser(
+            @PathVariable(value = "id") Long followingId,
+            AuthInfo authInfo // 요청자
+    ){
+        userApiService.followUser(authInfo.getId(), followingId);
+        return ResponseEntity.status(CREATED).body(new SuccessResponse(FOLLOW_USER));
+    }
+
+    @DeleteMapping("/unfollow/{id}")
+    public ResponseEntity<SuccessResponse> unfollowUser(
+            @PathVariable(value = "id") Long followingId,
+            AuthInfo authInfo // 요청자
+    ){
+        userApiService.unfollowUser(authInfo.getId(), followingId);
+        return ResponseEntity.status(CREATED).body(new SuccessResponse(UNFOLLOW_USER));
     }
 
 }
