@@ -51,19 +51,19 @@ class UserTest extends UserSetUpData {
     @DisplayName("유저 생성자 - Domain")
     @Test
     void testUserConstructor() {
-        User getUser = new User(USER_ID, SOCIAL_ID, EMAIL, EMPTY, EMPTY);
+        user = new User(USER_ID, SOCIAL_ID, EMAIL, EMPTY, EMPTY);
 
-        assertEquals(USER_ID, getUser.getId());
-        assertEquals(SOCIAL_ID, getUser.getSocialId());
-        assertEquals(EMAIL, getUser.getEmail());
-        assertEquals(EMPTY, getUser.getNickname());
-        assertEquals(EMPTY, getUser.getIntroduce());
+        assertEquals(USER_ID, user.getId());
+        assertEquals(SOCIAL_ID, user.getSocialId());
+        assertEquals(EMAIL, user.getEmail());
+        assertEquals(EMPTY, user.getNickname());
+        assertEquals(EMPTY, user.getIntroduce());
     }
 
     @DisplayName("유저 Builder 패턴 - Domain")
     @Test
     void testBuilder() {
-        User getUser = User.builder()
+        user = User.builder()
                 .id(USER_ID)
                 .socialId(SOCIAL_ID)
                 .email(EMAIL)
@@ -71,23 +71,23 @@ class UserTest extends UserSetUpData {
                 .introduce(EMPTY)
                 .build();
 
-        assertEquals(USER_ID, getUser.getId());
-        assertEquals(SOCIAL_ID, getUser.getSocialId());
-        assertEquals(EMAIL, getUser.getEmail());
-        assertEquals(EMPTY, getUser.getNickname());
-        assertEquals(EMPTY, getUser.getIntroduce());
+        assertEquals(USER_ID, user.getId());
+        assertEquals(SOCIAL_ID, user.getSocialId());
+        assertEquals(EMAIL, user.getEmail());
+        assertEquals(EMPTY, user.getNickname());
+        assertEquals(EMPTY, user.getIntroduce());
     }
 
     @DisplayName("유저 create method - Domain")
     @Test
     void testCreate() {
         KakaoProfile kakaoProfile = new KakaoProfile(SOCIAL_ID, new KakaoAccount(EMAIL));
-        User getUser = User.create(kakaoProfile);
+        user = User.create(kakaoProfile);
 
-        assertEquals(SOCIAL_ID, getUser.getSocialId());
-        assertEquals(EMAIL, getUser.getEmail());
-        assertEquals(EMPTY, getUser.getNickname());
-        assertEquals(EMPTY, getUser.getIntroduce());
+        assertEquals(SOCIAL_ID, user.getSocialId());
+        assertEquals(EMAIL, user.getEmail());
+        assertEquals(EMPTY, user.getNickname());
+        assertEquals(EMPTY, user.getIntroduce());
     }
 
     @DisplayName("유저 updateUserNickName - Domain")
