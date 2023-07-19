@@ -68,13 +68,13 @@ class ProfileImageTest extends ProfileImageSetUpData {
     @DisplayName("프로필 이미지 UpdateProfileImage - Domain")
     @Test
     void testUpdateProfileImage() {
-        String old_ProfileImageFilename = profileImage.getProfileImageFilename();
+        String oldProfileImageFilename = profileImage.getProfileImageFilename();
 
         profileImage.updateProfileImage(NEW_PROFILE_IMAGE_FILENAME);
-        String updatedProfileImageFileName = profileImage.getProfileImageFilename();
+        String newProfileImageFileName = profileImage.getProfileImageFilename();
 
-        assertNotEquals(old_ProfileImageFilename, updatedProfileImageFileName);
-        assertEquals(NEW_PROFILE_IMAGE_FILENAME, updatedProfileImageFileName);
+        assertNotEquals(oldProfileImageFilename, newProfileImageFileName);
+        assertEquals(NEW_PROFILE_IMAGE_FILENAME, newProfileImageFileName);
     }
 
 }
