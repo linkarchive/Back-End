@@ -1,7 +1,7 @@
-package project.linkarchive.backend.user.repository;
+package project.linkarchive.backend.relationship.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import project.linkarchive.backend.user.domain.Relationship;
+import project.linkarchive.backend.relationship.domain.Relationship;
 
 import java.util.Optional;
 

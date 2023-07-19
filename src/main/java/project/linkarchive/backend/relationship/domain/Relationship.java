@@ -1,4 +1,4 @@
-package project.linkarchive.backend.user.domain;
+package project.linkarchive.backend.relationship.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
