@@ -1,5 +1,6 @@
 package project.linkarchive.backend.util.setUpData;
 
+import org.springframework.web.multipart.MultipartFile;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.hashtag.domain.HashTag;
@@ -32,6 +33,7 @@ public class SetUpData {
 
     protected User user;
     protected ProfileImage profileImage;
+    protected MultipartFile multipartFile;
     protected RefreshToken refreshToken;
     protected Link link;
     protected HashTag hashTag;
