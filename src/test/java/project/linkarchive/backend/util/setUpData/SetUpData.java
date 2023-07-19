@@ -2,6 +2,7 @@ package project.linkarchive.backend.util.setUpData;
 
 import org.springframework.web.multipart.MultipartFile;
 import project.linkarchive.backend.auth.domain.RefreshToken;
+import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.domain.UserHashTag;
@@ -32,6 +33,7 @@ import java.util.List;
 public class SetUpData {
 
     protected User user;
+    protected KakaoProfile kakaoProfile;
     protected ProfileImage profileImage;
     protected MultipartFile multipartFile;
     protected RefreshToken refreshToken;
