@@ -96,27 +96,25 @@ public class UserApiService {
     }
 
     public void followUser(Long followerId, Long followeeId) {
-        User follower = findUserById(followerId);
         User followee = findUserById(followeeId);
 
-        checkFollowStatus(follower.getId(), followee.getId());
+        checkFollowStatus(followerId, followee.getId());
 
-        Relationship relationship = Relationship.build(follower.getId(), followee.getId());
+        Relationship relationship = Relationship.build(followerId, followee.getId());
         relationshipRepository.save(relationship);
 
-        userRepository.increaseFollowingCount(follower.getId());
+        userRepository.increaseFollowingCount(followerId);
         userRepository.increaseFollowerCount(followee.getId());
     }
 
     public void unfollowUser(Long followerId, Long followeeId) {
-        User follower = findUserById(followerId);
         User followee = findUserById(followeeId);
 
-        Relationship relationship = checkUnFollowStatus(follower.getId(), followee.getId());
+        Relationship relationship = checkUnFollowStatus(followerId, followee.getId());
 
         relationshipRepository.delete(relationship);
 
-        userRepository.decreaseFollowingCount(follower.getId());
+        userRepository.decreaseFollowingCount(followerId);
         userRepository.decreaseFollowerCount(followee.getId());
     }
 
