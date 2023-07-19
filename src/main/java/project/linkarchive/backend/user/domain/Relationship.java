@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
-import project.linkarchive.backend.bookmark.domain.BookMark;
-import project.linkarchive.backend.link.domain.Link;
 
 import javax.persistence.*;
 
@@ -18,19 +16,19 @@ public class Relationship extends TimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "follow_id")
     private Long id;
-    private Long followerId;
-    private Long followingId;
+    private Long follower;
+    private Long followee;
 
     @Builder
-    public Relationship(Long followerId, Long followingId) {
-        this.followerId = followerId;
-        this.followingId = followingId;
+    public Relationship(Long follower, Long followee) {
+        this.follower = follower;
+        this.followee = followee;
     }
 
-    public static Relationship build(Long followerId, Long followingId) {
+    public static Relationship build(Long followerId, Long followeeId) {
         return Relationship.builder()
-                .followerId(followerId)
-                .followingId(followingId)
+                .follower(followerId)
+                .followee(followeeId)
                 .build();
     }
 }

@@ -95,15 +95,16 @@ public class UserApiService {
         validateUserByNickname(nickname);
     }
 
-    public void followUser(Long followerId, Long followingId) {
+    public void followUser(Long followerId, Long followeeId) {
         User follower = findUserById(followerId);
-        User followee = findUserById(followingId);
+        User followee = findUserById(followeeId);
 
-        relationshipRepository.findByFollowerIdAndFollowingId(followerId, followingId)
-                .ifPresent(i -> {
-                    throw new NotFoundException(NOT_FOUND_BOOKMARK);
-                    //TODO: 이미 팔로우 상태입니다. 예외처리 & 메서드 분리
-                });
+        checkFollowStatus(follower.getId(), followee.getId());
+//        relationshipRepository.findByFollowerIdAndFolloweeId(followerId, followeeId)
+//                .ifPresent(i -> {
+//                    throw new NotFoundException(NOT_FOUND_BOOKMARK);
+//                    //TODO: 이미 팔로우 상태입니다. 예외처리 & 메서드 분리
+//                });
 
         Relationship relationship = Relationship.build(follower.getId(), followee.getId());
         relationshipRepository.save(relationship);
@@ -112,16 +113,14 @@ public class UserApiService {
         userRepository.increaseFollowerCount(followee.getId());
     }
 
-    public void unfollowUser(Long followerId, Long followingId) {
+    public void unfollowUser(Long followerId, Long followeeId) {
         User follower = findUserById(followerId);
-        User followee = findUserById(followingId);
+        User followee = findUserById(followeeId);
 
-//        userRepository.findById(followingId)
+        Relationship relationship = checkUnFollowStatus(follower.getId(), followee.getId());
+//        Relationship relationship = relationshipRepository.findByFollowerIdAndFolloweeId(followerId, followeeId)
 //                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-
-        Relationship relationship = relationshipRepository.findByFollowerIdAndFollowingId(followerId, followingId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-        //TODO: 팔로우내역 찾을 수 없음. 예외처리
+//        //TODO: 팔로우내역 찾을 수 없음. 예외처리
 
         relationshipRepository.delete(relationship);
 
@@ -213,5 +212,18 @@ public class UserApiService {
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+    }
+
+    private void checkFollowStatus(Long followerId, Long followeeId){
+        relationshipRepository.findByFollowerAndFollowee(followerId, followeeId)
+                .ifPresent(i -> {
+                    throw new AlreadyExistException(ALREADY_FOLLOWED);
+                });
+    }
+
+    private Relationship checkUnFollowStatus(Long followerId, Long followeeId){
+        Relationship relationship = relationshipRepository.findByFollowerAndFollowee(followerId, followeeId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_FOLLOW_STATUS));
+        return relationship;
     }
 }
