@@ -23,7 +23,7 @@ import static project.linkarchive.backend.advice.data.DataConstants.EMPTY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = {@Index(name = "index_nickname", columnList = "nickname", unique = true)})
+@Table(name = "`user`", indexes = {@Index(name = "index_nickname", columnList = "nickname", unique = true)})
 public class User extends TimeEntity {
 
     @Id
@@ -51,7 +51,8 @@ public class User extends TimeEntity {
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
     @Builder
-    public User(String socialId, String email, String nickname, String introduce, int followerCount, int followingCount) {
+    public User(Long id, String socialId, String email, String nickname, String introduce, int followerCount, int followingCount) {
+        this.id = id;
         this.socialId = socialId;
         this.email = email;
         this.nickname = nickname;

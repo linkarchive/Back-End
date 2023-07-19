@@ -26,12 +26,13 @@ public class ProfileImage extends TimeEntity {
     private User user;
 
     @Builder
-    public ProfileImage(String profileImageFilename, User user) {
+    public ProfileImage(Long id, String profileImageFilename, User user) {
+        this.id = id;
         this.profileImageFilename = profileImageFilename;
         this.user = user;
     }
 
-    public static ProfileImage build(String profileImageFilename, User user) {
+    public static ProfileImage create(String profileImageFilename, User user) {
         return ProfileImage.builder()
                 .profileImageFilename(profileImageFilename)
                 .user(user)
