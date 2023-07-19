@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Relationship extends TimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "follow_id")
+    @Column(name = "relationship_id")
     private Long id;
     private Long follower;
     private Long followee;
