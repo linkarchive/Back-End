@@ -63,17 +63,17 @@ public class UserApiController {
 
     @PostMapping("/follow/{id}")
     public ResponseEntity<SuccessResponse> followUser(
-            @PathVariable(value = "id") Long followingId,
-            AuthInfo authInfo // 요청자
+            @PathVariable(value = "id") Long followeeId,
+            AuthInfo authInfo
     ){
-        userApiService.followUser(authInfo.getId(), followingId);
+        userApiService.followUser(authInfo.getId(), followeeId);
         return ResponseEntity.status(CREATED).body(new SuccessResponse(FOLLOW_USER));
     }
 
     @DeleteMapping("/unfollow/{id}")
     public ResponseEntity<SuccessResponse> unfollowUser(
             @PathVariable(value = "id") Long followingId,
-            AuthInfo authInfo // 요청자
+            AuthInfo authInfo
     ){
         userApiService.unfollowUser(authInfo.getId(), followingId);
         return ResponseEntity.status(CREATED).body(new SuccessResponse(UNFOLLOW_USER));
