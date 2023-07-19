@@ -17,6 +17,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static project.linkarchive.backend.advice.data.DataConstants.DEFAULT_COUNT;
 import static project.linkarchive.backend.advice.data.DataConstants.EMPTY;
 
 @Entity
@@ -34,6 +35,8 @@ public class User extends TimeEntity {
     private String email;
     private String nickname;
     private String introduce;
+    private int followerCount;
+    private int followingCount;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ProfileImage profileImage;
@@ -48,11 +51,13 @@ public class User extends TimeEntity {
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
     @Builder
-    public User(String socialId, String email, String nickname, String introduce) {
+    public User(String socialId, String email, String nickname, String introduce, int followerCount, int followingCount) {
         this.socialId = socialId;
         this.email = email;
         this.nickname = nickname;
         this.introduce = introduce;
+        this.followerCount = followerCount;
+        this.followingCount = followingCount;
     }
 
     public static User create(KakaoProfile kakaoProfile) {
@@ -61,6 +66,8 @@ public class User extends TimeEntity {
                 .nickname(EMPTY)
                 .email(kakaoProfile.getKakaoAccount().getEmail())
                 .introduce(EMPTY)
+                .followerCount(DEFAULT_COUNT)
+                .followingCount(DEFAULT_COUNT)
                 .build();
     }
 
