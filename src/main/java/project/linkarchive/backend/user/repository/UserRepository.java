@@ -17,21 +17,21 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Query("UPDATE User u SET u.followingCount = u.followingCount + 1 " +
-            "WHERE u.id = :followingId")
-    void increaseFollowingCount(Long followingId);
+            "WHERE u.id = :followerId")
+    void increaseFollowingCount(Long followerId);
 
     @Modifying
     @Query("UPDATE User u SET u.followerCount = u.followerCount + 1 " +
-            "WHERE u.id = :followerId")
-    void increaseFollowerCount(Long followerId);
+            "WHERE u.id = :followeeId")
+    void increaseFollowerCount(Long followeeId);
 
     @Modifying
     @Query("UPDATE User u SET u.followingCount = u.followingCount - 1 " +
-            "WHERE u.id = :followingId")
-    void decreaseFollowingCount(Long followingId);
+            "WHERE u.id = :followerId")
+    void decreaseFollowingCount(Long followerId);
 
     @Modifying
     @Query("UPDATE User u SET u.followerCount = u.followerCount - 1 " +
-            "WHERE u.id = :followerId")
-    void decreaseFollowerCount(Long followerId);
+            "WHERE u.id = :followeeId")
+    void decreaseFollowerCount(Long followeeId);
 }
