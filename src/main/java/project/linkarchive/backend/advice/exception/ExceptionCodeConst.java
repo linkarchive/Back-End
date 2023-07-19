@@ -20,7 +20,7 @@ public enum ExceptionCodeConst {
     NOT_FOUND_LINK(404, "NOT_FOUND_URL", "존재하지 않는 Link 입니다."),
     NOT_FOUND_BOOKMARK(404, "NOT_FOUND_BOOKMARK", "존재하지 않는 북마크입니다."),
     NOT_FOUND_HASHTAG(404, "NOT_FOUND_HASHTAG", "존재하지 않는 태그입니다."),
-    NOT_FOUND_FOLLOW_STATUS(404, "NOT_FOUND_FOLLOW_STATUS", "팔로우 정보를 찾을 수 없습니다. 팔로우 취소X"),
+    NOT_FOUND_FOLLOW_STATUS(404, "NOT_FOUND_FOLLOW_STATUS", "팔로우 정보를 찾을 수 없습니다."),
 
     EMPTY_UPLOAD_FILE(406, "EMPTY_UPLOAD_FILE", "파일을 찾을 수 없습니다."),
     NOT_ACCEPTABLE_CONTENT_TYPE(406, "NOT_ACCEPTABLE_CONTENT_TYPE", "jpeg, jpg, png 파일만 업로드 할 수 있습니다."),
