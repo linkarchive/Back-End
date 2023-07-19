@@ -18,7 +18,6 @@ public class Relationship extends TimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "follow_id")
     private Long id;
-
     private Long followerId;
     private Long followingId;
 
