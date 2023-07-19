@@ -10,9 +10,7 @@ import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.s3.S3Uploader;
-import project.linkarchive.backend.user.domain.Relationship;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.user.repository.RelationshipRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
@@ -32,17 +30,15 @@ public class UserApiService {
     private final BadWordFiltering badWordFiltering;
     private final UserRepository userRepository;
     private final ProfileImageRepository userProfileImageRepository;
-    private final RelationshipRepository relationshipRepository;
 
     @Value("${cloud.aws.s3.default-image}")
     private String defaultImage;
 
-    public UserApiService(BadWordFiltering badWordFiltering, S3Uploader s3Uploader, UserRepository userRepository, ProfileImageRepository userProfileImageRepository, RelationshipRepository relationshipRepository) {
+    public UserApiService(BadWordFiltering badWordFiltering, S3Uploader s3Uploader, UserRepository userRepository, ProfileImageRepository userProfileImageRepository) {
         this.badWordFiltering = badWordFiltering;
         this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
-        this.relationshipRepository = relationshipRepository;
     }
 
     public UpdateNicknameResponse updateUserNickName(UpdateNicknameRequest request, Long userId) {
@@ -93,29 +89,6 @@ public class UserApiService {
     public void checkNickName(String nickname) {
         validateNickname(nickname);
         validateUserByNickname(nickname);
-    }
-
-    public void followUser(String nickname, Long followerId) {
-        Long followeeId = validateFollowRequest(nickname,followerId);
-
-        checkFollowStatus(followeeId, followerId);
-
-        Relationship relationship = Relationship.create(followerId, followeeId);
-        relationshipRepository.save(relationship);
-
-        userRepository.increaseFollowerCount(followeeId);
-        userRepository.increaseFollowingCount(followerId);
-    }
-
-    public void unfollowUser(String followeeNickname, Long followerId) {
-        Long followeeId = validateFollowRequest(followeeNickname, followerId);
-
-        Relationship relationship = checkUnFollowStatus(followeeId, followerId);
-
-        relationshipRepository.delete(relationship);
-
-        userRepository.decreaseFollowerCount(followeeId);
-        userRepository.decreaseFollowingCount(followerId);
     }
 
     private User getUserById(Long userId) {
@@ -199,34 +172,4 @@ public class UserApiService {
         }
     }
 
-    private void checkFollowStatus(Long followeeId, Long followerId) {
-        relationshipRepository.findByFolloweeAndFollower(followeeId, followerId)
-                .ifPresent(i -> {
-                    throw new AlreadyExistException(ALREADY_FOLLOWED);
-                });
-    }
-
-    private Relationship checkUnFollowStatus(Long followeeId, Long followerId) {
-        Relationship relationship = relationshipRepository.findByFolloweeAndFollower(followeeId, followerId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_FOLLOW_STATUS));
-
-        return relationship;
-    }
-
-    private Long validateFollowRequest(String followeeNickname, Long followerId) {
-        Long followeeId = findFolloweeId(followeeNickname);
-
-        if (followerId.equals(followeeId)) {
-            throw new InvalidException(FOLLOW_FAILED);
-        }
-
-        return followeeId;
-    }
-
-    private Long findFolloweeId(String followeeNickname){
-        User followee = userRepository.findByNickname(followeeNickname)
-                .orElseThrow(()-> new NotFoundException(NOT_FOUND_USER));
-
-        return followee.getId();
-    }
 }
