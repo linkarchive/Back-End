@@ -1,6 +1,8 @@
 package project.linkarchive.backend.util.setUpData;
 
 import org.springframework.mock.web.MockMultipartFile;
+import project.linkarchive.backend.auth.response.KakaoAccount;
+import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
@@ -21,6 +23,10 @@ public class UserSetUpData extends SetUpData {
                 .email(EMAIL)
                 .introduce(EMPTY)
                 .build();
+    }
+
+    protected void setUpKakaoProfile() {
+        kakaoProfile = new KakaoProfile(SOCIAL_ID, new KakaoAccount(EMAIL));
     }
 
     protected void setUpProfileImage() {
