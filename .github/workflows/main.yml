@@ -3,8 +3,6 @@ name: LinkArchive Spring Boot & Gradle CI/CD - operate
 on:
   push:
     branches: [ "release" ]
-  pull_request:
-    branches: [ "release" ]
 
 env:
   AWS_REGION: ap-northeast-2
