@@ -16,19 +16,21 @@ public class Relationship extends TimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "relationship_id")
     private Long id;
-    private Long follower;
     private Long followee;
+    private Long follower;
+
 
     @Builder
-    public Relationship(Long follower, Long followee) {
-        this.follower = follower;
+    public Relationship(Long id, Long followee, Long follower) {
+        this.id = id;
         this.followee = followee;
+        this.follower = follower;
     }
 
-    public static Relationship build(Long followerId, Long followeeId) {
+    public static Relationship create(Long followeeId, Long followerId) {
         return Relationship.builder()
-                .follower(followerId)
-                .followee(followeeId)
+                .follower(followeeId)
+                .followee(followerId)
                 .build();
     }
 }

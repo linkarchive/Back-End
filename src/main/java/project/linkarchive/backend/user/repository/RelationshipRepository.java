@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface RelationshipRepository extends JpaRepository<Relationship, Long> {
 
-    Optional<Relationship> findByFollowerAndFollowee(Long followerId, Long followingId);
+    Optional<Relationship> findByFolloweeAndFollower(Long followee, Long follower);
 
 }

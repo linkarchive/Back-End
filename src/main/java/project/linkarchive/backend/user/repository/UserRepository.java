@@ -34,4 +34,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u SET u.followerCount = u.followerCount - 1 " +
             "WHERE u.id = :followeeId")
     void decreaseFollowerCount(Long followeeId);
+
 }
