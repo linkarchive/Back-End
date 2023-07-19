@@ -43,13 +43,13 @@ public class OAuthService {
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
                 .map(user -> {
                     userProfileImageRepository.findByUserId(user.getId())
-                            .orElseGet(() -> userProfileImageRepository.save(ProfileImage.build(DEFAULT_IMAGE, user)));
+                            .orElseGet(() -> userProfileImageRepository.save(ProfileImage.create(DEFAULT_IMAGE, user)));
 
                     return user;
                 })
                 .orElseGet(() -> {
                     User user = User.create(kakaoProfile);
-                    userProfileImageRepository.save(ProfileImage.build(DEFAULT_IMAGE, user));
+                    userProfileImageRepository.save(ProfileImage.create(DEFAULT_IMAGE, user));
 
                     return user;
                 });
@@ -78,13 +78,13 @@ public class OAuthService {
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
                 .map(user -> {
                     userProfileImageRepository.findByUserId(user.getId())
-                            .orElseGet(() -> userProfileImageRepository.save(ProfileImage.build(DEFAULT_IMAGE, user)));
+                            .orElseGet(() -> userProfileImageRepository.save(ProfileImage.create(DEFAULT_IMAGE, user)));
 
                     return user;
                 })
                 .orElseGet(() -> {
                     User user = User.create(kakaoProfile);
-                    userProfileImageRepository.save(ProfileImage.build(DEFAULT_IMAGE, user));
+                    userProfileImageRepository.save(ProfileImage.create(DEFAULT_IMAGE, user));
 
                     return user;
                 });

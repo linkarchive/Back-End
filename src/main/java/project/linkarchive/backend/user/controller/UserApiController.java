@@ -54,10 +54,10 @@ public class UserApiController {
     }
 
     @PostMapping("/nickname")
-    public ResponseEntity<SuccessResponse> validationNickName(
+    public ResponseEntity<SuccessResponse> checkNicknameAvailability(
             @RequestBody UpdateNicknameRequest request
     ) {
-        userApiService.checkNickName(request.getNickname());
+        userApiService.checkIfNicknameIsAvailable(request.getNickname());
         return ResponseEntity.status(CREATED).body(new SuccessResponse(AVAILABLE_NICKNAME));
     }
 

@@ -86,9 +86,9 @@ public class UserApiService {
         return new ProfileImageResponse(profileImageUrl);
     }
 
-    public void checkNickName(String nickname) {
+    public void checkIfNicknameIsAvailable(String nickname) {
         validateNickname(nickname);
-        validateUserByNickname(nickname);
+        checkIfNicknameExists(nickname);
     }
 
     private User getUserById(Long userId) {
@@ -101,7 +101,7 @@ public class UserApiService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_PROFILE_IMAGE));
     }
 
-    private void validateUserByNickname(String nickname) {
+    private void checkIfNicknameExists(String nickname) {
         if (userRepository.existsUserByNickname(nickname)) {
             throw new AlreadyExistException(ALREADY_EXIST_NICKNAME);
         }
