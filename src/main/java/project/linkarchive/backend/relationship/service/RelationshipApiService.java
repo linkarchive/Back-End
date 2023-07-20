@@ -24,58 +24,50 @@ public class RelationshipApiService {
         this.relationshipRepository = relationshipRepository;
     }
 
-    public void followUser(String nickname, Long followerId) {
-        Long followeeId = validateFollowRequest(nickname, followerId);
-
+    public void followUser(Long followeeId, Long followerId) {
+        validateFollowRequest(followeeId, followerId);
         checkFollowStatus(followeeId, followerId);
 
-        Relationship relationship = Relationship.create(followerId, followeeId);
-        relationshipRepository.save(relationship);
+        User followee = findRelatedUser(followeeId);
+        User follower = findRelatedUser(followerId);
+
+        Relationship relationship = Relationship.create(followee, follower);
 
         userRepository.increaseFollowerCount(followeeId);
         userRepository.increaseFollowingCount(followerId);
+        relationshipRepository.save(relationship);
     }
 
-    public void unfollowUser(String followeeNickname, Long followerId) {
-        Long followeeId = validateFollowRequest(followeeNickname, followerId);
-
+    public void unfollowUser(Long followeeId, Long followerId) {
+        validateFollowRequest(followeeId, followerId);
         Relationship relationship = checkUnFollowStatus(followeeId, followerId);
-
-        relationshipRepository.delete(relationship);
 
         userRepository.decreaseFollowerCount(followeeId);
         userRepository.decreaseFollowingCount(followerId);
+        relationshipRepository.delete(relationship);
+    }
+
+    private void validateFollowRequest(Long followeeId, Long followerId) {
+        if (followerId.equals(followeeId)) {
+            throw new InvalidException(FOLLOW_FAILED);
+        }
     }
 
     private void checkFollowStatus(Long followeeId, Long followerId) {
-        relationshipRepository.findByFolloweeAndFollower(followeeId, followerId)
+        relationshipRepository.findByFolloweeIdAndFollowerId(followeeId, followerId)
                 .ifPresent(i -> {
                     throw new AlreadyExistException(ALREADY_FOLLOWED);
                 });
     }
 
     private Relationship checkUnFollowStatus(Long followeeId, Long followerId) {
-        Relationship relationship = relationshipRepository.findByFolloweeAndFollower(followeeId, followerId)
+        return relationshipRepository.findByFolloweeIdAndFollowerId(followeeId, followerId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_FOLLOW_STATUS));
-
-        return relationship;
     }
 
-    private Long validateFollowRequest(String followeeNickname, Long followerId) {
-        Long followeeId = findFolloweeId(followeeNickname);
-
-        if (followerId.equals(followeeId)) {
-            throw new InvalidException(FOLLOW_FAILED);
-        }
-
-        return followeeId;
-    }
-
-    private Long findFolloweeId(String followeeNickname) {
-        User followee = userRepository.findByNickname(followeeNickname)
+    private User findRelatedUser(Long userId) {
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-
-        return followee.getId();
     }
 
 }
