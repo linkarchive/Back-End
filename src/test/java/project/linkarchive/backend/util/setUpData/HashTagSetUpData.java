@@ -6,7 +6,7 @@ import project.linkarchive.backend.hashtag.request.CreateTagRequest;
 
 import static project.linkarchive.backend.util.constant.Constants.TAG;
 
-public class HashTagSetUpData extends SetUpData {
+public class HashTagSetUpData extends MockDataGenerator {
 
     @BeforeEach
     public void setup() {

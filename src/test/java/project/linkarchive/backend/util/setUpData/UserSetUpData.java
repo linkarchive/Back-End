@@ -13,7 +13,7 @@ import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-public class UserSetUpData extends SetUpData {
+public class UserSetUpData extends MockDataGenerator {
 
     protected void setUpUser() {
         user = User.builder()

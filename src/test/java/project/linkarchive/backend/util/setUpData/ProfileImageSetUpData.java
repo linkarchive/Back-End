@@ -5,7 +5,7 @@ import project.linkarchive.backend.user.domain.User;
 
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-public class ProfileImageSetUpData extends SetUpData {
+public class ProfileImageSetUpData extends MockDataGenerator {
 
     protected void setUpUser() {
         user = User.builder()
