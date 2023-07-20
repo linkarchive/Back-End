@@ -3,20 +3,17 @@ package project.linkarchive.backend.user.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.linkarchive.backend.util.setUpData.UserSetUpData;
+import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-class UserTest extends UserSetUpData {
+class UserTest extends SetUpMockData {
 
     @BeforeEach
     public void setup() {
         setUpUser();
-        setUpUpdateNicknameRequest();
-        setUpUpdateProfileRequest();
-        setUpKakaoProfile();
     }
 
     @DisplayName("유저 getUserId - Domain")
@@ -82,6 +79,7 @@ class UserTest extends UserSetUpData {
     @DisplayName("유저 create method - Domain")
     @Test
     void testCreate() {
+        setUpKaKaoProfile();
         user = User.create(kakaoProfile);
 
         assertEquals(SOCIAL_ID, user.getSocialId());
@@ -95,6 +93,7 @@ class UserTest extends UserSetUpData {
     void testUpdateUserNickName() {
         String oldNickname = user.getNickname();
 
+        setUpUpdateNicknameRequest();
         user.updateNickName(updateNicknameRequest);
         String newNickname = user.getNickname();
 
@@ -108,6 +107,7 @@ class UserTest extends UserSetUpData {
         String oldNickname = user.getNickname();
         String oldIntroduce = user.getIntroduce();
 
+        setUpUpdateProfileRequest();
         user.updateProfile(updateProfileRequest);
         String newNickname = user.getNickname();
         String newIntroduce = user.getIntroduce();
