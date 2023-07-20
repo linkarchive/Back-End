@@ -171,4 +171,5 @@ public class UserApiService {
             throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
         }
     }
+
 }

@@ -20,16 +20,19 @@ public enum ExceptionCodeConst {
     NOT_FOUND_LINK(404, "NOT_FOUND_URL", "존재하지 않는 Link 입니다."),
     NOT_FOUND_BOOKMARK(404, "NOT_FOUND_BOOKMARK", "존재하지 않는 북마크입니다."),
     NOT_FOUND_HASHTAG(404, "NOT_FOUND_HASHTAG", "존재하지 않는 태그입니다."),
+    NOT_FOUND_FOLLOW_STATUS(404, "NOT_FOUND_FOLLOW_STATUS", "팔로우 정보를 찾을 수 없습니다."),
 
     EMPTY_UPLOAD_FILE(406, "EMPTY_UPLOAD_FILE", "파일을 찾을 수 없습니다."),
     NOT_ACCEPTABLE_CONTENT_TYPE(406, "NOT_ACCEPTABLE_CONTENT_TYPE", "jpeg, jpg, png 파일만 업로드 할 수 있습니다."),
     INVALID_NICKNAME(406, "INVALID_NICKNAME", "유효하지 않는 닉네임입니다."),
     CONVERSION_FAILED(406, "CONVERSION_FAILED", "MultipartFile -> File 변환 실패"),
+    FOLLOW_FAILED(406, "FOLLOW_FAILED", "잘못된 팔로우 요청입니다."),
 
     ALREADY_EXIST_TAG(409, "ALREADY_EXIST_TAG", "이미 존재하는 태그입니다."),
     ALREADY_EXIST_BOOKMARK(409, "ALREADY_EXIST_BOOKMARK", "이미 마크가 된 Link 입니다."),
     ALREADY_EXIST_NICKNAME(409, "ALREADY_EXIST_NICKNAME", "이미 존재하는 닉네임 입니다."),
     ALREADY_EXIST_IS_LINK_READ(409, "ALREADY_EXIST_IS_LINK_READ", "이미 읽었던 Link 입니다."),
+    ALREADY_FOLLOWED(409, "ALREADY_FOLLOWED", "이미 팔로우했습니다."),
 
     LENGTH_REQUIRED_TAG(416, "LENGTH_REQUIRED_TAG", "Tag의 길이를 2글자 이상 8글자 이하로 작성해주세요."),
     LENGTH_REQUIRED_NICKNAME(416, "LENGTH_REQUIRED_NICKNAME", "닉네임의 길이를 2글자 이상 16글자 이하로 작성해주세요."),
