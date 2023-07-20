@@ -23,21 +23,21 @@ public class RelationApiController {
         this.relationshipApiService = relationshipApiService;
     }
 
-    @PostMapping("/follow/{nickname}")
+    @PostMapping("/follow/{followeeId}")
     public ResponseEntity<SuccessResponse> followUser(
-            @PathVariable(value = "nickname") String nickname,
+            @PathVariable(value = "followeeId") Long followeeId,
             AuthInfo authInfo
     ) {
-        relationshipApiService.followUser(nickname, authInfo.getId());
+        relationshipApiService.followUser(followeeId, authInfo.getId());
         return ResponseEntity.status(CREATED).body(new SuccessResponse(FOLLOW_USER));
     }
 
-    @DeleteMapping("/unfollow/{nickname}")
+    @DeleteMapping("/unfollow/{followeeId}")
     public ResponseEntity<SuccessResponse> unfollowUser(
-            @PathVariable(value = "nickname") String nickname,
+            @PathVariable(value = "followeeId") Long followeeId,
             AuthInfo authInfo
     ) {
-        relationshipApiService.unfollowUser(nickname, authInfo.getId());
+        relationshipApiService.unfollowUser(followeeId, authInfo.getId());
         return ResponseEntity.status(OK).body(new SuccessResponse(UNFOLLOW_USER));
     }
 
