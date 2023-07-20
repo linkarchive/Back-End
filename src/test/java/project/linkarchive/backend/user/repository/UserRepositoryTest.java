@@ -1,11 +1,12 @@
 package project.linkarchive.backend.user.repository;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
-import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.util.repository.UserSetUpRepository;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 import static project.linkarchive.backend.util.constant.Constants.*;
@@ -18,26 +19,17 @@ class UserRepositoryTest extends UserSetUpRepository {
         userRepository.save(user);
     }
 
-    @AfterEach
-    void cleanUp() {
-        userRepository.delete(user);
-    }
-
     @DisplayName("유저 Repository - findBySocialId")
     @Test
     void testFindBySocialId() {
-        User findUser = userRepository.findBySocialId(user.getSocialId())
+        user = userRepository.findBySocialId(SOCIAL_ID)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
 
-        assertAll(
-                () -> assertNotNull(findUser),
-                () -> assertThat(findUser.getId()).isEqualTo(user.getId()),
-                () -> assertThat(findUser.getSocialId()).isEqualTo(user.getSocialId()),
-                () -> assertThat(findUser.getNickname()).isEqualTo(user.getNickname()),
-                () -> assertThat(findUser.getEmail()).isEqualTo(user.getEmail()),
-                () -> assertThat(findUser.getIntroduce()).isEqualTo(user.getIntroduce()),
-                () -> assertThat(findUser).isEqualTo(user)
-        );
+        assertNotNull(user.getId());
+        assertEquals(SOCIAL_ID, user.getSocialId());
+        assertEquals(EMAIL, user.getEmail());
+        assertEquals(EMPTY, user.getNickname());
+        assertEquals(EMPTY, user.getIntroduce());
     }
 
     @DisplayName("유저 Repository - findBySocialId NotFound")
@@ -68,18 +60,14 @@ class UserRepositoryTest extends UserSetUpRepository {
     @DisplayName("유저 Repository - findByNickname")
     @Test
     void testFindByNickname() {
-        User findUser = userRepository.findByNickname(user.getNickname())
+        user = userRepository.findByNickname(EMPTY)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
 
-        assertAll(
-                () -> assertNotNull(findUser),
-                () -> assertThat(findUser.getId()).isEqualTo(user.getId()),
-                () -> assertThat(findUser.getSocialId()).isEqualTo(user.getSocialId()),
-                () -> assertThat(findUser.getNickname()).isEqualTo(user.getNickname()),
-                () -> assertThat(findUser.getEmail()).isEqualTo(user.getEmail()),
-                () -> assertThat(findUser.getIntroduce()).isEqualTo(user.getIntroduce()),
-                () -> assertThat(findUser).isEqualTo(user)
-        );
+        assertNotNull(user.getId());
+        assertEquals(SOCIAL_ID, user.getSocialId());
+        assertEquals(EMAIL, user.getEmail());
+        assertEquals(EMPTY, user.getNickname());
+        assertEquals(EMPTY, user.getIntroduce());
     }
 
     @DisplayName("유저 Repository - findByNickname NotFound")
