@@ -9,7 +9,7 @@ import project.linkarchive.backend.user.domain.User;
 
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-public class UserHashTagSetUpData extends SetUpData {
+public class UserHashTagSetUpData extends MockDataGenerator {
 
     @BeforeEach
     public void setup() {

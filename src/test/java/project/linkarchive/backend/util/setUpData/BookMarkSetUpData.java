@@ -8,7 +8,7 @@ import project.linkarchive.backend.user.domain.User;
 import static project.linkarchive.backend.util.constant.Constants.*;
 import static project.linkarchive.backend.util.constant.Constants.INTRODUCE;
 
-public class BookMarkSetUpData extends SetUpData {
+public class BookMarkSetUpData extends MockDataGenerator {
 
     @BeforeEach
     public void setup() {

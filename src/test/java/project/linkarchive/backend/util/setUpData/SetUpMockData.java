@@ -13,7 +13,7 @@ import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-public class UserSetUpData extends SetUpData {
+public class SetUpMockData extends MockDataGenerator {
 
     protected void setUpUser() {
         user = User.builder()
@@ -25,7 +25,7 @@ public class UserSetUpData extends SetUpData {
                 .build();
     }
 
-    protected void setUpKakaoProfile() {
+    protected void setUpKaKaoProfile() {
         kakaoProfile = new KakaoProfile(SOCIAL_ID, new KakaoAccount(EMAIL));
     }
 

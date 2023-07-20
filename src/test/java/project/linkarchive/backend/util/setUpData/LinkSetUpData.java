@@ -2,7 +2,6 @@ package project.linkarchive.backend.util.setUpData;
 
 import org.junit.jupiter.api.BeforeEach;
 import project.linkarchive.backend.hashtag.domain.HashTag;
-import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.link.response.LinkMetaDataResponse;
@@ -16,7 +15,7 @@ import project.linkarchive.backend.user.domain.User;
 
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-public class LinkSetUpData extends SetUpData {
+public class LinkSetUpData extends MockDataGenerator {
 
     @BeforeEach
     public void setup() {

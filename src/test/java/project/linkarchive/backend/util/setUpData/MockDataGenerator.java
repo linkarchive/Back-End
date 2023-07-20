@@ -30,7 +30,7 @@ import project.linkarchive.backend.user.response.UpdateProfileResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SetUpData {
+public class MockDataGenerator {
 
     protected User user;
     protected KakaoProfile kakaoProfile;
