@@ -46,16 +46,30 @@ class UserTest extends SetUpMockData {
         assertEquals(EMPTY, user.getIntroduce());
     }
 
+    @DisplayName("유저 getFollowerCount - Domain")
+    @Test
+    void testGetFollowerCount() {
+        assertEquals(FOLLOWER_COUNT, user.getFollowerCount());
+    }
+
+    @DisplayName("유저 getFollowingCount - Domain")
+    @Test
+    void testGetFollowingCount() {
+        assertEquals(FOLLOWING_COUNT, user.getFollowingCount());
+    }
+
     @DisplayName("유저 생성자 - Domain")
     @Test
     void testUserConstructor() {
-        user = new User(USER_ID, SOCIAL_ID, EMAIL, EMPTY, EMPTY);
+        user = new User(USER_ID, SOCIAL_ID, EMAIL, EMPTY, EMPTY, FOLLOWER_COUNT, FOLLOWING_COUNT);
 
         assertEquals(USER_ID, user.getId());
         assertEquals(SOCIAL_ID, user.getSocialId());
         assertEquals(EMAIL, user.getEmail());
         assertEquals(EMPTY, user.getNickname());
         assertEquals(EMPTY, user.getIntroduce());
+        assertEquals(FOLLOWER_COUNT, user.getFollowerCount());
+        assertEquals(FOLLOWING_COUNT, user.getFollowingCount());
     }
 
     @DisplayName("유저 Builder 패턴 - Domain")
@@ -67,6 +81,8 @@ class UserTest extends SetUpMockData {
                 .email(EMAIL)
                 .nickname(EMPTY)
                 .introduce(EMPTY)
+                .followerCount(FOLLOWER_COUNT)
+                .followingCount(FOLLOWING_COUNT)
                 .build();
 
         assertEquals(USER_ID, user.getId());
@@ -74,6 +90,8 @@ class UserTest extends SetUpMockData {
         assertEquals(EMAIL, user.getEmail());
         assertEquals(EMPTY, user.getNickname());
         assertEquals(EMPTY, user.getIntroduce());
+        assertEquals(FOLLOWER_COUNT, user.getFollowerCount());
+        assertEquals(FOLLOWING_COUNT, user.getFollowingCount());
     }
 
     @DisplayName("유저 create method - Domain")
@@ -86,6 +104,8 @@ class UserTest extends SetUpMockData {
         assertEquals(EMAIL, user.getEmail());
         assertEquals(EMPTY, user.getNickname());
         assertEquals(EMPTY, user.getIntroduce());
+        assertEquals(FOLLOWER_COUNT, user.getFollowerCount());
+        assertEquals(FOLLOWING_COUNT, user.getFollowingCount());
     }
 
     @DisplayName("유저 updateUserNickName - Domain")

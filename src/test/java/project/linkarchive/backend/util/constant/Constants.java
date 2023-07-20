@@ -18,6 +18,8 @@ public class Constants {
     public static final String EMAIL = "Test_Email";
     public static final String NICKNAME = "TestNickname";
     public static final String INTRODUCE = "Test_Introduce";
+    public static final int FOLLOWER_COUNT = 0;
+    public static final int FOLLOWING_COUNT = 0;
     public static final String NONE_SOCIAL_ID = "Test_None_Social_Id";
     public static final String NONE_NICKNAME = "Test_None_Nickname";
 
