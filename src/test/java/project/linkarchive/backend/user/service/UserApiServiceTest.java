@@ -24,15 +24,12 @@ class UserApiServiceTest extends UserSetUpService {
     @BeforeEach
     public void setUp() {
         setUpUser();
-        setUpProfileImage();
-        setUpMultipartFile();
-        setUpUpdateNicknameRequest();
-        setUpUpdateProfileRequest();
     }
 
     @DisplayName("유저 Api Service - updateUserNickname")
     @Test
     void testUpdateUserNickname() {
+        setUpUpdateNicknameRequest();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(userRepository.existsUserByNickname(anyString())).thenReturn(false);
         when(badWordFiltering.filter(eq(NEW_NICKNAME))).thenReturn(false);
@@ -45,6 +42,7 @@ class UserApiServiceTest extends UserSetUpService {
     @DisplayName("유저 Api Service - updateUserProfile")
     @Test
     void testUpdateUserProfile() {
+        setUpUpdateProfileRequest();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(userRepository.existsUserByNickname(anyString())).thenReturn(false);
         when(badWordFiltering.filter(eq(NEW_NICKNAME))).thenReturn(false);
@@ -59,6 +57,8 @@ class UserApiServiceTest extends UserSetUpService {
     @DisplayName("유저 Api Service - updateProfileImage")
     @Test
     void testUpdateProfileImage() throws IOException {
+        setUpProfileImage();
+        setUpMultipartFile();
         when(profileImageRepository.findByUserId(anyLong())).thenReturn(Optional.of(profileImage));
         when(s3Uploader.upload(any(MultipartFile.class))).thenReturn(STORED_FILE_NAME);
         when(s3Uploader.generatePresignedProfileImageUrl(anyString(), anyInt())).thenReturn(new URL(MULTIPART_FILE_URL));
