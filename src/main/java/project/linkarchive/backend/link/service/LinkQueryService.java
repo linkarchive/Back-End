@@ -95,14 +95,12 @@ public class LinkQueryService {
         Long loginUserId = authInfo != null ? authInfo.getId() : null;
 
         List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(nickname, pageable, lastLinkId, tag);
-
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
                     List<TagResponse> tagList = linkHashTagList.stream()
                             .map(TagResponse::create)
                             .collect(Collectors.toList());
-
 
                     Boolean isRead = (loginUserId != null) ? isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId) : false;
                     Boolean isMark = (loginUserId != null) ? bookMarkRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId) : false;
