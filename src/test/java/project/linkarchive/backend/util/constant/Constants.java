@@ -31,6 +31,7 @@ public class Constants {
     public static final String MULTIPART_FILE_NAME = "TEST_New_File_Image.jpg";
     public static final String CONTENT_TYPE = "image/jpg";
     public static final byte[] MULTIPART_FILE_DATA = "image data".getBytes();
+    public static final int EXPIRATION_TIME_MINUTE = 3600000;
 
     public static final String REFRESH_TOKEN = "Test_RefreshToken";
     public static final String AGENT = "Test_Agent";
