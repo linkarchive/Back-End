@@ -38,7 +38,7 @@ public class SetUpMockData extends MockDataGenerator {
     }
 
     protected void setUpMultipartFile() {
-        multipartFile = new MockMultipartFile(MULTIPART_FILE_URL, MULTIPART_FILE_NAME, CONTENT_TYPE, MULTIPART_FILE_DATA);
+        multipartFile = new MockMultipartFile(PROFILE_IMAGE_URL, MULTIPART_FILE_NAME, CONTENT_TYPE, MULTIPART_FILE_DATA);
     }
 
     protected void setUpUpdateNicknameRequest() {

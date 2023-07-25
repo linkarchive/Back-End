@@ -27,7 +27,7 @@ public class Constants {
     public static final String PROFILE_IMAGE_FILENAME = "Test_ProfileImage_FileName";
 
     public static final String STORED_FILE_NAME = "Test_Stored_FileName";
-    public static final String MULTIPART_FILE_URL = "http://Test_New_ProfileImage_FileName";
+    public static final String PROFILE_IMAGE_URL = "http://Test_New_ProfileImage_FileName";
     public static final String MULTIPART_FILE_NAME = "TEST_New_File_Image.jpg";
     public static final String CONTENT_TYPE = "image/jpg";
     public static final byte[] MULTIPART_FILE_DATA = "image data".getBytes();
