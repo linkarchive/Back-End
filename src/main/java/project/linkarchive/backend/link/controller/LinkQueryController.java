@@ -114,7 +114,7 @@ public class LinkQueryController {
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable,
-            @Nullable AuthInfo authInfo
+            AuthInfo authInfo
     ) {
         UserTrashLinkListResponse userTrashLinkListResponse = linkQueryService.getTrashLinkList(tag, lastLinkId, pageable, authInfo.getId());
         return ResponseEntity.ok(userTrashLinkListResponse);
