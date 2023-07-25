@@ -70,11 +70,11 @@ class UserApiServiceTest extends UserSetUpService {
         setUpMultipartFile();
         when(profileImageRepository.findByUserId(USER_ID)).thenReturn(Optional.of(profileImage));
         when(s3Uploader.upload(multipartFile)).thenReturn(STORED_FILE_NAME);
-        when(s3Uploader.generatePresignedProfileImageUrl(STORED_FILE_NAME, EXPIRATION_TIME_MINUTE)).thenReturn(new URL(MULTIPART_FILE_URL));
+        when(s3Uploader.generatePresignedProfileImageUrl(STORED_FILE_NAME, EXPIRATION_TIME_MINUTE)).thenReturn(new URL(PROFILE_IMAGE_URL));
 
         ProfileImageResponse response = userApiService.updateProfileImage(multipartFile, user.getId());
 
-        assertEquals(MULTIPART_FILE_URL, response.getProfileImageFileName());
+        assertEquals(PROFILE_IMAGE_URL, response.getProfileImageFileName());
 
         verify(profileImageRepository).findByUserId(USER_ID);
         verify(s3Uploader).upload(multipartFile);
