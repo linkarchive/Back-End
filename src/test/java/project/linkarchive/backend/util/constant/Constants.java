@@ -20,6 +20,7 @@ public class Constants {
     public static final String INTRODUCE = "Test_Introduce";
     public static final int FOLLOWER_COUNT = 0;
     public static final int FOLLOWING_COUNT = 0;
+
     public static final String NONE_SOCIAL_ID = "Test_None_Social_Id";
     public static final String NONE_NICKNAME = "Test_None_Nickname";
 
@@ -33,6 +34,7 @@ public class Constants {
     public static final byte[] MULTIPART_FILE_DATA = "image data".getBytes();
     public static final int EXPIRATION_TIME_MINUTE = 3600000;
 
+    public static final Long REFRESH_TOKEN_ID = 1L;
     public static final String REFRESH_TOKEN = "Test_RefreshToken";
     public static final String AGENT = "Test_Agent";
 
