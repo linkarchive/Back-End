@@ -15,4 +15,11 @@ public interface RelationshipRepository extends JpaRepository<Relationship, Long
     @Query("SELECT r.follower FROM Relationship r " +
             "WHERE r.followee.id=:followeeId")
     List<User> findFollowerIdByFolloweeId(Long followeeId);
+
+    @Query("SELECT r.followee FROM Relationship r " +
+            "WHERE r.follower.id=:followerId")
+    List<User> findFolloweeIdByFollowerId(Long followerId);
+
+    boolean existsByFolloweeIdAndFollowerId(Long followeeId, Long followerId);
+
 }
