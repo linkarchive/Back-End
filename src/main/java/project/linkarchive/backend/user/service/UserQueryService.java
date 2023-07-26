@@ -47,7 +47,7 @@ public class UserQueryService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
-    private String generateProfileImageUrl(String profileImageFilename) {
+    public String generateProfileImageUrl(String profileImageFilename) {
         return s3Uploader.generatePresignedProfileImageUrl(
                         profileImageFilename,
                         IMAGE_EXPIRATION_TIME)
