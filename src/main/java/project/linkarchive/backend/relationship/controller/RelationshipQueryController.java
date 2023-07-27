@@ -4,8 +4,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import project.linkarchive.backend.relationship.response.FollowInfoResponse;
+import project.linkarchive.backend.relationship.response.FollowResponse;
 import project.linkarchive.backend.relationship.service.RelationshipQueryService;
+import project.linkarchive.backend.security.AuthInfo;
 
 import java.util.List;
 
@@ -18,17 +19,18 @@ public class RelationshipQueryController {
     }
 
     @GetMapping("/follower-list/{userId}")
-    public ResponseEntity<List<FollowInfoResponse>> getFollowerList(
-            @PathVariable("userId") Long userId
+    public ResponseEntity<List<FollowResponse>> getFollowerList(
+            @PathVariable("userId") Long userId,
+            AuthInfo authInfo
     ) {
-        return ResponseEntity.ok(relationshipQueryService.getFollowerList(userId));
+        return ResponseEntity.ok(relationshipQueryService.getFollowerList(userId, authInfo.getId()));
     }
 
     @GetMapping("/following-list/{userId}")
-    public ResponseEntity<List<FollowInfoResponse>> getFollowingList(
-            @PathVariable("userId") Long userId
+    public ResponseEntity<List<FollowResponse>> getFollowingList(
+            @PathVariable("userId") Long userId,
+            AuthInfo authInfo
     ) {
-        return ResponseEntity.ok(relationshipQueryService.getFollowingList(userId));
+        return ResponseEntity.ok(relationshipQueryService.getFollowingList(userId, authInfo.getId()));
     }
 }
-

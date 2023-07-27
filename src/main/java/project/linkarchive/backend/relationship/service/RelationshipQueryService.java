@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.ExceptionCodeConst;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.relationship.repository.RelationshipRepository;
-import project.linkarchive.backend.relationship.response.FollowInfoResponse;
+import project.linkarchive.backend.relationship.response.FollowResponse;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.service.UserQueryService;
@@ -27,51 +27,40 @@ public class RelationshipQueryService {
         this.userQueryService = userQueryService;
     }
 
-    public List<FollowInfoResponse> getFollowerList(Long userId) {
+    public List<FollowResponse> getFollowerList(Long userId, Long loginUserId) {
         findUserById(userId);
-
-        List<FollowInfoResponse> followerListResponse = new ArrayList<>();
 
         List<User> followerList = relationshipRepository.findFollowerIdByFolloweeId(userId);
-        if (followerList.isEmpty()) {
-            return followerListResponse;
-        }
 
-        followerList.forEach(follower -> {
-            String profileImageUrl = userQueryService.generateProfileImageUrl(follower.getProfileImage().getProfileImageFilename());
-            boolean isFollowing = isFollowing(follower.getId(), userId);
-            FollowInfoResponse response = new FollowInfoResponse(follower, profileImageUrl, isFollowing);
-            followerListResponse.add(response);
-        });
-
-        return followerListResponse;
+        return getFollowResponses(loginUserId, followerList);
     }
 
-
-
-    public List<FollowInfoResponse> getFollowingList(Long userId) {
+    public List<FollowResponse> getFollowingList(Long userId, Long loginUserId) {
         findUserById(userId);
 
-        List<FollowInfoResponse> followingListResponse = new ArrayList<>();
-
         List<User> followingList = relationshipRepository.findFolloweeIdByFollowerId(userId);
-
-        if (followingList.isEmpty()) {
-            return followingListResponse;
-        }
-
-        followingList.forEach(follower -> {
-            String profileImageUrl = userQueryService.generateProfileImageUrl(follower.getProfileImage().getProfileImageFilename());
-            boolean isFollowing = isFollowing(follower.getId(), userId);
-            FollowInfoResponse response = new FollowInfoResponse(follower, profileImageUrl, isFollowing);
-            followingListResponse.add(response);
-        });
-
-        return followingListResponse;
+        return getFollowResponses(loginUserId, followingList);
     }
 
     private void findUserById(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ExceptionCodeConst.NOT_FOUND_USER));
+    }
+
+    private List<FollowResponse> getFollowResponses(Long loginUserId, List<User> followList) {
+        List<FollowResponse> followResponses = new ArrayList<>();
+
+        if (followList.isEmpty()) {
+            return followResponses;
+        }
+
+        followList.forEach(user -> {
+            String profileImageUrl = userQueryService.generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
+            boolean isFollow = isFollowing(user.getId(), loginUserId);
+            FollowResponse response = new FollowResponse(user, profileImageUrl, isFollow);
+            followResponses.add(response);
+        });
+
+        return followResponses;
     }
 
     private boolean isFollowing(Long followeeId, Long followerId) {

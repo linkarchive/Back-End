@@ -5,17 +5,19 @@ import lombok.Getter;
 import project.linkarchive.backend.user.domain.User;
 
 @Getter
-public class FollowInfoResponse {
+public class FollowResponse {
     private Long userId;
     private String nickname;
-    private String profileUrl;
+    private String introduce;
+    private String profileImageFileName;
     private boolean isFollow;
 
     @Builder
-    public FollowInfoResponse(User user, String url, boolean isFollow) {
+    public FollowResponse(User user, String url, boolean isFollow) {
         this.userId = user.getId();
         this.nickname = user.getNickname();
-        this.profileUrl = url;
+        this.introduce = user.getIntroduce();
+        this.profileImageFileName = url;
         this.isFollow = isFollow;
     }
 
