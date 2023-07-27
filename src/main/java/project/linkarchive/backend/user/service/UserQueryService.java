@@ -37,6 +37,13 @@ public class UserQueryService {
         return new ProfileResponse(user, profileImageUrl);
     }
 
+    public String generateProfileImageUrl(String profileImageFilename) {
+        return s3Uploader.generatePresignedProfileImageUrl(
+                        profileImageFilename,
+                        IMAGE_EXPIRATION_TIME)
+                .toString();
+    }
+
     private User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
@@ -47,11 +54,5 @@ public class UserQueryService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
-    private String generateProfileImageUrl(String profileImageFilename) {
-        return s3Uploader.generatePresignedProfileImageUrl(
-                        profileImageFilename,
-                        IMAGE_EXPIRATION_TIME)
-                .toString();
-    }
 
 }
