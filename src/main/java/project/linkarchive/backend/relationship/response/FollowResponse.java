@@ -1,6 +1,5 @@
 package project.linkarchive.backend.relationship.response;
 
-import lombok.Builder;
 import lombok.Getter;
 import project.linkarchive.backend.user.domain.User;
 
@@ -12,7 +11,6 @@ public class FollowResponse {
     private String profileImageFileName;
     private boolean isFollow;
 
-    @Builder
     public FollowResponse(User user, String url, boolean isFollow) {
         this.userId = user.getId();
         this.nickname = user.getNickname();

@@ -22,12 +22,10 @@ public class Relationship extends TimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "followee_id")
-    @JsonIgnore
     private User followee;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_id")
-    @JsonIgnore
     private User follower;
 
     @Builder
