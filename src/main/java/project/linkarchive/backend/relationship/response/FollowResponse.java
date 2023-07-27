@@ -12,6 +12,7 @@ public class FollowResponse {
     private boolean isFollow;
 
     public FollowResponse(User user, String url, boolean isFollow) {
+
         this.userId = user.getId();
         this.nickname = user.getNickname();
         this.introduce = user.getIntroduce();
