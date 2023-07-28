@@ -18,6 +18,9 @@ public class Constants {
     public static final String EMAIL = "Test_Email";
     public static final String NICKNAME = "TestNickname";
     public static final String INTRODUCE = "Test_Introduce";
+    public static final int FOLLOWER_COUNT = 0;
+    public static final int FOLLOWING_COUNT = 0;
+
     public static final String NONE_SOCIAL_ID = "Test_None_Social_Id";
     public static final String NONE_NICKNAME = "Test_None_Nickname";
 
@@ -25,11 +28,13 @@ public class Constants {
     public static final String PROFILE_IMAGE_FILENAME = "Test_ProfileImage_FileName";
 
     public static final String STORED_FILE_NAME = "Test_Stored_FileName";
-    public static final String MULTIPART_FILE_URL = "http://Test_New_ProfileImage_FileName";
+    public static final String PROFILE_IMAGE_URL = "http://Test_New_ProfileImage_FileName";
     public static final String MULTIPART_FILE_NAME = "TEST_New_File_Image.jpg";
     public static final String CONTENT_TYPE = "image/jpg";
     public static final byte[] MULTIPART_FILE_DATA = "image data".getBytes();
+    public static final int EXPIRATION_TIME_MINUTE = 3600000;
 
+    public static final Long REFRESH_TOKEN_ID = 1L;
     public static final String REFRESH_TOKEN = "Test_RefreshToken";
     public static final String AGENT = "Test_Agent";
 

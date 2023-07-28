@@ -21,21 +21,18 @@ public class ProfileImage extends TimeEntity {
 
     private String profileImageFilename;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToOne(mappedBy = "profileImage", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User user;
 
     @Builder
-    public ProfileImage(Long id, String profileImageFilename, User user) {
+    public ProfileImage(Long id, String profileImageFilename) {
         this.id = id;
         this.profileImageFilename = profileImageFilename;
-        this.user = user;
     }
 
-    public static ProfileImage create(String profileImageFilename, User user) {
+    public static ProfileImage create(String profileImageFilename) {
         return ProfileImage.builder()
                 .profileImageFilename(profileImageFilename)
-                .user(user)
                 .build();
     }
 
