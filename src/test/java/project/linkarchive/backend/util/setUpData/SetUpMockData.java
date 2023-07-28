@@ -22,6 +22,7 @@ public class SetUpMockData extends MockDataGenerator {
                 .nickname(EMPTY)
                 .email(EMAIL)
                 .introduce(EMPTY)
+                .profileImage(profileImage)
                 .build();
     }
 
@@ -33,7 +34,6 @@ public class SetUpMockData extends MockDataGenerator {
         profileImage = ProfileImage.builder()
                 .id(PROFILE_IMAGE_ID)
                 .profileImageFilename(PROFILE_IMAGE_FILENAME)
-                .user(user)
                 .build();
     }
 
