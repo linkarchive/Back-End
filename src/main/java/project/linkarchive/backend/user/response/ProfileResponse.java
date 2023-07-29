@@ -12,14 +12,16 @@ public class ProfileResponse {
     private String profileImageFileName;
     private int followerCount;
     private int followingCount;
+    private boolean isFollow;
 
-    public ProfileResponse(User user, String preSignedUrl) {
+    public ProfileResponse(User user, String preSignedUrl, boolean isFollow) {
         this.id = user.getId();
         this.nickname = user.getNickname();
         this.introduce = user.getIntroduce();
         this.profileImageFileName = preSignedUrl;
         this.followerCount = user.getFollowerCount();
         this.followingCount = user.getFollowingCount();
+        this.isFollow = isFollow;
     }
 
 }

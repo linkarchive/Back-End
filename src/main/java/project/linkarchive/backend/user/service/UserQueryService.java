@@ -3,7 +3,10 @@ package project.linkarchive.backend.user.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.relationship.repository.RelationshipRepository;
+import project.linkarchive.backend.relationship.service.RelationshipQueryService;
 import project.linkarchive.backend.s3.S3Uploader;
+import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.response.ProfileResponse;
@@ -17,24 +20,34 @@ public class UserQueryService {
 
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
+    private final RelationshipRepository relationshipRepository;
 
-    public UserQueryService(UserRepository userRepository, S3Uploader s3Uploader) {
+    public UserQueryService(UserRepository userRepository, S3Uploader s3Uploader, RelationshipRepository relationshipRepository) {
         this.userRepository = userRepository;
         this.s3Uploader = s3Uploader;
+        this.relationshipRepository = relationshipRepository;
     }
 
     public ProfileResponse getMyProfile(Long userId) {
         User user = getUserById(userId);
         String profileImageUrl = generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
 
-        return new ProfileResponse(user, profileImageUrl);
+        return new ProfileResponse(user, profileImageUrl, false);
     }
 
-    public ProfileResponse getUserProfile(String nickname) {
+    public ProfileResponse getUserProfile(String nickname, AuthInfo authInfo) {
         User user = getUserByNickname(nickname);
         String profileImageUrl = generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
 
-        return new ProfileResponse(user, profileImageUrl);
+        boolean isFollow;
+        Long loginUserId = authInfo != null ? authInfo.getId() : null;
+        if (loginUserId == null) {
+            isFollow = false;
+            return new ProfileResponse(user, profileImageUrl, isFollow);
+        }
+        isFollow = isFollowing(user.getId(), authInfo.getId());
+
+        return new ProfileResponse(user, profileImageUrl, isFollow);
     }
 
     public String generateProfileImageUrl(String profileImageFilename) {
@@ -54,5 +67,8 @@ public class UserQueryService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
+    private boolean isFollowing(Long followeeId, Long followerId) {
+        return relationshipRepository.existsByFolloweeIdAndFollowerId(followeeId, followerId);
+    }
 
 }

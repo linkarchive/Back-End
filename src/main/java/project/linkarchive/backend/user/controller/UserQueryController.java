@@ -1,6 +1,7 @@
 package project.linkarchive.backend.user.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,9 +28,10 @@ public class UserQueryController {
 
     @GetMapping("/user/{nickname}")
     public ResponseEntity<ProfileResponse> getUserProfile(
-            @PathVariable("nickname") String nickname
+            @PathVariable("nickname") String nickname,
+            @Nullable AuthInfo authInfo
     ) {
-        ProfileResponse profileResponse = userQueryService.getUserProfile(nickname);
+        ProfileResponse profileResponse = userQueryService.getUserProfile(nickname, authInfo);
         return ResponseEntity.ok(profileResponse);
     }
 
