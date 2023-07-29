@@ -23,16 +23,16 @@ public class OAuthService {
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
-    private final ProfileImageRepository userProfileImageRepository;
+    private final ProfileImageRepository profileImageRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${cloud.aws.s3.default-image}")
     private String DEFAULT_IMAGE;
 
-    public OAuthService(JwtUtil jwtUtil, UserRepository userRepository, ProfileImageRepository userProfileImageRepository, RefreshTokenRepository refreshTokenRepository) {
+    public OAuthService(JwtUtil jwtUtil, UserRepository userRepository, ProfileImageRepository profileImageRepository, RefreshTokenRepository refreshTokenRepository) {
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
-        this.userProfileImageRepository = userProfileImageRepository;
+        this.profileImageRepository = profileImageRepository;
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
@@ -41,15 +41,10 @@ public class OAuthService {
         KakaoProfile kakaoProfile = jwtUtil.getUserInfo(oauthToken.getAccess_token());
 
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
-                .map(user -> {
-                    userProfileImageRepository.findByUserId(user.getId())
-                            .orElseGet(() -> userProfileImageRepository.save(ProfileImage.create(DEFAULT_IMAGE, user)));
-
-                    return user;
-                })
                 .orElseGet(() -> {
-                    User user = User.create(kakaoProfile);
-                    userProfileImageRepository.save(ProfileImage.create(DEFAULT_IMAGE, user));
+                    ProfileImage profileImage = ProfileImage.create(DEFAULT_IMAGE);
+                    User user = User.create(kakaoProfile, profileImage);
+                    userRepository.save(user);
 
                     return user;
                 });
@@ -76,15 +71,10 @@ public class OAuthService {
         KakaoProfile kakaoProfile = jwtUtil.getUserInfo(oauthToken.getAccess_token());
 
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
-                .map(user -> {
-                    userProfileImageRepository.findByUserId(user.getId())
-                            .orElseGet(() -> userProfileImageRepository.save(ProfileImage.create(DEFAULT_IMAGE, user)));
-
-                    return user;
-                })
                 .orElseGet(() -> {
-                    User user = User.create(kakaoProfile);
-                    userProfileImageRepository.save(ProfileImage.create(DEFAULT_IMAGE, user));
+                    ProfileImage profileImage = ProfileImage.create(DEFAULT_IMAGE);
+                    User user = User.create(kakaoProfile, profileImage);
+                    userRepository.save(user);
 
                     return user;
                 });

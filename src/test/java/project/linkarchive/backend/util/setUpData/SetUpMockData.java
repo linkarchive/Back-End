@@ -22,6 +22,7 @@ public class SetUpMockData extends MockDataGenerator {
                 .nickname(EMPTY)
                 .email(EMAIL)
                 .introduce(EMPTY)
+                .profileImage(profileImage)
                 .build();
     }
 
@@ -33,12 +34,11 @@ public class SetUpMockData extends MockDataGenerator {
         profileImage = ProfileImage.builder()
                 .id(PROFILE_IMAGE_ID)
                 .profileImageFilename(PROFILE_IMAGE_FILENAME)
-                .user(user)
                 .build();
     }
 
     protected void setUpMultipartFile() {
-        multipartFile = new MockMultipartFile(MULTIPART_FILE_URL, MULTIPART_FILE_NAME, CONTENT_TYPE, MULTIPART_FILE_DATA);
+        multipartFile = new MockMultipartFile(PROFILE_IMAGE_URL, MULTIPART_FILE_NAME, CONTENT_TYPE, MULTIPART_FILE_DATA);
     }
 
     protected void setUpUpdateNicknameRequest() {

@@ -10,6 +10,7 @@ import project.linkarchive.backend.profileImage.repository.ProfileImageRepositor
 import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.service.UserApiService;
+import project.linkarchive.backend.user.service.UserQueryService;
 import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,5 +33,8 @@ public class UserSetUpService extends SetUpMockData {
 
     @InjectMocks
     protected UserApiService userApiService;
+
+    @InjectMocks
+    protected UserQueryService userQueryService;
 
 }

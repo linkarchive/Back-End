@@ -7,21 +7,10 @@ import static project.linkarchive.backend.util.constant.Constants.*;
 
 public class ProfileImageSetUpData extends MockDataGenerator {
 
-    protected void setUpUser() {
-        user = User.builder()
-                .id(USER_ID)
-                .socialId(SOCIAL_ID)
-                .nickname(EMPTY)
-                .email(EMAIL)
-                .introduce(EMPTY)
-                .build();
-    }
-
     protected void setUpProfileImage() {
         profileImage = ProfileImage.builder()
                 .id(PROFILE_IMAGE_ID)
                 .profileImageFilename(PROFILE_IMAGE_FILENAME)
-                .user(user)
                 .build();
     }
 
