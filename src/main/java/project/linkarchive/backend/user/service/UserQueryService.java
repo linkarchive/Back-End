@@ -40,6 +40,7 @@ public class UserQueryService {
         String profileImageUrl = generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
 
         boolean isFollow;
+
         Long loginUserId = authInfo != null ? authInfo.getId() : null;
         if (loginUserId == null) {
             isFollow = false;
