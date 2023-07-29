@@ -45,7 +45,7 @@ public class UserQueryService {
             isFollow = false;
             return new ProfileResponse(user, profileImageUrl, isFollow);
         }
-        isFollow = isFollowing(user.getId(), authInfo.getId());
+        isFollow = isFollowing(user.getId(), loginUserId);
 
         return new ProfileResponse(user, profileImageUrl, isFollow);
     }
