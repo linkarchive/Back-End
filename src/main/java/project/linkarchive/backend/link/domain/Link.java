@@ -33,7 +33,7 @@ public class Link extends TimeEntity {
 
     @Column(length = 500)
     private String description;
-    //
+    
     private String thumbnail;
     private Long bookMarkCount;
 

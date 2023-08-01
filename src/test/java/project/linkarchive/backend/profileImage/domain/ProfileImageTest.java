@@ -12,7 +12,6 @@ class ProfileImageTest extends ProfileImageSetUpData {
 
     @BeforeEach
     public void setup() {
-        setUpUser();
         setUpProfileImage();
     }
 
@@ -28,20 +27,13 @@ class ProfileImageTest extends ProfileImageSetUpData {
         assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getProfileImageFilename());
     }
 
-    @DisplayName("프로필 이미지 getUser - Domain")
-    @Test
-    void testGetUser() {
-        assertEquals(user, profileImage.getUser());
-    }
-
     @DisplayName("프로필 이미지 생성자 - Domain")
     @Test
     void testProfileImageConstructor() {
-        profileImage = new ProfileImage(PROFILE_IMAGE_ID, PROFILE_IMAGE_FILENAME, user);
+        profileImage = new ProfileImage(PROFILE_IMAGE_ID, PROFILE_IMAGE_FILENAME);
 
         assertEquals(PROFILE_IMAGE_ID, profileImage.getId());
         assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getProfileImageFilename());
-        assertEquals(user, profileImage.getUser());
     }
 
     @DisplayName("프로필 이미지 Builder 패턴 - Domain")
@@ -49,20 +41,17 @@ class ProfileImageTest extends ProfileImageSetUpData {
     void testBuilder() {
         profileImage = ProfileImage.builder()
                 .profileImageFilename(PROFILE_IMAGE_FILENAME)
-                .user(user)
                 .build();
 
         assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getProfileImageFilename());
-        assertEquals(user, profileImage.getUser());
     }
 
     @DisplayName("프로필 이미지 create 메서드 - Domain")
     @Test
     void testCreate() {
-        profileImage = ProfileImage.create(PROFILE_IMAGE_FILENAME, user);
+        profileImage = ProfileImage.create(PROFILE_IMAGE_FILENAME);
 
         assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getProfileImageFilename());
-        assertEquals(user, profileImage.getUser());
     }
 
     @DisplayName("프로필 이미지 UpdateProfileImage - Domain")

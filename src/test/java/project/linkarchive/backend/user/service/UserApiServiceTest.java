@@ -3,7 +3,6 @@ package project.linkarchive.backend.user.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.multipart.MultipartFile;
 import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
@@ -15,7 +14,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
@@ -24,29 +24,31 @@ class UserApiServiceTest extends UserSetUpService {
     @BeforeEach
     public void setUp() {
         setUpUser();
-        setUpProfileImage();
-        setUpMultipartFile();
-        setUpUpdateNicknameRequest();
-        setUpUpdateProfileRequest();
     }
 
     @DisplayName("유저 Api Service - updateUserNickname")
     @Test
     void testUpdateUserNickname() {
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-        when(userRepository.existsUserByNickname(anyString())).thenReturn(false);
+        setUpUpdateNicknameRequest();
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(userRepository.existsUserByNickname(NEW_NICKNAME)).thenReturn(false);
         when(badWordFiltering.filter(eq(NEW_NICKNAME))).thenReturn(false);
 
         UpdateNicknameResponse response = userApiService.updateUserNickName(updateNicknameRequest, user.getId());
 
         assertEquals(NEW_NICKNAME, response.getNickname());
+
+        verify(userRepository).findById(USER_ID);
+        verify(userRepository).existsUserByNickname(NEW_NICKNAME);
+        verify(badWordFiltering).filter(NEW_NICKNAME);
     }
 
     @DisplayName("유저 Api Service - updateUserProfile")
     @Test
     void testUpdateUserProfile() {
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-        when(userRepository.existsUserByNickname(anyString())).thenReturn(false);
+        setUpUpdateProfileRequest();
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(userRepository.existsUserByNickname(NEW_NICKNAME)).thenReturn(false);
         when(badWordFiltering.filter(eq(NEW_NICKNAME))).thenReturn(false);
         when(badWordFiltering.filter(eq(NEW_INTRODUCE))).thenReturn(false);
 
@@ -54,24 +56,35 @@ class UserApiServiceTest extends UserSetUpService {
 
         assertEquals(NEW_NICKNAME, response.getNickname());
         assertEquals(NEW_INTRODUCE, response.getIntroduce());
+
+        verify(userRepository).findById(USER_ID);
+        verify(userRepository).existsUserByNickname(NEW_NICKNAME);
+        verify(badWordFiltering).filter(NEW_NICKNAME);
+        verify(badWordFiltering).filter(NEW_INTRODUCE);
     }
 
     @DisplayName("유저 Api Service - updateProfileImage")
     @Test
     void testUpdateProfileImage() throws IOException {
-        when(profileImageRepository.findByUserId(anyLong())).thenReturn(Optional.of(profileImage));
-        when(s3Uploader.upload(any(MultipartFile.class))).thenReturn(STORED_FILE_NAME);
-        when(s3Uploader.generatePresignedProfileImageUrl(anyString(), anyInt())).thenReturn(new URL(MULTIPART_FILE_URL));
+        setUpProfileImage();
+        setUpMultipartFile();
+        when(profileImageRepository.findByUserId(USER_ID)).thenReturn(Optional.of(profileImage));
+        when(s3Uploader.upload(multipartFile)).thenReturn(STORED_FILE_NAME);
+        when(s3Uploader.generatePresignedProfileImageUrl(STORED_FILE_NAME, EXPIRATION_TIME_MINUTE)).thenReturn(new URL(PROFILE_IMAGE_URL));
 
         ProfileImageResponse response = userApiService.updateProfileImage(multipartFile, user.getId());
 
-        assertEquals(MULTIPART_FILE_URL, response.getProfileImageFileName());
+        assertEquals(PROFILE_IMAGE_URL, response.getProfileImageFileName());
+
+        verify(profileImageRepository).findByUserId(USER_ID);
+        verify(s3Uploader).upload(multipartFile);
+        verify(s3Uploader).generatePresignedProfileImageUrl(STORED_FILE_NAME, EXPIRATION_TIME_MINUTE);
     }
 
     @DisplayName("유저 Api Service - checkIfNicknameIsAvailable")
     @Test
     void testCheckIfNicknameIsAvailable() {
-        assertDoesNotThrow(() -> userApiService.checkIfNicknameIsAvailable(NICKNAME));
+        assertDoesNotThrow(() -> userApiService.checkIfNicknameIsAvailable(NEW_NICKNAME));
     }
 
 }

@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.linkarchive.backend.util.constant.Constants.NEW_INTRODUCE;
 import static project.linkarchive.backend.util.constant.Constants.NEW_NICKNAME;
 
-class UpdateProfileResponseTest extends SetUpMockData {
+class UpdateMyProfileResponseTest extends SetUpMockData {
 
     @DisplayName("UpdateProfileResponse - DTO")
     @Test

@@ -7,7 +7,7 @@ import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
-import project.linkarchive.backend.user.response.ProfileResponse;
+import project.linkarchive.backend.user.response.MyProfileResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
@@ -22,6 +22,7 @@ public class SetUpMockData extends MockDataGenerator {
                 .nickname(EMPTY)
                 .email(EMAIL)
                 .introduce(EMPTY)
+                .profileImage(profileImage)
                 .build();
     }
 
@@ -33,12 +34,11 @@ public class SetUpMockData extends MockDataGenerator {
         profileImage = ProfileImage.builder()
                 .id(PROFILE_IMAGE_ID)
                 .profileImageFilename(PROFILE_IMAGE_FILENAME)
-                .user(user)
                 .build();
     }
 
     protected void setUpMultipartFile() {
-        multipartFile = new MockMultipartFile(MULTIPART_FILE_URL, MULTIPART_FILE_NAME, CONTENT_TYPE, MULTIPART_FILE_DATA);
+        multipartFile = new MockMultipartFile(PROFILE_IMAGE_URL, MULTIPART_FILE_NAME, CONTENT_TYPE, MULTIPART_FILE_DATA);
     }
 
     protected void setUpUpdateNicknameRequest() {
@@ -50,7 +50,7 @@ public class SetUpMockData extends MockDataGenerator {
     }
 
     protected void setUpProfileResponse() {
-        profileResponse = new ProfileResponse(user, PRE_SIGNED_URL);
+        myProfileResponse = new MyProfileResponse(user, PRE_SIGNED_URL);
     }
 
     protected void setUpUpdateNicknameResponse() {

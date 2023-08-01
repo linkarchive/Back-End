@@ -25,8 +25,8 @@ public class SecurityConfig implements WebMvcConfigurer {
             "/auth/**",
             "/nickname",
             "/user/{nickname}",
-            "/links/**",
-            "/links/archive/**",
+            "/links/user/{nickname}",
+            "/links/archive",
             "/mark/links/**",
             "/mark/tags/**",
             "/tags/**"
