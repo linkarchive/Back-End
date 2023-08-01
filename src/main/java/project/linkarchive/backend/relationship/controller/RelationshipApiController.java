@@ -15,11 +15,11 @@ import static project.linkarchive.backend.advice.success.SuccessCodeConst.FOLLOW
 import static project.linkarchive.backend.advice.success.SuccessCodeConst.UNFOLLOW_USER;
 
 @RestController
-public class RelationApiController {
+public class RelationshipApiController {
 
     private final RelationshipApiService relationshipApiService;
 
-    public RelationApiController(RelationshipApiService relationshipApiService) {
+    public RelationshipApiController(RelationshipApiService relationshipApiService) {
         this.relationshipApiService = relationshipApiService;
     }
 
