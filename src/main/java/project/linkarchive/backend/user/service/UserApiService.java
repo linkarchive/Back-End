@@ -65,18 +65,18 @@ public class UserApiService {
     }
 
     public ProfileImageResponse updateProfileImage(MultipartFile image, Long userId) throws IOException {
-        ProfileImage profileImage = getProfileImageByUserId(userId);
+        User user = getUserById(userId);
 
         validateNotEmptyFile(image);
         validateContentType(image.getContentType());
 
         String storedFileName = s3Uploader.upload(image);
 
-        if (!profileImage.getProfileImageFilename().equals(defaultImage)) {
-            s3Uploader.deleteFile(profileImage.getProfileImageFilename());
+        if (!user.getProfileImage().getProfileImageFilename().equals(defaultImage)) {
+            s3Uploader.deleteFile(user.getProfileImage().getProfileImageFilename());
         }
 
-        profileImage.updateProfileImage(storedFileName);
+        user.getProfileImage().updateProfileImage(storedFileName);
 
         String profileImageUrl = s3Uploader.generatePresignedProfileImageUrl(
                         storedFileName,
@@ -94,11 +94,6 @@ public class UserApiService {
     private User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-    }
-
-    private ProfileImage getProfileImageByUserId(Long userId) {
-        return userProfileImageRepository.findByUserId(userId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_PROFILE_IMAGE));
     }
 
     private void checkIfNicknameExists(String nickname) {
