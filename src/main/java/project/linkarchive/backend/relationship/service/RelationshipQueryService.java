@@ -32,6 +32,11 @@ public class RelationshipQueryService {
 
         List<User> followerList = relationshipRepository.findFollowerIdByFolloweeId(userId);
 
+        List<FollowResponse> followResponses = new ArrayList<>();
+        if (followerList == null || followerList.isEmpty()) {
+            return followResponses;
+        }
+
         return getFollowResponses(loginUserId, followerList);
     }
 
@@ -39,6 +44,11 @@ public class RelationshipQueryService {
         findUserById(userId);
 
         List<User> followingList = relationshipRepository.findFolloweeIdByFollowerId(userId);
+        List<FollowResponse> followResponses = new ArrayList<>();
+        if (followingList == null || followingList.isEmpty()) {
+            return followResponses;
+        }
+
         return getFollowResponses(loginUserId, followingList);
     }
 
@@ -48,11 +58,7 @@ public class RelationshipQueryService {
 
     private List<FollowResponse> getFollowResponses(Long loginUserId, List<User> followList) {
         List<FollowResponse> followResponses = new ArrayList<>();
-
-        if (followList.isEmpty()) {
-            return followResponses;
-        }
-
+        
         followList.forEach(user -> {
             String profileImageUrl = userQueryService.generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
             boolean isFollow = isFollowing(user.getId(), loginUserId);
