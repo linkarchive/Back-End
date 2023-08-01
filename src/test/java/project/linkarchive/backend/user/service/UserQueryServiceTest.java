@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
-import project.linkarchive.backend.user.response.ProfileResponse;
+import project.linkarchive.backend.user.response.MyProfileResponse;
 import project.linkarchive.backend.util.service.UserSetUpService;
 
 import java.net.MalformedURLException;
@@ -36,7 +36,7 @@ class UserQueryServiceTest extends UserSetUpService {
                 eq(EXPIRATION_TIME_MINUTE))
         ).thenReturn(new URL(PROFILE_IMAGE_URL));
 
-        ProfileResponse response = userQueryService.getMyProfile(user.getId());
+        MyProfileResponse response = userQueryService.getMyProfile(user.getId());
 
         validateResponse(response);
     }
@@ -60,7 +60,7 @@ class UserQueryServiceTest extends UserSetUpService {
                 eq(EXPIRATION_TIME_MINUTE))
         ).thenReturn(new URL(PROFILE_IMAGE_URL));
 
-        ProfileResponse response = userQueryService.getUserProfile(user.getNickname());
+        MyProfileResponse response = userQueryService.getUserProfile(user.getNickname());
 
         validateResponse(response);
     }
@@ -74,7 +74,7 @@ class UserQueryServiceTest extends UserSetUpService {
         assertThrows(NotFoundException.class, () -> userQueryService.getUserProfile(user.getNickname()));
     }
 
-    private void validateResponse(ProfileResponse response) {
+    private void validateResponse(MyProfileResponse response) {
         assertEquals(user.getId(), response.getId());
         assertEquals(user.getNickname(), response.getNickname());
         assertEquals(PROFILE_IMAGE_URL, response.getProfileImageFileName());

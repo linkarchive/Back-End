@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.linkarchive.backend.util.constant.Constants.EMPTY;
 import static project.linkarchive.backend.util.constant.Constants.PRE_SIGNED_URL;
 
-class ProfileResponseTest extends SetUpMockData {
+class MyProfileResponseTest extends SetUpMockData {
 
     @DisplayName("ProfileResponse - DTO")
     @Test
@@ -16,9 +16,9 @@ class ProfileResponseTest extends SetUpMockData {
         setUpUser();
         setUpProfileResponse();
 
-        assertEquals(EMPTY, profileResponse.getNickname());
-        assertEquals(EMPTY, profileResponse.getIntroduce());
-        assertEquals(PRE_SIGNED_URL, profileResponse.getProfileImageFileName());
+        assertEquals(EMPTY, myProfileResponse.getNickname());
+        assertEquals(EMPTY, myProfileResponse.getIntroduce());
+        assertEquals(PRE_SIGNED_URL, myProfileResponse.getProfileImageFileName());
     }
 
 }
