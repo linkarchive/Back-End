@@ -62,7 +62,7 @@ public class RelationshipQueryService {
         List<FollowResponse> followResponses = new ArrayList<>();
         followList.forEach(user -> {
             String profileImageUrl = userQueryService.generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
-            boolean isFollow = isFollowing(user.getId(), loginUserId);
+            Boolean isFollow = isFollowing(user.getId(), loginUserId);
             FollowResponse response = new FollowResponse(user, profileImageUrl, isFollow);
             followResponses.add(response);
         });
@@ -70,7 +70,7 @@ public class RelationshipQueryService {
         return new FollowListResponse(followResponses);
     }
 
-    private boolean isFollowing(Long followeeId, Long followerId) {
+    private Boolean isFollowing(Long followeeId, Long followerId) {
         return relationshipRepository.existsByFolloweeIdAndFollowerId(followeeId, followerId);
     }
 }

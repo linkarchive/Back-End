@@ -9,9 +9,9 @@ public class FollowResponse {
     private String nickname;
     private String introduce;
     private String profileImageFileName;
-    private boolean isFollow;
+    private Boolean isFollow;
 
-    public FollowResponse(User user, String url, boolean isFollow) {
+    public FollowResponse(User user, String url, Boolean isFollow) {
 
         this.userId = user.getId();
         this.nickname = user.getNickname();
