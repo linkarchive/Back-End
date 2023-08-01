@@ -7,7 +7,7 @@ import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
-import project.linkarchive.backend.user.response.ProfileResponse;
+import project.linkarchive.backend.user.response.MyProfileResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
@@ -50,7 +50,7 @@ public class SetUpMockData extends MockDataGenerator {
     }
 
     protected void setUpProfileResponse() {
-        profileResponse = new ProfileResponse(user, PRE_SIGNED_URL);
+        myProfileResponse = new MyProfileResponse(user, PRE_SIGNED_URL);
     }
 
     protected void setUpUpdateNicknameResponse() {
