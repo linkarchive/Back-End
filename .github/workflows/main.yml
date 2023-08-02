@@ -9,8 +9,8 @@ env:
   AWS_S3_BUCKET: linkarchive-operate
   AWS_CODE_DEPLOY_APPLICATION: linkarchive-operate-codedeploy
   AWS_CODE_DEPLOY_GROUP: linkarchive-operate-deploy-group
-jobs:
 
+jobs:
   build-and-deploy:
     if: github.event_name == 'push'
     runs-on: ubuntu-20.04
