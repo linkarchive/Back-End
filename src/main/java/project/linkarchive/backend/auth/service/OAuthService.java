@@ -17,6 +17,8 @@ import project.linkarchive.backend.util.JwtUtil;
 
 import javax.transaction.Transactional;
 
+import java.util.Optional;
+
 import static project.linkarchive.backend.advice.data.DataConstants.AUTH_KAKAO;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
@@ -57,13 +59,9 @@ public class OAuthService {
 
         RefreshToken token = RefreshToken.build(refreshToken, userAgent, findUser);
 
-        if (refreshTokenRepository.existsByUserIdAndAgent(findUser.getId(), userAgent)) {
-            RefreshToken savedRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent)
-                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-            savedRefreshToken.updateRefreshToken(token);
-        } else {
-            refreshTokenRepository.save(token);
-        }
+        Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent);
+        savedRefreshToken.ifPresentOrElse
+                (value -> value.updateRefreshToken(token), () -> refreshTokenRepository.save(token));
 
         return new LoginResponse(findUser, accessToken, refreshToken);
     }
@@ -87,13 +85,9 @@ public class OAuthService {
 
         RefreshToken token = RefreshToken.build(refreshToken, userAgent, findUser);
 
-        if (refreshTokenRepository.existsByUserIdAndAgent(findUser.getId(), userAgent)) {
-            RefreshToken findRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent)
-                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-            findRefreshToken.updateRefreshToken(token);
-        } else {
-            refreshTokenRepository.save(token);
-        }
+        Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent);
+        savedRefreshToken.ifPresentOrElse
+                (value -> value.updateRefreshToken(token), () -> refreshTokenRepository.save(token));
 
         return new LoginResponse(findUser, accessToken, refreshToken);
     }
