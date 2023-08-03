@@ -59,8 +59,8 @@ public class OAuthService {
 
         Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent);
         savedRefreshToken.ifPresentOrElse
-                (refreshToken -> refreshToken.updateRefreshToken(token)
-                        , () -> refreshTokenRepository.save(token));
+                (refreshToken -> refreshToken.updateRefreshToken(token),
+                        () -> refreshTokenRepository.save(token));
 
         return new LoginResponse(findUser, newAccessToken, newRefreshToken);
     }
@@ -86,8 +86,8 @@ public class OAuthService {
 
         Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent);
         savedRefreshToken.ifPresentOrElse
-                (refreshToken -> refreshToken.updateRefreshToken(token)
-                        , () -> refreshTokenRepository.save(token));
+                (refreshToken -> refreshToken.updateRefreshToken(token),
+                        () -> refreshTokenRepository.save(token));
 
         return new LoginResponse(findUser, newAccessToken, newRefreshToken);
     }
