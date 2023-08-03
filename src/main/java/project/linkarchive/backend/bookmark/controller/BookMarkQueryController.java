@@ -33,32 +33,31 @@ public class BookMarkQueryController {
         return ResponseEntity.ok(userMarkListResponse);
     }
 
-    @GetMapping("/mark/links/user/{nickname}")
+    @GetMapping("/mark/links/user/{userId}")
     public ResponseEntity<UserMarkListResponse> getAuthenticatedUserMarkedLinkList(
-            @PathVariable("nickname") String nickname,
+            @PathVariable("userId") Long userId,
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "markId", required = false) Long lastMarkId,
             @PageableDefault Pageable pageable,
             @Nullable AuthInfo authInfo
     ) {
-        UserMarkListResponse userMarkListResponse = bookMarkQueryService.getUserMarkedLinkList(nickname, lastMarkId, pageable, authInfo, tag);
+        UserMarkListResponse userMarkListResponse = bookMarkQueryService.getUserMarkedLinkList(userId, lastMarkId, pageable, authInfo, tag);
         return ResponseEntity.ok(userMarkListResponse);
     }
 
-    @GetMapping("/mark/tags/user/{nickname}")
+    @GetMapping("/mark/tags/user/{userId}")
     public ResponseEntity<TagListResponse> getMarkTagList(
-            @PathVariable("nickname") String nickname
+            @PathVariable("userId") Long userId
     ) {
-        TagListResponse tagList = bookMarkQueryService.getMarkTagList(nickname);
+        TagListResponse tagList = bookMarkQueryService.getMarkTagList(userId);
         return ResponseEntity.ok(tagList);
     }
 
-    @GetMapping("/mark/limited-tags/user/{nickname}")
-    public ResponseEntity<TagListResponse> getMarkTagLimitList(
-            @PathVariable("nickname") String nickname,
-            @RequestParam("size") int size
+    @GetMapping("/mark/tags/10/user/{userId}")
+    public ResponseEntity<TagListResponse> getMarkTagList10(
+            @PathVariable("userId") Long userId
     ) {
-        TagListResponse tagList = bookMarkQueryService.getMarkTagLimitList(nickname, size);
+        TagListResponse tagList = bookMarkQueryService.getMarkTagList10(userId);
         return ResponseEntity.ok(tagList);
     }
 

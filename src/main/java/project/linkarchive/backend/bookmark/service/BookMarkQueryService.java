@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static project.linkarchive.backend.advice.data.DataConstants.MAX_SIZE;
+import static project.linkarchive.backend.advice.data.DataConstants.TAG_SIZE;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.EXCEEDED_TAG_SIZE;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
@@ -76,12 +77,12 @@ public class BookMarkQueryService {
         return new UserMarkListResponse(userMarkResponseList, hasNext);
     }
 
-    public UserMarkListResponse getUserMarkedLinkList(String nickname, Long lastMarkId, Pageable pageable, AuthInfo authInfo, String tag) {
-        getUserByNickname(nickname);
+    public UserMarkListResponse getUserMarkedLinkList(Long userId, Long lastMarkId, Pageable pageable, AuthInfo authInfo, String tag) {
+        getUserById(userId);
 
         Long loginUserId = authInfo != null ? authInfo.getId() : null;
 
-        List<MarkResponse> markResponseList = bookMarkRepositoryImpl.getUserMarkLinkList(nickname, lastMarkId, pageable, tag);
+        List<MarkResponse> markResponseList = bookMarkRepositoryImpl.getUserMarkLinkList(userId, lastMarkId, pageable, tag);
         List<UserMarkResponse> userMarkResponseList = markResponseList.stream()
                 .map(markResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(markResponse.getLinkId());
@@ -100,8 +101,8 @@ public class BookMarkQueryService {
         return new UserMarkListResponse(userMarkResponseList, hasNext);
     }
 
-    public TagListResponse getMarkTagList(String nickname) {
-        User user = findUserByNickname(nickname);
+    public TagListResponse getMarkTagList(Long userId) {
+        User user = findUserById(userId);
 
         List<BookMark> bookMarkList = bookMarkRepository.findByUserId(user.getId());
         Map<String, Long> tagIdMap = new HashMap<>();
@@ -125,9 +126,8 @@ public class BookMarkQueryService {
         return new TagListResponse(tagList);
     }
 
-    public TagListResponse getMarkTagLimitList(String nickname, int size) {
-        User user = findUserByNickname(nickname);
-        isSizeNotExceedMax(size);
+    public TagListResponse getMarkTagList10(Long userId) {
+        User user = findUserById(userId);
 
         List<BookMark> bookMarkList = bookMarkRepository.findByUserId(user.getId());
         Map<String, Long> tagIdMap = new HashMap<>();
@@ -145,7 +145,7 @@ public class BookMarkQueryService {
 
         List<TagResponse> tagList = tagCountMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .limit(size)
+                .limit(TAG_SIZE)
                 .map(entry -> new TagResponse(tagIdMap.get(entry.getKey()), entry.getKey()))
                 .collect(Collectors.toList());
 
@@ -157,20 +157,9 @@ public class BookMarkQueryService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
-    private void getUserByNickname(String nickname) {
-        userRepository.findByNickname(nickname)
+    private User findUserById(Long userId) {
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-    }
-
-    private User findUserByNickname(String nickname) {
-        return userRepository.findByNickname(nickname)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-    }
-
-    private void isSizeNotExceedMax(int size) {
-        if (size > MAX_SIZE) {
-            throw new ExceededException(EXCEEDED_TAG_SIZE);
-        }
     }
 
     private boolean isHasNextLinkList(Pageable pageable, List<MarkResponse> linkResponseList) {

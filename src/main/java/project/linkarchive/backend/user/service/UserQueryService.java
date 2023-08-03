@@ -35,8 +35,8 @@ public class UserQueryService {
         return new MyProfileResponse(user, profileImageUrl);
     }
 
-    public UserProfileResponse getUserProfile(String nickname, AuthInfo authInfo) {
-        User user = getUserByNickname(nickname);
+    public UserProfileResponse getUserProfile(Long userId, AuthInfo authInfo) {
+        User user = getUserById(userId);
         String profileImageUrl = generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
 
         Long loginUserId = authInfo != null ? authInfo.getId() : null;
@@ -45,6 +45,7 @@ public class UserQueryService {
         }
 
         Boolean isFollow = isFollowing(user.getId(), authInfo.getId());
+
         return new UserProfileResponse(user, profileImageUrl, isFollow);
     }
 
@@ -57,11 +58,6 @@ public class UserQueryService {
 
     private User getUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-    }
-
-    private User getUserByNickname(String nickname) {
-        return userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 

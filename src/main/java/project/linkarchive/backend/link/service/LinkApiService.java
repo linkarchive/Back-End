@@ -94,7 +94,7 @@ public class LinkApiService {
     }
 
     private void exceededTagCount(Set<String> requestForTag) {
-        if (requestForTag.size() > MAX_TAG_COUNT) {
+        if (requestForTag.size() > TAG_SIZE) {
             throw new ExceededException(EXCEEDED_TAG_LIMIT_10);
         }
     }
