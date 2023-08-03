@@ -30,8 +30,8 @@ public class SecurityConfig implements WebMvcConfigurer {
             "/mark/links/**",
             "/mark/tags/**",
             "/tags/**",
-            "/follower-list/{userId}",
-            "/following-list/{userId}"
+            "/follower-list/user/{userId}",
+            "/following-list/user/{userId}"
     };
 
     private final SecurityArgumentResolver securityArgumentResolver;
