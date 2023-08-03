@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.linkarchive.backend.auth.request.AccessTokenRequest;
 import project.linkarchive.backend.auth.response.LoginResponse;
-import project.linkarchive.backend.auth.response.TokenResponse;
+import project.linkarchive.backend.auth.response.AccessTokenResponse;
 import project.linkarchive.backend.auth.service.OAuthService;
 
 @RestController
@@ -38,7 +38,7 @@ public class OAuthController {
     }
 
     @PostMapping("/publish/token")
-    public TokenResponse publishToken(
+    public AccessTokenResponse publishToken(
             @RequestHeader("Authorization") String refreshToken,
             @RequestBody AccessTokenRequest accessTokenRequest
     ) {

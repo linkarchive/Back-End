@@ -22,7 +22,7 @@ import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.OauthToken;
-import project.linkarchive.backend.auth.response.TokenResponse;
+import project.linkarchive.backend.auth.response.AccessTokenResponse;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 
@@ -184,7 +184,7 @@ public class JwtUtil {
         return userId;
     }
 
-    public TokenResponse publishToken(String accessToken, String refreshToken) {
+    public AccessTokenResponse publishToken(String accessToken, String refreshToken) {
         String getAccessToken = getTokenWithoutBearer(accessToken);
         String getRefreshToken = getTokenWithoutBearer(refreshToken);
         RefreshToken savedRefreshToken;
@@ -202,7 +202,7 @@ public class JwtUtil {
 
             String newAccessToken = createAccessToken(user);
 
-            return new TokenResponse(newAccessToken);
+            return new AccessTokenResponse(newAccessToken);
 
         } else {
             throw new UnauthorizedException(INVALID_TOKEN);
