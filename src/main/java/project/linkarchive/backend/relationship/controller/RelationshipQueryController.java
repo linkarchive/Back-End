@@ -20,7 +20,7 @@ public class RelationshipQueryController {
         this.relationshipQueryService = relationshipQueryService;
     }
 
-    @GetMapping("/follower-list/{userId}")
+    @GetMapping("/follower-list/user/{userId}")
     public ResponseEntity<FollowListResponse> getFollowerList(
             @PathVariable("userId") Long userId,
             @Nullable AuthInfo authInfo
@@ -29,7 +29,7 @@ public class RelationshipQueryController {
         return ResponseEntity.ok(followListResponse);
     }
 
-    @GetMapping("/following-list/{userId}")
+    @GetMapping("/following-list/user/{userId}")
     public ResponseEntity<FollowListResponse> getFollowingList(
             @PathVariable("userId") Long userId,
             @Nullable AuthInfo authInfo
