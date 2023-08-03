@@ -89,12 +89,12 @@ public class LinkQueryService {
         return new UserLinkListResponse(userLinkResponse, hasNext);
     }
 
-    public UserLinkListResponse getUserLinkList(String nickname, Pageable pageable, Long lastLinkId, AuthInfo authInfo, String tag) {
-        getUserByNickname(nickname);
+    public UserLinkListResponse getUserLinkList(Long userId, Pageable pageable, Long lastLinkId, AuthInfo authInfo, String tag) {
+        getUserById(userId);
 
         Long loginUserId = authInfo != null ? authInfo.getId() : null;
 
-        List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(nickname, pageable, lastLinkId, tag);
+        List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(userId, pageable, lastLinkId, tag);
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
@@ -156,8 +156,8 @@ public class LinkQueryService {
         return new UserTrashLinkListResponse(trashLinkListResponseList, hasNext);
     }
 
-    public TagListResponse getLinkTagList(String nickname) {
-        User user = findUserByNickname(nickname);
+    public TagListResponse getLinkTagList(Long userId) {
+        User user = findUserById(userId);
 
         List<Link> linkList = linkRepository.findByUserId(user.getId());
         Map<String, Long> tagIdMap = new HashMap<>();
@@ -186,13 +186,8 @@ public class LinkQueryService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
-    private void getUserByNickname(String nickname) {
-        userRepository.findByNickname(nickname)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-    }
-
-    private User findUserByNickname(String nickname) {
-        return userRepository.findByNickname(nickname)
+    private User findUserById(Long userId) {
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
