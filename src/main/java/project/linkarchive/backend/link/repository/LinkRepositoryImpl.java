@@ -29,7 +29,33 @@ public class LinkRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<LinkResponse> getMyLinkList(Long userId, Pageable pageable, Long lastLinkLid, String tag) {
+    public List<LinkResponse> getMyLinkList(Long tagId, Long linkId, Pageable pageable, Long loginUserId) {
+        return queryFactory
+                .select(new QLinkResponse(
+                        link.id,
+                        link.url,
+                        link.title,
+                        link.description,
+                        link.thumbnail,
+                        link.bookMarkCount,
+                        link.createdAt,
+                        link.updatedAt
+                ))
+                .from(link)
+                .distinct()
+                .leftJoin(link.linkHashTagList, linkHashTag)
+                .where(
+                        link.user.id.eq(loginUserId),
+                        link.linkStatus.eq(ACTIVE),
+                        ltUrlId(linkId),
+                        containTag(tagId)
+                )
+                .limit(pageable.getPageSize() + 1)
+                .orderBy(link.id.desc())
+                .fetch();
+    }
+
+    public List<LinkResponse> getUserLinkList(Long userId, Long tagId, Long linkId, Pageable pageable) {
         return queryFactory
                 .select(new QLinkResponse(
                         link.id,
@@ -47,41 +73,15 @@ public class LinkRepositoryImpl {
                 .where(
                         link.user.id.eq(userId),
                         link.linkStatus.eq(ACTIVE),
-                        ltUrlId(lastLinkLid),
-                        containTag(tag)
+                        ltUrlId(linkId),
+                        containTag(tagId)
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(link.id.desc())
                 .fetch();
     }
 
-    public List<LinkResponse> getUserLinkList(Long userId, Pageable pageable, Long lastLinkLid, String tag) {
-        return queryFactory
-                .select(new QLinkResponse(
-                        link.id,
-                        link.url,
-                        link.title,
-                        link.description,
-                        link.thumbnail,
-                        link.bookMarkCount,
-                        link.createdAt,
-                        link.updatedAt
-                ))
-                .from(link)
-                .distinct()
-                .leftJoin(link.linkHashTagList, linkHashTag)
-                .where(
-                        link.user.id.eq(userId),
-                        link.linkStatus.eq(ACTIVE),
-                        ltUrlId(lastLinkLid),
-                        containTag(tag)
-                )
-                .limit(pageable.getPageSize() + 1)
-                .orderBy(link.id.desc())
-                .fetch();
-    }
-
-    public List<ArchiveResponse> getLinkArchive(Pageable pageable, Long lastLinkId, String tag) {
+    public List<ArchiveResponse> getLinkArchive(Long tagId, Long linkId, Pageable pageable) {
         return queryFactory
                 .select(new QArchiveResponse(
                         link.user.id,
@@ -102,15 +102,15 @@ public class LinkRepositoryImpl {
                 .leftJoin(link.linkHashTagList, linkHashTag)
                 .where(
                         link.linkStatus.eq(ACTIVE),
-                        ltUrlId(lastLinkId),
-                        containTag(tag)
+                        ltUrlId(linkId),
+                        containTag(tagId)
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(link.id.desc())
                 .fetch();
     }
 
-    public List<TrashLinkResponse> getTrashLinkList(String tag, Long lastLinkId, Pageable pageable, Long loginUserId) {
+    public List<TrashLinkResponse> getTrashLinkList(Long tagId, Long linkId, Pageable pageable, Long loginUserId) {
         return queryFactory
                 .select(new QTrashLinkResponse(
                         link.id,
@@ -127,20 +127,20 @@ public class LinkRepositoryImpl {
                 .where(
                         link.user.id.eq(loginUserId),
                         link.linkStatus.eq(TRASH),
-                        ltUrlId(lastLinkId),
-                        containTag(tag)
+                        ltUrlId(linkId),
+                        containTag(tagId)
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(link.id.desc())
                 .fetch();
     }
 
-    private BooleanExpression ltUrlId(Long lastLinkId) {
-        return lastLinkId != null ? link.id.lt(lastLinkId) : null;
+    private BooleanExpression ltUrlId(Long linkId) {
+        return linkId != null ? link.id.lt(linkId) : null;
     }
 
-    private BooleanExpression containTag(String tag) {
-        return tag != null ? linkHashTag.hashTag.tag.eq(tag) : null;
+    private BooleanExpression containTag(Long tagId) {
+        return tagId != null ? linkHashTag.hashTag.id.eq(tagId) : null;
     }
 
 }
