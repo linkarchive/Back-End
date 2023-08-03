@@ -1,6 +1,7 @@
 package project.linkarchive.backend.relationship.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,21 +20,21 @@ public class RelationshipQueryController {
         this.relationshipQueryService = relationshipQueryService;
     }
 
-    @GetMapping("/follower-list/{userId}")
+    @GetMapping("/follower-list/user/{userId}")
     public ResponseEntity<FollowListResponse> getFollowerList(
             @PathVariable("userId") Long userId,
-            AuthInfo authInfo
+            @Nullable AuthInfo authInfo
     ) {
-        FollowListResponse followListResponse = relationshipQueryService.getFollowerList(userId, authInfo.getId());
+        FollowListResponse followListResponse = relationshipQueryService.getFollowerList(userId, authInfo);
         return ResponseEntity.ok(followListResponse);
     }
 
-    @GetMapping("/following-list/{userId}")
+    @GetMapping("/following-list/user/{userId}")
     public ResponseEntity<FollowListResponse> getFollowingList(
             @PathVariable("userId") Long userId,
-            AuthInfo authInfo
+            @Nullable AuthInfo authInfo
     ) {
-        FollowListResponse followListResponse = relationshipQueryService.getFollowingList(userId, authInfo.getId());
+        FollowListResponse followListResponse = relationshipQueryService.getFollowingList(userId, authInfo);
         return ResponseEntity.ok(followListResponse);
     }
 }
