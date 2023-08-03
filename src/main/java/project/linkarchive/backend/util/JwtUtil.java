@@ -201,12 +201,8 @@ public class JwtUtil {
                     .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
 
             String newAccessToken = createAccessToken(user);
-            String newRefreshToken = createRefreshToken(user);
 
-            RefreshToken refreshedToken = RefreshToken.build(newRefreshToken, savedRefreshToken.getAgent(), user);
-            savedRefreshToken.updateRefreshToken(refreshedToken);
-
-            return new TokenResponse(newAccessToken, newRefreshToken);
+            return new TokenResponse(newAccessToken);
 
         } else {
             throw new UnauthorizedException(INVALID_TOKEN);

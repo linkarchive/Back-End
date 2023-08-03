@@ -6,10 +6,8 @@ import lombok.Getter;
 public class TokenResponse {
 
     String accessToken;
-    String refreshToken;
 
-    public TokenResponse(String accessToken, String refreshToken) {
+    public TokenResponse(String accessToken) {
         this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
     }
 }
