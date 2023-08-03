@@ -20,10 +20,9 @@ import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.advice.exception.custom.UnauthorizedException;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
-import project.linkarchive.backend.auth.response.AccessTokenResponse;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.OauthToken;
-import project.linkarchive.backend.auth.response.RefreshTokenResponse;
+import project.linkarchive.backend.auth.response.TokenResponse;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 
@@ -185,7 +184,7 @@ public class JwtUtil {
         return userId;
     }
 
-    public AccessTokenResponse publishAccessToken(String accessToken, String refreshToken) {
+    public TokenResponse publishToken(String accessToken, String refreshToken) {
         String getAccessToken = getTokenWithoutBearer(accessToken);
         String getRefreshToken = getTokenWithoutBearer(refreshToken);
         RefreshToken savedRefreshToken;
@@ -200,40 +199,19 @@ public class JwtUtil {
         if (isValidatedToken(getRefreshToken)) {
             User user = userRepository.findById(savedRefreshToken.getUser().getId())
                     .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-            String newAccessToken = createAccessToken(user);
 
-            return new AccessTokenResponse(newAccessToken);
-        } else {
-            throw new UnauthorizedException(INVALID_TOKEN);
-        }
-
-    }
-
-    public RefreshTokenResponse publishRefreshToken(String refreshToken) {
-        String getRefreshToken = getTokenWithoutBearer(refreshToken);
-
-        RefreshToken findRefreshToken = refreshTokenRepository.findByRefreshToken(getRefreshToken)
-                .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
-        User user;
-
-        if (isValidatedToken(getRefreshToken)) {
-            user = userRepository.findById(findRefreshToken.getUser().getId())
-                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-        } else {
-            throw new UnauthorizedException(INVALID_TOKEN);
-        }
-
-        if (refreshTokenRepository.existsByUserIdAndAgent(findRefreshToken.getUser().getId(), findRefreshToken.getAgent())) {
             String newAccessToken = createAccessToken(user);
             String newRefreshToken = createRefreshToken(user);
 
-            RefreshToken refreshedToken = RefreshToken.build(newRefreshToken, findRefreshToken.getAgent(), user);
-            findRefreshToken.updateRefreshToken(refreshedToken);
+            RefreshToken refreshedToken = RefreshToken.build(newRefreshToken, savedRefreshToken.getAgent(), user);
+            savedRefreshToken.updateRefreshToken(refreshedToken);
 
-            return new RefreshTokenResponse(newAccessToken, newRefreshToken);
+            return new TokenResponse(newAccessToken, newRefreshToken);
+
         } else {
-            throw new NotFoundException(NOT_FOUND_TOKEN);
+            throw new UnauthorizedException(INVALID_TOKEN);
         }
+
     }
 
     public boolean isValidatedToken(String token) {

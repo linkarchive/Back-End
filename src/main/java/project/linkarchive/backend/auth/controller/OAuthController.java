@@ -3,9 +3,8 @@ package project.linkarchive.backend.auth.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.linkarchive.backend.auth.request.AccessTokenRequest;
-import project.linkarchive.backend.auth.response.AccessTokenResponse;
 import project.linkarchive.backend.auth.response.LoginResponse;
-import project.linkarchive.backend.auth.response.RefreshTokenResponse;
+import project.linkarchive.backend.auth.response.TokenResponse;
 import project.linkarchive.backend.auth.service.OAuthService;
 
 @RestController
@@ -38,19 +37,12 @@ public class OAuthController {
         return ResponseEntity.ok().body(loginResponse);
     }
 
-    @PostMapping("/publish/access-token")
-    public AccessTokenResponse publishAccessToken(
+    @PostMapping("/publish/token")
+    public TokenResponse publishToken(
             @RequestHeader("Authorization") String refreshToken,
             @RequestBody AccessTokenRequest accessTokenRequest
     ) {
-        return oAuthService.publishAccessToken(accessTokenRequest.getAccessToken(), refreshToken);
-    }
-
-    @PostMapping("/publish/refresh-token")
-    public RefreshTokenResponse publishRefreshToken(
-            @RequestHeader("Authorization") String refreshToken
-    ) {
-        return oAuthService.publishRefreshToken(refreshToken);
+        return oAuthService.publishToken(accessTokenRequest.getAccessToken(), refreshToken);
     }
 
 }

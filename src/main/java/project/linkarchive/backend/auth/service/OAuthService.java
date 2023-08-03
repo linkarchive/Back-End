@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
-import project.linkarchive.backend.auth.response.*;
+import project.linkarchive.backend.auth.response.KakaoProfile;
+import project.linkarchive.backend.auth.response.LoginResponse;
+import project.linkarchive.backend.auth.response.OauthToken;
+import project.linkarchive.backend.auth.response.TokenResponse;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.user.domain.User;
@@ -95,12 +98,8 @@ public class OAuthService {
         return new LoginResponse(findUser, accessToken, refreshToken);
     }
 
-    public AccessTokenResponse publishAccessToken(String accessToken, String refreshToken) {
-        return jwtUtil.publishAccessToken(accessToken, refreshToken);
-    }
-
-    public RefreshTokenResponse publishRefreshToken(String refreshToken) {
-        return jwtUtil.publishRefreshToken(refreshToken);
+    public TokenResponse publishToken(String accessToken, String refreshToken) {
+        return jwtUtil.publishToken(accessToken, refreshToken);
     }
 
 }
