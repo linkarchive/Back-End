@@ -7,6 +7,7 @@ import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.relationship.repository.RelationshipRepository;
 import project.linkarchive.backend.relationship.response.FollowListResponse;
 import project.linkarchive.backend.relationship.response.FollowResponse;
+import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.service.UserQueryService;
@@ -28,7 +29,7 @@ public class RelationshipQueryService {
         this.userQueryService = userQueryService;
     }
 
-    public FollowListResponse getFollowerList(Long userId, Long loginUserId) {
+    public FollowListResponse getFollowerList(Long userId, AuthInfo authInfo) {
         findUserById(userId);
 
         List<User> followerList = relationshipRepository.findFollowerIdByFolloweeId(userId);
@@ -38,10 +39,10 @@ public class RelationshipQueryService {
             return new FollowListResponse(followResponses);
         }
 
-        return getFollowResponses(loginUserId, followerList);
+        return getFollowResponses(authInfo, followerList);
     }
 
-    public FollowListResponse getFollowingList(Long userId, Long loginUserId) {
+    public FollowListResponse getFollowingList(Long userId, AuthInfo authInfo) {
         findUserById(userId);
 
         List<User> followingList = relationshipRepository.findFolloweeIdByFollowerId(userId);
@@ -51,18 +52,22 @@ public class RelationshipQueryService {
             return new FollowListResponse(followResponses);
         }
 
-        return getFollowResponses(loginUserId, followingList);
+        return getFollowResponses(authInfo, followingList);
     }
 
     private void findUserById(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ExceptionCodeConst.NOT_FOUND_USER));
     }
 
-    private FollowListResponse getFollowResponses(Long loginUserId, List<User> followList) {
+    private FollowListResponse getFollowResponses(AuthInfo authInfo, List<User> followList) {
+        Long loginUserId = authInfo != null ? authInfo.getId() : null;
+
         List<FollowResponse> followResponses = new ArrayList<>();
         followList.forEach(user -> {
             String profileImageUrl = userQueryService.generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
-            Boolean isFollow = isFollowing(user.getId(), loginUserId);
+
+            Boolean isFollow = loginUserId != null && isFollowing(user.getId(), loginUserId);
+
             FollowResponse response = new FollowResponse(user, profileImageUrl, isFollow);
             followResponses.add(response);
         });
