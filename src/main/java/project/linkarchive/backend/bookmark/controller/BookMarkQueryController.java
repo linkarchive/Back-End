@@ -24,24 +24,24 @@ public class BookMarkQueryController {
 
     @GetMapping("/mark/links/user")
     public ResponseEntity<UserMarkListResponse> getMyMarkLinkList(
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "markId", required = false) Long lastMarkId,
+            @RequestParam(value = "tagId", required = false) Long tagId,
+            @RequestParam(value = "markId", required = false) Long markId,
             @PageableDefault Pageable pageable,
             AuthInfo authInfo
     ) {
-        UserMarkListResponse userMarkListResponse = bookMarkQueryService.getMyMarkedLinkList(authInfo.getId(), lastMarkId, pageable, tag);
+        UserMarkListResponse userMarkListResponse = bookMarkQueryService.getMyMarkedLinkList(tagId, markId, pageable, authInfo.getId());
         return ResponseEntity.ok(userMarkListResponse);
     }
 
     @GetMapping("/mark/links/user/{userId}")
-    public ResponseEntity<UserMarkListResponse> getAuthenticatedUserMarkedLinkList(
+    public ResponseEntity<UserMarkListResponse> getUserMarkedLinkList(
             @PathVariable("userId") Long userId,
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "markId", required = false) Long lastMarkId,
+            @RequestParam(value = "tagId", required = false) Long tagId,
+            @RequestParam(value = "markId", required = false) Long markId,
             @PageableDefault Pageable pageable,
             @Nullable AuthInfo authInfo
     ) {
-        UserMarkListResponse userMarkListResponse = bookMarkQueryService.getUserMarkedLinkList(userId, lastMarkId, pageable, authInfo, tag);
+        UserMarkListResponse userMarkListResponse = bookMarkQueryService.getUserMarkedLinkList(userId, tagId, markId, pageable, authInfo);
         return ResponseEntity.ok(userMarkListResponse);
     }
 

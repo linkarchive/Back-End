@@ -23,7 +23,7 @@ public class BookMarkRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<MarkResponse> getMyMarkLinkList(Long userId, Long lastMarkId, Pageable pageable, String tag) {
+    public List<MarkResponse> getMyMarkLinkList(Long tagId, Long markId, Pageable pageable, Long userId) {
         return queryFactory
                 .select(new QMarkResponse(
                         bookMark.id,
@@ -41,15 +41,15 @@ public class BookMarkRepositoryImpl {
                 .where(
                         bookMark.user.id.eq(userId),
                         bookMark.link.linkStatus.eq(ACTIVE),
-                        ltLinkId(lastMarkId),
-                        containTag(tag)
+                        ltLinkId(markId),
+                        containTag(tagId)
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(bookMark.id.desc())
                 .fetch();
     }
 
-    public List<MarkResponse> getUserMarkLinkList(Long userId, Long lastMarkId, Pageable pageable, String tag) {
+    public List<MarkResponse> getUserMarkLinkList(Long userId, Long tagId, Long markId, Pageable pageable) {
         return queryFactory
                 .select(new QMarkResponse(
                         bookMark.id,
@@ -67,20 +67,20 @@ public class BookMarkRepositoryImpl {
                 .where(
                         bookMark.user.id.eq(userId),
                         bookMark.link.linkStatus.eq(ACTIVE),
-                        ltLinkId(lastMarkId),
-                        containTag(tag)
+                        ltLinkId(markId),
+                        containTag(tagId)
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(bookMark.id.desc())
                 .fetch();
     }
 
-    private BooleanExpression ltLinkId(Long lastMarkId) {
-        return lastMarkId != null ? bookMark.id.lt(lastMarkId) : null;
+    private BooleanExpression ltLinkId(Long markId) {
+        return markId != null ? bookMark.id.lt(markId) : null;
     }
 
-    private BooleanExpression containTag(String tag) {
-        return tag != null ? linkHashTag.hashTag.tag.eq(tag) : null;
+    private BooleanExpression containTag(Long tagId) {
+        return tagId != null ? linkHashTag.hashTag.id.eq(tagId) : null;
     }
 
 }

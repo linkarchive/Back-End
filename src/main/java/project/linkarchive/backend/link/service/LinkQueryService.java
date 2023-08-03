@@ -66,10 +66,10 @@ public class LinkQueryService {
         this.linkRepositoryImpl = linkRepositoryImpl;
     }
 
-    public UserLinkListResponse getMyLinkList(Long userId, Pageable pageable, Long lastLinkId, String tag) {
-        getUserById(userId);
+    public UserLinkListResponse getMyLinkList(Long tagId, Long linkId, Pageable pageable, Long loginUserId) {
+        getUserById(loginUserId);
 
-        List<LinkResponse> linkResponseList = linkRepositoryImpl.getMyLinkList(userId, pageable, lastLinkId, tag);
+        List<LinkResponse> linkResponseList = linkRepositoryImpl.getMyLinkList(tagId, linkId, pageable, loginUserId);
 
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
@@ -78,8 +78,8 @@ public class LinkQueryService {
                             .map(TagResponse::create)
                             .collect(Collectors.toList());
 
-                    Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), userId);
-                    Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), userId);
+                    Boolean isRead = isLinkReadRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId);
+                    Boolean isMark = bookMarkRepository.existsByLinkIdAndUserId(linkResponse.getLinkId(), loginUserId);
 
                     return UserLinkResponse.create(linkResponse, isRead, isMark, tagList);
                 }).collect(Collectors.toList());
@@ -89,12 +89,12 @@ public class LinkQueryService {
         return new UserLinkListResponse(userLinkResponse, hasNext);
     }
 
-    public UserLinkListResponse getUserLinkList(Long userId, Pageable pageable, Long lastLinkId, AuthInfo authInfo, String tag) {
+    public UserLinkListResponse getUserLinkList(Long userId, Long tagId, Long linkId, Pageable pageable, AuthInfo authInfo) {
         getUserById(userId);
 
         Long loginUserId = authInfo != null ? authInfo.getId() : null;
 
-        List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(userId, pageable, lastLinkId, tag);
+        List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(userId, tagId, linkId, pageable);
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
                     List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
@@ -113,8 +113,8 @@ public class LinkQueryService {
         return new UserLinkListResponse(userLinkResponse, hasNext);
     }
 
-    public UserLinkArchiveResponse getLinkArchive(Pageable pageable, Long lastLinkId, AuthInfo authInfo, String tag) {
-        List<ArchiveResponse> archiveResponseList = linkRepositoryImpl.getLinkArchive(pageable, lastLinkId, tag);
+    public UserLinkArchiveResponse getLinkArchive(Long tagId, Long linkId, Pageable pageable, AuthInfo authInfo) {
+        List<ArchiveResponse> archiveResponseList = linkRepositoryImpl.getLinkArchive(tagId, linkId, pageable);
 
         Long loginUserId = authInfo != null ? authInfo.getId() : null;
 
@@ -138,8 +138,8 @@ public class LinkQueryService {
         return new UserLinkArchiveResponse(userArchiveResponseList, hasNext);
     }
 
-    public UserTrashLinkListResponse getTrashLinkList(String tag, Long lastLinkId, Pageable pageable, Long loginUserId) {
-        List<TrashLinkResponse> trashLinkResponseList = linkRepositoryImpl.getTrashLinkList(tag, lastLinkId, pageable, loginUserId);
+    public UserTrashLinkListResponse getTrashLinkList(Long tagId, Long linkId, Pageable pageable, Long loginUserId) {
+        List<TrashLinkResponse> trashLinkResponseList = linkRepositoryImpl.getTrashLinkList(tagId, linkId, pageable, loginUserId);
 
         List<TrashLinkListResponse> trashLinkListResponseList = trashLinkResponseList.stream()
                 .map(trashLinkResponse -> {

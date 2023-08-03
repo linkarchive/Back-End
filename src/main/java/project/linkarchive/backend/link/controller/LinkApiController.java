@@ -30,9 +30,9 @@ public class LinkApiController {
         return ResponseEntity.status(CREATED).body(new SuccessResponse(LINK_CREATE));
     }
 
-    @PatchMapping("/link/{id}")
+    @PatchMapping("/link/{linkId}")
     public ResponseEntity<SuccessResponse> delete(
-            @PathVariable("id") Long linkId,
+            @PathVariable("linkId") Long linkId,
             AuthInfo authInfo
     ) {
         linkApiService.delete(linkId, authInfo.getId());
