@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.user.response.MyProfileResponse;
+import project.linkarchive.backend.user.response.UserProfileResponse;
 import project.linkarchive.backend.util.service.UserSetUpService;
 
 import java.net.MalformedURLException;
@@ -24,6 +25,7 @@ class UserQueryServiceTest extends UserSetUpService {
     void setUp() {
         setUpProfileImage();
         setUpUser();
+        setUpOauthInfo();
     }
 
     @DisplayName("유저 Query Service - getMyProfile")
@@ -53,14 +55,16 @@ class UserQueryServiceTest extends UserSetUpService {
     @DisplayName("유저 Query Service - getUserProfile")
     @Test
     void testGetUserProfile() throws MalformedURLException {
-        when(userRepository.findByNickname(EMPTY))
+        when(userRepository.findById(USER_ID))
                 .thenReturn(Optional.of(user));
         when(s3Uploader.generatePresignedProfileImageUrl(
                 anyString(),
                 eq(EXPIRATION_TIME_MINUTE))
         ).thenReturn(new URL(PROFILE_IMAGE_URL));
+        when(relationshipRepository.existsByFolloweeIdAndFollowerId(user.getId(), authInfo.getId()))
+                .thenReturn(true);
 
-        MyProfileResponse response = userQueryService.getUserProfile(user.getNickname());
+        UserProfileResponse response = userQueryService.getUserProfile(user.getId(), authInfo);
 
         validateResponse(response);
     }
@@ -68,13 +72,19 @@ class UserQueryServiceTest extends UserSetUpService {
     @DisplayName("유저 Query Service - getUserProfile - User Not Found")
     @Test
     void testGetUserProfile_UserNotFound() {
-        when(userRepository.findByNickname(EMPTY))
+        when(userRepository.findById(USER_ID))
                 .thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> userQueryService.getUserProfile(user.getNickname()));
+        assertThrows(NotFoundException.class, () -> userQueryService.getUserProfile(user.getId(), authInfo));
     }
 
     private void validateResponse(MyProfileResponse response) {
+        assertEquals(user.getId(), response.getId());
+        assertEquals(user.getNickname(), response.getNickname());
+        assertEquals(PROFILE_IMAGE_URL, response.getProfileImageFileName());
+    }
+
+    private void validateResponse(UserProfileResponse response) {
         assertEquals(user.getId(), response.getId());
         assertEquals(user.getNickname(), response.getNickname());
         assertEquals(PROFILE_IMAGE_URL, response.getProfileImageFileName());

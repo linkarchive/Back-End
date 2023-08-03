@@ -27,12 +27,12 @@ public class UserQueryController {
         return ResponseEntity.ok(myProfileResponse);
     }
 
-    @GetMapping("/user/{nickname}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<UserProfileResponse> getUserProfile(
-            @PathVariable("nickname") String nickname,
+            @PathVariable("userId") Long userId,
             @Nullable AuthInfo authInfo
     ) {
-        UserProfileResponse userProfileResponse = userQueryService.getUserProfile(nickname, authInfo);
+        UserProfileResponse userProfileResponse = userQueryService.getUserProfile(userId, authInfo);
         return ResponseEntity.ok(userProfileResponse);
     }
 

@@ -55,7 +55,7 @@ public class LinkRepositoryImpl {
                 .fetch();
     }
 
-    public List<LinkResponse> getUserLinkList(String nickname, Pageable pageable, Long lastLinkLid, String tag) {
+    public List<LinkResponse> getUserLinkList(Long userId, Pageable pageable, Long lastLinkLid, String tag) {
         return queryFactory
                 .select(new QLinkResponse(
                         link.id,
@@ -71,7 +71,7 @@ public class LinkRepositoryImpl {
                 .distinct()
                 .leftJoin(link.linkHashTagList, linkHashTag)
                 .where(
-                        link.user.nickname.eq(nickname),
+                        link.user.id.eq(userId),
                         link.linkStatus.eq(ACTIVE),
                         ltUrlId(lastLinkLid),
                         containTag(tag)

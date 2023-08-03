@@ -2,7 +2,6 @@ package project.linkarchive.backend.hashtag.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.linkarchive.backend.advice.exception.custom.ExceededException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.hashtag.repository.UserHashTagRepositoryImpl;
 import project.linkarchive.backend.hashtag.response.TagListResponse;
@@ -11,8 +10,6 @@ import project.linkarchive.backend.user.repository.UserRepository;
 
 import java.util.List;
 
-import static project.linkarchive.backend.advice.data.DataConstants.MAX_SIZE;
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.EXCEEDED_TAG_SIZE;
 import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 @Service
@@ -27,32 +24,25 @@ public class HashTagQueryService {
         this.userHashTagRepositoryImpl = userHashTagRepositoryImpl;
     }
 
-    public TagListResponse getUserTagList(String nickname) {
-        getUserById(nickname);
+    public TagListResponse getUserTagList(Long userId) {
+        getUserById(userId);
 
-        List<TagResponse> tagList = userHashTagRepositoryImpl.getUserTagList(nickname);
+        List<TagResponse> tagList = userHashTagRepositoryImpl.getUserTagList(userId);
 
         return new TagListResponse(tagList);
     }
 
-    public TagListResponse getLimitedTagList(String nickname, int size) {
-        getUserById(nickname);
-        checkSize(size);
+    public TagListResponse getUserTagList10(Long userId) {
+        getUserById(userId);
 
-        List<TagResponse> tagResponses = userHashTagRepositoryImpl.getLimitedTagList(nickname, size);
+        List<TagResponse> tagResponses = userHashTagRepositoryImpl.getUserTagList10(userId);
 
         return new TagListResponse(tagResponses);
     }
 
-    private void getUserById(String nickname) {
-        userRepository.findByNickname(nickname)
+    private void getUserById(Long userId) {
+        userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-    }
-
-    private void checkSize(int size) {
-        if (size > MAX_SIZE) {
-            throw new ExceededException(EXCEEDED_TAG_SIZE);
-        }
     }
 
 }

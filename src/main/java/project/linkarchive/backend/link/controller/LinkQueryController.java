@@ -86,15 +86,15 @@ public class LinkQueryController {
         return ResponseEntity.ok(userLinkListResponse);
     }
 
-    @GetMapping("/links/user/{nickname}")
+    @GetMapping("/links/user/{userId}")
     public ResponseEntity<UserLinkListResponse> getUserLinkList(
-            @PathVariable("nickname") String nickname,
+            @PathVariable("userId") Long userId,
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "linkId", required = false) Long lastLinkId,
             @PageableDefault Pageable pageable,
             @Nullable AuthInfo authInfo
     ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(nickname, pageable, lastLinkId, authInfo, tag);
+        UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(userId, pageable, lastLinkId, authInfo, tag);
         return ResponseEntity.ok(userLinkListResponse);
     }
 
@@ -120,11 +120,11 @@ public class LinkQueryController {
         return ResponseEntity.ok(userTrashLinkListResponse);
     }
 
-    @GetMapping("/links/tags/user/{nickname}")
+    @GetMapping("/links/tags/user/{userId}")
     public ResponseEntity<TagListResponse> getLinkTagList(
-            @PathVariable("nickname") String nickname
+            @PathVariable("userId") Long userId
     ) {
-        TagListResponse tagList = linkQueryService.getLinkTagList(nickname);
+        TagListResponse tagList = linkQueryService.getLinkTagList(userId);
         return ResponseEntity.ok(tagList);
     }
 

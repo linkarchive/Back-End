@@ -49,7 +49,7 @@ public class BookMarkRepositoryImpl {
                 .fetch();
     }
 
-    public List<MarkResponse> getUserMarkLinkList(String nickname, Long lastMarkId, Pageable pageable, String tag) {
+    public List<MarkResponse> getUserMarkLinkList(Long userId, Long lastMarkId, Pageable pageable, String tag) {
         return queryFactory
                 .select(new QMarkResponse(
                         bookMark.id,
@@ -65,7 +65,7 @@ public class BookMarkRepositoryImpl {
                 .distinct()
                 .leftJoin(bookMark.link.linkHashTagList, linkHashTag)
                 .where(
-                        bookMark.user.nickname.eq(nickname),
+                        bookMark.user.id.eq(userId),
                         bookMark.link.linkStatus.eq(ACTIVE),
                         ltLinkId(lastMarkId),
                         containTag(tag)

@@ -7,6 +7,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 import project.linkarchive.backend.badword.BadWordFiltering;
 import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
+import project.linkarchive.backend.relationship.repository.RelationshipRepository;
 import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.service.UserApiService;
@@ -20,7 +21,7 @@ public class UserSetUpService extends SetUpMockData {
     protected UserRepository userRepository;
 
     @Mock
-    protected ProfileImageRepository profileImageRepository;
+    protected RelationshipRepository relationshipRepository;
 
     @Mock
     protected MultipartFile multipartFile;
