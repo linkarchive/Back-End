@@ -184,7 +184,7 @@ public class JwtUtil {
         return userId;
     }
 
-    public AccessTokenResponse publishToken(String accessToken, String refreshToken) {
+    public AccessTokenResponse publishAccessToken(String accessToken, String refreshToken) {
         String getAccessToken = getTokenWithoutBearer(accessToken);
         String getRefreshToken = getTokenWithoutBearer(refreshToken);
         RefreshToken savedRefreshToken;

@@ -92,8 +92,8 @@ public class OAuthService {
         return new LoginResponse(findUser, newAccessToken, newRefreshToken);
     }
 
-    public AccessTokenResponse publishToken(String accessToken, String refreshToken) {
-        return jwtUtil.publishToken(accessToken, refreshToken);
+    public AccessTokenResponse publishAccessToken(String accessToken, String refreshToken) {
+        return jwtUtil.publishAccessToken(accessToken, refreshToken);
     }
 
 }

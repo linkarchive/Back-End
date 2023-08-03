@@ -37,12 +37,12 @@ public class OAuthController {
         return ResponseEntity.ok().body(loginResponse);
     }
 
-    @PostMapping("/publish/token")
-    public AccessTokenResponse publishToken(
+    @PostMapping("/publish/access-token")
+    public AccessTokenResponse publishAccessToken(
             @RequestHeader("Authorization") String refreshToken,
             @RequestBody AccessTokenRequest accessTokenRequest
     ) {
-        return oAuthService.publishToken(accessTokenRequest.getAccessToken(), refreshToken);
+        return oAuthService.publishAccessToken(accessTokenRequest.getAccessToken(), refreshToken);
     }
 
 }
