@@ -61,7 +61,7 @@ public class Link extends TimeEntity {
         this.description = description;
         this.thumbnail = thumbnail;
         this.bookMarkCount = bookMarkCount;
-        this.linkStatus = ACTIVE;
+        this.linkStatus = linkStatus.ACTIVE;
         this.user = user;
     }
 
