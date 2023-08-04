@@ -21,6 +21,7 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
 
     Optional<Link> findByIdAndUserId(Long linkId, Long userId);
 
-    List<Link> findByUserId(Long userId);
+    @Query("SELECT l FROM Link l WHERE l.status = 'ACTIVE' AND l.userId = :userId")
+    List<Link> findByUserId(@Param("userId") Long userId);
 
 }

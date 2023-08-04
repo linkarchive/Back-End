@@ -5,6 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.ExceededException;
 import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.bookmark.domain.BookMark;
+import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
@@ -32,18 +34,20 @@ public class LinkApiService {
     private final LinkHashTagRepository linkHashTagRepository;
     private final UserHashTagRepository userHashTagRepository;
     private final LinkRepository linkRepository;
+    private final BookMarkRepository bookMarkRepository;
 
     public LinkApiService(UserRepository userRepository,
                           HashTagRepository hashTagRepository,
                           LinkHashTagRepository linkHashTagRepository,
                           UserHashTagRepository userHashTagRepository,
-                          LinkRepository linkRepository
-    ) {
+                          LinkRepository linkRepository,
+                          BookMarkRepository bookMarkRepository) {
         this.userRepository = userRepository;
         this.hashTagRepository = hashTagRepository;
         this.linkHashTagRepository = linkHashTagRepository;
         this.userHashTagRepository = userHashTagRepository;
         this.linkRepository = linkRepository;
+        this.bookMarkRepository = bookMarkRepository;
     }
 
     public void create(CreateLinkRequest request, Long userId) {
@@ -64,6 +68,10 @@ public class LinkApiService {
 
         Link link = linkRepository.findByIdAndUserId(linkId, userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_LINK));
+
+        BookMark bookMark = bookMarkRepository.findByLinkIdAndUserId(link.getId(), userId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_BOOKMARK));
+        bookMarkRepository.delete(bookMark);
 
         link.delete();
     }
