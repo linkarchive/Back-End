@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import project.linkarchive.backend.link.domain.Link;
+import project.linkarchive.backend.user.domain.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
 
     Optional<Link> findByIdAndUserId(Long linkId, Long userId);
 
-    List<Link> findByUserId(Long userId);
+    @Query("SELECT l FROM Link l WHERE l.linkStatus = 'ACTIVE' AND l.user = :user")
+    List<Link> findByUser(@Param("user") User user);
 
 }

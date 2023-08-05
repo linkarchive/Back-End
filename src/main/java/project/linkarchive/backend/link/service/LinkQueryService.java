@@ -159,7 +159,7 @@ public class LinkQueryService {
     public TagListResponse getLinkTagList(Long userId) {
         User user = findUserById(userId);
 
-        List<Link> linkList = linkRepository.findByUserId(user.getId());
+        List<Link> linkList = linkRepository.findByUser(user);
         Map<String, Long> tagIdMap = new HashMap<>();
         Map<String, Integer> tagCountMap = new HashMap<>();
 
