@@ -3,9 +3,15 @@ package project.linkarchive.backend.user.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.s3.S3Uploader;
+import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.response.ProfileResponse;
-import project.linkarchive.backend.util.service.UserSetUpService;
+import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -18,7 +24,17 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-class UserQueryServiceTest extends UserSetUpService {
+@ExtendWith(MockitoExtension.class)
+class UserQueryServiceTest extends SetUpMockData {
+
+    @Mock
+    protected UserRepository userRepository;
+
+    @Mock
+    protected S3Uploader s3Uploader;
+
+    @InjectMocks
+    protected UserQueryService userQueryService;
 
     @BeforeEach
     void setUp() {
@@ -47,7 +63,9 @@ class UserQueryServiceTest extends UserSetUpService {
         when(userRepository.findById(USER_ID))
                 .thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> userQueryService.getMyProfile(user.getId()));
+        assertThrows(
+                NotFoundException.class, () -> userQueryService.getMyProfile(user.getId())
+        );
     }
 
     @DisplayName("유저 Query Service - getUserProfile")
@@ -57,8 +75,8 @@ class UserQueryServiceTest extends UserSetUpService {
                 .thenReturn(Optional.of(user));
         when(s3Uploader.generatePresignedProfileImageUrl(
                 anyString(),
-                eq(EXPIRATION_TIME_MINUTE))
-        ).thenReturn(new URL(PROFILE_IMAGE_URL));
+                eq(EXPIRATION_TIME_MINUTE)))
+                .thenReturn(new URL(PROFILE_IMAGE_URL));
 
         ProfileResponse response = userQueryService.getUserProfile(user.getNickname());
 
@@ -71,13 +89,18 @@ class UserQueryServiceTest extends UserSetUpService {
         when(userRepository.findByNickname(EMPTY))
                 .thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> userQueryService.getUserProfile(user.getNickname()));
+        assertThrows(
+                NotFoundException.class, () -> userQueryService.getUserProfile(user.getNickname())
+        );
     }
 
     private void validateResponse(ProfileResponse response) {
         assertEquals(user.getId(), response.getId());
         assertEquals(user.getNickname(), response.getNickname());
+        assertEquals(user.getIntroduce(), response.getIntroduce());
         assertEquals(PROFILE_IMAGE_URL, response.getProfileImageFileName());
+        assertEquals(user.getFollowerCount(), response.getFollowerCount());
+        assertEquals(user.getFollowingCount(), response.getFollowingCount());
     }
 
 }
