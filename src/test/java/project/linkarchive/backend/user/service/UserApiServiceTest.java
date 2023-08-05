@@ -3,10 +3,19 @@ package project.linkarchive.backend.user.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
+import project.linkarchive.backend.badword.BadWordFiltering;
+import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
+import project.linkarchive.backend.s3.S3Uploader;
+import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
-import project.linkarchive.backend.util.service.UserSetUpService;
+import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,10 +28,30 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-class UserApiServiceTest extends UserSetUpService {
+@ExtendWith(MockitoExtension.class)
+class UserApiServiceTest extends SetUpMockData {
+
+    @Mock
+    protected UserRepository userRepository;
+
+    @Mock
+    protected ProfileImageRepository profileImageRepository;
+
+    @Mock
+    protected MultipartFile multipartFile;
+
+    @Mock
+    protected BadWordFiltering badWordFiltering;
+
+    @Mock
+    protected S3Uploader s3Uploader;
+
+    @InjectMocks
+    protected UserApiService userApiService;
 
     @BeforeEach
     public void setUp() {
+        setUpProfileImage();
         setUpUser();
     }
 
@@ -30,9 +59,13 @@ class UserApiServiceTest extends UserSetUpService {
     @Test
     void testUpdateUserNickname() {
         setUpUpdateNicknameRequest();
-        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
-        when(userRepository.existsUserByNickname(NEW_NICKNAME)).thenReturn(false);
-        when(badWordFiltering.filter(eq(NEW_NICKNAME))).thenReturn(false);
+
+        when(userRepository.findById(USER_ID))
+                .thenReturn(Optional.of(user));
+        when(userRepository.existsUserByNickname(NEW_NICKNAME))
+                .thenReturn(false);
+        when(badWordFiltering.filter(eq(NEW_NICKNAME)))
+                .thenReturn(false);
 
         UpdateNicknameResponse response = userApiService.updateUserNickName(updateNicknameRequest, user.getId());
 
@@ -47,10 +80,15 @@ class UserApiServiceTest extends UserSetUpService {
     @Test
     void testUpdateUserProfile() {
         setUpUpdateProfileRequest();
-        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
-        when(userRepository.existsUserByNickname(NEW_NICKNAME)).thenReturn(false);
-        when(badWordFiltering.filter(eq(NEW_NICKNAME))).thenReturn(false);
-        when(badWordFiltering.filter(eq(NEW_INTRODUCE))).thenReturn(false);
+
+        when(userRepository.findById(USER_ID))
+                .thenReturn(Optional.of(user));
+        when(userRepository.existsUserByNickname(NEW_NICKNAME))
+                .thenReturn(false);
+        when(badWordFiltering.filter(eq(NEW_NICKNAME)))
+                .thenReturn(false);
+        when(badWordFiltering.filter(eq(NEW_INTRODUCE)))
+                .thenReturn(false);
 
         UpdateProfileResponse response = userApiService.updateUserProfile(updateProfileRequest, user.getId());
 
@@ -66,11 +104,14 @@ class UserApiServiceTest extends UserSetUpService {
     @DisplayName("유저 Api Service - updateProfileImage")
     @Test
     void testUpdateProfileImage() throws IOException {
-        setUpProfileImage();
         setUpMultipartFile();
-        when(profileImageRepository.findByUserId(USER_ID)).thenReturn(Optional.of(profileImage));
-        when(s3Uploader.upload(multipartFile)).thenReturn(STORED_FILE_NAME);
-        when(s3Uploader.generatePresignedProfileImageUrl(STORED_FILE_NAME, EXPIRATION_TIME_MINUTE)).thenReturn(new URL(PROFILE_IMAGE_URL));
+
+        when(profileImageRepository.findByUserId(USER_ID))
+                .thenReturn(Optional.of(profileImage));
+        when(s3Uploader.upload(multipartFile))
+                .thenReturn(STORED_FILE_NAME);
+        when(s3Uploader.generatePresignedProfileImageUrl(STORED_FILE_NAME, EXPIRATION_TIME_MINUTE))
+                .thenReturn(new URL(PROFILE_IMAGE_URL));
 
         ProfileImageResponse response = userApiService.updateProfileImage(multipartFile, user.getId());
 
@@ -84,7 +125,9 @@ class UserApiServiceTest extends UserSetUpService {
     @DisplayName("유저 Api Service - checkIfNicknameIsAvailable")
     @Test
     void testCheckIfNicknameIsAvailable() {
-        assertDoesNotThrow(() -> userApiService.checkIfNicknameIsAvailable(NEW_NICKNAME));
+        assertDoesNotThrow(
+                () -> userApiService.checkIfNicknameIsAvailable(NEW_NICKNAME)
+        );
     }
 
 }
