@@ -67,13 +67,13 @@ class UserTest extends SetUpMockData {
     @DisplayName("유저 생성자 - Domain")
     @Test
     void testUserConstructor() {
-        user = new User(USER_ID, SOCIAL_ID, EMAIL, EMPTY, EMPTY, FOLLOWER_COUNT, FOLLOWING_COUNT, profileImage);
+        user = new User(USER_ID, SOCIAL_ID, EMAIL, NICKNAME, INTRODUCE, FOLLOWER_COUNT, FOLLOWING_COUNT, profileImage);
 
         assertEquals(USER_ID, user.getId());
         assertEquals(SOCIAL_ID, user.getSocialId());
         assertEquals(EMAIL, user.getEmail());
-        assertEquals(EMPTY, user.getNickname());
-        assertEquals(EMPTY, user.getIntroduce());
+        assertEquals(NICKNAME, user.getNickname());
+        assertEquals(INTRODUCE, user.getIntroduce());
         assertEquals(FOLLOWER_COUNT, user.getFollowerCount());
         assertEquals(FOLLOWING_COUNT, user.getFollowingCount());
         assertEquals(profileImage, user.getProfileImage());
@@ -86,8 +86,8 @@ class UserTest extends SetUpMockData {
                 .id(USER_ID)
                 .socialId(SOCIAL_ID)
                 .email(EMAIL)
-                .nickname(EMPTY)
-                .introduce(EMPTY)
+                .nickname(NICKNAME)
+                .introduce(INTRODUCE)
                 .followerCount(FOLLOWER_COUNT)
                 .followingCount(FOLLOWING_COUNT)
                 .profileImage(profileImage)
@@ -96,8 +96,8 @@ class UserTest extends SetUpMockData {
         assertEquals(USER_ID, user.getId());
         assertEquals(SOCIAL_ID, user.getSocialId());
         assertEquals(EMAIL, user.getEmail());
-        assertEquals(EMPTY, user.getNickname());
-        assertEquals(EMPTY, user.getIntroduce());
+        assertEquals(NICKNAME, user.getNickname());
+        assertEquals(INTRODUCE, user.getIntroduce());
         assertEquals(FOLLOWER_COUNT, user.getFollowerCount());
         assertEquals(FOLLOWING_COUNT, user.getFollowingCount());
         assertEquals(profileImage, user.getProfileImage());
