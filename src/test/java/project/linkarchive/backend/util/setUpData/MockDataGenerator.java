@@ -20,6 +20,7 @@ import project.linkarchive.backend.link.response.linkarchive.ArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
+import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
@@ -54,6 +55,7 @@ public class MockDataGenerator {
     protected MyProfileResponse myProfileResponse;
     protected UpdateNicknameResponse updateNicknameResponse;
     protected UpdateProfileResponse updateProfileResponse;
+    protected ProfileImageResponse profileImageResponse;
     protected ArchiveResponse archiveResponse;
     protected UserArchiveResponse userArchiveResponse;
     protected UserLinkArchiveResponse userLinkArchiveResponse;

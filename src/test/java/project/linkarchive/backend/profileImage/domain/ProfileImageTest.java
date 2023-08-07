@@ -3,12 +3,13 @@ package project.linkarchive.backend.profileImage.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.linkarchive.backend.util.setUpData.ProfileImageSetUpData;
+import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-class ProfileImageTest extends ProfileImageSetUpData {
+class ProfileImageTest extends SetUpMockData {
 
     @BeforeEach
     public void setup() {
