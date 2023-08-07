@@ -16,7 +16,7 @@ jobs:
   build-ci-only:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-20.04
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -51,7 +51,7 @@ jobs:
   build-and-deploy:
     if: github.event_name == 'push'
     runs-on: ubuntu-20.04
-    
+
     steps:
       - name: dev 브랜치로 이동
         uses: actions/checkout@v3
