@@ -15,15 +15,15 @@ import static project.linkarchive.backend.advice.success.SuccessCodeConst.FOLLOW
 import static project.linkarchive.backend.advice.success.SuccessCodeConst.UNFOLLOW_USER;
 
 @RestController
-public class RelationApiController {
+public class RelationshipApiController {
 
     private final RelationshipApiService relationshipApiService;
 
-    public RelationApiController(RelationshipApiService relationshipApiService) {
+    public RelationshipApiController(RelationshipApiService relationshipApiService) {
         this.relationshipApiService = relationshipApiService;
     }
 
-    @PostMapping("/follow/{followeeId}")
+    @PostMapping("/follow/user/{followeeId}")
     public ResponseEntity<SuccessResponse> followUser(
             @PathVariable(value = "followeeId") Long followeeId,
             AuthInfo authInfo
@@ -32,7 +32,7 @@ public class RelationApiController {
         return ResponseEntity.status(CREATED).body(new SuccessResponse(FOLLOW_USER));
     }
 
-    @DeleteMapping("/unfollow/{followeeId}")
+    @DeleteMapping("/unfollow/user/{followeeId}")
     public ResponseEntity<SuccessResponse> unfollowUser(
             @PathVariable(value = "followeeId") Long followeeId,
             AuthInfo authInfo

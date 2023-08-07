@@ -4,10 +4,11 @@ import org.springframework.mock.web.MockMultipartFile;
 import project.linkarchive.backend.auth.response.KakaoAccount;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
+import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
-import project.linkarchive.backend.user.response.ProfileResponse;
+import project.linkarchive.backend.user.response.MyProfileResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
@@ -39,6 +40,10 @@ public class SetUpMockData extends MockDataGenerator {
         kakaoProfile = new KakaoProfile(SOCIAL_ID, new KakaoAccount(EMAIL));
     }
 
+    protected void setUpOauthInfo() {
+        authInfo = new AuthInfo(USER_ID);
+    }
+
     protected void setUpMultipartFile() {
         multipartFile = new MockMultipartFile(PROFILE_IMAGE_URL, MULTIPART_FILE_NAME, CONTENT_TYPE, MULTIPART_FILE_DATA);
     }
@@ -52,7 +57,7 @@ public class SetUpMockData extends MockDataGenerator {
     }
 
     protected void setUpProfileResponse() {
-        profileResponse = new ProfileResponse(user, PRE_SIGNED_URL);
+        myProfileResponse = new MyProfileResponse(user, PRE_SIGNED_URL);
     }
 
     protected void setUpUpdateNicknameResponse() {

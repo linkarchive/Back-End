@@ -6,8 +6,10 @@ import java.util.Set;
 
 public class BadWordList {
 
-    public static final Set<String> badWords = new HashSet<>(Arrays.asList(
-            "시발", "씨발"
-    ));
+    public static final Set<String> badWords = new HashSet<>(
+            Arrays.asList(
+                    "시발", "씨발"
+            )
+    );
 
 }

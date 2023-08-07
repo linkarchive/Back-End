@@ -8,6 +8,7 @@ import project.linkarchive.backend.hashtag.response.TagResponse;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static project.linkarchive.backend.advice.data.DataConstants.TAG_SIZE;
 import static project.linkarchive.backend.hashtag.domain.QUserHashTag.userHashTag;
 
 @Repository
@@ -19,28 +20,28 @@ public class UserHashTagRepositoryImpl {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<TagResponse> getUserTagList(String nickname) {
+    public List<TagResponse> getUserTagList(Long userId) {
         return queryFactory
                 .select(new QTagResponse(
                         userHashTag.hashTag.id,
                         userHashTag.hashTag.tag
                 ))
                 .from(userHashTag)
-                .where(userHashTag.user.nickname.eq(nickname))
+                .where(userHashTag.user.id.eq(userId))
                 .orderBy(userHashTag.usageCount.desc())
                 .fetch();
     }
 
-    public List<TagResponse> getLimitedTagList(String nickname, int size) {
+    public List<TagResponse> getUserTagList10(Long userId) {
         return queryFactory
                 .select(new QTagResponse(
                         userHashTag.hashTag.id,
                         userHashTag.hashTag.tag
                 ))
                 .from(userHashTag)
-                .where(userHashTag.user.nickname.eq(nickname))
+                .where(userHashTag.user.id.eq(userId))
                 .orderBy(userHashTag.usageCount.desc())
-                .limit(size)
+                .limit(TAG_SIZE)
                 .fetch();
     }
 

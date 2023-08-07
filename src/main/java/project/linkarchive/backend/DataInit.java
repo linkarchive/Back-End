@@ -53,7 +53,6 @@
 //    @EventListener(ApplicationReadyEvent.class)
 //    public void initDB() {
 //        initUser();
-//        initProfileImage();
 //        initLink();
 //        initTag();
 //        initLinkTag();
@@ -63,6 +62,9 @@
 //    }
 //
 //    public void initUser() {
+//        ProfileImage profileImage = ProfileImage.create("profileImage");
+//        profileImageRepository.save(profileImage);
+//
 //        List<User> users = new ArrayList<>();
 //        for (int i = 1; i <= 10; i++) {
 //            User user = User.builder()
@@ -70,24 +72,12 @@
 //                    .email(i + "@google.com")
 //                    .nickname("nickname" + i)
 //                    .introduce(i + "입니다")
+//                    .profileImage(profileImage)
 //                    .build();
 //            users.add(user);
 //        }
 //
 //        userRepository.saveAll(users);
-//    }
-//
-//    public void initProfileImage() {
-//        List<ProfileImage> profileImages = new ArrayList<>();
-//        List<User> users = userRepository.findAll();
-//        for (int i = 0; i < users.size(); i++) {
-//            ProfileImage profileImage = ProfileImage.builder()
-//                    .profileImageFilename("profileImage" + (i + 1))
-//                    .user(users.get(i))
-//                    .build();
-//            profileImages.add(profileImage);
-//        }
-//        profileImageRepository.saveAll(profileImages);
 //    }
 //
 //    public void initLink() {
@@ -193,7 +183,7 @@
 //                        .link(link)
 //                        .build();
 //                bookMarks.add(bookMark);
-//            }
+//            } 
 //        }
 //        bookMarkRepository.saveAll(bookMarks);
 //    }

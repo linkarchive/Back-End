@@ -8,9 +8,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.relationship.repository.RelationshipRepository;
 import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.repository.UserRepository;
-import project.linkarchive.backend.user.response.ProfileResponse;
+import project.linkarchive.backend.user.response.MyProfileResponse;
+import project.linkarchive.backend.user.response.UserProfileResponse;
 import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
 import java.net.MalformedURLException;
@@ -31,6 +33,9 @@ class UserQueryServiceTest extends SetUpMockData {
     protected UserRepository userRepository;
 
     @Mock
+    protected RelationshipRepository relationshipRepository;
+
+    @Mock
     protected S3Uploader s3Uploader;
 
     @InjectMocks
@@ -40,6 +45,7 @@ class UserQueryServiceTest extends SetUpMockData {
     void setUp() {
         setUpProfileImage();
         setUpUser();
+        setUpOauthInfo();
     }
 
     @DisplayName("유저 Query Service - getMyProfile")
@@ -52,7 +58,7 @@ class UserQueryServiceTest extends SetUpMockData {
                 eq(EXPIRATION_TIME_MINUTE))
         ).thenReturn(new URL(PROFILE_IMAGE_URL));
 
-        ProfileResponse response = userQueryService.getMyProfile(user.getId());
+        MyProfileResponse response = userQueryService.getMyProfile(user.getId());
 
         validateResponse(response);
     }
@@ -71,14 +77,16 @@ class UserQueryServiceTest extends SetUpMockData {
     @DisplayName("유저 Query Service - getUserProfile")
     @Test
     void testGetUserProfile() throws MalformedURLException {
-        when(userRepository.findByNickname(EMPTY))
+        when(userRepository.findById(USER_ID))
                 .thenReturn(Optional.of(user));
         when(s3Uploader.generatePresignedProfileImageUrl(
                 anyString(),
-                eq(EXPIRATION_TIME_MINUTE)))
-                .thenReturn(new URL(PROFILE_IMAGE_URL));
+                eq(EXPIRATION_TIME_MINUTE))
+        ).thenReturn(new URL(PROFILE_IMAGE_URL));
+        when(relationshipRepository.existsByFolloweeIdAndFollowerId(user.getId(), authInfo.getId()))
+                .thenReturn(true);
 
-        ProfileResponse response = userQueryService.getUserProfile(user.getNickname());
+        UserProfileResponse response = userQueryService.getUserProfile(user.getId(), authInfo);
 
         validateResponse(response);
     }
@@ -86,15 +94,21 @@ class UserQueryServiceTest extends SetUpMockData {
     @DisplayName("유저 Query Service - getUserProfile - User Not Found")
     @Test
     void testGetUserProfile_UserNotFound() {
-        when(userRepository.findByNickname(EMPTY))
+        when(userRepository.findById(USER_ID))
                 .thenReturn(Optional.empty());
 
         assertThrows(
-                NotFoundException.class, () -> userQueryService.getUserProfile(user.getNickname())
+                NotFoundException.class, () -> userQueryService.getUserProfile(user.getId(), authInfo)
         );
     }
 
-    private void validateResponse(ProfileResponse response) {
+    private void validateResponse(MyProfileResponse response) {
+        assertEquals(user.getId(), response.getId());
+        assertEquals(user.getNickname(), response.getNickname());
+        assertEquals(PROFILE_IMAGE_URL, response.getProfileImageFileName());
+    }
+
+    private void validateResponse(UserProfileResponse response) {
         assertEquals(user.getId(), response.getId());
         assertEquals(user.getNickname(), response.getNickname());
         assertEquals(user.getIntroduce(), response.getIntroduce());

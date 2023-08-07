@@ -8,7 +8,7 @@ import project.linkarchive.backend.util.setUpData.SetUpMockData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-class ProfileResponseTest extends SetUpMockData {
+class MyProfileResponseTest extends SetUpMockData {
 
     @BeforeEach
     void setUp() {
@@ -19,12 +19,12 @@ class ProfileResponseTest extends SetUpMockData {
     @DisplayName("ProfileResponse - DTO")
     @Test
     void testProfileResponse() {
-        assertEquals(USER_ID, profileResponse.getId());
-        assertEquals(EMPTY, profileResponse.getNickname());
-        assertEquals(EMPTY, profileResponse.getIntroduce());
-        assertEquals(PRE_SIGNED_URL, profileResponse.getProfileImageFileName());
-        assertEquals(FOLLOWER_COUNT, profileResponse.getFollowerCount());
-        assertEquals(FOLLOWING_COUNT, profileResponse.getFollowingCount());
+        assertEquals(USER_ID, myProfileResponse.getId());
+        assertEquals(EMPTY, myProfileResponse.getNickname());
+        assertEquals(EMPTY, myProfileResponse.getIntroduce());
+        assertEquals(PRE_SIGNED_URL, myProfileResponse.getProfileImageFileName());
+        assertEquals(FOLLOWER_COUNT, myProfileResponse.getFollowerCount());
+        assertEquals(FOLLOWING_COUNT, myProfileResponse.getFollowingCount());
     }
 
 }

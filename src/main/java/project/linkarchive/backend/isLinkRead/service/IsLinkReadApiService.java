@@ -21,7 +21,10 @@ public class IsLinkReadApiService {
     private final LinkRepository linkRepository;
     private final IsLinkReadRepository isLinkReadRepository;
 
-    public IsLinkReadApiService(UserRepository userRepository, LinkRepository linkRepository, IsLinkReadRepository isLinkReadRepository) {
+    public IsLinkReadApiService(UserRepository userRepository,
+                                LinkRepository linkRepository,
+                                IsLinkReadRepository isLinkReadRepository
+    ) {
         this.userRepository = userRepository;
         this.linkRepository = linkRepository;
         this.isLinkReadRepository = isLinkReadRepository;

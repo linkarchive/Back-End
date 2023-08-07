@@ -103,6 +103,7 @@ public class S3Uploader {
             throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
         }
     }
+    
     private String extractKey(String fileName) {
         String key = fileName.split("/")[S3_KEY];
         return key;

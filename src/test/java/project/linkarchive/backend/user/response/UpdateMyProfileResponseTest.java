@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static project.linkarchive.backend.util.constant.Constants.NEW_INTRODUCE;
 import static project.linkarchive.backend.util.constant.Constants.NEW_NICKNAME;
 
-class UpdateProfileResponseTest extends SetUpMockData {
+class UpdateMyProfileResponseTest extends SetUpMockData {
 
     @BeforeEach
     void setUp() {

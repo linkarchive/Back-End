@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 import project.linkarchive.backend.badword.BadWordFiltering;
-import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.repository.UserRepository;
@@ -33,9 +32,6 @@ class UserApiServiceTest extends SetUpMockData {
 
     @Mock
     protected UserRepository userRepository;
-
-    @Mock
-    protected ProfileImageRepository profileImageRepository;
 
     @Mock
     protected MultipartFile multipartFile;
@@ -106,8 +102,8 @@ class UserApiServiceTest extends SetUpMockData {
     void testUpdateProfileImage() throws IOException {
         setUpMultipartFile();
 
-        when(profileImageRepository.findByUserId(USER_ID))
-                .thenReturn(Optional.of(profileImage));
+        when(userRepository.findById(USER_ID))
+                .thenReturn(Optional.of(user));
         when(s3Uploader.upload(multipartFile))
                 .thenReturn(STORED_FILE_NAME);
         when(s3Uploader.generatePresignedProfileImageUrl(STORED_FILE_NAME, EXPIRATION_TIME_MINUTE))
@@ -117,7 +113,7 @@ class UserApiServiceTest extends SetUpMockData {
 
         assertEquals(PROFILE_IMAGE_URL, response.getProfileImageFileName());
 
-        verify(profileImageRepository).findByUserId(USER_ID);
+        verify(userRepository).findById(USER_ID);
         verify(s3Uploader).upload(multipartFile);
         verify(s3Uploader).generatePresignedProfileImageUrl(STORED_FILE_NAME, EXPIRATION_TIME_MINUTE);
     }

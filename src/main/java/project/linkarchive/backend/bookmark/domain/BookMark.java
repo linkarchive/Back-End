@@ -29,7 +29,8 @@ public class BookMark extends CreatedEntity {
     private Link link;
 
     @Builder
-    public BookMark(User user, Link link) {
+    public BookMark(Long id, User user, Link link) {
+        this.id = id;
         this.user = user;
         this.link = link;
     }

@@ -20,10 +20,11 @@ import project.linkarchive.backend.link.response.linkarchive.ArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
+import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
-import project.linkarchive.backend.user.response.ProfileResponse;
+import project.linkarchive.backend.user.response.MyProfileResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
@@ -35,6 +36,7 @@ public class MockDataGenerator {
     protected User user;
     protected KakaoProfile kakaoProfile;
     protected ProfileImage profileImage;
+    protected AuthInfo authInfo;
     protected MultipartFile multipartFile;
     protected RefreshToken refreshToken;
     protected Link link;
@@ -49,7 +51,7 @@ public class MockDataGenerator {
     protected CreateLinkRequest createLinkRequest;
     protected CreateTagRequest createTagRequest;
 
-    protected ProfileResponse profileResponse;
+    protected MyProfileResponse myProfileResponse;
     protected UpdateNicknameResponse updateNicknameResponse;
     protected UpdateProfileResponse updateProfileResponse;
     protected ArchiveResponse archiveResponse;

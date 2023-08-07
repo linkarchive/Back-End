@@ -77,54 +77,54 @@ public class LinkQueryController {
 
     @GetMapping("/links/user")
     public ResponseEntity<UserLinkListResponse> getMyLinkList(
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "linkId", required = false) Long lastLinkId,
+            @RequestParam(value = "tagId", required = false) Long tagId,
+            @RequestParam(value = "linkId", required = false) Long linkId,
             @PageableDefault Pageable pageable,
             AuthInfo authInfo
     ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getMyLinkList(authInfo.getId(), pageable, lastLinkId, tag);
+        UserLinkListResponse userLinkListResponse = linkQueryService.getMyLinkList(tagId, linkId, pageable, authInfo.getId());
         return ResponseEntity.ok(userLinkListResponse);
     }
 
-    @GetMapping("/links/user/{nickname}")
+    @GetMapping("/links/user/{userId}")
     public ResponseEntity<UserLinkListResponse> getUserLinkList(
-            @PathVariable("nickname") String nickname,
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "linkId", required = false) Long lastLinkId,
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "tagId", required = false) Long tagId,
+            @RequestParam(value = "linkId", required = false) Long linkId,
             @PageableDefault Pageable pageable,
             @Nullable AuthInfo authInfo
     ) {
-        UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(nickname, pageable, lastLinkId, authInfo, tag);
+        UserLinkListResponse userLinkListResponse = linkQueryService.getUserLinkList(userId, tagId, linkId, pageable, authInfo);
         return ResponseEntity.ok(userLinkListResponse);
     }
 
     @GetMapping("/links/archive")
     public ResponseEntity<UserLinkArchiveResponse> getLinkArchive(
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "linkId", required = false) Long lastLinkId,
+            @RequestParam(value = "tagId", required = false) Long tagId,
+            @RequestParam(value = "linkId", required = false) Long linkId,
             @PageableDefault Pageable pageable,
             @Nullable AuthInfo authInfo
     ) {
-        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getLinkArchive(pageable, lastLinkId, authInfo, tag);
+        UserLinkArchiveResponse userLinkArchiveResponse = linkQueryService.getLinkArchive(tagId, linkId, pageable, authInfo);
         return ResponseEntity.ok(userLinkArchiveResponse);
     }
 
     @GetMapping("/links/trash")
     public ResponseEntity<UserTrashLinkListResponse> getLinkTrashList(
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "linkId", required = false) Long lastLinkId,
+            @RequestParam(value = "tagId", required = false) Long tagId,
+            @RequestParam(value = "linkId", required = false) Long linkId,
             @PageableDefault Pageable pageable,
             AuthInfo authInfo
     ) {
-        UserTrashLinkListResponse userTrashLinkListResponse = linkQueryService.getTrashLinkList(tag, lastLinkId, pageable, authInfo.getId());
+        UserTrashLinkListResponse userTrashLinkListResponse = linkQueryService.getTrashLinkList(tagId, linkId, pageable, authInfo.getId());
         return ResponseEntity.ok(userTrashLinkListResponse);
     }
 
-    @GetMapping("/links/tags/user/{nickname}")
+    @GetMapping("/links/tags/user/{userId}")
     public ResponseEntity<TagListResponse> getLinkTagList(
-            @PathVariable("nickname") String nickname
+            @PathVariable("userId") Long userId
     ) {
-        TagListResponse tagList = linkQueryService.getLinkTagList(nickname);
+        TagListResponse tagList = linkQueryService.getLinkTagList(userId);
         return ResponseEntity.ok(tagList);
     }
 

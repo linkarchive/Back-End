@@ -2,10 +2,12 @@ package project.linkarchive.backend.auth.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
-import project.linkarchive.backend.auth.response.*;
+import project.linkarchive.backend.auth.response.AccessTokenResponse;
+import project.linkarchive.backend.auth.response.KakaoProfile;
+import project.linkarchive.backend.auth.response.LoginResponse;
+import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.user.domain.User;
@@ -13,9 +15,9 @@ import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.util.JwtUtil;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 import static project.linkarchive.backend.advice.data.DataConstants.AUTH_KAKAO;
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.NOT_FOUND_USER;
 
 @Service
 @Transactional
@@ -49,20 +51,18 @@ public class OAuthService {
                     return user;
                 });
 
-        String accessToken = jwtUtil.createAccessToken(findUser);
-        String refreshToken;
+        String newAccessToken = jwtUtil.createAccessToken(findUser);
+        String newRefreshToken = jwtUtil.createRefreshToken(findUser);
 
-        if (!refreshTokenRepository.existsByUserIdAndAgent(findUser.getId(), userAgent)) {
-            refreshToken = jwtUtil.createRefreshToken(findUser);
-            RefreshToken token = RefreshToken.build(refreshToken, userAgent, findUser);
-            refreshTokenRepository.save(token);
-        } else {
-            RefreshToken findRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent)
-                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-            refreshToken = findRefreshToken.getRefreshToken();
-        }
+        RefreshToken token = RefreshToken.build(newRefreshToken, userAgent, findUser);
 
-        return new LoginResponse(findUser, accessToken, refreshToken);
+        Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent);
+        savedRefreshToken.ifPresentOrElse(
+                refreshToken -> refreshToken.updateRefreshToken(token),
+                () -> refreshTokenRepository.save(token)
+        );
+
+        return new LoginResponse(findUser, newAccessToken, newRefreshToken);
     }
 
     public LoginResponse login(String code, String referer, String userAgent) {
@@ -79,28 +79,23 @@ public class OAuthService {
                     return user;
                 });
 
-        String accessToken = jwtUtil.createAccessToken(findUser);
-        String refreshToken;
+        String newAccessToken = jwtUtil.createAccessToken(findUser);
+        String newRefreshToken = jwtUtil.createRefreshToken(findUser);
 
-        if (!refreshTokenRepository.existsByUserIdAndAgent(findUser.getId(), userAgent)) {
-            refreshToken = jwtUtil.createRefreshToken(findUser);
-            RefreshToken token = RefreshToken.build(refreshToken, userAgent, findUser);
-            refreshTokenRepository.save(token);
-        } else {
-            RefreshToken findRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent)
-                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
-            refreshToken = findRefreshToken.getRefreshToken();
-        }
+        RefreshToken token = RefreshToken.build(newRefreshToken, userAgent, findUser);
 
-        return new LoginResponse(findUser, accessToken, refreshToken);
+        Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent);
+        savedRefreshToken.ifPresentOrElse
+                (
+                        refreshToken -> refreshToken.updateRefreshToken(token),
+                        () -> refreshTokenRepository.save(token)
+                );
+
+        return new LoginResponse(findUser, newAccessToken, newRefreshToken);
     }
 
     public AccessTokenResponse publishAccessToken(String accessToken, String refreshToken) {
         return jwtUtil.publishAccessToken(accessToken, refreshToken);
-    }
-
-    public RefreshTokenResponse publishRefreshToken(String refreshToken) {
-        return jwtUtil.publishRefreshToken(refreshToken);
     }
 
 }

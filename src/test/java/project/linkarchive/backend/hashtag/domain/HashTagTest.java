@@ -33,7 +33,7 @@ class HashTagTest extends HashTagSetUpData {
     @DisplayName("해시태그 Build 메서드 - Domain")
     @Test
     void testBuild() {
-        HashTag getHashTag = HashTag.build(createTagRequest);
+        HashTag getHashTag = HashTag.create(createTagRequest.getTag());
 
         assertNotNull(getHashTag);
         assertEquals(TAG, getHashTag.getTag());
