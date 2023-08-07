@@ -3,8 +3,8 @@ package project.linkarchive.backend.auth.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.linkarchive.backend.auth.request.AccessTokenRequest;
-import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.AccessTokenResponse;
+import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.service.OAuthService;
 
 @RestController

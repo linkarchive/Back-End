@@ -29,7 +29,8 @@ public class RefreshToken extends CreatedEntity {
     private User user;
 
     @Builder
-    public RefreshToken(String refreshToken, String agent, User user) {
+    public RefreshToken(Long id, String refreshToken, String agent, User user) {
+        this.id = id;
         this.refreshToken = refreshToken;
         this.agent = agent;
         this.user = user;

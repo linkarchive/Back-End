@@ -60,7 +60,7 @@ public class HashTagApiService {
 
     private HashTag findAndBuildHashTagByTag(CreateTagRequest request) {
         return hashTagRepository.findByTag(request.getTag())
-                .orElseGet(() -> HashTag.build(request));
+                .orElseGet(() -> HashTag.create(request.getTag()));
     }
 
 }

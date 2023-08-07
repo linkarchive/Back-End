@@ -21,7 +21,11 @@ public class BookMarkApiService {
     private final LinkRepository linkRepository;
     private final BookMarkRepository bookMarkRepository;
 
-    public BookMarkApiService(UserRepository userRepository, LinkRepository linkRepository, BookMarkRepository bookMarkRepository) {
+    public BookMarkApiService(
+            UserRepository userRepository,
+            LinkRepository linkRepository,
+            BookMarkRepository bookMarkRepository
+    ) {
         this.userRepository = userRepository;
         this.linkRepository = linkRepository;
         this.bookMarkRepository = bookMarkRepository;

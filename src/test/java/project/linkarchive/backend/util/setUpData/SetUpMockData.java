@@ -20,15 +20,13 @@ public class SetUpMockData extends MockDataGenerator {
         user = User.builder()
                 .id(USER_ID)
                 .socialId(SOCIAL_ID)
-                .nickname(EMPTY)
                 .email(EMAIL)
+                .nickname(EMPTY)
                 .introduce(EMPTY)
+                .followerCount(FOLLOWER_COUNT)
+                .followingCount(FOLLOWING_COUNT)
                 .profileImage(profileImage)
                 .build();
-    }
-
-    protected void setUpKaKaoProfile() {
-        kakaoProfile = new KakaoProfile(SOCIAL_ID, new KakaoAccount(EMAIL));
     }
 
     protected void setUpProfileImage() {
@@ -36,6 +34,10 @@ public class SetUpMockData extends MockDataGenerator {
                 .id(PROFILE_IMAGE_ID)
                 .profileImageFilename(PROFILE_IMAGE_FILENAME)
                 .build();
+    }
+
+    protected void setUpKaKaoProfile() {
+        kakaoProfile = new KakaoProfile(SOCIAL_ID, new KakaoAccount(EMAIL));
     }
 
     protected void setUpOauthInfo() {

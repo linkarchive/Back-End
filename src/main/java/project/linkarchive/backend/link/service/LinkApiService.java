@@ -110,7 +110,7 @@ public class LinkApiService {
     private void addTagsToLinkAndIncrementUserTagCount(Set<String> tagsFromRequest, Link link) {
         tagsFromRequest.stream()
                 .map(tag -> hashTagRepository.findByTag(tag)
-                        .orElseGet(() -> HashTag.build(tag)))
+                        .orElseGet(() -> HashTag.create(tag)))
                 .forEach(hashTag -> {
                     userHashTagRepository.findByHashTagId(hashTag.getId())
                             .ifPresent(tag -> userHashTagRepository.increaseUsageCount(tag.getId()));

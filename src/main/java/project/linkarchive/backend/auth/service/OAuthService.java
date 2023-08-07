@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
+import project.linkarchive.backend.auth.response.AccessTokenResponse;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
-import project.linkarchive.backend.auth.response.AccessTokenResponse;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.user.domain.User;
@@ -15,7 +15,6 @@ import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.util.JwtUtil;
 
 import javax.transaction.Transactional;
-
 import java.util.Optional;
 
 import static project.linkarchive.backend.advice.data.DataConstants.AUTH_KAKAO;
@@ -58,9 +57,10 @@ public class OAuthService {
         RefreshToken token = RefreshToken.build(newRefreshToken, userAgent, findUser);
 
         Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent);
-        savedRefreshToken.ifPresentOrElse
-                (refreshToken -> refreshToken.updateRefreshToken(token),
-                        () -> refreshTokenRepository.save(token));
+        savedRefreshToken.ifPresentOrElse(
+                refreshToken -> refreshToken.updateRefreshToken(token),
+                () -> refreshTokenRepository.save(token)
+        );
 
         return new LoginResponse(findUser, newAccessToken, newRefreshToken);
     }
@@ -86,8 +86,10 @@ public class OAuthService {
 
         Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent);
         savedRefreshToken.ifPresentOrElse
-                (refreshToken -> refreshToken.updateRefreshToken(token),
-                        () -> refreshTokenRepository.save(token));
+                (
+                        refreshToken -> refreshToken.updateRefreshToken(token),
+                        () -> refreshTokenRepository.save(token)
+                );
 
         return new LoginResponse(findUser, newAccessToken, newRefreshToken);
     }

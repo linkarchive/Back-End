@@ -14,8 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "https://localhost:3000",
                         "https://dev.link-archive.com",
                         "https://www.link-archive.com",
-                        "https://test.link-archive.com",
-                        "https://stage.link-archive.com"
+                        "https://test.link-archive.com"
                 )
                 .allowedMethods("GET", "POST", "PATCH", "DELETE")
                 .allowedHeaders("Access-Control-Allow-Origin",

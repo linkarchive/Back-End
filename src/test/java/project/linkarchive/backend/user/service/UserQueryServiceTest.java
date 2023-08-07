@@ -3,10 +3,17 @@ package project.linkarchive.backend.user.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.relationship.repository.RelationshipRepository;
+import project.linkarchive.backend.s3.S3Uploader;
+import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.user.response.MyProfileResponse;
 import project.linkarchive.backend.user.response.UserProfileResponse;
-import project.linkarchive.backend.util.service.UserSetUpService;
+import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,7 +26,20 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-class UserQueryServiceTest extends UserSetUpService {
+@ExtendWith(MockitoExtension.class)
+class UserQueryServiceTest extends SetUpMockData {
+
+    @Mock
+    protected UserRepository userRepository;
+
+    @Mock
+    protected RelationshipRepository relationshipRepository;
+
+    @Mock
+    protected S3Uploader s3Uploader;
+
+    @InjectMocks
+    protected UserQueryService userQueryService;
 
     @BeforeEach
     void setUp() {
@@ -49,7 +69,9 @@ class UserQueryServiceTest extends UserSetUpService {
         when(userRepository.findById(USER_ID))
                 .thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> userQueryService.getMyProfile(user.getId()));
+        assertThrows(
+                NotFoundException.class, () -> userQueryService.getMyProfile(user.getId())
+        );
     }
 
     @DisplayName("유저 Query Service - getUserProfile")
@@ -75,7 +97,9 @@ class UserQueryServiceTest extends UserSetUpService {
         when(userRepository.findById(USER_ID))
                 .thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> userQueryService.getUserProfile(user.getId(), authInfo));
+        assertThrows(
+                NotFoundException.class, () -> userQueryService.getUserProfile(user.getId(), authInfo)
+        );
     }
 
     private void validateResponse(MyProfileResponse response) {
@@ -87,7 +111,10 @@ class UserQueryServiceTest extends UserSetUpService {
     private void validateResponse(UserProfileResponse response) {
         assertEquals(user.getId(), response.getId());
         assertEquals(user.getNickname(), response.getNickname());
+        assertEquals(user.getIntroduce(), response.getIntroduce());
         assertEquals(PROFILE_IMAGE_URL, response.getProfileImageFileName());
+        assertEquals(user.getFollowerCount(), response.getFollowerCount());
+        assertEquals(user.getFollowingCount(), response.getFollowingCount());
     }
 
 }
