@@ -33,7 +33,7 @@ public class HashTagQueryController {
     }
 
     @GetMapping("/tags/archive")
-    public ResponseEntity<TagListResponse> getArchiveTagList() {
+    public ResponseEntity<TagListResponse> getArchiveTagList(){
         TagListResponse tagList = hashTagQueryService.getArchiveTagList();
         return ResponseEntity.ok(tagList);
     }
