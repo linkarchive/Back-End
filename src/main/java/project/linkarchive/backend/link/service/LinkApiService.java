@@ -57,7 +57,7 @@ public class LinkApiService {
         Set<String> tagsFromRequest = getTagsFromRequest(request);
         exceededTagCount(tagsFromRequest);
 
-        Link link = Link.build(request, user);
+        Link link = Link.create(request, user);
         addTagsToLinkAndIncrementUserTagCount(tagsFromRequest, link);
 
         linkRepository.save(link);
