@@ -48,7 +48,7 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      - name: Cache Gradle packages
+      - name: Gradle packages 캐시
         uses: actions/cache@v2
         with:
           path: ~/.gradle/caches
