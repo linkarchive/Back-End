@@ -5,12 +5,11 @@ import project.linkarchive.backend.link.enums.LinkStatus;
 import java.time.LocalDateTime;
 
 import static project.linkarchive.backend.link.enums.LinkStatus.ACTIVE;
+import static project.linkarchive.backend.link.enums.LinkStatus.TRASH;
 
 public class Constants {
 
     public static final String EMPTY = "";
-    public static final Long EMPTY_LONG_VAL = 0L;
-    public static final Long MODIFY_LONG_VAL = 1L;
     public static final Long ID = 1L;
 
     public static final Long USER_ID = 1L;
@@ -38,12 +37,14 @@ public class Constants {
     public static final String REFRESH_TOKEN = "Test_RefreshToken";
     public static final String AGENT = "Test_Agent";
 
-    public static final String URL = "Test_Url";
+    public static final Long LINK_ID = 1L;
+    public static final String URL = "Test_https://url.com";
     public static final String TITLE = "Test_Title";
     public static final String DESCRIPTION = "Test_Description";
     public static final String THUMBNAIL = "Test_Thumbnail";
-    public static final Long BOOKMARK_COUNT = 10L;
-    public static final LinkStatus LINK_STATUS = ACTIVE;
+    public static final Long BOOKMARK_COUNT = 0L;
+    public static final LinkStatus LINK_STATUS_ACTIVE = ACTIVE;
+    public static final LinkStatus LINK_STATUS_TRASH = TRASH;
 
     public static final String META_TITLE = "Test_Meta_Title";
     public static final String META_DESCRIPTION = "Test_Meta_Description";
