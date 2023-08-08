@@ -39,7 +39,7 @@ jobs:
           touch ./application-oauth.yml
           echo "${{ secrets.PRODUCT_AUTH_YML }}" > ./application-oauth.yml
           touch ./application-aws.yml
-          echo "${{ secrets.YML_AWS }}" > ./application-aws.yml
+          echo "${{ secrets.PRODUCT_AWS_YML }}" > ./application-aws.yml
           touch ./application-jwt.yml
           echo "${{ secrets.YML_JWT }}" > ./application-jwt.yml
         shell: bash
