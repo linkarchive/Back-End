@@ -4,13 +4,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
-import project.linkarchive.backend.link.domain.LinkHashTag;
 import project.linkarchive.backend.user.domain.User;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
