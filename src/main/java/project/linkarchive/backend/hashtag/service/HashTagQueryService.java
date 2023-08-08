@@ -3,6 +3,7 @@ package project.linkarchive.backend.hashtag.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
+import project.linkarchive.backend.hashtag.repository.HashTagRepositoryImpl;
 import project.linkarchive.backend.hashtag.repository.UserHashTagRepositoryImpl;
 import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
@@ -18,10 +19,12 @@ public class HashTagQueryService {
 
     private final UserRepository userRepository;
     private final UserHashTagRepositoryImpl userHashTagRepositoryImpl;
+    private final HashTagRepositoryImpl hashTagRepositoryImpl;
 
-    public HashTagQueryService(UserRepository userRepository, UserHashTagRepositoryImpl userHashTagRepositoryImpl) {
+    public HashTagQueryService(UserRepository userRepository, UserHashTagRepositoryImpl userHashTagRepositoryImpl, HashTagRepositoryImpl hashTagRepositoryImpl) {
         this.userRepository = userRepository;
         this.userHashTagRepositoryImpl = userHashTagRepositoryImpl;
+        this.hashTagRepositoryImpl = hashTagRepositoryImpl;
     }
 
     public TagListResponse getUserTagList(Long userId) {
@@ -37,6 +40,11 @@ public class HashTagQueryService {
 
         List<TagResponse> tagResponses = userHashTagRepositoryImpl.getUserTagList10(userId);
 
+        return new TagListResponse(tagResponses);
+    }
+
+    public TagListResponse getArchiveTagList() {
+        List<TagResponse> tagResponses = hashTagRepositoryImpl.getArchiveTagList();
         return new TagListResponse(tagResponses);
     }
 
