@@ -28,7 +28,7 @@ jobs:
           distribution: 'corretto'
           cache: gradle
 
-      - name: make application.yml
+      - name: application.yml 생성
         if: contains(github.ref, 'release')
         run: |
           cd ./src/main/resources
