@@ -1,13 +1,19 @@
 package project.linkarchive.backend.profileImage.response;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.linkarchive.backend.util.setUpData.ProfileImageSetUpData;
+import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.linkarchive.backend.util.constant.Constants.PROFILE_IMAGE_FILENAME;
 
-class ProfileImageResponseTest extends ProfileImageSetUpData {
+class ProfileImageResponseTest extends SetUpMockData {
+
+    @BeforeEach
+    void setUp() {
+        setUpProfileImageResponse();
+    }
 
     @DisplayName("ProfileImageResponse - DTO")
     @Test

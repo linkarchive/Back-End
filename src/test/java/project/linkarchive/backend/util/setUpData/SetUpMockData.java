@@ -4,6 +4,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import project.linkarchive.backend.auth.response.KakaoAccount;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
+import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
@@ -66,6 +67,10 @@ public class SetUpMockData extends MockDataGenerator {
 
     protected void setUpUpdateProfileResponse() {
         updateProfileResponse = new UpdateProfileResponse(user);
+    }
+
+    protected void setUpProfileImageResponse() {
+        profileImageResponse = new ProfileImageResponse(PROFILE_IMAGE_FILENAME);
     }
 
 }
