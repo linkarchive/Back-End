@@ -85,6 +85,7 @@ class LinkTest extends SetUpMockData {
     @Test
     void builder() {
         link = Link.builder()
+                .id(LINK_ID)
                 .url(URL)
                 .title(TITLE)
                 .description(DESCRIPTION)
@@ -94,6 +95,7 @@ class LinkTest extends SetUpMockData {
                 .user(user)
                 .build();
 
+        assertEquals(LINK_ID, link.getId());
         assertEquals(URL, link.getUrl());
         assertEquals(TITLE, link.getTitle());
         assertEquals(DESCRIPTION, link.getDescription());
@@ -106,7 +108,6 @@ class LinkTest extends SetUpMockData {
     @DisplayName("Link create method - Domain")
     @Test
     void build() {
-        setUpTagList();
         setUpCreateLinkRequest();
 
         link = Link.create(createLinkRequest, user);
