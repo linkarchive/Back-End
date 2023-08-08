@@ -81,19 +81,6 @@ public class SetUpMockData extends MockDataGenerator {
         updateProfileRequest = new UpdateProfileRequest(NEW_NICKNAME, NEW_INTRODUCE);
     }
 
-    protected void setUpTagList() {
-        for (int i = 1; i <= 10; i++) {
-            hashTag = HashTag.builder()
-                    .tag(TAG + i)
-                    .build();
-            tagList.add(hashTag.getTag());
-        }
-    }
-
-    protected void setUpCreateLinkRequest() {
-        createLinkRequest = new CreateLinkRequest(URL, TITLE, DESCRIPTION, THUMBNAIL, tagList);
-    }
-
     protected void setUpProfileResponse() {
         myProfileResponse = new MyProfileResponse(user, PRE_SIGNED_URL);
     }
@@ -110,15 +97,31 @@ public class SetUpMockData extends MockDataGenerator {
         profileImageResponse = new ProfileImageResponse(PROFILE_IMAGE_FILENAME);
     }
 
+    protected void setUpTagList() {
+        tagList.clear();
+
+        for (int i = 1; i <= LOOP_COUNT; i++) {
+            hashTag = HashTag.builder()
+                    .tag(TAG + i)
+                    .build();
+            tagList.add(hashTag.getTag());
+        }
+    }
+
+    protected void setUpCreateLinkRequest() {
+        createLinkRequest = new CreateLinkRequest(URL, TITLE, DESCRIPTION, THUMBNAIL, tagList);
+    }
+
+    protected void setUpLinkMetaDataResponse() {
+        linkMetaDataResponse = new LinkMetaDataResponse(META_TITLE, META_DESCRIPTION, META_THUMBNAIL);
+    }
+
     protected void setUpArchiveResponse() {
         archiveResponse = new ArchiveResponse(USER_ID, NICKNAME, PROFILE_IMAGE_FILENAME, LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, CREATED_AT, UPDATED_AT);
     }
 
-    protected void setupUserArchiveResponseList() {
-        for (int i = 1; i <= 10; i++) {
-            userArchiveResponse = new UserArchiveResponse((long) i, NICKNAME, PROFILE_IMAGE_FILENAME, (long) i, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, IS_READ, IS_MARK, tagResponseList, CREATED_AT, UPDATED_AT);
-            userArchiveResponseList.add(userArchiveResponse);
-        }
+    protected void setUpUserArchiveResponse() {
+        userArchiveResponse = new UserArchiveResponse(USER_ID, NICKNAME, PROFILE_IMAGE_FILENAME, LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, IS_READ, IS_MARK, tagResponseList, CREATED_AT, UPDATED_AT);
     }
 
     protected void setUpUserLinkArchiveResponse() {
@@ -126,22 +129,16 @@ public class SetUpMockData extends MockDataGenerator {
     }
 
     protected void setUpLinkResponse() {
-        linkResponse = new LinkResponse(ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, CREATED_AT, UPDATED_AT);
+        linkResponse = new LinkResponse(LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, CREATED_AT, UPDATED_AT);
     }
 
-    protected void setUpUserLinkResponseList() {
-        for (int i = 1; i <= 10; i++) {
-            getUserLinkResponse = new UserLinkResponse((long) i, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, IS_READ, IS_MARK, tagResponseList, CREATED_AT, UPDATED_AT);
-            userLinkResponseList.add(getUserLinkResponse);
-        }
+    protected void setUpUserLinkResponse() {
+        userLinkResponse = new UserLinkResponse(LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, IS_READ, IS_MARK, tagResponseList, CREATED_AT, UPDATED_AT);
+
     }
 
     protected void setUpUserLinkListResponse() {
         userLinkListResponse = new UserLinkListResponse(userLinkResponseList, HAS_NEXT);
-    }
-
-    protected void setUpLinkMetaDataResponse() {
-        linkMetaDataResponse = new LinkMetaDataResponse(META_TITLE, META_DESCRIPTION, META_THUMBNAIL);
     }
 
 }

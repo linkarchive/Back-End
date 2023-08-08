@@ -10,7 +10,7 @@ import static project.linkarchive.backend.link.enums.LinkStatus.TRASH;
 public class Constants {
 
     public static final String EMPTY = "";
-    public static final Long ID = 1L;
+    public static final int LOOP_COUNT = 10;
 
     public static final Long USER_ID = 1L;
     public static final String SOCIAL_ID = "Test_Social_Id";
@@ -25,7 +25,6 @@ public class Constants {
 
     public static final Long PROFILE_IMAGE_ID = 1L;
     public static final String PROFILE_IMAGE_FILENAME = "Test_ProfileImage_FileName";
-
     public static final String STORED_FILE_NAME = "Test_Stored_FileName";
     public static final String PROFILE_IMAGE_URL = "http://Test_New_ProfileImage_FileName";
     public static final String MULTIPART_FILE_NAME = "TEST_New_File_Image.jpg";
