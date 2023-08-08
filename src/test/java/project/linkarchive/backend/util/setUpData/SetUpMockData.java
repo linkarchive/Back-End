@@ -3,6 +3,16 @@ package project.linkarchive.backend.util.setUpData;
 import org.springframework.mock.web.MockMultipartFile;
 import project.linkarchive.backend.auth.response.KakaoAccount;
 import project.linkarchive.backend.auth.response.KakaoProfile;
+import project.linkarchive.backend.hashtag.domain.HashTag;
+import project.linkarchive.backend.link.domain.Link;
+import project.linkarchive.backend.link.request.CreateLinkRequest;
+import project.linkarchive.backend.link.response.LinkMetaDataResponse;
+import project.linkarchive.backend.link.response.linkList.LinkResponse;
+import project.linkarchive.backend.link.response.linkList.UserLinkListResponse;
+import project.linkarchive.backend.link.response.linkList.UserLinkResponse;
+import project.linkarchive.backend.link.response.linkarchive.ArchiveResponse;
+import project.linkarchive.backend.link.response.linkarchive.UserArchiveResponse;
+import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.security.AuthInfo;
@@ -13,6 +23,7 @@ import project.linkarchive.backend.user.response.MyProfileResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
 
+import static project.linkarchive.backend.link.enums.LinkStatus.ACTIVE;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
 public class SetUpMockData extends MockDataGenerator {
@@ -49,6 +60,19 @@ public class SetUpMockData extends MockDataGenerator {
         multipartFile = new MockMultipartFile(PROFILE_IMAGE_URL, MULTIPART_FILE_NAME, CONTENT_TYPE, MULTIPART_FILE_DATA);
     }
 
+    protected void setUpLink() {
+        link = Link.builder()
+                .id(LINK_ID)
+                .url(URL)
+                .title(TITLE)
+                .description(DESCRIPTION)
+                .thumbnail(THUMBNAIL)
+                .bookMarkCount(BOOKMARK_COUNT)
+                .linkStatus(ACTIVE)
+                .user(user)
+                .build();
+    }
+
     protected void setUpUpdateNicknameRequest() {
         updateNicknameRequest = new UpdateNicknameRequest(NEW_NICKNAME);
     }
@@ -71,6 +95,50 @@ public class SetUpMockData extends MockDataGenerator {
 
     protected void setUpProfileImageResponse() {
         profileImageResponse = new ProfileImageResponse(PROFILE_IMAGE_FILENAME);
+    }
+
+    protected void setUpTagList() {
+        tagList.clear();
+
+        for (int i = 1; i <= LOOP_COUNT; i++) {
+            hashTag = HashTag.builder()
+                    .tag(TAG + i)
+                    .build();
+            tagList.add(hashTag.getTag());
+        }
+    }
+
+    protected void setUpCreateLinkRequest() {
+        createLinkRequest = new CreateLinkRequest(URL, TITLE, DESCRIPTION, THUMBNAIL, tagList);
+    }
+
+    protected void setUpLinkMetaDataResponse() {
+        linkMetaDataResponse = new LinkMetaDataResponse(META_TITLE, META_DESCRIPTION, META_THUMBNAIL);
+    }
+
+    protected void setUpArchiveResponse() {
+        archiveResponse = new ArchiveResponse(USER_ID, NICKNAME, PROFILE_IMAGE_FILENAME, LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, CREATED_AT, UPDATED_AT);
+    }
+
+    protected void setUpUserArchiveResponse() {
+        userArchiveResponse = new UserArchiveResponse(USER_ID, NICKNAME, PROFILE_IMAGE_FILENAME, LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, IS_READ, IS_MARK, tagResponseList, CREATED_AT, UPDATED_AT);
+    }
+
+    protected void setUpUserLinkArchiveResponse() {
+        userLinkArchiveResponse = new UserLinkArchiveResponse(userArchiveResponseList, HAS_NEXT);
+    }
+
+    protected void setUpLinkResponse() {
+        linkResponse = new LinkResponse(LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, CREATED_AT, UPDATED_AT);
+    }
+
+    protected void setUpUserLinkResponse() {
+        userLinkResponse = new UserLinkResponse(LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, IS_READ, IS_MARK, tagResponseList, CREATED_AT, UPDATED_AT);
+
+    }
+
+    protected void setUpUserLinkListResponse() {
+        userLinkListResponse = new UserLinkListResponse(userLinkResponseList, HAS_NEXT);
     }
 
 }

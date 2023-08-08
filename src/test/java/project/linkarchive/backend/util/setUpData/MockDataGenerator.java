@@ -56,13 +56,13 @@ public class MockDataGenerator {
     protected UpdateNicknameResponse updateNicknameResponse;
     protected UpdateProfileResponse updateProfileResponse;
     protected ProfileImageResponse profileImageResponse;
+    protected LinkMetaDataResponse linkMetaDataResponse;
     protected ArchiveResponse archiveResponse;
     protected UserArchiveResponse userArchiveResponse;
     protected UserLinkArchiveResponse userLinkArchiveResponse;
     protected LinkResponse linkResponse;
     protected UserLinkListResponse userLinkListResponse;
-    protected UserLinkResponse getUserLinkResponse;
-    protected LinkMetaDataResponse linkMetaDataResponse;
+    protected UserLinkResponse userLinkResponse;
     protected TagResponse tagResponse;
 
     protected List<UserArchiveResponse> userArchiveResponseList = new ArrayList<>();

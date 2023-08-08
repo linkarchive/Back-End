@@ -1,103 +1,136 @@
 package project.linkarchive.backend.link.domain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.util.setUpData.LinkSetUpData;
+import project.linkarchive.backend.link.enums.LinkStatus;
+import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static project.linkarchive.backend.link.enums.LinkStatus.ACTIVE;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-class LinkTest extends LinkSetUpData {
+class LinkTest extends SetUpMockData {
+
+    @BeforeEach
+    void setUp() {
+        setUpLink();
+    }
+
+    @DisplayName("Link getLinkId- Domain")
+    @Test
+    void testGetLinkId() {
+        assertEquals(LINK_ID, link.getId());
+    }
 
     @DisplayName("Link getUrl - Domain")
     @Test
     void testGetUrl() {
-        String url = link.getUrl();
-
-        assertNotNull(url);
-        assertEquals(URL, url);
+        assertEquals(URL, link.getUrl());
     }
 
     @DisplayName("Link getTitle - Domain")
     @Test
     void getTitle() {
-        String title = link.getTitle();
-
-        assertNotNull(title);
-        assertEquals(TITLE, title);
+        assertEquals(TITLE, link.getTitle());
     }
 
     @DisplayName("Link getDescription - Domain")
     @Test
     void getDescription() {
-        String description = link.getDescription();
-
-        assertNotNull(description);
-        assertEquals(DESCRIPTION, description);
+        assertEquals(DESCRIPTION, link.getDescription());
     }
 
     @DisplayName("Link getThumbnail - Domain")
     @Test
     void getThumbnail() {
-        String thumbnail = link.getThumbnail();
-
-        assertNotNull(thumbnail);
-        assertEquals(THUMBNAIL, thumbnail);
+        assertEquals(THUMBNAIL, link.getThumbnail());
     }
 
     @DisplayName("Link getBookMarkCount - Domain")
     @Test
     void getBookMarkCount() {
-        Long bookMarkCount = link.getBookMarkCount();
+        assertEquals(BOOKMARK_COUNT, link.getBookMarkCount());
+    }
 
-        assertNotNull(bookMarkCount);
-        assertEquals(BOOKMARK_COUNT, bookMarkCount);
+    @DisplayName("Link getLinkStatus - Domain")
+    @Test
+    void getLinkStatus() {
+        assertEquals(LINK_STATUS_ACTIVE, link.getLinkStatus());
     }
 
     @DisplayName("Link getUser - Domain")
     @Test
     void getUser() {
-        User getUser = link.getUser();
-
-        assertNotNull(getUser);
-        assertEquals(user, getUser);
+        assertEquals(user, link.getUser());
     }
 
-    @DisplayName("Link Builder 패턴 - Domain")
+    @DisplayName("Link Constructor - Domain")
+    @Test
+    void testLinkConstructor() {
+        link = new Link(LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, ACTIVE, user);
+
+        assertEquals(LINK_ID, link.getId());
+        assertEquals(URL, link.getUrl());
+        assertEquals(TITLE, link.getTitle());
+        assertEquals(DESCRIPTION, link.getDescription());
+        assertEquals(THUMBNAIL, link.getThumbnail());
+        assertEquals(BOOKMARK_COUNT, link.getBookMarkCount());
+        assertEquals(LINK_STATUS_ACTIVE, link.getLinkStatus());
+        assertEquals(user, link.getUser());
+    }
+
+    @DisplayName("Link Builder Pattern - Domain")
     @Test
     void builder() {
-        Link getLink = Link.builder()
+        link = Link.builder()
+                .id(LINK_ID)
                 .url(URL)
                 .title(TITLE)
                 .description(DESCRIPTION)
                 .thumbnail(THUMBNAIL)
                 .bookMarkCount(BOOKMARK_COUNT)
+                .linkStatus(ACTIVE)
                 .user(user)
                 .build();
 
-        assertNotNull(getLink);
-        assertEquals(URL, getLink.getUrl());
-        assertEquals(TITLE, getLink.getTitle());
-        assertEquals(DESCRIPTION, getLink.getDescription());
-        assertEquals(THUMBNAIL, getLink.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, getLink.getBookMarkCount());
-        assertEquals(user, getLink.getUser());
+        assertEquals(LINK_ID, link.getId());
+        assertEquals(URL, link.getUrl());
+        assertEquals(TITLE, link.getTitle());
+        assertEquals(DESCRIPTION, link.getDescription());
+        assertEquals(THUMBNAIL, link.getThumbnail());
+        assertEquals(BOOKMARK_COUNT, link.getBookMarkCount());
+        assertEquals(LINK_STATUS_ACTIVE, link.getLinkStatus());
+        assertEquals(user, link.getUser());
     }
 
-    @DisplayName("Link Build 메서드 - Domain")
+    @DisplayName("Link create method - Domain")
     @Test
     void build() {
-        Link getLink = Link.build(createLinkRequest, user);
+        setUpCreateLinkRequest();
 
-        assertNotNull(getLink);
-        assertEquals(URL, getLink.getUrl());
-        assertEquals(TITLE, getLink.getTitle());
-        assertEquals(DESCRIPTION, getLink.getDescription());
-        assertEquals(THUMBNAIL, getLink.getThumbnail());
-        assertEquals(EMPTY_LONG_VAL, getLink.getBookMarkCount());
-        assertEquals(user, getLink.getUser());
+        link = Link.create(createLinkRequest, user);
+
+        assertEquals(URL, link.getUrl());
+        assertEquals(TITLE, link.getTitle());
+        assertEquals(DESCRIPTION, link.getDescription());
+        assertEquals(THUMBNAIL, link.getThumbnail());
+        assertEquals(BOOKMARK_COUNT, link.getBookMarkCount());
+        assertEquals(LINK_STATUS_ACTIVE, link.getLinkStatus());
+        assertEquals(user, link.getUser());
+    }
+
+    @DisplayName("Link delete - Domain")
+    @Test
+    void testDelete() {
+        LinkStatus oldLinkStatus = link.getLinkStatus();
+
+        link.delete();
+        LinkStatus newLinkStatus = link.getLinkStatus();
+
+        assertNotEquals(oldLinkStatus, newLinkStatus);
+        assertEquals(LINK_STATUS_TRASH, newLinkStatus);
     }
 
 }

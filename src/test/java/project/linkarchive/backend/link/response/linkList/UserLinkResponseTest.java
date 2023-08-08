@@ -1,33 +1,41 @@
 package project.linkarchive.backend.link.response.linkList;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.linkarchive.backend.util.setUpData.LinkSetUpData;
+import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-class UserLinkResponseTest extends LinkSetUpData {
+class UserLinkResponseTest extends SetUpMockData {
+
+    @BeforeEach
+    void setUp() {
+        setUpUserLinkResponse();
+    }
 
     @DisplayName("UserLinkResponseTest - DTO")
     @Test
     void testUserLinkResponse() {
-        assertEquals(URL, getUserLinkResponse.getUrl());
-        assertEquals(TITLE, getUserLinkResponse.getTitle());
-        assertEquals(DESCRIPTION, getUserLinkResponse.getDescription());
-        assertEquals(THUMBNAIL, getUserLinkResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, getUserLinkResponse.getBookMarkCount());
-        assertEquals(CREATED_AT, getUserLinkResponse.getLinkCreatedTime());
-        assertEquals(IS_READ, getUserLinkResponse.getIsRead());
-        assertEquals(IS_MARK, getUserLinkResponse.getIsMark());
-        assertEquals(tagResponseList, getUserLinkResponse.getTagList());
+        assertEquals(LINK_ID, userLinkResponse.getLinkId());
+        assertEquals(URL, userLinkResponse.getUrl());
+        assertEquals(TITLE, userLinkResponse.getTitle());
+        assertEquals(DESCRIPTION, userLinkResponse.getDescription());
+        assertEquals(THUMBNAIL, userLinkResponse.getThumbnail());
+        assertEquals(BOOKMARK_COUNT, userLinkResponse.getBookMarkCount());
+        assertEquals(IS_READ, userLinkResponse.getIsRead());
+        assertEquals(IS_MARK, userLinkResponse.getIsMark());
+        assertEquals(tagResponseList, userLinkResponse.getTagList());
+        assertEquals(CREATED_AT, userLinkResponse.getLinkCreatedTime());
+        assertEquals(UPDATED_AT, userLinkResponse.getLinkUpdatedTime());
     }
 
     @DisplayName("UserLinkResponse Builder 패턴 - DTO")
     @Test
     void testBuilder() {
-        UserLinkResponse getUserLinkResponse = UserLinkResponse.builder()
-                .linkId(ID)
+        userLinkResponse = UserLinkResponse.builder()
+                .linkId(LINK_ID)
                 .url(URL)
                 .title(TITLE)
                 .description(DESCRIPTION)
@@ -37,35 +45,41 @@ class UserLinkResponseTest extends LinkSetUpData {
                 .isRead(IS_READ)
                 .isMark(IS_MARK)
                 .tagList(tagResponseList)
+                .linkCreatedTime(CREATED_AT)
+                .linkUpdatedTime(UPDATED_AT)
                 .build();
 
-        assertEquals(ID, getUserLinkResponse.getLinkId());
-        assertEquals(URL, getUserLinkResponse.getUrl());
-        assertEquals(TITLE, getUserLinkResponse.getTitle());
-        assertEquals(DESCRIPTION, getUserLinkResponse.getDescription());
-        assertEquals(THUMBNAIL, getUserLinkResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, getUserLinkResponse.getBookMarkCount());
-        assertEquals(CREATED_AT, getUserLinkResponse.getLinkCreatedTime());
-        assertEquals(IS_READ, getUserLinkResponse.getIsRead());
-        assertEquals(IS_MARK, getUserLinkResponse.getIsMark());
-        assertEquals(tagResponseList, getUserLinkResponse.getTagList());
+        assertEquals(LINK_ID, userLinkResponse.getLinkId());
+        assertEquals(URL, userLinkResponse.getUrl());
+        assertEquals(TITLE, userLinkResponse.getTitle());
+        assertEquals(DESCRIPTION, userLinkResponse.getDescription());
+        assertEquals(THUMBNAIL, userLinkResponse.getThumbnail());
+        assertEquals(BOOKMARK_COUNT, userLinkResponse.getBookMarkCount());
+        assertEquals(IS_READ, userLinkResponse.getIsRead());
+        assertEquals(IS_MARK, userLinkResponse.getIsMark());
+        assertEquals(tagResponseList, userLinkResponse.getTagList());
+        assertEquals(CREATED_AT, userLinkResponse.getLinkCreatedTime());
+        assertEquals(UPDATED_AT, userLinkResponse.getLinkUpdatedTime());
     }
 
     @DisplayName("UserLinkResponse create method - DTO")
     @Test
     void testCreate() {
-        UserLinkResponse getUserLinkResponse = UserLinkResponse.create(linkResponse, IS_READ, IS_MARK, tagResponseList);
+        setUpLinkResponse();
 
-        assertEquals(ID, getUserLinkResponse.getLinkId());
-        assertEquals(URL, getUserLinkResponse.getUrl());
-        assertEquals(TITLE, getUserLinkResponse.getTitle());
-        assertEquals(DESCRIPTION, getUserLinkResponse.getDescription());
-        assertEquals(THUMBNAIL, getUserLinkResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, getUserLinkResponse.getBookMarkCount());
-        assertEquals(CREATED_AT, getUserLinkResponse.getLinkCreatedTime());
-        assertEquals(IS_READ, getUserLinkResponse.getIsRead());
-        assertEquals(IS_MARK, getUserLinkResponse.getIsMark());
-        assertEquals(tagResponseList, getUserLinkResponse.getTagList());
+        userLinkResponse = UserLinkResponse.create(linkResponse, IS_READ, IS_MARK, tagResponseList);
+
+        assertEquals(LINK_ID, userLinkResponse.getLinkId());
+        assertEquals(URL, userLinkResponse.getUrl());
+        assertEquals(TITLE, userLinkResponse.getTitle());
+        assertEquals(DESCRIPTION, userLinkResponse.getDescription());
+        assertEquals(THUMBNAIL, userLinkResponse.getThumbnail());
+        assertEquals(BOOKMARK_COUNT, userLinkResponse.getBookMarkCount());
+        assertEquals(IS_READ, userLinkResponse.getIsRead());
+        assertEquals(IS_MARK, userLinkResponse.getIsMark());
+        assertEquals(tagResponseList, userLinkResponse.getTagList());
+        assertEquals(CREATED_AT, userLinkResponse.getLinkCreatedTime());
+        assertEquals(UPDATED_AT, userLinkResponse.getLinkUpdatedTime());
     }
 
 }

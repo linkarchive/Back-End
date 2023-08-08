@@ -33,7 +33,7 @@ public class Link extends TimeEntity {
 
     @Column(length = 500)
     private String description;
-    
+
     private String thumbnail;
     private Long bookMarkCount;
 
@@ -65,7 +65,7 @@ public class Link extends TimeEntity {
         this.user = user;
     }
 
-    public static Link build(CreateLinkRequest request, User user) {
+    public static Link create(CreateLinkRequest request, User user) {
         return Link.builder()
                 .url(request.getUrl())
                 .title(request.getTitle())

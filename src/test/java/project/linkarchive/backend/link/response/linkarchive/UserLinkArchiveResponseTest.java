@@ -1,13 +1,19 @@
 package project.linkarchive.backend.link.response.linkarchive;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.linkarchive.backend.util.setUpData.LinkSetUpData;
+import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.linkarchive.backend.util.constant.Constants.HAS_NEXT;
 
-class UserLinkArchiveResponseTest extends LinkSetUpData {
+class UserLinkArchiveResponseTest extends SetUpMockData {
+
+    @BeforeEach
+    void setUp() {
+        setUpUserLinkArchiveResponse();
+    }
 
     @DisplayName("UserLinkArchiveResponseTest - DTO")
     @Test
