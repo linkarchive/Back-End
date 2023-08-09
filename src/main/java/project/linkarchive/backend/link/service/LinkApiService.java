@@ -36,12 +36,14 @@ public class LinkApiService {
     private final LinkRepository linkRepository;
     private final BookMarkRepository bookMarkRepository;
 
-    public LinkApiService(UserRepository userRepository,
-                          HashTagRepository hashTagRepository,
-                          LinkHashTagRepository linkHashTagRepository,
-                          UserHashTagRepository userHashTagRepository,
-                          LinkRepository linkRepository,
-                          BookMarkRepository bookMarkRepository) {
+    public LinkApiService(
+            UserRepository userRepository,
+            HashTagRepository hashTagRepository,
+            LinkHashTagRepository linkHashTagRepository,
+            UserHashTagRepository userHashTagRepository,
+            LinkRepository linkRepository,
+            BookMarkRepository bookMarkRepository
+    ) {
         this.userRepository = userRepository;
         this.hashTagRepository = hashTagRepository;
         this.linkHashTagRepository = linkHashTagRepository;
@@ -88,7 +90,7 @@ public class LinkApiService {
     }
 
     private Set<String> getTagsFromRequest(CreateLinkRequest request) {
-        return request.getTags().stream()
+        return request.getTagList().stream()
                 .peek(this::validationTagLength)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }

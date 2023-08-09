@@ -15,14 +15,14 @@ public class CreateLinkRequest {
     private String title;
     private String description;
     private String thumbnail;
-    private List<String> tags = new ArrayList<>();
+    private List<String> tagList = new ArrayList<>();
 
-    public CreateLinkRequest(String url, String title, String description, String thumbnail, List<String> tags) {
+    public CreateLinkRequest(String url, String title, String description, String thumbnail, List<String> tagList) {
         this.url = url;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
-        this.tags = tags;
+        this.tagList = tagList;
     }
 
 }
