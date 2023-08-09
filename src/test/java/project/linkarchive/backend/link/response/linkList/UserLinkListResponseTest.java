@@ -15,11 +15,21 @@ class UserLinkListResponseTest extends SetUpMockData {
         setUpUserLinkListResponse();
     }
 
-    @DisplayName("UserLinkListResponseTest - DTO")
+    @DisplayName("UserLinkListResponse Getter - DTO")
     @Test
     void testUserLinkListResponse() {
         assertEquals(userLinkResponseList, userLinkListResponse.getLinkList());
         assertEquals(HAS_NEXT, userLinkListResponse.getHasNext());
     }
+
+    @DisplayName("UserLinkListResponse Constructor - DTO")
+    @Test
+    void testConstructor() {
+        userLinkListResponse = new UserLinkListResponse(userLinkResponseList, HAS_NEXT);
+
+        assertEquals(userLinkResponseList, userLinkListResponse.getLinkList());
+        assertEquals(HAS_NEXT, userLinkListResponse.getHasNext());
+    }
+
 
 }

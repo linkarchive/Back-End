@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
 class UserLinkResponseTest extends SetUpMockData {
@@ -15,7 +15,7 @@ class UserLinkResponseTest extends SetUpMockData {
         setUpUserLinkResponse();
     }
 
-    @DisplayName("UserLinkResponseTest - DTO")
+    @DisplayName("UserLinkResponse Getter - DTO")
     @Test
     void testUserLinkResponse() {
         assertEquals(LINK_ID, userLinkResponse.getLinkId());
@@ -31,7 +31,25 @@ class UserLinkResponseTest extends SetUpMockData {
         assertEquals(UPDATED_AT, userLinkResponse.getLinkUpdatedTime());
     }
 
-    @DisplayName("UserLinkResponse Builder 패턴 - DTO")
+    @DisplayName("UserLinkResponse Constructor - DTO")
+    @Test
+    void testConstructor() {
+        userLinkResponse = new UserLinkResponse(LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, IS_READ, IS_MARK, tagResponseList, CREATED_AT, UPDATED_AT);
+
+        assertEquals(LINK_ID, userLinkResponse.getLinkId());
+        assertEquals(URL, userLinkResponse.getUrl());
+        assertEquals(TITLE, userLinkResponse.getTitle());
+        assertEquals(DESCRIPTION, userLinkResponse.getDescription());
+        assertEquals(THUMBNAIL, userLinkResponse.getThumbnail());
+        assertEquals(BOOKMARK_COUNT, userLinkResponse.getBookMarkCount());
+        assertEquals(IS_READ, userLinkResponse.getIsRead());
+        assertEquals(IS_MARK, userLinkResponse.getIsMark());
+        assertEquals(tagResponseList, userLinkResponse.getTagList());
+        assertEquals(CREATED_AT, userLinkResponse.getLinkCreatedTime());
+        assertEquals(UPDATED_AT, userLinkResponse.getLinkUpdatedTime());
+    }
+
+    @DisplayName("UserLinkResponse Builder Pattern - DTO")
     @Test
     void testBuilder() {
         userLinkResponse = UserLinkResponse.builder()
@@ -62,7 +80,7 @@ class UserLinkResponseTest extends SetUpMockData {
         assertEquals(UPDATED_AT, userLinkResponse.getLinkUpdatedTime());
     }
 
-    @DisplayName("UserLinkResponse create method - DTO")
+    @DisplayName("UserLinkResponse Created Method - DTO")
     @Test
     void testCreate() {
         setUpLinkResponse();

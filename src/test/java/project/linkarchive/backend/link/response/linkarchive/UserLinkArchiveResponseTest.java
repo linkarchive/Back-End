@@ -15,9 +15,18 @@ class UserLinkArchiveResponseTest extends SetUpMockData {
         setUpUserLinkArchiveResponse();
     }
 
-    @DisplayName("UserLinkArchiveResponseTest - DTO")
+    @DisplayName("UserLinkArchiveResponse Getter - DTO")
     @Test
     void testUserLinkArchiveResponse() {
+        assertEquals(userArchiveResponseList, userLinkArchiveResponse.getLinkArchive());
+        assertEquals(HAS_NEXT, userLinkArchiveResponse.getHasNext());
+    }
+
+    @DisplayName("UserLinkArchiveResponse Constructor - DTO")
+    @Test
+    void testConstructor() {
+        userLinkArchiveResponse = new UserLinkArchiveResponse(userArchiveResponseList, HAS_NEXT);
+
         assertEquals(userArchiveResponseList, userLinkArchiveResponse.getLinkArchive());
         assertEquals(HAS_NEXT, userLinkArchiveResponse.getHasNext());
     }

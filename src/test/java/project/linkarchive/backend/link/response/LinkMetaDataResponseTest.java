@@ -15,9 +15,19 @@ class LinkMetaDataResponseTest extends SetUpMockData {
         setUpLinkMetaDataResponse();
     }
 
-    @DisplayName("LinkMetaDataResponseTest - DTO")
+    @DisplayName("LinkMetaDataResponse Getter - DTO")
     @Test
     void testLinkMetaDataResponse() {
+        assertEquals(META_TITLE, linkMetaDataResponse.getMetaTitle());
+        assertEquals(META_DESCRIPTION, linkMetaDataResponse.getMetaDescription());
+        assertEquals(META_THUMBNAIL, linkMetaDataResponse.getMetaThumbnail());
+    }
+
+    @DisplayName("LinkMetaDataResponse Constructor - DTO")
+    @Test
+    void testConstructor() {
+        linkMetaDataResponse = new LinkMetaDataResponse(META_TITLE, META_DESCRIPTION, META_THUMBNAIL);
+
         assertEquals(META_TITLE, linkMetaDataResponse.getMetaTitle());
         assertEquals(META_DESCRIPTION, linkMetaDataResponse.getMetaDescription());
         assertEquals(META_THUMBNAIL, linkMetaDataResponse.getMetaThumbnail());
