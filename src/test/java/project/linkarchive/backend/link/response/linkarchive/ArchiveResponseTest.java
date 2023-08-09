@@ -15,9 +15,27 @@ class ArchiveResponseTest extends SetUpMockData {
         setUpArchiveResponse();
     }
 
-    @DisplayName("ArchiveResponseTest - DTO")
+    @DisplayName("ArchiveResponse Getter - DTO")
     @Test
     void testArchiveResponse() {
+        assertEquals(USER_ID, archiveResponse.getUserId());
+        assertEquals(NICKNAME, archiveResponse.getNickname());
+        assertEquals(PROFILE_IMAGE_FILENAME, archiveResponse.getProfileImage());
+        assertEquals(LINK_ID, archiveResponse.getLinkId());
+        assertEquals(URL, archiveResponse.getUrl());
+        assertEquals(TITLE, archiveResponse.getTitle());
+        assertEquals(DESCRIPTION, archiveResponse.getDescription());
+        assertEquals(THUMBNAIL, archiveResponse.getThumbnail());
+        assertEquals(BOOKMARK_COUNT, archiveResponse.getBookMarkCount());
+        assertEquals(CREATED_AT, archiveResponse.getLinkCreatedTime());
+        assertEquals(UPDATED_AT, archiveResponse.getLinkUpdatedTime());
+    }
+
+    @DisplayName("ArchiveResponse Constructor - DTO")
+    @Test
+    void testConstructor() {
+        archiveResponse = new ArchiveResponse(USER_ID, NICKNAME, PROFILE_IMAGE_FILENAME, LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, CREATED_AT, UPDATED_AT);
+
         assertEquals(USER_ID, archiveResponse.getUserId());
         assertEquals(NICKNAME, archiveResponse.getNickname());
         assertEquals(PROFILE_IMAGE_FILENAME, archiveResponse.getProfileImage());

@@ -19,6 +19,9 @@ import project.linkarchive.backend.link.response.linkList.UserLinkResponse;
 import project.linkarchive.backend.link.response.linkarchive.ArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
+import project.linkarchive.backend.link.response.trash.TrashLinkListResponse;
+import project.linkarchive.backend.link.response.trash.TrashLinkResponse;
+import project.linkarchive.backend.link.response.trash.UserTrashLinkListResponse;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.security.AuthInfo;
@@ -63,10 +66,14 @@ public class MockDataGenerator {
     protected LinkResponse linkResponse;
     protected UserLinkListResponse userLinkListResponse;
     protected UserLinkResponse userLinkResponse;
+    protected TrashLinkListResponse trashLinkListResponse;
+    protected TrashLinkResponse trashLinkResponse;
+    protected UserTrashLinkListResponse userTrashLinkListResponse;
     protected TagResponse tagResponse;
 
     protected List<UserArchiveResponse> userArchiveResponseList = new ArrayList<>();
     protected List<UserLinkResponse> userLinkResponseList = new ArrayList<>();
+    protected List<TrashLinkListResponse> trashLinkListResponseList = new ArrayList<>();
     protected List<String> tagList = new ArrayList<>();
     protected List<TagResponse> tagResponseList = new ArrayList<>();
     protected List<LinkHashTag> linkHashTagList = new ArrayList<>();

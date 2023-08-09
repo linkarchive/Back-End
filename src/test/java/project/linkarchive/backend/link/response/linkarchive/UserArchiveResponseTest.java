@@ -15,7 +15,7 @@ class UserArchiveResponseTest extends SetUpMockData {
         setUpUserArchiveResponse();
     }
 
-    @DisplayName("UserArchiveResponseTest - DTO")
+    @DisplayName("UserArchiveResponse Getter - DTO")
     @Test
     void testUserArchiveResponse() {
         assertEquals(USER_ID, userArchiveResponse.getUserId());
@@ -34,7 +34,28 @@ class UserArchiveResponseTest extends SetUpMockData {
         assertEquals(UPDATED_AT, userArchiveResponse.getLinkUpdatedTime());
     }
 
-    @DisplayName("UserArchiveResponse Builder 패턴 - DTO")
+    @DisplayName("UserArchiveResponse Constructor - DTO")
+    @Test
+    void testConstructor() {
+        userArchiveResponse = new UserArchiveResponse(USER_ID, NICKNAME, PROFILE_IMAGE_FILENAME, LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, IS_READ, IS_MARK, tagResponseList, CREATED_AT, UPDATED_AT);
+
+        assertEquals(USER_ID, userArchiveResponse.getUserId());
+        assertEquals(NICKNAME, userArchiveResponse.getNickname());
+        assertEquals(PROFILE_IMAGE_FILENAME, userArchiveResponse.getProfileImage());
+        assertEquals(LINK_ID, userArchiveResponse.getLinkId());
+        assertEquals(URL, userArchiveResponse.getUrl());
+        assertEquals(TITLE, userArchiveResponse.getTitle());
+        assertEquals(DESCRIPTION, userArchiveResponse.getDescription());
+        assertEquals(THUMBNAIL, userArchiveResponse.getThumbnail());
+        assertEquals(BOOKMARK_COUNT, userArchiveResponse.getBookMarkCount());
+        assertEquals(IS_READ, userArchiveResponse.getIsRead());
+        assertEquals(IS_MARK, userArchiveResponse.getIsMark());
+        assertEquals(tagResponseList, userArchiveResponse.getTagList());
+        assertEquals(CREATED_AT, userArchiveResponse.getLinkCreatedTime());
+        assertEquals(UPDATED_AT, userArchiveResponse.getLinkUpdatedTime());
+    }
+
+    @DisplayName("UserArchiveResponse Builder Pattern - DTO")
     @Test
     void testBuilder() {
         userArchiveResponse = UserArchiveResponse.builder()
@@ -70,7 +91,7 @@ class UserArchiveResponseTest extends SetUpMockData {
         assertEquals(UPDATED_AT, userArchiveResponse.getLinkUpdatedTime());
     }
 
-    @DisplayName("UserArchiveResponse create method - DTO")
+    @DisplayName("UserArchiveResponse Create Method - DTO")
     @Test
     void testCreate() {
         setUpArchiveResponse();

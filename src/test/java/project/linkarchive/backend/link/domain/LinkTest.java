@@ -18,57 +18,23 @@ class LinkTest extends SetUpMockData {
         setUpLink();
     }
 
-    @DisplayName("Link getLinkId- Domain")
+    @DisplayName("Link Getter- Domain")
     @Test
-    void testGetLinkId() {
+    void testLink() {
         assertEquals(LINK_ID, link.getId());
-    }
-
-    @DisplayName("Link getUrl - Domain")
-    @Test
-    void testGetUrl() {
         assertEquals(URL, link.getUrl());
-    }
-
-    @DisplayName("Link getTitle - Domain")
-    @Test
-    void getTitle() {
         assertEquals(TITLE, link.getTitle());
-    }
-
-    @DisplayName("Link getDescription - Domain")
-    @Test
-    void getDescription() {
         assertEquals(DESCRIPTION, link.getDescription());
-    }
-
-    @DisplayName("Link getThumbnail - Domain")
-    @Test
-    void getThumbnail() {
         assertEquals(THUMBNAIL, link.getThumbnail());
-    }
-
-    @DisplayName("Link getBookMarkCount - Domain")
-    @Test
-    void getBookMarkCount() {
         assertEquals(BOOKMARK_COUNT, link.getBookMarkCount());
-    }
-
-    @DisplayName("Link getLinkStatus - Domain")
-    @Test
-    void getLinkStatus() {
         assertEquals(LINK_STATUS_ACTIVE, link.getLinkStatus());
-    }
-
-    @DisplayName("Link getUser - Domain")
-    @Test
-    void getUser() {
         assertEquals(user, link.getUser());
     }
 
+
     @DisplayName("Link Constructor - Domain")
     @Test
-    void testLinkConstructor() {
+    void testConstructor() {
         link = new Link(LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, ACTIVE, user);
 
         assertEquals(LINK_ID, link.getId());
@@ -83,7 +49,7 @@ class LinkTest extends SetUpMockData {
 
     @DisplayName("Link Builder Pattern - Domain")
     @Test
-    void builder() {
+    void testBuilder() {
         link = Link.builder()
                 .id(LINK_ID)
                 .url(URL)
@@ -105,9 +71,9 @@ class LinkTest extends SetUpMockData {
         assertEquals(user, link.getUser());
     }
 
-    @DisplayName("Link create method - Domain")
+    @DisplayName("Link Create Method - Domain")
     @Test
-    void build() {
+    void testCreate() {
         setUpCreateLinkRequest();
 
         link = Link.create(createLinkRequest, user);
@@ -121,7 +87,7 @@ class LinkTest extends SetUpMockData {
         assertEquals(user, link.getUser());
     }
 
-    @DisplayName("Link delete - Domain")
+    @DisplayName("Link Delete Method - Domain")
     @Test
     void testDelete() {
         LinkStatus oldLinkStatus = link.getLinkStatus();

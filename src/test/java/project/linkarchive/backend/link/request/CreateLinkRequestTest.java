@@ -15,14 +15,26 @@ class CreateLinkRequestTest extends SetUpMockData {
         setUpCreateLinkRequest();
     }
 
-    @DisplayName("CreateLinkRequestTest - DTO")
+    @DisplayName("CreateLinkRequest Getter - DTO")
     @Test
     void testCreateLinkRequest() {
         assertEquals(URL, createLinkRequest.getUrl());
         assertEquals(TITLE, createLinkRequest.getTitle());
         assertEquals(DESCRIPTION, createLinkRequest.getDescription());
         assertEquals(THUMBNAIL, createLinkRequest.getThumbnail());
-        assertEquals(tagList, createLinkRequest.getTags());
+        assertEquals(tagList, createLinkRequest.getTagList());
+    }
+
+    @DisplayName("CreateLinkRequest Constructor - DTO")
+    @Test
+    void testConstructor() {
+        createLinkRequest = new CreateLinkRequest(URL, TITLE, DESCRIPTION, THUMBNAIL, tagList);
+
+        assertEquals(URL, createLinkRequest.getUrl());
+        assertEquals(TITLE, createLinkRequest.getTitle());
+        assertEquals(DESCRIPTION, createLinkRequest.getDescription());
+        assertEquals(THUMBNAIL, createLinkRequest.getThumbnail());
+        assertEquals(tagList, createLinkRequest.getTagList());
     }
 
 }
