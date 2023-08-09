@@ -31,6 +31,7 @@ import project.linkarchive.backend.user.request.UpdateProfileRequest;
 import project.linkarchive.backend.user.response.MyProfileResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
+import project.linkarchive.backend.user.response.UserProfileResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,7 @@ public class MockDataGenerator {
     protected CreateTagRequest createTagRequest;
 
     protected MyProfileResponse myProfileResponse;
+    protected UserProfileResponse userProfileResponse;
     protected UpdateNicknameResponse updateNicknameResponse;
     protected UpdateProfileResponse updateProfileResponse;
     protected ProfileImageResponse profileImageResponse;
