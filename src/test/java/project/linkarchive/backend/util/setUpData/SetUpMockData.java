@@ -3,7 +3,6 @@ package project.linkarchive.backend.util.setUpData;
 import org.springframework.mock.web.MockMultipartFile;
 import project.linkarchive.backend.auth.response.KakaoAccount;
 import project.linkarchive.backend.auth.response.KakaoProfile;
-import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.link.response.LinkMetaDataResponse;
@@ -13,6 +12,9 @@ import project.linkarchive.backend.link.response.linkList.UserLinkResponse;
 import project.linkarchive.backend.link.response.linkarchive.ArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserArchiveResponse;
 import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResponse;
+import project.linkarchive.backend.link.response.trash.TrashLinkListResponse;
+import project.linkarchive.backend.link.response.trash.TrashLinkResponse;
+import project.linkarchive.backend.link.response.trash.UserTrashLinkListResponse;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.security.AuthInfo;
@@ -97,17 +99,6 @@ public class SetUpMockData extends MockDataGenerator {
         profileImageResponse = new ProfileImageResponse(PROFILE_IMAGE_FILENAME);
     }
 
-    protected void setUpTagList() {
-        tagList.clear();
-
-        for (int i = 1; i <= LOOP_COUNT; i++) {
-            hashTag = HashTag.builder()
-                    .tag(TAG + i)
-                    .build();
-            tagList.add(hashTag.getTag());
-        }
-    }
-
     protected void setUpCreateLinkRequest() {
         createLinkRequest = new CreateLinkRequest(URL, TITLE, DESCRIPTION, THUMBNAIL, tagList);
     }
@@ -140,5 +131,18 @@ public class SetUpMockData extends MockDataGenerator {
     protected void setUpUserLinkListResponse() {
         userLinkListResponse = new UserLinkListResponse(userLinkResponseList, HAS_NEXT);
     }
+
+    protected void setUpTrashLinkResponse() {
+        trashLinkResponse = new TrashLinkResponse(LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, CREATED_AT);
+    }
+
+    protected void setUpTrashLinkListResponse() {
+        trashLinkListResponse = new TrashLinkListResponse(LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, tagResponseList, CREATED_AT);
+    }
+
+    protected void setUpUserTrashLinkListResponse() {
+        userTrashLinkListResponse = new UserTrashLinkListResponse(trashLinkListResponseList, HAS_NEXT);
+    }
+
 
 }
