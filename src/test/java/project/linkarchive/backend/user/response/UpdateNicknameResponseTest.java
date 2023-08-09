@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static project.linkarchive.backend.util.constant.Constants.NEW_NICKNAME;
 
 class UpdateNicknameResponseTest extends SetUpMockData {
@@ -14,20 +13,21 @@ class UpdateNicknameResponseTest extends SetUpMockData {
     @BeforeEach
     void setUp() {
         setUpUser();
-        setUpUpdateNicknameRequest();
+        setUpUpdateNicknameResponse();
     }
 
-    @DisplayName("UpdateNicknameResponse - DTO")
+    @DisplayName("UpdateNicknameResponse Getter - DTO")
     @Test
-    void testUpdateNicknameResponse() {
-        String oldNickname = user.getNickname();
-        user.updateNickName(updateNicknameRequest);
+    void testGetter() {
+        assertEquals(NEW_NICKNAME, updateNicknameResponse.getNickname());
+    }
 
-        setUpUpdateNicknameResponse();
-        String newNickname = updateNicknameResponse.getNickname();
+    @DisplayName("UpdateNicknameResponse Constructor - DTO")
+    @Test
+    void testConstructor() {
+        updateNicknameResponse = new UpdateNicknameResponse(NEW_NICKNAME);
 
-        assertNotEquals(oldNickname, newNickname);
-        assertEquals(NEW_NICKNAME, newNickname);
+        assertEquals(NEW_NICKNAME, updateNicknameResponse.getNickname());
     }
 
 }
