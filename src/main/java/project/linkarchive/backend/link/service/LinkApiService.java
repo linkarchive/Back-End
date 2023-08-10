@@ -2,16 +2,17 @@ package project.linkarchive.backend.link.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
 import project.linkarchive.backend.advice.exception.custom.ExceededException;
 import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
-import project.linkarchive.backend.bookmark.domain.BookMark;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.hashtag.domain.HashTag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.domain.LinkHashTag;
+import project.linkarchive.backend.link.enums.LinkStatus;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
@@ -53,11 +54,11 @@ public class LinkApiService {
     }
 
     public void create(CreateLinkRequest request, Long userId) {
-        validationTitleLength(request);
+        validateTitleLength(request);
 
-        User user = findUserById(userId);
+        User user = getUserById(userId);
         Set<String> tagsFromRequest = getTagsFromRequest(request);
-        exceededTagCount(tagsFromRequest);
+        exceedTagCount(tagsFromRequest);
 
         Link link = Link.create(request, user);
         addTagsToLinkAndIncrementUserTagCount(tagsFromRequest, link);
@@ -66,36 +67,45 @@ public class LinkApiService {
     }
 
     public void delete(Long linkId, Long userId) {
-        findUserById(userId);
+        validateUserExists(userId);
 
-        Link link = linkRepository.findByIdAndUserId(linkId, userId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_LINK));
+        Link link = getLinkByLinkIdAndUserId(linkId, userId);
+        validateLinkStatus(link);
 
-        BookMark bookMark = bookMarkRepository.findByLinkIdAndUserId(link.getId(), userId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_BOOKMARK));
-        bookMarkRepository.delete(bookMark);
+        deleteBookmarkByLinkIdAndUserId(userId, link);
 
         link.delete();
+        decreaseBookmarkCount(link);
     }
 
-    private void validationTitleLength(CreateLinkRequest request) {
+    private void validateTitleLength(CreateLinkRequest request) {
         if (request.getTitle() == null || request.getTitle().length() < MINIMUM_TITLE_LENGTH) {
             throw new LengthRequiredException(LENGTH_REQUIRED_TITLE);
         }
     }
 
-    private User findUserById(Long userId) {
+    private void validateUserExists(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+    }
+
+    private User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
+    private Link getLinkByLinkIdAndUserId(Long linkId, Long userId) {
+        return linkRepository.findByIdAndUserId(linkId, userId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_LINK));
+    }
+
     private Set<String> getTagsFromRequest(CreateLinkRequest request) {
         return request.getTagList().stream()
-                .peek(this::validationTagLength)
+                .peek(this::validateTagLength)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    private void validationTagLength(String tag) {
+    private void validateTagLength(String tag) {
         boolean isTooLong = tag.length() > MAXIMUM_TAG_LENGTH;
         boolean isTooShort = tag.length() < MINIMUM_TAG_LENGTH;
         if (isTooLong || isTooShort) {
@@ -103,7 +113,7 @@ public class LinkApiService {
         }
     }
 
-    private void exceededTagCount(Set<String> requestForTag) {
+    private void exceedTagCount(Set<String> requestForTag) {
         if (requestForTag.size() > TAG_SIZE) {
             throw new ExceededException(EXCEEDED_TAG_LIMIT_10);
         }
@@ -119,6 +129,25 @@ public class LinkApiService {
 
                     linkHashTagRepository.save(LinkHashTag.build(link, hashTag));
                 });
+    }
+
+    private void validateLinkStatus(Link link) {
+        if (link.getLinkStatus().equals(LinkStatus.TRASH)) {
+            throw new AlreadyExistException(ALREADY_TRASH_LINK);
+        }
+    }
+
+    private void deleteBookmarkByLinkIdAndUserId(Long userId, Link link) {
+        bookMarkRepository.findByLinkIdAndUserId(link.getId(), userId)
+                .ifPresent(
+                        bookMarkRepository::delete
+                );
+    }
+
+    private void decreaseBookmarkCount(Link link) {
+        if (DEFAULT_COUNT < link.getBookMarkCount()) {
+            linkRepository.decreaseBookMarkCount(link.getId());
+        }
     }
 
 }
