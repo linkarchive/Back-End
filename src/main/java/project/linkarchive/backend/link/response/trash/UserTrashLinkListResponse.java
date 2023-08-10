@@ -7,11 +7,11 @@ import java.util.List;
 @Getter
 public class UserTrashLinkListResponse {
 
-    private List<TrashLinkListResponse> trashLinkList;
+    private List<TrashLinkListResponse> linkList;
     private Boolean hasNext;
 
     public UserTrashLinkListResponse(List<TrashLinkListResponse> trashLinkListResponseList, Boolean hasNext) {
-        this.trashLinkList = trashLinkListResponseList;
+        this.linkList = trashLinkListResponseList;
         this.hasNext = hasNext;
     }
 

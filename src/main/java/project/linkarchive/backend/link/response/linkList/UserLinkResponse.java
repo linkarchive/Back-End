@@ -15,7 +15,7 @@ public class UserLinkResponse {
     private String title;
     private String description;
     private String thumbnail;
-    private Long bookMarkCount;
+    private int bookmarkCount;
     private Boolean isRead;
     private Boolean isMark;
     private List<TagResponse> tagList;
@@ -23,13 +23,13 @@ public class UserLinkResponse {
     private LocalDateTime linkUpdatedTime;
 
     @Builder
-    public UserLinkResponse(Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, Boolean isRead, Boolean isMark, List<TagResponse> tagList, LocalDateTime linkCreatedTime, LocalDateTime linkUpdatedTime) {
+    public UserLinkResponse(Long linkId, String url, String title, String description, String thumbnail, int bookmarkCount, Boolean isRead, Boolean isMark, List<TagResponse> tagList, LocalDateTime linkCreatedTime, LocalDateTime linkUpdatedTime) {
         this.linkId = linkId;
         this.url = url;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
-        this.bookMarkCount = bookMarkCount;
+        this.bookmarkCount = bookmarkCount;
         this.isRead = isRead;
         this.isMark = isMark;
         this.tagList = tagList;
@@ -44,7 +44,7 @@ public class UserLinkResponse {
                 .title(response.getTitle())
                 .description(response.getDescription())
                 .thumbnail(response.getThumbnail())
-                .bookMarkCount(response.getBookMarkCount())
+                .bookmarkCount(response.getBookmarkCount())
                 .isRead(isRead)
                 .isMark(isMark)
                 .tagList(tagList)

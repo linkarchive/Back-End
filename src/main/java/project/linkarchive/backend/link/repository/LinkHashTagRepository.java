@@ -1,14 +1,12 @@
 package project.linkarchive.backend.link.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import project.linkarchive.backend.link.domain.LinkHashTag;
+import project.linkarchive.backend.link.domain.LinkHashtag;
 
 import java.util.List;
 
-public interface LinkHashTagRepository extends JpaRepository<LinkHashTag, Long> {
+public interface LinkHashTagRepository extends JpaRepository<LinkHashtag, Long> {
 
-    List<LinkHashTag> findByLinkId(Long linkId);
-
-    List<LinkHashTag> findByHashTagId(Long HashTagId);
+    List<LinkHashtag> findByLinkId(Long linkId);
 
 }

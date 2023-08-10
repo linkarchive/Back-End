@@ -15,18 +15,18 @@ public class TrashLinkListResponse {
     private String title;
     private String description;
     private String thumbnail;
-    private Long bookMarkCount;
+    private int bookmarkCount;
     private List<TagResponse> tagList;
     private LocalDateTime linkCreatedTime;
 
     @Builder
-    public TrashLinkListResponse(Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, List<TagResponse> tagList, LocalDateTime linkCreatedTime) {
+    public TrashLinkListResponse(Long linkId, String url, String title, String description, String thumbnail, int bookmarkCount, List<TagResponse> tagList, LocalDateTime linkCreatedTime) {
         this.linkId = linkId;
         this.url = url;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
-        this.bookMarkCount = bookMarkCount;
+        this.bookmarkCount = bookmarkCount;
         this.tagList = tagList;
         this.linkCreatedTime = linkCreatedTime;
     }
@@ -38,7 +38,7 @@ public class TrashLinkListResponse {
                 .title(trashLinkResponse.getTitle())
                 .description(trashLinkResponse.getDescription())
                 .thumbnail(trashLinkResponse.getThumbnail())
-                .bookMarkCount(trashLinkResponse.getBookMarkCount())
+                .bookmarkCount(trashLinkResponse.getBookMarkCount())
                 .tagList(tagList)
                 .linkCreatedTime(trashLinkResponse.getLinkCreatedTime())
                 .build();

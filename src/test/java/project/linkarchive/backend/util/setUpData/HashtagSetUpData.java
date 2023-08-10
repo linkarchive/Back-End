@@ -1,17 +1,17 @@
 package project.linkarchive.backend.util.setUpData;
 
 import org.junit.jupiter.api.BeforeEach;
-import project.linkarchive.backend.hashtag.domain.HashTag;
+import project.linkarchive.backend.hashtag.domain.Hashtag;
 import project.linkarchive.backend.hashtag.request.CreateTagRequest;
 
 import static project.linkarchive.backend.util.constant.Constants.TAG;
 
-public class HashTagSetUpData extends MockDataGenerator {
+public class HashtagSetUpData extends MockDataGenerator {
 
     @BeforeEach
     public void setup() {
 
-        hashTag = HashTag.builder()
+        hashTag = Hashtag.builder()
                 .tag(TAG)
                 .build();
 

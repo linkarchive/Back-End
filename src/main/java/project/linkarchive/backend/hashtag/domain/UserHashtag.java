@@ -12,14 +12,14 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserHashTag extends CreatedEntity {
+public class UserHashtag extends CreatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_hashtag_id")
     private Long id;
 
-    private Long usageCount;
+    private int usageCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -27,20 +27,20 @@ public class UserHashTag extends CreatedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "hashtag_id")
-    private HashTag hashTag;
+    private Hashtag hashtag;
 
     @Builder
-    public UserHashTag(Long usageCount, User user, HashTag hashTag) {
+    public UserHashtag(int usageCount, User user, Hashtag hashtag) {
         this.usageCount = usageCount;
         this.user = user;
-        this.hashTag = hashTag;
+        this.hashtag = hashtag;
     }
 
-    public static UserHashTag create(Long usageCount, User user, HashTag hashTag) {
-        return UserHashTag.builder()
+    public static UserHashtag create(int usageCount, User user, Hashtag hashTag) {
+        return UserHashtag.builder()
                 .usageCount(usageCount)
                 .user(user)
-                .hashTag(hashTag)
+                .hashtag(hashTag)
                 .build();
     }
 

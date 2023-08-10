@@ -23,20 +23,20 @@ public class BookMarkApiController {
     }
 
     @PostMapping("/mark/link/{linkId}")
-    public ResponseEntity<SuccessResponse> bookMark(
+    public ResponseEntity<SuccessResponse> bookmark(
             @PathVariable(value = "linkId") Long linkId,
             AuthInfo authInfo
     ) {
-        bookMarkApiService.bookMark(linkId, authInfo.getId());
+        bookMarkApiService.bookmark(linkId, authInfo.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(BOOK_MARK));
     }
 
     @DeleteMapping("/mark/link/{linkId}")
-    public ResponseEntity<SuccessResponse> bookMarkCancel(
+    public ResponseEntity<SuccessResponse> bookmarkCancel(
             @PathVariable(value = "linkId") Long linkId,
             AuthInfo authInfo
     ) {
-        bookMarkApiService.bookMarkCancel(linkId, authInfo.getId());
+        bookMarkApiService.bookmarkCount(linkId, authInfo.getId());
         return ResponseEntity.ok(new SuccessResponse(BOOK_MARK_CANCEL));
     }
 

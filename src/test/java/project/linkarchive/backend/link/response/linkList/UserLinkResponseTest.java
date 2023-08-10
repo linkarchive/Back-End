@@ -23,7 +23,7 @@ class UserLinkResponseTest extends SetUpMockData {
         assertEquals(TITLE, userLinkResponse.getTitle());
         assertEquals(DESCRIPTION, userLinkResponse.getDescription());
         assertEquals(THUMBNAIL, userLinkResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, userLinkResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, userLinkResponse.getBookmarkCount());
         assertEquals(IS_READ, userLinkResponse.getIsRead());
         assertEquals(IS_MARK, userLinkResponse.getIsMark());
         assertEquals(tagResponseList, userLinkResponse.getTagList());
@@ -41,7 +41,7 @@ class UserLinkResponseTest extends SetUpMockData {
         assertEquals(TITLE, userLinkResponse.getTitle());
         assertEquals(DESCRIPTION, userLinkResponse.getDescription());
         assertEquals(THUMBNAIL, userLinkResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, userLinkResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, userLinkResponse.getBookmarkCount());
         assertEquals(IS_READ, userLinkResponse.getIsRead());
         assertEquals(IS_MARK, userLinkResponse.getIsMark());
         assertEquals(tagResponseList, userLinkResponse.getTagList());
@@ -58,7 +58,7 @@ class UserLinkResponseTest extends SetUpMockData {
                 .title(TITLE)
                 .description(DESCRIPTION)
                 .thumbnail(THUMBNAIL)
-                .bookMarkCount(BOOKMARK_COUNT)
+                .bookmarkCount(BOOKMARK_COUNT)
                 .linkCreatedTime(CREATED_AT)
                 .isRead(IS_READ)
                 .isMark(IS_MARK)
@@ -72,7 +72,7 @@ class UserLinkResponseTest extends SetUpMockData {
         assertEquals(TITLE, userLinkResponse.getTitle());
         assertEquals(DESCRIPTION, userLinkResponse.getDescription());
         assertEquals(THUMBNAIL, userLinkResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, userLinkResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, userLinkResponse.getBookmarkCount());
         assertEquals(IS_READ, userLinkResponse.getIsRead());
         assertEquals(IS_MARK, userLinkResponse.getIsMark());
         assertEquals(tagResponseList, userLinkResponse.getTagList());
@@ -92,7 +92,7 @@ class UserLinkResponseTest extends SetUpMockData {
         assertEquals(TITLE, userLinkResponse.getTitle());
         assertEquals(DESCRIPTION, userLinkResponse.getDescription());
         assertEquals(THUMBNAIL, userLinkResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, userLinkResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, userLinkResponse.getBookmarkCount());
         assertEquals(IS_READ, userLinkResponse.getIsRead());
         assertEquals(IS_MARK, userLinkResponse.getIsMark());
         assertEquals(tagResponseList, userLinkResponse.getTagList());

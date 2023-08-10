@@ -2,13 +2,13 @@ package project.linkarchive.backend.hashtag.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.linkarchive.backend.util.setUpData.HashTagSetUpData;
+import project.linkarchive.backend.util.setUpData.HashtagSetUpData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static project.linkarchive.backend.util.constant.Constants.TAG;
 
-class HashTagTest extends HashTagSetUpData {
+class HashtagTest extends HashtagSetUpData {
 
     @DisplayName("해시태그 getTag - Domain")
     @Test
@@ -22,21 +22,21 @@ class HashTagTest extends HashTagSetUpData {
     @DisplayName("해시태그 Builder 패턴 - Domain")
     @Test
     void testBuilder() {
-        HashTag getHashTag = HashTag.builder()
+        Hashtag getHashtag = Hashtag.builder()
                 .tag(TAG)
                 .build();
 
-        assertNotNull(getHashTag);
-        assertEquals(TAG, getHashTag.getTag());
+        assertNotNull(getHashtag);
+        assertEquals(TAG, getHashtag.getTag());
     }
 
     @DisplayName("해시태그 Build 메서드 - Domain")
     @Test
     void testBuild() {
-        HashTag getHashTag = HashTag.create(createTagRequest.getTag());
+        Hashtag getHashtag = Hashtag.create(createTagRequest.getTag());
 
-        assertNotNull(getHashTag);
-        assertEquals(TAG, getHashTag.getTag());
+        assertNotNull(getHashtag);
+        assertEquals(TAG, getHashtag.getTag());
     }
 
 }

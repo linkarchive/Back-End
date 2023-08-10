@@ -41,7 +41,7 @@ public class Constants {
     public static final String TITLE = "Test_Title";
     public static final String DESCRIPTION = "Test_Description";
     public static final String THUMBNAIL = "Test_Thumbnail";
-    public static final Long BOOKMARK_COUNT = 0L;
+    public static final int BOOKMARK_COUNT = 0;
     public static final LinkStatus LINK_STATUS_ACTIVE = ACTIVE;
     public static final LinkStatus LINK_STATUS_TRASH = TRASH;
 
@@ -53,6 +53,7 @@ public class Constants {
 
     public static final String TAG = "Test_Tag";
 
+    public static final int USAGE_COUNT_INT = 10;
     public static final Long USAGE_COUNT = 10L;
     public static final Boolean IS_MARK = true;
     public static final Boolean IS_READ = true;

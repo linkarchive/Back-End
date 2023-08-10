@@ -105,14 +105,14 @@ class UserQueryServiceTest extends SetUpMockData {
     private void validateResponse(MyProfileResponse response) {
         assertEquals(user.getId(), response.getId());
         assertEquals(user.getNickname(), response.getNickname());
-        assertEquals(PROFILE_IMAGE_URL, response.getProfileImageFileName());
+        assertEquals(PROFILE_IMAGE_URL, response.getProfileImage());
     }
 
     private void validateResponse(UserProfileResponse response) {
         assertEquals(user.getId(), response.getId());
         assertEquals(user.getNickname(), response.getNickname());
         assertEquals(user.getIntroduce(), response.getIntroduce());
-        assertEquals(PROFILE_IMAGE_URL, response.getProfileImageFileName());
+        assertEquals(PROFILE_IMAGE_URL, response.getProfileImage());
         assertEquals(user.getFollowerCount(), response.getFollowerCount());
         assertEquals(user.getFollowingCount(), response.getFollowingCount());
     }

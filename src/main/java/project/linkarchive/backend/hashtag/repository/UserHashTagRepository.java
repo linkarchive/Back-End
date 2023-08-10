@@ -4,16 +4,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import project.linkarchive.backend.hashtag.domain.UserHashTag;
+import project.linkarchive.backend.hashtag.domain.UserHashtag;
 
 import java.util.Optional;
 
-public interface UserHashTagRepository extends JpaRepository<UserHashTag, Long> {
+public interface UserHashTagRepository extends JpaRepository<UserHashtag, Long> {
 
-    Optional<UserHashTag> findByHashTagId(Long hashTagId);
+    Optional<UserHashtag> findByHashtagId(Long hashtagId);
 
     @Modifying
-    @Query("UPDATE UserHashTag uh SET uh.usageCount = uh.usageCount + 1 WHERE uh.id = :hashtagId")
+    @Query("UPDATE UserHashtag uh SET uh.usageCount = uh.usageCount + 1 WHERE uh.id = :hashtagId")
     void increaseUsageCount(@Param("hashtagId") Long hashtagId);
 
 }

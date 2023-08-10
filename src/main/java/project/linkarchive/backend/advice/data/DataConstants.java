@@ -12,6 +12,8 @@ public class DataConstants {
     public static final Pattern PATTERN_REGAX = Pattern.compile("^[\\uAC00-\\uD7A3a-zA-Z0-9]+$");
 
     public static final int DEFAULT_COUNT = 0;
+    public static final int BOOKMARK_DEFAULT_COUNT = 0;
+    public static final int HASHTAG_DEFAULT_COUNT = 0;
     public static final int TOKEN_TYPE_INDEX = 0;
     public static final int TOKEN_DATA_INDEX = 1;
     public static final int MINIMUM_TITLE_LENGTH = 1;
@@ -23,10 +25,8 @@ public class DataConstants {
     public static final int TAG_SIZE = 10;
     public static final int MAXIMUM_NICKNAME_LENGTH = 16;
     public static final int MAXIMUM_INTRODUCE_LENGTH = 20;
-    public static final int MAX_SIZE = 30;
     public static final int IMAGE_EXPIRATION_TIME = 1000 * 60 * 60;
 
-    public static final Long HASHTAG_DEFAULT_COUNT = 0L;
     public static final Long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 2L;
     public static final Long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30L;
 

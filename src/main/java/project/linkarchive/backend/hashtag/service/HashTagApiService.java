@@ -5,8 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
 import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
-import project.linkarchive.backend.hashtag.domain.HashTag;
-import project.linkarchive.backend.hashtag.domain.UserHashTag;
+import project.linkarchive.backend.hashtag.domain.Hashtag;
+import project.linkarchive.backend.hashtag.domain.UserHashtag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 import project.linkarchive.backend.hashtag.request.CreateTagRequest;
@@ -33,14 +33,14 @@ public class HashTagApiService {
     public void create(CreateTagRequest request, Long userId) {
         User user = findUserById(userId);
         validationTagLength(request);
-        HashTag hashTag = findAndBuildHashTagByTag(request);
+        Hashtag hashTag = findAndBuildHashTagByTag(request);
 
-        userHashTagRepository.findByHashTagId(hashTag.getId())
+        userHashTagRepository.findByHashtagId(hashTag.getId())
                 .ifPresentOrElse(userHashTag -> {
                             throw new AlreadyExistException(ALREADY_EXIST_TAG);
                         },
                         () -> {
-                            UserHashTag getHashTag = UserHashTag.create(HASHTAG_DEFAULT_COUNT, user, hashTag);
+                            UserHashtag getHashTag = UserHashtag.create(HASHTAG_DEFAULT_COUNT, user, hashTag);
                             userHashTagRepository.save(getHashTag);
                         });
     }
@@ -58,9 +58,9 @@ public class HashTagApiService {
         }
     }
 
-    private HashTag findAndBuildHashTagByTag(CreateTagRequest request) {
+    private Hashtag findAndBuildHashTagByTag(CreateTagRequest request) {
         return hashTagRepository.findByTag(request.getTag())
-                .orElseGet(() -> HashTag.create(request.getTag()));
+                .orElseGet(() -> Hashtag.create(request.getTag()));
     }
 
 }

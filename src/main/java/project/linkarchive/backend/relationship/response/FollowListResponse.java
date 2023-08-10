@@ -7,10 +7,10 @@ import java.util.List;
 @Getter
 public class FollowListResponse {
 
-    private List<FollowResponse> followResponseList;
+    private List<FollowResponse> followList;
 
-    public FollowListResponse(List<FollowResponse> followResponseList){
-        this.followResponseList = followResponseList;
+    public FollowListResponse(List<FollowResponse> followList){
+        this.followList = followList;
     }
 
 }

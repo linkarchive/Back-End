@@ -70,7 +70,7 @@ public class SetUpMockData extends MockDataGenerator {
                 .title(TITLE)
                 .description(DESCRIPTION)
                 .thumbnail(THUMBNAIL)
-                .bookMarkCount(BOOKMARK_COUNT)
+                .bookmarkCount(BOOKMARK_COUNT)
                 .linkStatus(ACTIVE)
                 .user(user)
                 .build();

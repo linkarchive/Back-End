@@ -7,11 +7,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
-import project.linkarchive.backend.util.setUpData.BookMarkSetUpData;
+import project.linkarchive.backend.util.setUpData.BookmarkSetUpData;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class BookMarkSetUpRepository extends BookMarkSetUpData {
+public class BookmarkSetUpRepository extends BookmarkSetUpData {
 
     @Autowired
     protected UserRepository userRepository;

@@ -13,16 +13,16 @@ import java.util.Optional;
 public interface LinkRepository extends JpaRepository<Link, Long> {
 
     @Modifying
-    @Query("UPDATE Link l SET l.bookMarkCount = l.bookMarkCount + 1 WHERE l.id = :linkId")
-    void increaseBookMarkCount(@Param("linkId") Long linkId);
+    @Query("UPDATE Link l SET l.bookmarkCount = l.bookmarkCount + 1 WHERE l.id = :linkId")
+    void increaseBookmarkCount(@Param("linkId") Long linkId);
 
     @Modifying
-    @Query("UPDATE Link l SET l.bookMarkCount = l.bookMarkCount - 1 WHERE l.id = :linkId")
-    void decreaseBookMarkCount(@Param("linkId") Long linkId);
+    @Query("UPDATE Link l SET l.bookmarkCount = l.bookmarkCount - 1 WHERE l.id = :linkId")
+    void decreaseBookmarkCount(@Param("linkId") Long linkId);
 
     @Modifying
-    @Query("UPDATE Link l SET l.bookMarkCount = 0 WHERE l.id = :linkId")
-    void resetBookMarkCount(@Param("linkId") Long linkId);
+    @Query("UPDATE Link l SET l.bookmarkCount = 0 WHERE l.id = :linkId")
+    void resetBookmarkCount(@Param("linkId") Long linkId);
 
     Optional<Link> findByIdAndUserId(Long linkId, Long userId);
 
