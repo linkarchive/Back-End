@@ -13,11 +13,11 @@ public class TrashLinkResponse {
     private String title;
     private String description;
     private String thumbnail;
-    private Long bookMarkCount;
+    private int bookMarkCount;
     private LocalDateTime linkCreatedTime;
 
     @QueryProjection
-    public TrashLinkResponse(Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, LocalDateTime linkCreatedTime) {
+    public TrashLinkResponse(Long linkId, String url, String title, String description, String thumbnail, int bookMarkCount, LocalDateTime linkCreatedTime) {
         this.linkId = linkId;
         this.url = url;
         this.title = title;

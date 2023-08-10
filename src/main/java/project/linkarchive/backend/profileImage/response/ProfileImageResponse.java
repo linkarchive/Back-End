@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public class ProfileImageResponse {
 
-    private String profileImageFileName;
+    private String profileImage;
 
-    public ProfileImageResponse(String profileImageFileName) {
-        this.profileImageFileName = profileImageFileName;
+    public ProfileImageResponse(String profileImage) {
+        this.profileImage = profileImage;
     }
 
 }

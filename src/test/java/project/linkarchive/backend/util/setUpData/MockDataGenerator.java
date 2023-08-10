@@ -3,14 +3,14 @@ package project.linkarchive.backend.util.setUpData;
 import org.springframework.web.multipart.MultipartFile;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.response.KakaoProfile;
-import project.linkarchive.backend.bookmark.domain.BookMark;
-import project.linkarchive.backend.hashtag.domain.HashTag;
-import project.linkarchive.backend.hashtag.domain.UserHashTag;
+import project.linkarchive.backend.bookmark.domain.Bookmark;
+import project.linkarchive.backend.hashtag.domain.Hashtag;
+import project.linkarchive.backend.hashtag.domain.UserHashtag;
 import project.linkarchive.backend.hashtag.request.CreateTagRequest;
 import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
 import project.linkarchive.backend.link.domain.Link;
-import project.linkarchive.backend.link.domain.LinkHashTag;
+import project.linkarchive.backend.link.domain.LinkHashtag;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
 import project.linkarchive.backend.link.response.LinkMetaDataResponse;
 import project.linkarchive.backend.link.response.linkList.LinkResponse;
@@ -45,10 +45,10 @@ public class MockDataGenerator {
     protected MultipartFile multipartFile;
     protected RefreshToken refreshToken;
     protected Link link;
-    protected HashTag hashTag;
-    protected UserHashTag userHashTag;
-    protected LinkHashTag linkHashTag;
-    protected BookMark bookMark;
+    protected Hashtag hashTag;
+    protected UserHashtag userHashTag;
+    protected LinkHashtag linkHashTag;
+    protected Bookmark bookMark;
     protected IsLinkRead isLinkRead;
 
     protected UpdateNicknameRequest updateNicknameRequest;
@@ -78,6 +78,6 @@ public class MockDataGenerator {
     protected List<TrashLinkListResponse> trashLinkListResponseList = new ArrayList<>();
     protected List<String> tagList = new ArrayList<>();
     protected List<TagResponse> tagResponseList = new ArrayList<>();
-    protected List<LinkHashTag> linkHashTagList = new ArrayList<>();
+    protected List<LinkHashtag> linkHashtagList = new ArrayList<>();
 
 }

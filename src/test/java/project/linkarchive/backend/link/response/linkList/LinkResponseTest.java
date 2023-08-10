@@ -23,7 +23,7 @@ class LinkResponseTest extends SetUpMockData {
         assertEquals(TITLE, linkResponse.getTitle());
         assertEquals(DESCRIPTION, linkResponse.getDescription());
         assertEquals(THUMBNAIL, linkResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, linkResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, linkResponse.getBookmarkCount());
         assertEquals(CREATED_AT, linkResponse.getLinkCreatedTime());
         assertEquals(UPDATED_AT, linkResponse.getLinkUpdatedTime());
     }
@@ -38,7 +38,7 @@ class LinkResponseTest extends SetUpMockData {
         assertEquals(TITLE, linkResponse.getTitle());
         assertEquals(DESCRIPTION, linkResponse.getDescription());
         assertEquals(THUMBNAIL, linkResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, linkResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, linkResponse.getBookmarkCount());
         assertEquals(CREATED_AT, linkResponse.getLinkCreatedTime());
         assertEquals(UPDATED_AT, linkResponse.getLinkUpdatedTime());
     }

@@ -36,7 +36,7 @@ public class RefreshToken extends CreatedEntity {
         this.user = user;
     }
 
-    public static RefreshToken build(String refreshToken, String userAgent, User user) {
+    public static RefreshToken create(String refreshToken, String userAgent, User user) {
         return RefreshToken.builder()
                 .refreshToken(refreshToken)
                 .agent(userAgent)

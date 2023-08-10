@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BookMark extends CreatedEntity {
+public class Bookmark extends CreatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,14 +29,14 @@ public class BookMark extends CreatedEntity {
     private Link link;
 
     @Builder
-    public BookMark(Long id, User user, Link link) {
+    public Bookmark(Long id, User user, Link link) {
         this.id = id;
         this.user = user;
         this.link = link;
     }
 
-    public static BookMark build(User user, Link link) {
-        return BookMark.builder()
+    public static Bookmark create(User user, Link link) {
+        return Bookmark.builder()
                 .user(user)
                 .link(link)
                 .build();

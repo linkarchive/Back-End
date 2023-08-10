@@ -4,7 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
-import project.linkarchive.backend.bookmark.domain.BookMark;
+import project.linkarchive.backend.bookmark.domain.Bookmark;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepositoryImpl;
 import project.linkarchive.backend.bookmark.response.MarkResponse;
@@ -13,7 +13,7 @@ import project.linkarchive.backend.bookmark.response.UserMarkResponse;
 import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.isLinkRead.repository.IsLinkReadRepository;
-import project.linkarchive.backend.link.domain.LinkHashTag;
+import project.linkarchive.backend.link.domain.LinkHashtag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.security.AuthInfo;
 import project.linkarchive.backend.user.domain.User;
@@ -58,8 +58,8 @@ public class BookMarkQueryService {
         List<MarkResponse> markResponseList = bookMarkRepositoryImpl.getMyMarkLinkList(tagId, markId, pageable, userId);
         List<UserMarkResponse> userMarkResponseList = markResponseList.stream()
                 .map(markResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(markResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
+                    List<LinkHashtag> linkHashtagList = linkHashTagRepository.findByLinkId(markResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashtagList.stream()
                             .map(TagResponse::create)
                             .collect(Collectors.toList());
 
@@ -82,8 +82,8 @@ public class BookMarkQueryService {
         List<MarkResponse> markResponseList = bookMarkRepositoryImpl.getUserMarkLinkList(userId, tagId, markId, pageable);
         List<UserMarkResponse> userMarkResponseList = markResponseList.stream()
                 .map(markResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(markResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
+                    List<LinkHashtag> linkHashtagList = linkHashTagRepository.findByLinkId(markResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashtagList.stream()
                             .map(TagResponse::create)
                             .collect(Collectors.toList());
 
@@ -101,15 +101,15 @@ public class BookMarkQueryService {
     public TagListResponse getMarkTagList(Long userId) {
         User user = findUserById(userId);
 
-        List<BookMark> bookMarkList = bookMarkRepository.findByUserId(user.getId());
+        List<Bookmark> bookmarkList = bookMarkRepository.findByUserId(user.getId());
         Map<String, Long> tagIdMap = new HashMap<>();
         Map<String, Integer> tagCountMap = new HashMap<>();
 
-        bookMarkList.forEach(bookMark -> {
-            List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(bookMark.getLink().getId());
-            linkHashTagList.forEach(urlHashTag -> {
-                Long tagId = urlHashTag.getHashTag().getId();
-                String tagName = urlHashTag.getHashTag().getTag();
+        bookmarkList.forEach(bookMark -> {
+            List<LinkHashtag> linkHashtagList = linkHashTagRepository.findByLinkId(bookMark.getLink().getId());
+            linkHashtagList.forEach(urlHashTag -> {
+                Long tagId = urlHashTag.getHashtag().getId();
+                String tagName = urlHashTag.getHashtag().getTag();
                 tagIdMap.put(tagName, tagId);
                 tagCountMap.put(tagName, tagCountMap.getOrDefault(tagName, 0) + 1);
             });
@@ -126,15 +126,15 @@ public class BookMarkQueryService {
     public TagListResponse getMarkTagList10(Long userId) {
         User user = findUserById(userId);
 
-        List<BookMark> bookMarkList = bookMarkRepository.findByUserId(user.getId());
+        List<Bookmark> bookmarkList = bookMarkRepository.findByUserId(user.getId());
         Map<String, Long> tagIdMap = new HashMap<>();
         Map<String, Integer> tagCountMap = new HashMap<>();
 
-        bookMarkList.forEach(bookMark -> {
-            List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(bookMark.getLink().getId());
-            linkHashTagList.forEach(urlHashTag -> {
-                Long tagId = urlHashTag.getHashTag().getId();
-                String tagName = urlHashTag.getHashTag().getTag();
+        bookmarkList.forEach(bookMark -> {
+            List<LinkHashtag> linkHashtagList = linkHashTagRepository.findByLinkId(bookMark.getLink().getId());
+            linkHashtagList.forEach(urlHashTag -> {
+                Long tagId = urlHashTag.getHashtag().getId();
+                String tagName = urlHashTag.getHashtag().getTag();
                 tagIdMap.put(tagName, tagId);
                 tagCountMap.put(tagName, tagCountMap.getOrDefault(tagName, 0) + 1);
             });

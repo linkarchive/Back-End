@@ -4,11 +4,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.user.domain.User;
-import project.linkarchive.backend.util.setUpData.BookMarkSetUpData;
+import project.linkarchive.backend.util.setUpData.BookmarkSetUpData;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BookMarkTest extends BookMarkSetUpData {
+class BookmarkTest extends BookmarkSetUpData {
 
     @DisplayName("북마크 getUser - Domain")
     @Test
@@ -31,23 +31,23 @@ class BookMarkTest extends BookMarkSetUpData {
     @DisplayName("북마크 Builder 패턴 - Domain")
     @Test
     void testBuilder() {
-        BookMark getBookMark = BookMark.builder()
+        Bookmark getBookmark = Bookmark.builder()
                 .user(user)
                 .link(link)
                 .build();
 
-        assertNotNull(getBookMark);
-        assertEquals(user, getBookMark.getUser());
-        assertEquals(link, getBookMark.getLink());
+        assertNotNull(getBookmark);
+        assertEquals(user, getBookmark.getUser());
+        assertEquals(link, getBookmark.getLink());
     }
 
     @DisplayName("북마크 Build 메서드 - Domain")
     @Test
     void testBuild() {
-        BookMark getBookMark = BookMark.build(user, link);
+        Bookmark getBookmark = Bookmark.create(user, link);
 
-        assertNotNull(getBookMark);
-        assertEquals(user, getBookMark.getUser());
-        assertEquals(link, getBookMark.getLink());
+        assertNotNull(getBookmark);
+        assertEquals(user, getBookmark.getUser());
+        assertEquals(link, getBookmark.getLink());
     }
 }

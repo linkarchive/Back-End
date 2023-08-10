@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.AlreadyExistException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
-import project.linkarchive.backend.bookmark.domain.BookMark;
+import project.linkarchive.backend.bookmark.domain.Bookmark;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.link.repository.LinkRepository;
@@ -31,23 +31,23 @@ public class BookMarkApiService {
         this.bookMarkRepository = bookMarkRepository;
     }
 
-    public void bookMark(Long linkId, Long userId) {
+    public void bookmark(Long linkId, Long userId) {
         Link link = findLinkById(linkId);
         User user = findUserById(userId);
         existUrlValidation(link.getId(), user.getId());
 
-        BookMark bookMark = BookMark.build(user, link);
-        bookMarkRepository.save(bookMark);
+        Bookmark bookmark = Bookmark.create(user, link);
+        bookMarkRepository.save(bookmark);
 
-        linkRepository.increaseBookMarkCount(link.getId());
+        linkRepository.increaseBookmarkCount(link.getId());
     }
 
-    public void bookMarkCancel(Long linkId, Long userId) {
+    public void bookmarkCount(Long linkId, Long userId) {
         Link link = findLinkById(linkId);
-        BookMark bookMark = findBookMarkByLinkAndUser(link, userId);
-        bookMarkRepository.delete(bookMark);
+        Bookmark bookmark = findBookMarkByLinkAndUser(link, userId);
+        bookMarkRepository.delete(bookmark);
 
-        linkRepository.decreaseBookMarkCount(link.getId());
+        linkRepository.decreaseBookmarkCount(link.getId());
     }
 
     private Link findLinkById(Long linkId) {
@@ -66,7 +66,7 @@ public class BookMarkApiService {
         }
     }
 
-    private BookMark findBookMarkByLinkAndUser(Link link, Long userId) {
+    private Bookmark findBookMarkByLinkAndUser(Link link, Long userId) {
         return bookMarkRepository.findByLinkIdAndUserId(link.getId(), userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_BOOKMARK));
     }

@@ -18,7 +18,7 @@ class UserTrashLinkListResponseTest extends SetUpMockData {
     @DisplayName("UserTrashLinkListResponse Getter - DTO")
     @Test
     void testUserTrashLinkListResponse() {
-        assertEquals(trashLinkListResponseList, userTrashLinkListResponse.getTrashLinkList());
+        assertEquals(trashLinkListResponseList, userTrashLinkListResponse.getLinkList());
         assertEquals(HAS_NEXT, userTrashLinkListResponse.getHasNext());
     }
 
@@ -27,7 +27,7 @@ class UserTrashLinkListResponseTest extends SetUpMockData {
     void testConstructor() {
         userTrashLinkListResponse = new UserTrashLinkListResponse(trashLinkListResponseList, HAS_NEXT);
 
-        assertEquals(trashLinkListResponseList, userTrashLinkListResponse.getTrashLinkList());
+        assertEquals(trashLinkListResponseList, userTrashLinkListResponse.getLinkList());
         assertEquals(HAS_NEXT, userTrashLinkListResponse.getHasNext());
     }
 

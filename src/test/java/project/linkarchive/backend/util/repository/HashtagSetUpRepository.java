@@ -5,11 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
-import project.linkarchive.backend.util.setUpData.HashTagSetUpData;
+import project.linkarchive.backend.util.setUpData.HashtagSetUpData;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class HashTagSetUpRepository extends HashTagSetUpData {
+public class HashtagSetUpRepository extends HashtagSetUpData {
 
     @Autowired
     protected HashTagRepository hashTagRepository;

@@ -111,7 +111,7 @@ class UserApiServiceTest extends SetUpMockData {
 
         ProfileImageResponse response = userApiService.updateProfileImage(multipartFile, user.getId());
 
-        assertEquals(PROFILE_IMAGE_URL, response.getProfileImageFileName());
+        assertEquals(PROFILE_IMAGE_URL, response.getProfileImage());
 
         verify(userRepository).findById(USER_ID);
         verify(s3Uploader).upload(multipartFile);

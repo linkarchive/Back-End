@@ -1,14 +1,14 @@
 package project.linkarchive.backend.util.setUpData;
 
 import org.junit.jupiter.api.BeforeEach;
-import project.linkarchive.backend.bookmark.domain.BookMark;
+import project.linkarchive.backend.bookmark.domain.Bookmark;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.user.domain.User;
 
 import static project.linkarchive.backend.util.constant.Constants.*;
 import static project.linkarchive.backend.util.constant.Constants.INTRODUCE;
 
-public class BookMarkSetUpData extends MockDataGenerator {
+public class BookmarkSetUpData extends MockDataGenerator {
 
     @BeforeEach
     public void setup() {
@@ -25,11 +25,11 @@ public class BookMarkSetUpData extends MockDataGenerator {
                 .title(TITLE)
                 .description(DESCRIPTION)
                 .thumbnail(THUMBNAIL)
-                .bookMarkCount(BOOKMARK_COUNT)
+                .bookmarkCount(BOOKMARK_COUNT)
                 .user(user)
                 .build();
 
-        bookMark = BookMark.builder()
+        bookMark = Bookmark.builder()
                 .user(user)
                 .link(link)
                 .build();

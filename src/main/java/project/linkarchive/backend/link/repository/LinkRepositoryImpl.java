@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static project.linkarchive.backend.link.domain.QLink.link;
-import static project.linkarchive.backend.link.domain.QLinkHashTag.linkHashTag;
+import static project.linkarchive.backend.link.domain.QLinkHashtag.linkHashtag;
 import static project.linkarchive.backend.link.enums.LinkStatus.ACTIVE;
 import static project.linkarchive.backend.link.enums.LinkStatus.TRASH;
 import static project.linkarchive.backend.profileImage.domain.QProfileImage.profileImage;
@@ -37,13 +37,13 @@ public class LinkRepositoryImpl {
                         link.title,
                         link.description,
                         link.thumbnail,
-                        link.bookMarkCount,
+                        link.bookmarkCount,
                         link.createdAt,
                         link.updatedAt
                 ))
                 .from(link)
                 .distinct()
-                .leftJoin(link.linkHashTagList, linkHashTag)
+                .leftJoin(link.linkHashtagList, linkHashtag)
                 .where(
                         link.user.id.eq(loginUserId),
                         link.linkStatus.eq(ACTIVE),
@@ -63,13 +63,13 @@ public class LinkRepositoryImpl {
                         link.title,
                         link.description,
                         link.thumbnail,
-                        link.bookMarkCount,
+                        link.bookmarkCount,
                         link.createdAt,
                         link.updatedAt
                 ))
                 .from(link)
                 .distinct()
-                .leftJoin(link.linkHashTagList, linkHashTag)
+                .leftJoin(link.linkHashtagList, linkHashtag)
                 .where(
                         link.user.id.eq(userId),
                         link.linkStatus.eq(ACTIVE),
@@ -92,14 +92,14 @@ public class LinkRepositoryImpl {
                         link.title,
                         link.description,
                         link.thumbnail,
-                        link.bookMarkCount,
+                        link.bookmarkCount,
                         link.createdAt,
                         link.updatedAt
                 ))
                 .from(link)
                 .distinct()
                 .leftJoin(link.user.profileImage, profileImage)
-                .leftJoin(link.linkHashTagList, linkHashTag)
+                .leftJoin(link.linkHashtagList, linkHashtag)
                 .where(
                         link.linkStatus.eq(ACTIVE),
                         ltUrlId(linkId),
@@ -118,12 +118,12 @@ public class LinkRepositoryImpl {
                         link.title,
                         link.description,
                         link.thumbnail,
-                        link.bookMarkCount,
+                        link.bookmarkCount,
                         link.createdAt
                 ))
                 .from(link)
                 .distinct()
-                .leftJoin(link.linkHashTagList, linkHashTag)
+                .leftJoin(link.linkHashtagList, linkHashtag)
                 .where(
                         link.user.id.eq(loginUserId),
                         link.linkStatus.eq(TRASH),
@@ -140,7 +140,7 @@ public class LinkRepositoryImpl {
     }
 
     private BooleanExpression containTag(Long tagId) {
-        return tagId != null ? linkHashTag.hashTag.id.eq(tagId) : null;
+        return tagId != null ? linkHashtag.hashtag.id.eq(tagId) : null;
     }
 
 }

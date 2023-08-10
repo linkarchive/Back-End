@@ -9,7 +9,7 @@ public class UserProfileResponse {
     private Long id;
     private String nickname;
     private String introduce;
-    private String profileImageFileName;
+    private String profileImage;
     private int followerCount;
     private int followingCount;
     private Boolean isFollow;
@@ -18,7 +18,7 @@ public class UserProfileResponse {
         this.id = user.getId();
         this.nickname = user.getNickname();
         this.introduce = user.getIntroduce();
-        this.profileImageFileName = preSignedUrl;
+        this.profileImage = preSignedUrl;
         this.followerCount = user.getFollowerCount();
         this.followingCount = user.getFollowingCount();
         this.isFollow = isFollow;

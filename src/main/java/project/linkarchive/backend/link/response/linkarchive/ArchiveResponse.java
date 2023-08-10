@@ -16,12 +16,12 @@ public class ArchiveResponse {
     private String title;
     private String description;
     private String thumbnail;
-    private Long bookMarkCount;
+    private int bookMarkCount;
     private LocalDateTime linkCreatedTime;
     private LocalDateTime linkUpdatedTime;
 
     @QueryProjection
-    public ArchiveResponse(Long userId, String nickname, String profileImage, Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, LocalDateTime linkCreatedTime, LocalDateTime linkUpdatedTime) {
+    public ArchiveResponse(Long userId, String nickname, String profileImage, Long linkId, String url, String title, String description, String thumbnail, int bookMarkCount, LocalDateTime linkCreatedTime, LocalDateTime linkUpdatedTime) {
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;

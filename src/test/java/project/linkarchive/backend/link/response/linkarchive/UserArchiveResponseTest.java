@@ -26,7 +26,7 @@ class UserArchiveResponseTest extends SetUpMockData {
         assertEquals(TITLE, userArchiveResponse.getTitle());
         assertEquals(DESCRIPTION, userArchiveResponse.getDescription());
         assertEquals(THUMBNAIL, userArchiveResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, userArchiveResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, userArchiveResponse.getBookmarkCount());
         assertEquals(IS_READ, userArchiveResponse.getIsRead());
         assertEquals(IS_MARK, userArchiveResponse.getIsMark());
         assertEquals(tagResponseList, userArchiveResponse.getTagList());
@@ -47,7 +47,7 @@ class UserArchiveResponseTest extends SetUpMockData {
         assertEquals(TITLE, userArchiveResponse.getTitle());
         assertEquals(DESCRIPTION, userArchiveResponse.getDescription());
         assertEquals(THUMBNAIL, userArchiveResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, userArchiveResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, userArchiveResponse.getBookmarkCount());
         assertEquals(IS_READ, userArchiveResponse.getIsRead());
         assertEquals(IS_MARK, userArchiveResponse.getIsMark());
         assertEquals(tagResponseList, userArchiveResponse.getTagList());
@@ -67,7 +67,7 @@ class UserArchiveResponseTest extends SetUpMockData {
                 .title(TITLE)
                 .description(DESCRIPTION)
                 .thumbnail(THUMBNAIL)
-                .bookMarkCount(BOOKMARK_COUNT)
+                .bookmarkCount(BOOKMARK_COUNT)
                 .isRead(IS_READ)
                 .isMark(IS_MARK)
                 .tagList(tagResponseList)
@@ -83,7 +83,7 @@ class UserArchiveResponseTest extends SetUpMockData {
         assertEquals(TITLE, userArchiveResponse.getTitle());
         assertEquals(DESCRIPTION, userArchiveResponse.getDescription());
         assertEquals(THUMBNAIL, userArchiveResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, userArchiveResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, userArchiveResponse.getBookmarkCount());
         assertEquals(IS_READ, userArchiveResponse.getIsRead());
         assertEquals(IS_MARK, userArchiveResponse.getIsMark());
         assertEquals(tagResponseList, userArchiveResponse.getTagList());
@@ -106,7 +106,7 @@ class UserArchiveResponseTest extends SetUpMockData {
         assertEquals(TITLE, userArchiveResponse.getTitle());
         assertEquals(DESCRIPTION, userArchiveResponse.getDescription());
         assertEquals(THUMBNAIL, userArchiveResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, userArchiveResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, userArchiveResponse.getBookmarkCount());
         assertEquals(IS_READ, userArchiveResponse.getIsRead());
         assertEquals(IS_MARK, userArchiveResponse.getIsMark());
         assertEquals(tagResponseList, userArchiveResponse.getTagList());

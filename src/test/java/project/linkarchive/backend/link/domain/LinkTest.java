@@ -26,7 +26,7 @@ class LinkTest extends SetUpMockData {
         assertEquals(TITLE, link.getTitle());
         assertEquals(DESCRIPTION, link.getDescription());
         assertEquals(THUMBNAIL, link.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, link.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, link.getBookmarkCount());
         assertEquals(LINK_STATUS_ACTIVE, link.getLinkStatus());
         assertEquals(user, link.getUser());
     }
@@ -42,7 +42,7 @@ class LinkTest extends SetUpMockData {
         assertEquals(TITLE, link.getTitle());
         assertEquals(DESCRIPTION, link.getDescription());
         assertEquals(THUMBNAIL, link.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, link.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, link.getBookmarkCount());
         assertEquals(LINK_STATUS_ACTIVE, link.getLinkStatus());
         assertEquals(user, link.getUser());
     }
@@ -56,7 +56,7 @@ class LinkTest extends SetUpMockData {
                 .title(TITLE)
                 .description(DESCRIPTION)
                 .thumbnail(THUMBNAIL)
-                .bookMarkCount(BOOKMARK_COUNT)
+                .bookmarkCount(BOOKMARK_COUNT)
                 .linkStatus(ACTIVE)
                 .user(user)
                 .build();
@@ -66,7 +66,7 @@ class LinkTest extends SetUpMockData {
         assertEquals(TITLE, link.getTitle());
         assertEquals(DESCRIPTION, link.getDescription());
         assertEquals(THUMBNAIL, link.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, link.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, link.getBookmarkCount());
         assertEquals(LINK_STATUS_ACTIVE, link.getLinkStatus());
         assertEquals(user, link.getUser());
     }
@@ -82,7 +82,7 @@ class LinkTest extends SetUpMockData {
         assertEquals(TITLE, link.getTitle());
         assertEquals(DESCRIPTION, link.getDescription());
         assertEquals(THUMBNAIL, link.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, link.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, link.getBookmarkCount());
         assertEquals(LINK_STATUS_ACTIVE, link.getLinkStatus());
         assertEquals(user, link.getUser());
     }

@@ -23,7 +23,7 @@ public class BookMarkQueryController {
     }
 
     @GetMapping("/mark/links/user")
-    public ResponseEntity<UserMarkListResponse> getMyMarkLinkList(
+    public ResponseEntity<UserMarkListResponse> getMyMarkedLinkList(
             @RequestParam(value = "tagId", required = false) Long tagId,
             @RequestParam(value = "markId", required = false) Long markId,
             @PageableDefault Pageable pageable,

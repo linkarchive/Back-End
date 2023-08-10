@@ -7,11 +7,11 @@ import project.linkarchive.backend.advice.exception.custom.ExceededException;
 import project.linkarchive.backend.advice.exception.custom.LengthRequiredException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
-import project.linkarchive.backend.hashtag.domain.HashTag;
+import project.linkarchive.backend.hashtag.domain.Hashtag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 import project.linkarchive.backend.link.domain.Link;
-import project.linkarchive.backend.link.domain.LinkHashTag;
+import project.linkarchive.backend.link.domain.LinkHashtag;
 import project.linkarchive.backend.link.enums.LinkStatus;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.link.repository.LinkRepository;
@@ -123,12 +123,12 @@ public class LinkApiService {
     private void addTagsToLinkAndIncrementUserTagCount(Set<String> tagsFromRequest, Link link) {
         tagsFromRequest.stream()
                 .map(tag -> hashTagRepository.findByTag(tag)
-                        .orElseGet(() -> HashTag.create(tag)))
+                        .orElseGet(() -> Hashtag.create(tag)))
                 .forEach(hashTag -> {
-                    userHashTagRepository.findByHashTagId(hashTag.getId())
+                    userHashTagRepository.findByHashtagId(hashTag.getId())
                             .ifPresent(tag -> userHashTagRepository.increaseUsageCount(tag.getId()));
 
-                    linkHashTagRepository.save(LinkHashTag.build(link, hashTag));
+                    linkHashTagRepository.save(LinkHashtag.create(link, hashTag));
                 });
     }
 
@@ -139,7 +139,7 @@ public class LinkApiService {
     }
 
     public void resetBookmarkCount(Link link) {
-        linkRepository.resetBookMarkCount(link.getId());
+        linkRepository.resetBookmarkCount(link.getId());
     }
 
 }

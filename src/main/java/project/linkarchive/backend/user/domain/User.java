@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
 import project.linkarchive.backend.auth.response.KakaoProfile;
-import project.linkarchive.backend.bookmark.domain.BookMark;
-import project.linkarchive.backend.hashtag.domain.UserHashTag;
+import project.linkarchive.backend.bookmark.domain.Bookmark;
+import project.linkarchive.backend.hashtag.domain.UserHashtag;
 import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
@@ -43,10 +43,10 @@ public class User extends TimeEntity {
     private ProfileImage profileImage;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserHashTag> userHashTagList = new ArrayList<>();
+    private List<UserHashtag> userHashtagList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<BookMark> bookMarkList = new ArrayList<>();
+    private List<Bookmark> bookmarkList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();

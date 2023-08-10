@@ -54,7 +54,7 @@ public class OAuthService {
         String newAccessToken = jwtUtil.createAccessToken(findUser);
         String newRefreshToken = jwtUtil.createRefreshToken(findUser);
 
-        RefreshToken token = RefreshToken.build(newRefreshToken, userAgent, findUser);
+        RefreshToken token = RefreshToken.create(newRefreshToken, userAgent, findUser);
 
         Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent);
         savedRefreshToken.ifPresentOrElse(
@@ -82,7 +82,7 @@ public class OAuthService {
         String newAccessToken = jwtUtil.createAccessToken(findUser);
         String newRefreshToken = jwtUtil.createRefreshToken(findUser);
 
-        RefreshToken token = RefreshToken.build(newRefreshToken, userAgent, findUser);
+        RefreshToken token = RefreshToken.create(newRefreshToken, userAgent, findUser);
 
         Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent);
         savedRefreshToken.ifPresentOrElse

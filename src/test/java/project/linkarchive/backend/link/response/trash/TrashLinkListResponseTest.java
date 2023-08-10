@@ -23,7 +23,7 @@ class TrashLinkListResponseTest extends SetUpMockData {
         assertEquals(TITLE, trashLinkListResponse.getTitle());
         assertEquals(DESCRIPTION, trashLinkListResponse.getDescription());
         assertEquals(THUMBNAIL, trashLinkListResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, trashLinkListResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, trashLinkListResponse.getBookmarkCount());
         assertEquals(tagResponseList, trashLinkListResponse.getTagList());
         assertEquals(CREATED_AT, trashLinkListResponse.getLinkCreatedTime());
     }
@@ -38,7 +38,7 @@ class TrashLinkListResponseTest extends SetUpMockData {
         assertEquals(TITLE, trashLinkListResponse.getTitle());
         assertEquals(DESCRIPTION, trashLinkListResponse.getDescription());
         assertEquals(THUMBNAIL, trashLinkListResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, trashLinkListResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, trashLinkListResponse.getBookmarkCount());
         assertEquals(tagResponseList, trashLinkListResponse.getTagList());
         assertEquals(CREATED_AT, trashLinkListResponse.getLinkCreatedTime());
     }
@@ -52,7 +52,7 @@ class TrashLinkListResponseTest extends SetUpMockData {
                 .title(TITLE)
                 .description(DESCRIPTION)
                 .thumbnail(THUMBNAIL)
-                .bookMarkCount(BOOKMARK_COUNT)
+                .bookmarkCount(BOOKMARK_COUNT)
                 .tagList(tagResponseList)
                 .linkCreatedTime(CREATED_AT)
                 .build();
@@ -62,7 +62,7 @@ class TrashLinkListResponseTest extends SetUpMockData {
         assertEquals(TITLE, trashLinkListResponse.getTitle());
         assertEquals(DESCRIPTION, trashLinkListResponse.getDescription());
         assertEquals(THUMBNAIL, trashLinkListResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, trashLinkListResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, trashLinkListResponse.getBookmarkCount());
         assertEquals(tagResponseList, trashLinkListResponse.getTagList());
         assertEquals(CREATED_AT, trashLinkListResponse.getLinkCreatedTime());
     }
@@ -79,7 +79,7 @@ class TrashLinkListResponseTest extends SetUpMockData {
         assertEquals(TITLE, trashLinkListResponse.getTitle());
         assertEquals(DESCRIPTION, trashLinkListResponse.getDescription());
         assertEquals(THUMBNAIL, trashLinkListResponse.getThumbnail());
-        assertEquals(BOOKMARK_COUNT, trashLinkListResponse.getBookMarkCount());
+        assertEquals(BOOKMARK_COUNT, trashLinkListResponse.getBookmarkCount());
         assertEquals(tagResponseList, trashLinkListResponse.getTagList());
         assertEquals(CREATED_AT, trashLinkListResponse.getLinkCreatedTime());
     }

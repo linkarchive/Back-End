@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
-import project.linkarchive.backend.link.domain.LinkHashTag;
+import project.linkarchive.backend.link.domain.LinkHashtag;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HashTag extends CreatedEntity {
+public class Hashtag extends CreatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,20 +23,20 @@ public class HashTag extends CreatedEntity {
 
     private String tag;
 
-    @OneToMany(mappedBy = "hashTag", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<UserHashTag> userHashTags = new ArrayList<>();
+    @OneToMany(mappedBy = "hashtag", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserHashtag> userHashtagList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hashTag", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<LinkHashTag> linkHashTagList = new ArrayList<>();
+    @OneToMany(mappedBy = "hashtag", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<LinkHashtag> linkHashtagList = new ArrayList<>();
 
     @Builder
-    public HashTag(Long id, String tag) {
+    public Hashtag(Long id, String tag) {
         this.id = id;
         this.tag = tag;
     }
 
-    public static HashTag create(String tag) {
-        return HashTag.builder()
+    public static Hashtag create(String tag) {
+        return Hashtag.builder()
                 .tag(tag)
                 .build();
     }

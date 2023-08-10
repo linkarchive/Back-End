@@ -1,15 +1,15 @@
 package project.linkarchive.backend.util.setUpData;
 
 import org.junit.jupiter.api.BeforeEach;
-import project.linkarchive.backend.hashtag.domain.HashTag;
-import project.linkarchive.backend.hashtag.domain.UserHashTag;
+import project.linkarchive.backend.hashtag.domain.Hashtag;
+import project.linkarchive.backend.hashtag.domain.UserHashtag;
 import project.linkarchive.backend.link.domain.Link;
-import project.linkarchive.backend.link.domain.LinkHashTag;
+import project.linkarchive.backend.link.domain.LinkHashtag;
 import project.linkarchive.backend.user.domain.User;
 
 import static project.linkarchive.backend.util.constant.Constants.*;
 
-public class UserHashTagSetUpData extends MockDataGenerator {
+public class UserHashtagSetUpData extends MockDataGenerator {
 
     @BeforeEach
     public void setup() {
@@ -21,19 +21,19 @@ public class UserHashTagSetUpData extends MockDataGenerator {
                 .introduce(INTRODUCE)
                 .build();
 
-        hashTag = HashTag.builder()
+        hashTag = Hashtag.builder()
                 .tag(TAG)
                 .build();
 
-        userHashTag = UserHashTag.builder()
-                .usageCount(USAGE_COUNT)
+        userHashTag = UserHashtag.builder()
+                .usageCount(USAGE_COUNT_INT)
                 .user(user)
-                .hashTag(hashTag)
+                .hashtag(hashTag)
                 .build();
 
-        linkHashTag = LinkHashTag.builder()
+        linkHashTag = LinkHashtag.builder()
                 .link(link)
-                .hashTag(hashTag)
+                .hashtag(hashTag)
                 .build();
 
         for (int i = 0; i < 10; i++) {
@@ -42,16 +42,16 @@ public class UserHashTagSetUpData extends MockDataGenerator {
                     .title(TITLE)
                     .description(DESCRIPTION)
                     .thumbnail(THUMBNAIL)
-                    .bookMarkCount(BOOKMARK_COUNT)
+                    .bookmarkCount(BOOKMARK_COUNT)
                     .user(user)
                     .build();
 
-            LinkHashTag linkHashTag = LinkHashTag.builder()
+            LinkHashtag linkHashTag = LinkHashtag.builder()
                     .link(link)
-                    .hashTag(hashTag)
+                    .hashtag(hashTag)
                     .build();
 
-            linkHashTagList.add(linkHashTag);
+            linkHashtagList.add(linkHashTag);
         }
 
     }

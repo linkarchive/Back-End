@@ -18,7 +18,7 @@ public class UserArchiveResponse {
     private String title;
     private String description;
     private String thumbnail;
-    private Long bookMarkCount;
+    private int bookmarkCount;
     private Boolean isRead;
     private Boolean isMark;
     private List<TagResponse> tagList;
@@ -26,7 +26,7 @@ public class UserArchiveResponse {
     private LocalDateTime linkUpdatedTime;
 
     @Builder
-    public UserArchiveResponse(Long userId, String nickname, String profileImage, Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, Boolean isRead, Boolean isMark, List<TagResponse> tagList, LocalDateTime linkCreatedTime, LocalDateTime linkUpdatedTime) {
+    public UserArchiveResponse(Long userId, String nickname, String profileImage, Long linkId, String url, String title, String description, String thumbnail, int bookmarkCount, Boolean isRead, Boolean isMark, List<TagResponse> tagList, LocalDateTime linkCreatedTime, LocalDateTime linkUpdatedTime) {
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;
@@ -35,7 +35,7 @@ public class UserArchiveResponse {
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
-        this.bookMarkCount = bookMarkCount;
+        this.bookmarkCount = bookmarkCount;
         this.isRead = isRead;
         this.isMark = isMark;
         this.tagList = tagList;
@@ -53,7 +53,7 @@ public class UserArchiveResponse {
                 .title(response.getTitle())
                 .description(response.getDescription())
                 .thumbnail(response.getThumbnail())
-                .bookMarkCount(response.getBookMarkCount())
+                .bookmarkCount(response.getBookMarkCount())
                 .isRead(isRead)
                 .isMark(isMark)
                 .tagList(tagList)

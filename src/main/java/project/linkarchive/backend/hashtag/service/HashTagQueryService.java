@@ -3,7 +3,7 @@ package project.linkarchive.backend.hashtag.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
-import project.linkarchive.backend.hashtag.domain.HashTag;
+import project.linkarchive.backend.hashtag.domain.Hashtag;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.hashtag.repository.UserHashTagRepositoryImpl;
 import project.linkarchive.backend.hashtag.response.TagListResponse;
@@ -46,7 +46,7 @@ public class HashTagQueryService {
     }
 
     public TagListResponse getArchiveTagList() {
-        List<HashTag> tagList = hashTagRepository.getArchiveTagList();
+        List<Hashtag> tagList = hashTagRepository.getArchiveTagList();
 
         List<TagResponse> tagResponses = tagList.stream()
                 .map(TagResponse::create)

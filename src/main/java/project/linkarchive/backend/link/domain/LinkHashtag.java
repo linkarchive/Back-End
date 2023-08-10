@@ -5,14 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.CreatedEntity;
-import project.linkarchive.backend.hashtag.domain.HashTag;
+import project.linkarchive.backend.hashtag.domain.Hashtag;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LinkHashTag extends CreatedEntity {
+public class LinkHashtag extends CreatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,19 +25,19 @@ public class LinkHashTag extends CreatedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "hashtag_id")
-    private HashTag hashTag;
+    private Hashtag hashtag;
 
     @Builder
-    public LinkHashTag(Long id, Link link, HashTag hashTag) {
+    public LinkHashtag(Long id, Link link, Hashtag hashtag) {
         this.id = id;
         this.link = link;
-        this.hashTag = hashTag;
+        this.hashtag = hashtag;
     }
 
-    public static LinkHashTag build(Link link, HashTag hashTag) {
-        return LinkHashTag.builder()
+    public static LinkHashtag create(Link link, Hashtag hashTag) {
+        return LinkHashtag.builder()
                 .link(link)
-                .hashTag(hashTag)
+                .hashtag(hashTag)
                 .build();
     }
 

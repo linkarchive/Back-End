@@ -13,18 +13,18 @@ public class LinkResponse {
     private String title;
     private String description;
     private String thumbnail;
-    private Long bookMarkCount;
+    private int bookmarkCount;
     private LocalDateTime linkCreatedTime;
     private LocalDateTime linkUpdatedTime;
 
     @QueryProjection
-    public LinkResponse(Long linkId, String url, String title, String description, String thumbnail, Long bookMarkCount, LocalDateTime linkCreatedTime, LocalDateTime linkUpdatedTime) {
+    public LinkResponse(Long linkId, String url, String title, String description, String thumbnail, int bookmarkCount, LocalDateTime linkCreatedTime, LocalDateTime linkUpdatedTime) {
         this.linkId = linkId;
         this.url = url;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
-        this.bookMarkCount = bookMarkCount;
+        this.bookmarkCount = bookmarkCount;
         this.linkCreatedTime = linkCreatedTime;
         this.linkUpdatedTime = linkUpdatedTime;
     }

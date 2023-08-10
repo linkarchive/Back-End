@@ -22,7 +22,7 @@ class MyProfileResponseTest extends SetUpMockData {
         assertEquals(USER_ID, myProfileResponse.getId());
         assertEquals(EMPTY, myProfileResponse.getNickname());
         assertEquals(EMPTY, myProfileResponse.getIntroduce());
-        assertEquals(PRE_SIGNED_URL, myProfileResponse.getProfileImageFileName());
+        assertEquals(PRE_SIGNED_URL, myProfileResponse.getProfileImage());
         assertEquals(FOLLOWER_COUNT, myProfileResponse.getFollowerCount());
         assertEquals(FOLLOWING_COUNT, myProfileResponse.getFollowingCount());
     }
@@ -35,7 +35,7 @@ class MyProfileResponseTest extends SetUpMockData {
         assertEquals(USER_ID, myProfileResponse.getId());
         assertEquals(EMPTY, myProfileResponse.getNickname());
         assertEquals(EMPTY, myProfileResponse.getIntroduce());
-        assertEquals(PRE_SIGNED_URL, myProfileResponse.getProfileImageFileName());
+        assertEquals(PRE_SIGNED_URL, myProfileResponse.getProfileImage());
         assertEquals(FOLLOWER_COUNT, myProfileResponse.getFollowerCount());
         assertEquals(FOLLOWING_COUNT, myProfileResponse.getFollowingCount());
     }

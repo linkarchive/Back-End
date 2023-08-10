@@ -7,13 +7,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import project.linkarchive.backend.hashtag.repository.HashTagRepository;
 import project.linkarchive.backend.hashtag.repository.UserHashTagRepository;
 import project.linkarchive.backend.user.repository.UserRepository;
-import project.linkarchive.backend.util.setUpData.UserHashTagSetUpData;
+import project.linkarchive.backend.util.setUpData.UserHashtagSetUpData;
 
 import javax.persistence.EntityManager;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class UserHashTagSetUpRepository extends UserHashTagSetUpData {
+public class UserHashtagSetUpRepository extends UserHashtagSetUpData {
 
     @Autowired
     protected EntityManager entityManager;

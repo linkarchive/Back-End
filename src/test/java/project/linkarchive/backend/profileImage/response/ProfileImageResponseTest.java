@@ -20,7 +20,7 @@ class ProfileImageResponseTest extends SetUpMockData {
     void testProfileImageResponse() {
         ProfileImageResponse profileImageResponse = new ProfileImageResponse(PROFILE_IMAGE_FILENAME);
 
-        assertEquals(PROFILE_IMAGE_FILENAME, profileImageResponse.getProfileImageFileName());
+        assertEquals(PROFILE_IMAGE_FILENAME, profileImageResponse.getProfileImage());
     }
 
 }

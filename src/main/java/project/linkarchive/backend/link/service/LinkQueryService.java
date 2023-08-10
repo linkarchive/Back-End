@@ -9,7 +9,7 @@ import project.linkarchive.backend.hashtag.response.TagListResponse;
 import project.linkarchive.backend.hashtag.response.TagResponse;
 import project.linkarchive.backend.isLinkRead.repository.IsLinkReadRepository;
 import project.linkarchive.backend.link.domain.Link;
-import project.linkarchive.backend.link.domain.LinkHashTag;
+import project.linkarchive.backend.link.domain.LinkHashtag;
 import project.linkarchive.backend.link.repository.LinkHashTagRepository;
 import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.link.repository.LinkRepositoryImpl;
@@ -73,8 +73,8 @@ public class LinkQueryService {
 
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
+                    List<LinkHashtag> linkHashtagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashtagList.stream()
                             .map(TagResponse::create)
                             .collect(Collectors.toList());
 
@@ -97,8 +97,8 @@ public class LinkQueryService {
         List<LinkResponse> linkResponseList = linkRepositoryImpl.getUserLinkList(userId, tagId, linkId, pageable);
         List<UserLinkResponse> userLinkResponse = linkResponseList.stream()
                 .map(linkResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
+                    List<LinkHashtag> linkHashtagList = linkHashTagRepository.findByLinkId(linkResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashtagList.stream()
                             .map(TagResponse::create)
                             .collect(Collectors.toList());
 
@@ -120,8 +120,8 @@ public class LinkQueryService {
 
         List<UserArchiveResponse> userArchiveResponseList = archiveResponseList.stream()
                 .map(archiveResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(archiveResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
+                    List<LinkHashtag> linkHashtagList = linkHashTagRepository.findByLinkId(archiveResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashtagList.stream()
                             .map(TagResponse::create)
                             .collect(Collectors.toList());
 
@@ -143,8 +143,8 @@ public class LinkQueryService {
 
         List<TrashLinkListResponse> trashLinkListResponseList = trashLinkResponseList.stream()
                 .map(trashLinkResponse -> {
-                    List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(trashLinkResponse.getLinkId());
-                    List<TagResponse> tagList = linkHashTagList.stream()
+                    List<LinkHashtag> linkHashtagList = linkHashTagRepository.findByLinkId(trashLinkResponse.getLinkId());
+                    List<TagResponse> tagList = linkHashtagList.stream()
                             .map(TagResponse::create)
                             .collect(Collectors.toList());
 
@@ -164,10 +164,10 @@ public class LinkQueryService {
         Map<String, Integer> tagCountMap = new HashMap<>();
 
         linkList.forEach(link -> {
-            List<LinkHashTag> linkHashTagList = linkHashTagRepository.findByLinkId(link.getId());
-            linkHashTagList.forEach(linkHashTag -> {
-                Long tagId = linkHashTag.getHashTag().getId();
-                String tagName = linkHashTag.getHashTag().getTag();
+            List<LinkHashtag> linkHashtagList = linkHashTagRepository.findByLinkId(link.getId());
+            linkHashtagList.forEach(linkHashTag -> {
+                Long tagId = linkHashTag.getHashtag().getId();
+                String tagName = linkHashTag.getHashtag().getTag();
                 tagIdMap.put(tagName, tagId);
                 tagCountMap.put(tagName, tagCountMap.getOrDefault(tagName, 0) + 1);
             });
