@@ -72,10 +72,11 @@ public class LinkApiService {
         Link link = getLinkByLinkIdAndUserId(linkId, userId);
         validateLinkStatus(link);
 
-        deleteBookmarkByLinkIdAndUserId(userId, link);
+        bookMarkRepository.findByLinkId(linkId)
+                .forEach(bookMarkRepository::delete);
 
         link.delete();
-        decreaseBookmarkCount(link);
+        resetBookmarkCount(link);
     }
 
     private void validateTitleLength(CreateLinkRequest request) {
@@ -137,17 +138,8 @@ public class LinkApiService {
         }
     }
 
-    private void deleteBookmarkByLinkIdAndUserId(Long userId, Link link) {
-        bookMarkRepository.findByLinkIdAndUserId(link.getId(), userId)
-                .ifPresent(
-                        bookMarkRepository::delete
-                );
-    }
-
-    private void decreaseBookmarkCount(Link link) {
-        if (DEFAULT_COUNT < link.getBookMarkCount()) {
-            linkRepository.decreaseBookMarkCount(link.getId());
-        }
+    public void resetBookmarkCount(Link link) {
+        linkRepository.resetBookMarkCount(link.getId());
     }
 
 }
