@@ -13,12 +13,25 @@ class MyProfileResponseTest extends SetUpMockData {
     @BeforeEach
     void setUp() {
         setUpUser();
-        setUpProfileResponse();
+        setUpMyProfileResponse();
     }
 
-    @DisplayName("ProfileResponse - DTO")
+    @DisplayName("MyProfileResponse Getter - DTO")
     @Test
-    void testProfileResponse() {
+    void testGetter() {
+        assertEquals(USER_ID, myProfileResponse.getId());
+        assertEquals(EMPTY, myProfileResponse.getNickname());
+        assertEquals(EMPTY, myProfileResponse.getIntroduce());
+        assertEquals(PRE_SIGNED_URL, myProfileResponse.getProfileImageFileName());
+        assertEquals(FOLLOWER_COUNT, myProfileResponse.getFollowerCount());
+        assertEquals(FOLLOWING_COUNT, myProfileResponse.getFollowingCount());
+    }
+
+    @DisplayName("MyProfileResponse Constructor - DTO")
+    @Test
+    void testConstructor() {
+        myProfileResponse = new MyProfileResponse(user, PRE_SIGNED_URL);
+
         assertEquals(USER_ID, myProfileResponse.getId());
         assertEquals(EMPTY, myProfileResponse.getNickname());
         assertEquals(EMPTY, myProfileResponse.getIntroduce());

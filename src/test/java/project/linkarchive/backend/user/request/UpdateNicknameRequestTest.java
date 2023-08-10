@@ -15,9 +15,17 @@ class UpdateNicknameRequestTest extends SetUpMockData {
         setUpUpdateNicknameRequest();
     }
 
-    @DisplayName("UpdateNicknameRequestTest - DTO")
+    @DisplayName("UpdateNicknameRequest Getter - DTO")
     @Test
-    void testUpdateNicknameRequest() {
+    void testGetter() {
+        assertEquals(NEW_NICKNAME, updateNicknameRequest.getNickname());
+    }
+
+    @DisplayName("UpdateNicknameRequest Constructor - DTO")
+    @Test
+    void testConstructor() {
+        updateNicknameRequest = new UpdateNicknameRequest(NEW_NICKNAME);
+
         assertEquals(NEW_NICKNAME, updateNicknameRequest.getNickname());
     }
 

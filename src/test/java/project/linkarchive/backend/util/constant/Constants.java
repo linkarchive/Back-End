@@ -57,6 +57,7 @@ public class Constants {
     public static final Boolean IS_MARK = true;
     public static final Boolean IS_READ = true;
     public static final Boolean HAS_NEXT = true;
+    public static final Boolean IS_FOLLOW = true;
 
     public static final String NEW_NICKNAME = "NewTestNickname";
     public static final String NEW_INTRODUCE = "New_Test_Introduce";

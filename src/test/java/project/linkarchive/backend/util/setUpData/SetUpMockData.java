@@ -24,6 +24,7 @@ import project.linkarchive.backend.user.request.UpdateProfileRequest;
 import project.linkarchive.backend.user.response.MyProfileResponse;
 import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
+import project.linkarchive.backend.user.response.UserProfileResponse;
 
 import static project.linkarchive.backend.link.enums.LinkStatus.ACTIVE;
 import static project.linkarchive.backend.util.constant.Constants.*;
@@ -83,7 +84,7 @@ public class SetUpMockData extends MockDataGenerator {
         updateProfileRequest = new UpdateProfileRequest(NEW_NICKNAME, NEW_INTRODUCE);
     }
 
-    protected void setUpProfileResponse() {
+    protected void setUpMyProfileResponse() {
         myProfileResponse = new MyProfileResponse(user, PRE_SIGNED_URL);
     }
 
@@ -93,6 +94,10 @@ public class SetUpMockData extends MockDataGenerator {
 
     protected void setUpUpdateProfileResponse() {
         updateProfileResponse = new UpdateProfileResponse(user);
+    }
+
+    protected void setUpUserProfileResponse() {
+        userProfileResponse = new UserProfileResponse(user, PRE_SIGNED_URL, IS_FOLLOW);
     }
 
     protected void setUpProfileImageResponse() {

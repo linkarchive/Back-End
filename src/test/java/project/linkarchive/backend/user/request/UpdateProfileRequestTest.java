@@ -16,11 +16,21 @@ class UpdateProfileRequestTest extends SetUpMockData {
         setUpUpdateProfileRequest();
     }
 
-    @DisplayName("UpdateProfileResponse - DTO")
+    @DisplayName("UpdateProfileResponse Getter - DTO")
     @Test
-    void testUpdateProfileResponse() {
+    void testGetter() {
         assertEquals(NEW_NICKNAME, updateProfileRequest.getNickname());
         assertEquals(NEW_INTRODUCE, updateProfileRequest.getIntroduce());
     }
+
+    @DisplayName("UpdateProfileResponse Constructor - DTO")
+    @Test
+    void testConstructor() {
+        updateProfileRequest = new UpdateProfileRequest(NEW_NICKNAME, NEW_INTRODUCE);
+
+        assertEquals(NEW_NICKNAME, updateProfileRequest.getNickname());
+        assertEquals(NEW_INTRODUCE, updateProfileRequest.getIntroduce());
+    }
+
 
 }

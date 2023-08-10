@@ -16,57 +16,22 @@ class UserTest extends SetUpMockData {
         setUpUser();
     }
 
-    @DisplayName("유저 getUserId - Domain")
+    @DisplayName("User Getter - Domain")
     @Test
-    void testGetUserId() {
+    void testGetter() {
         assertEquals(USER_ID, user.getId());
-    }
-
-    @DisplayName("유저 getSocialId - Domain")
-    @Test
-    void testGetSocialId() {
         assertEquals(SOCIAL_ID, user.getSocialId());
-    }
-
-    @DisplayName("유저 getEmail - Domain")
-    @Test
-    void testGetEmail() {
         assertEquals(EMAIL, user.getEmail());
-    }
-
-    @DisplayName("유저 getNickname - Domain")
-    @Test
-    void testGetNickname() {
         assertEquals(EMPTY, user.getNickname());
-    }
-
-    @DisplayName("유저 getIntroduce - Domain")
-    @Test
-    void testGetIntroduce() {
         assertEquals(EMPTY, user.getIntroduce());
-    }
-
-    @DisplayName("유저 getFollowerCount - Domain")
-    @Test
-    void testGetFollowerCount() {
         assertEquals(FOLLOWER_COUNT, user.getFollowerCount());
-    }
-
-    @DisplayName("유저 getFollowingCount - Domain")
-    @Test
-    void testGetFollowingCount() {
         assertEquals(FOLLOWING_COUNT, user.getFollowingCount());
-    }
-
-    @DisplayName("유저 getProfileImage - Domain")
-    @Test
-    void testGetProfileImage() {
         assertEquals(profileImage, user.getProfileImage());
     }
 
-    @DisplayName("유저 생성자 - Domain")
+    @DisplayName("User Constructor - Domain")
     @Test
-    void testUserConstructor() {
+    void testConstructor() {
         user = new User(USER_ID, SOCIAL_ID, EMAIL, NICKNAME, INTRODUCE, FOLLOWER_COUNT, FOLLOWING_COUNT, profileImage);
 
         assertEquals(USER_ID, user.getId());
@@ -79,7 +44,7 @@ class UserTest extends SetUpMockData {
         assertEquals(profileImage, user.getProfileImage());
     }
 
-    @DisplayName("유저 Builder 패턴 - Domain")
+    @DisplayName("User Builder Pattern - Domain")
     @Test
     void testBuilder() {
         user = User.builder()
@@ -103,10 +68,11 @@ class UserTest extends SetUpMockData {
         assertEquals(profileImage, user.getProfileImage());
     }
 
-    @DisplayName("유저 create method - Domain")
+    @DisplayName("User Create Method - Domain")
     @Test
     void testCreate() {
         setUpKaKaoProfile();
+
         user = User.create(kakaoProfile, profileImage);
 
         assertEquals(SOCIAL_ID, user.getSocialId());
@@ -118,9 +84,9 @@ class UserTest extends SetUpMockData {
         assertEquals(profileImage, user.getProfileImage());
     }
 
-    @DisplayName("유저 updateUserNickName - Domain")
+    @DisplayName("User UpdateNickName - Domain")
     @Test
-    void testUpdateUserNickName() {
+    void testUpdateNickName() {
         String oldNickname = user.getNickname();
 
         setUpUpdateNicknameRequest();
@@ -131,9 +97,9 @@ class UserTest extends SetUpMockData {
         assertEquals(NEW_NICKNAME, newNickname);
     }
 
-    @DisplayName("유저 updateUserProfile - Domain")
+    @DisplayName("User UpdateProfile - Domain")
     @Test
-    void testUpdateUserProfile() {
+    void testUpdateProfile() {
         String oldNickname = user.getNickname();
         String oldIntroduce = user.getIntroduce();
 
