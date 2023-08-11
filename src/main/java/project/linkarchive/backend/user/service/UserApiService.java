@@ -32,7 +32,7 @@ public class UserApiService {
     private final ProfileImageRepository userProfileImageRepository;
 
     @Value("${cloud.aws.s3.default-image}")
-    private String defaultImage;
+    private String DEFAULT_IMAGE;
 
     public UserApiService(BadWordFiltering badWordFiltering, S3Uploader s3Uploader, UserRepository userRepository, ProfileImageRepository userProfileImageRepository) {
         this.badWordFiltering = badWordFiltering;
@@ -72,7 +72,7 @@ public class UserApiService {
 
         String storedFileName = s3Uploader.upload(image);
 
-        if (!user.getProfileImage().getProfileImageFilename().equals(defaultImage)) {
+        if (!user.getProfileImage().getProfileImageFilename().equals(DEFAULT_IMAGE)) {
             s3Uploader.deleteFile(user.getProfileImage().getProfileImageFilename());
         }
 
@@ -84,6 +84,15 @@ public class UserApiService {
                 .toString();
 
         return new ProfileImageResponse(profileImageUrl);
+    }
+
+    public ProfileImageResponse defaultProfileImage(Long userId) {
+        User user = getUserById(userId);
+
+        ProfileImage profileImage = user.getProfileImage();
+        profileImage.updateProfileImage(DEFAULT_IMAGE);
+
+        return new ProfileImageResponse(profileImage.getProfileImageFilename());
     }
 
     public void checkIfNicknameIsAvailable(String nickname) {

@@ -53,6 +53,12 @@ public class UserApiController {
         return ResponseEntity.ok().body(profileImageResponse);
     }
 
+    @PatchMapping("/default/profile-image")
+    public ResponseEntity<ProfileImageResponse> defaultProfileImage(AuthInfo authInfo) {
+        ProfileImageResponse profileImageResponse = userApiService.defaultProfileImage(authInfo.getId());
+        return ResponseEntity.ok().body(profileImageResponse);
+    }
+
     @PostMapping("/nickname")
     public ResponseEntity<SuccessResponse> checkNicknameAvailability(
             @RequestBody UpdateNicknameRequest request
