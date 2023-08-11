@@ -1,11 +1,10 @@
 package project.linkarchive.backend.relationship.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.linkarchive.backend.advice.entityBase.TimeEntity;
+import project.linkarchive.backend.advice.entityBase.CreatedEntity;
 import project.linkarchive.backend.user.domain.User;
 
 import javax.persistence.*;
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Relationship extends TimeEntity {
+public class Relationship extends CreatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
