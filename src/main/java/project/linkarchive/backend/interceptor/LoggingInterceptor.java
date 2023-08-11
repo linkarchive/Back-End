@@ -20,8 +20,8 @@ public class LoggingInterceptor implements HandlerInterceptor {
         );
 
         logger.info(
-                "Method::" + request.getMethod() +
-                "Request URL::" + request.getRequestURL().toString() +
+                "Method=" + request.getMethod() +
+                ":: Request URL=" + request.getRequestURL().toString() +
                 ":: Client IP=" + request.getRemoteAddr() +
                 ":: User Agent=" + request.getHeader("User-Agent") +
                 ":: Start Time=" + System.currentTimeMillis()
@@ -35,8 +35,8 @@ public class LoggingInterceptor implements HandlerInterceptor {
         long startTime = (Long) request.getAttribute("startTime");
 
         logger.info(
-                "Method::" + request.getMethod() +
-                "Request URL::" + request.getRequestURL().toString() +
+                "Method=" + request.getMethod() +
+                ":: Request URL=" + request.getRequestURL().toString() +
                 ":: Status Code=" + response.getStatus() +
                 ":: End Time=" + System.currentTimeMillis() +
                 ":: Time Taken=" + (System.currentTimeMillis() - startTime) + "ms"
