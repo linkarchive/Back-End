@@ -9,8 +9,7 @@ import project.linkarchive.backend.security.AuthInfo;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
-import static project.linkarchive.backend.advice.success.SuccessCodeConst.LINK_CREATE;
-import static project.linkarchive.backend.advice.success.SuccessCodeConst.LINK_DELETE;
+import static project.linkarchive.backend.advice.success.SuccessCodeConst.*;
 
 @RestController
 public class LinkApiController {
@@ -37,6 +36,15 @@ public class LinkApiController {
     ) {
         linkApiService.delete(linkId, authInfo.getId());
         return ResponseEntity.status(OK).body(new SuccessResponse(LINK_DELETE));
+    }
+
+    @PatchMapping("/restore/link/{linkId}")
+    public ResponseEntity<SuccessResponse> restore(
+            @PathVariable("linkId") Long linkId,
+            AuthInfo authInfo
+    ) {
+        linkApiService.restore(linkId, authInfo.getId());
+        return ResponseEntity.status(OK).body(new SuccessResponse(LINK_RESTORE));
     }
 
 }

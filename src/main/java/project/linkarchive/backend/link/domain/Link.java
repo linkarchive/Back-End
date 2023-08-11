@@ -82,4 +82,8 @@ public class Link extends TimeEntity {
         this.linkStatus = TRASH;
     }
 
+    public void restore() {
+        this.linkStatus = ACTIVE;
+    }
+
 }

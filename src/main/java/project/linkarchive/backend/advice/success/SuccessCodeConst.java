@@ -12,6 +12,7 @@ public enum SuccessCodeConst {
     BOOK_MARK_CANCEL(200, "BOOK_MARK_CANCEL", "북마크가 취소되었습니다."),
     AVAILABLE_NICKNAME(200, "AVAILABLE_NICKNAME", "사용가능한 닉네임입니다"),
     UNFOLLOW_USER(200, "UNFOLLOW_USER", "팔로우가 취소되었습니다."),
+    LINK_RESTORE(200, "LINK_RESTORE", "링크가 복구되었습니다"),
 
     LINK_CREATE(201, "LINK_CREATE", "Link 가 생성되었습니다."),
     USER_TAG_CREATE(201, "USER_TAG_CREATE", "유저가 자주 사용하는 태그가 생성되었습니다."),
