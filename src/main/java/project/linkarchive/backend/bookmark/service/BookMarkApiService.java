@@ -7,6 +7,7 @@ import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.bookmark.domain.Bookmark;
 import project.linkarchive.backend.bookmark.repository.BookMarkRepository;
 import project.linkarchive.backend.link.domain.Link;
+import project.linkarchive.backend.link.enums.LinkStatus;
 import project.linkarchive.backend.link.repository.LinkRepository;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
@@ -32,9 +33,12 @@ public class BookMarkApiService {
     }
 
     public void bookmark(Long linkId, Long userId) {
-        Link link = findLinkById(linkId);
-        User user = findUserById(userId);
-        existUrlValidation(link.getId(), user.getId());
+        Link link = getLinkById(linkId);
+        User user = getUserById(userId);
+
+        validateLinkStatus(link);
+
+        existBookmarkByLinkIdAndUserId(link.getId(), user.getId());
 
         Bookmark bookmark = Bookmark.create(user, link);
         bookMarkRepository.save(bookmark);
@@ -42,31 +46,38 @@ public class BookMarkApiService {
         linkRepository.increaseBookmarkCount(link.getId());
     }
 
-    public void bookmarkCount(Long linkId, Long userId) {
-        Link link = findLinkById(linkId);
-        Bookmark bookmark = findBookMarkByLinkAndUser(link, userId);
+    public void bookmarkCancel(Long linkId, Long userId) {
+        Link link = getLinkById(linkId);
+
+        Bookmark bookmark = getBookMarkByLinkAndUser(link, userId);
         bookMarkRepository.delete(bookmark);
 
         linkRepository.decreaseBookmarkCount(link.getId());
     }
 
-    private Link findLinkById(Long linkId) {
+    private Link getLinkById(Long linkId) {
         return linkRepository.findById(linkId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_LINK));
     }
 
-    private User findUserById(Long userId) {
+    private User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
     }
 
-    private void existUrlValidation(Long linkId, Long userId) {
+    private void validateLinkStatus(Link link) {
+        if (link.getLinkStatus().equals(LinkStatus.TRASH)) {
+            throw new AlreadyExistException(ALREADY_TRASH_LINK);
+        }
+    }
+
+    private void existBookmarkByLinkIdAndUserId(Long linkId, Long userId) {
         if (bookMarkRepository.existsByLinkIdAndUserId(linkId, userId)) {
             throw new AlreadyExistException(ALREADY_EXIST_BOOKMARK);
         }
     }
 
-    private Bookmark findBookMarkByLinkAndUser(Link link, Long userId) {
+    private Bookmark getBookMarkByLinkAndUser(Link link, Long userId) {
         return bookMarkRepository.findByLinkIdAndUserId(link.getId(), userId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_BOOKMARK));
     }

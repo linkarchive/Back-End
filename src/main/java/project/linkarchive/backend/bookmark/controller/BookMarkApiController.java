@@ -36,7 +36,7 @@ public class BookMarkApiController {
             @PathVariable(value = "linkId") Long linkId,
             AuthInfo authInfo
     ) {
-        bookMarkApiService.bookmarkCount(linkId, authInfo.getId());
+        bookMarkApiService.bookmarkCancel(linkId, authInfo.getId());
         return ResponseEntity.ok(new SuccessResponse(BOOK_MARK_CANCEL));
     }
 
