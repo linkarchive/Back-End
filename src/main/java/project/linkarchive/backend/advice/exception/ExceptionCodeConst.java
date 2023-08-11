@@ -10,7 +10,9 @@ public enum ExceptionCodeConst {
 
     INVALID_TOKEN(401, "INVALID_TOKEN", "유효하지 않은 토큰입니다. 로그인이 필요합니다."),
     INVALID_AUTHORIZATION_CODE(401, "INVALID_AUTHORIZATION_CODE", "잘못된 인가코드입니다."),
-    INVALID_BAD_WORD(400, "INVALID_BAD_WORD", "욕설은 허용하지 않습니다."),
+    INVALID_BAD_WORD(401, "INVALID_BAD_WORD", "욕설은 허용하지 않습니다."),
+    INVALID_TRASH_LINK(401, "INVALID_TRASH_LINK", "삭제된 링크가 아닙니다"),
+    INVALID_LINK_ACCESS(401, "INVALID_LINK_ACCESS", "이 링크를 복구할 권한이 없습니다."),
 
     FORBIDDEN_ACCESS(403, "FORBIDDEN_ACCESS", "권한이 없습니다."),
 
