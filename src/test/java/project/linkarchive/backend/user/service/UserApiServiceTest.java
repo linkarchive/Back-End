@@ -17,7 +17,6 @@ import project.linkarchive.backend.user.response.UpdateProfileResponse;
 import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -106,16 +105,13 @@ class UserApiServiceTest extends SetUpMockData {
                 .thenReturn(Optional.of(user));
         when(s3Uploader.upload(multipartFile))
                 .thenReturn(STORED_FILE_NAME);
-        when(s3Uploader.generatePresignedProfileImageUrl(STORED_FILE_NAME, EXPIRATION_TIME_MINUTE))
-                .thenReturn(new URL(PROFILE_IMAGE_URL));
 
         ProfileImageResponse response = userApiService.updateProfileImage(multipartFile, user.getId());
 
-        assertEquals(PROFILE_IMAGE_URL, response.getProfileImage());
+        assertEquals(null + STORED_FILE_NAME, response.getProfileImage());
 
         verify(userRepository).findById(USER_ID);
         verify(s3Uploader).upload(multipartFile);
-        verify(s3Uploader).generatePresignedProfileImageUrl(STORED_FILE_NAME, EXPIRATION_TIME_MINUTE);
     }
 
     @DisplayName("유저 Api Service - checkIfNicknameIsAvailable")
