@@ -9,7 +9,6 @@ import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
-import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
 import project.linkarchive.backend.util.JwtUtil;
@@ -25,16 +24,16 @@ public class OAuthService {
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
-    private final ProfileImageRepository profileImageRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${cloud.aws.s3.default-image}")
     private String DEFAULT_IMAGE;
+    @Value("${cloud.aws.s3.url}")
+    private String URL;
 
-    public OAuthService(JwtUtil jwtUtil, UserRepository userRepository, ProfileImageRepository profileImageRepository, RefreshTokenRepository refreshTokenRepository) {
+    public OAuthService(JwtUtil jwtUtil, UserRepository userRepository, RefreshTokenRepository refreshTokenRepository) {
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
-        this.profileImageRepository = profileImageRepository;
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
@@ -62,7 +61,7 @@ public class OAuthService {
                 () -> refreshTokenRepository.save(token)
         );
 
-        return new LoginResponse(findUser, newAccessToken, newRefreshToken);
+        return new LoginResponse(findUser, URL + findUser.getProfileImage().getProfileImageFilename(), newAccessToken, newRefreshToken);
     }
 
     public LoginResponse login(String code, String referer, String userAgent) {
@@ -91,7 +90,7 @@ public class OAuthService {
                         () -> refreshTokenRepository.save(token)
                 );
 
-        return new LoginResponse(findUser, newAccessToken, newRefreshToken);
+        return new LoginResponse(findUser, URL + findUser.getProfileImage().getProfileImageFilename(), newAccessToken, newRefreshToken);
     }
 
     public AccessTokenResponse publishAccessToken(String accessToken, String refreshToken) {
