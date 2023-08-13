@@ -37,6 +37,8 @@ public class User extends TimeEntity {
     private String introduce;
     private int followerCount;
     private int followingCount;
+    private int linkCount;
+    private int bookmarkCount;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_image_id")
@@ -52,7 +54,7 @@ public class User extends TimeEntity {
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
     @Builder
-    public User(Long id, String socialId, String email, String nickname, String introduce, int followerCount, int followingCount, ProfileImage profileImage) {
+    public User(Long id, String socialId, String email, String nickname, String introduce, int followerCount, int followingCount, int linkCount, int bookmarkCount, ProfileImage profileImage) {
         this.id = id;
         this.socialId = socialId;
         this.email = email;
@@ -60,6 +62,8 @@ public class User extends TimeEntity {
         this.introduce = introduce;
         this.followerCount = followerCount;
         this.followingCount = followingCount;
+        this.linkCount = linkCount;
+        this.bookmarkCount = bookmarkCount;
         this.profileImage = profileImage;
     }
 
@@ -71,6 +75,8 @@ public class User extends TimeEntity {
                 .introduce(EMPTY)
                 .followerCount(DEFAULT_COUNT)
                 .followingCount(DEFAULT_COUNT)
+                .linkCount(DEFAULT_COUNT)
+                .bookmarkCount(DEFAULT_COUNT)
                 .profileImage(profileImage)
                 .build();
     }

@@ -52,15 +52,16 @@ public class LinkApiService {
 
     public void create(CreateLinkRequest request, Long userId) {
         validateLinkTitleLength(request);
-
-        User user = getUserById(userId);
         Set<String> tagsFromRequest = extractTagsFromRequest(request);
         checkExceededTagCount(tagsFromRequest);
+
+        User user = getUserById(userId);
 
         Link link = Link.create(request, user);
         addTagsToLinkAndIncrementUserTagCount(tagsFromRequest, link);
 
         linkRepository.save(link);
+        userRepository.increaseLinkCount(userId);
     }
 
     public void delete(Long linkId, Long userId) {
@@ -73,7 +74,8 @@ public class LinkApiService {
                 .forEach(bookMarkRepository::delete);
 
         link.delete();
-        resetBookmarkCount(link);
+        linkRepository.resetBookmarkCount(link.getId());
+        userRepository.decreaseLinkCount(userId);
     }
 
     public void restore(Long linkId, Long userId) {
@@ -83,6 +85,7 @@ public class LinkApiService {
         validateLinkInTrash(link);
 
         link.restore();
+        userRepository.increaseLinkCount(userId);
     }
 
     private void validateLinkTitleLength(CreateLinkRequest request) {
@@ -142,10 +145,6 @@ public class LinkApiService {
         if (link.getLinkStatus().equals(LinkStatus.TRASH)) {
             throw new AlreadyExistException(ALREADY_TRASH_LINK);
         }
-    }
-
-    private void resetBookmarkCount(Link link) {
-        linkRepository.resetBookmarkCount(link.getId());
     }
 
     private void validateUserAccessToLink(Long userId, Link link) {
