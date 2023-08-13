@@ -34,10 +34,9 @@ public class BookMarkApiService {
 
     public void bookmark(Long linkId, Long userId) {
         Link link = getLinkById(linkId);
-        User user = getUserById(userId);
-
         validateLinkStatus(link);
 
+        User user = getUserById(userId);
         existBookmarkByLinkIdAndUserId(link.getId(), user.getId());
 
         Bookmark bookmark = Bookmark.create(user, link);
