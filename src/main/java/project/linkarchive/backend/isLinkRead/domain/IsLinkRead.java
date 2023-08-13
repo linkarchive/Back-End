@@ -34,7 +34,7 @@ public class IsLinkRead extends CreatedEntity {
         this.link = link;
     }
 
-    public static IsLinkRead build(User user, Link link) {
+    public static IsLinkRead create(User user, Link link) {
         return IsLinkRead.builder()
                 .user(user)
                 .link(link)

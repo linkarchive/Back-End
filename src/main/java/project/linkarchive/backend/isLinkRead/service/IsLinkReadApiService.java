@@ -35,7 +35,7 @@ public class IsLinkReadApiService {
         Link link = getLinkById(linkId);
         existIsLinkReadValidation(user, link);
 
-        IsLinkRead isLinkRead = IsLinkRead.build(user, link);
+        IsLinkRead isLinkRead = IsLinkRead.create(user, link);
         isLinkReadRepository.save(isLinkRead);
     }
 
