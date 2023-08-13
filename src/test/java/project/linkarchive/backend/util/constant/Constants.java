@@ -31,6 +31,7 @@ public class Constants {
     public static final String CONTENT_TYPE = "image/jpg";
     public static final byte[] MULTIPART_FILE_DATA = "image data".getBytes();
     public static final int EXPIRATION_TIME_MINUTE = 3600000;
+    public static final String AWS_S3_URL = "https://linkarchive-profile.s3.ap-northeast-2.amazonaws.com/";
 
     public static final Long REFRESH_TOKEN_ID = 1L;
     public static final String REFRESH_TOKEN = "Test_RefreshToken";

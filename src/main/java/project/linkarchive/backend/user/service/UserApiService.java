@@ -7,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 import project.linkarchive.backend.advice.exception.custom.*;
 import project.linkarchive.backend.badword.BadWordFiltering;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
-import project.linkarchive.backend.profileImage.repository.ProfileImageRepository;
 import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.s3.S3Uploader;
 import project.linkarchive.backend.user.domain.User;
@@ -29,16 +28,16 @@ public class UserApiService {
     private final S3Uploader s3Uploader;
     private final BadWordFiltering badWordFiltering;
     private final UserRepository userRepository;
-    private final ProfileImageRepository userProfileImageRepository;
 
     @Value("${cloud.aws.s3.default-image}")
     private String DEFAULT_IMAGE;
+    @Value("${cloud.aws.s3.url}")
+    private String URL;
 
-    public UserApiService(BadWordFiltering badWordFiltering, S3Uploader s3Uploader, UserRepository userRepository, ProfileImageRepository userProfileImageRepository) {
+    public UserApiService(BadWordFiltering badWordFiltering, S3Uploader s3Uploader, UserRepository userRepository) {
         this.badWordFiltering = badWordFiltering;
         this.s3Uploader = s3Uploader;
         this.userRepository = userRepository;
-        this.userProfileImageRepository = userProfileImageRepository;
     }
 
     public UpdateNicknameResponse updateUserNickName(UpdateNicknameRequest request, Long userId) {
@@ -76,14 +75,10 @@ public class UserApiService {
             s3Uploader.deleteFile(user.getProfileImage().getProfileImageFilename());
         }
 
-        user.getProfileImage().updateProfileImage(storedFileName);
+        ProfileImage profileImage = user.getProfileImage();
+        profileImage.updateProfileImage(storedFileName);
 
-        String profileImageUrl = s3Uploader.generatePresignedProfileImageUrl(
-                        storedFileName,
-                        IMAGE_EXPIRATION_TIME)
-                .toString();
-
-        return new ProfileImageResponse(profileImageUrl);
+        return new ProfileImageResponse(URL + profileImage.getProfileImageFilename());
     }
 
     public ProfileImageResponse defaultProfileImage(Long userId) {
@@ -92,7 +87,7 @@ public class UserApiService {
         ProfileImage profileImage = user.getProfileImage();
         profileImage.updateProfileImage(DEFAULT_IMAGE);
 
-        return new ProfileImageResponse(profileImage.getProfileImageFilename());
+        return new ProfileImageResponse(URL + profileImage.getProfileImageFilename());
     }
 
     public void checkIfNicknameIsAvailable(String nickname) {
