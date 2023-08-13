@@ -10,7 +10,6 @@ import static project.linkarchive.backend.link.enums.LinkStatus.TRASH;
 public class Constants {
 
     public static final String EMPTY = "";
-    public static final int LOOP_COUNT = 10;
 
     public static final Long USER_ID = 1L;
     public static final String SOCIAL_ID = "Test_Social_Id";
@@ -19,6 +18,8 @@ public class Constants {
     public static final String INTRODUCE = "Test_Introduce";
     public static final int FOLLOWER_COUNT = 0;
     public static final int FOLLOWING_COUNT = 0;
+    public static final int USER_LINK_COUNT = 0;
+    public static final int USER_BOOKMARK_COUNT = 0;
 
     public static final String NONE_SOCIAL_ID = "Test_None_Social_Id";
     public static final String NONE_NICKNAME = "Test_None_Nickname";
@@ -31,7 +32,6 @@ public class Constants {
     public static final String CONTENT_TYPE = "image/jpg";
     public static final byte[] MULTIPART_FILE_DATA = "image data".getBytes();
     public static final int EXPIRATION_TIME_MINUTE = 3600000;
-    public static final String AWS_S3_URL = "https://linkarchive-profile.s3.ap-northeast-2.amazonaws.com/";
 
     public static final Long REFRESH_TOKEN_ID = 1L;
     public static final String REFRESH_TOKEN = "Test_RefreshToken";

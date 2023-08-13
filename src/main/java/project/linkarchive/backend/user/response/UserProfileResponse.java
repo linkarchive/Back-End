@@ -12,6 +12,8 @@ public class UserProfileResponse {
     private String profileImage;
     private int followerCount;
     private int followingCount;
+    private int linkCount;
+    private int bookmarkCount;
     private Boolean isFollow;
 
     public UserProfileResponse(User user, String preSignedUrl, Boolean isFollow) {
@@ -21,6 +23,8 @@ public class UserProfileResponse {
         this.profileImage = preSignedUrl;
         this.followerCount = user.getFollowerCount();
         this.followingCount = user.getFollowingCount();
+        this.linkCount = user.getLinkCount();
+        this.bookmarkCount = user.getBookmarkCount();
         this.isFollow = isFollow;
     }
 
