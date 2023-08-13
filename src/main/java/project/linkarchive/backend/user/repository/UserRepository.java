@@ -41,8 +41,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void increaseLinkCount(@Param("userId") Long userId);
 
     @Modifying
-    @Query("UPDATE User u SET u.linkCount = u.linkCount - 1 " +
-            "WHERE u.id = :userId")
-    void decreaseLinkCount(@Param("userId") Long id);
+    @Query("UPDATE User u SET u.linkCount = u.linkCount - 1 WHERE u.id = :userId")
+    void decreaseLinkCount(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("UPDATE User u SET u.bookmarkCount = u.bookmarkCount + 1 WHERE u.id = :userId")
+    void increaseBookmarkCount(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("UPDATE User u SET u.bookmarkCount = u.bookmarkCount - 1 WHERE u.id = :userId")
+    void decreaseBookmarkCount(@Param("userId") Long userId);
 
 }

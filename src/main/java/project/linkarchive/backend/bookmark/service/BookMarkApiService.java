@@ -44,6 +44,7 @@ public class BookMarkApiService {
         bookMarkRepository.save(bookmark);
 
         linkRepository.increaseBookmarkCount(link.getId());
+        userRepository.increaseBookmarkCount(userId);
     }
 
     public void bookmarkCancel(Long linkId, Long userId) {
@@ -53,6 +54,7 @@ public class BookMarkApiService {
         bookMarkRepository.delete(bookmark);
 
         linkRepository.decreaseBookmarkCount(link.getId());
+        userRepository.decreaseBookmarkCount(userId);
     }
 
     private Link getLinkById(Long linkId) {
