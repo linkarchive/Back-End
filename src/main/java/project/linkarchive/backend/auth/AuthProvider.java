@@ -7,7 +7,7 @@ import java.util.Arrays;
 @Getter
 public enum AuthProvider {
 
-    KAKAO("kakao"), GOOGLE("google"), NAVER("naver"), LOCAL("local");
+    KAKAO("kakao"), GOOGLE("google"), NAVER("naver"), LOCAL("local"), TEST("test");
 
     private String authProvider;
 
