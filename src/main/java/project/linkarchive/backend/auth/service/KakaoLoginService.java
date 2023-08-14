@@ -51,6 +51,7 @@ public class KakaoLoginService {
                     return user;
                 });
 
+        findUser.updateAuthProvider(KAKAO);
         String newAccessToken = jwtUtil.createAccessToken(findUser);
         String newRefreshToken = jwtUtil.createRefreshToken(findUser);
 

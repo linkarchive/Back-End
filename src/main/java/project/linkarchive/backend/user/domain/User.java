@@ -110,4 +110,8 @@ public class User extends TimeEntity {
         this.introduce = request.getIntroduce();
     }
 
+    public void updateAuthProvider(AuthProvider authProvider) {
+        this.authProvider = authProvider;
+    }
+
 }
