@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
+import project.linkarchive.backend.auth.AuthProvider;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.bookmark.domain.Bookmark;
 import project.linkarchive.backend.hashtag.domain.UserHashtag;
@@ -31,6 +32,9 @@ public class User extends TimeEntity {
     @Column(name = "user_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
+
     private String socialId;
     private String email;
     private String nickname;
@@ -54,8 +58,9 @@ public class User extends TimeEntity {
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
     @Builder
-    public User(Long id, String socialId, String email, String nickname, String introduce, int followerCount, int followingCount, int linkCount, int bookmarkCount, ProfileImage profileImage) {
+    public User(Long id, AuthProvider authProvider, String socialId, String email, String nickname, String introduce, int followerCount, int followingCount, int linkCount, int bookmarkCount, ProfileImage profileImage) {
         this.id = id;
+        this.authProvider = authProvider;
         this.socialId = socialId;
         this.email = email;
         this.nickname = nickname;
@@ -67,8 +72,9 @@ public class User extends TimeEntity {
         this.profileImage = profileImage;
     }
 
-    public static User create(KakaoProfile kakaoProfile, ProfileImage profileImage) {
+    public static User create(AuthProvider authProvider, KakaoProfile kakaoProfile, ProfileImage profileImage) {
         return User.builder()
+                .authProvider(authProvider)
                 .socialId(kakaoProfile.getId())
                 .nickname(EMPTY)
                 .email(kakaoProfile.getKakaoAccount().getEmail())
