@@ -7,6 +7,7 @@ import project.linkarchive.backend.util.setUpData.SetUpMockData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static project.linkarchive.backend.auth.AuthProvider.TEST;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
 class UserTest extends SetUpMockData {
@@ -32,7 +33,7 @@ class UserTest extends SetUpMockData {
     @DisplayName("User Constructor - Domain")
     @Test
     void testConstructor() {
-        user = new User(USER_ID, SOCIAL_ID, EMAIL, NICKNAME, INTRODUCE, FOLLOWER_COUNT, FOLLOWING_COUNT, USER_LINK_COUNT, USER_BOOKMARK_COUNT, profileImage);
+        user = new User(USER_ID, TEST, SOCIAL_ID, EMAIL, NICKNAME, INTRODUCE, FOLLOWER_COUNT, FOLLOWING_COUNT, USER_LINK_COUNT, USER_BOOKMARK_COUNT, profileImage);
 
         assertEquals(USER_ID, user.getId());
         assertEquals(SOCIAL_ID, user.getSocialId());
@@ -49,6 +50,7 @@ class UserTest extends SetUpMockData {
     void testBuilder() {
         user = User.builder()
                 .id(USER_ID)
+                .authProvider(TEST)
                 .socialId(SOCIAL_ID)
                 .email(EMAIL)
                 .nickname(NICKNAME)
@@ -73,7 +75,7 @@ class UserTest extends SetUpMockData {
     void testCreate() {
         setUpKaKaoProfile();
 
-        user = User.create(kakaoProfile, profileImage);
+        user = User.create(TEST, kakaoProfile, profileImage);
 
         assertEquals(SOCIAL_ID, user.getSocialId());
         assertEquals(EMAIL, user.getEmail());

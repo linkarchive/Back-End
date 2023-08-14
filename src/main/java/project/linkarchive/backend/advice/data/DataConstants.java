@@ -9,6 +9,8 @@ public class DataConstants {
     public static final String IMAGE_CONTENT_TYPE = "^image/(jpeg|jpg|png)$";
     public static final String BEARER = "bearer";
     public static final String AUTH_KAKAO = "auth/kakao";
+    public static final String LOCAL_EMAIL = "local@gmail.com";
+    public static final String SOCIAL_LOGIN = "social_login";
     public static final Pattern PATTERN_REGAX = Pattern.compile("^[\\uAC00-\\uD7A3a-zA-Z0-9]+$");
 
     public static final int DEFAULT_COUNT = 0;

@@ -7,6 +7,7 @@ import project.linkarchive.backend.user.domain.User;
 public class MyProfileResponse {
 
     private Long id;
+    private String auth;
     private String nickname;
     private String introduce;
     private String profileImage;
@@ -15,6 +16,7 @@ public class MyProfileResponse {
 
     public MyProfileResponse(User user, String preSignedUrl) {
         this.id = user.getId();
+        this.auth = user.getAuthProvider().getAuthProvider();
         this.nickname = user.getNickname();
         this.introduce = user.getIntroduce();
         this.profileImage = preSignedUrl;

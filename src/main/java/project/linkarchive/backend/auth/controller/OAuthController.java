@@ -5,34 +5,37 @@ import org.springframework.web.bind.annotation.*;
 import project.linkarchive.backend.auth.request.AccessTokenRequest;
 import project.linkarchive.backend.auth.response.AccessTokenResponse;
 import project.linkarchive.backend.auth.response.LoginResponse;
-import project.linkarchive.backend.auth.service.OAuthService;
+import project.linkarchive.backend.auth.service.LocalLoginService;
+import project.linkarchive.backend.auth.service.OauthService;
 
 @RestController
 public class OAuthController {
 
-    private final OAuthService oAuthService;
+    private final LocalLoginService localLoginService;
+    private final OauthService oauthService;
 
-    public OAuthController(OAuthService oAuthService) {
-        this.oAuthService = oAuthService;
+    public OAuthController(LocalLoginService localLoginService, OauthService oauthService) {
+        this.localLoginService = localLoginService;
+        this.oauthService = oauthService;
     }
 
-    @PostMapping("/auth/kakao/backend")
-    public ResponseEntity<LoginResponse> loginByBackEnd(
-            @RequestParam("code") String code,
+    @PostMapping("/auth/local")
+    public ResponseEntity<LoginResponse> localLogin(
             @RequestHeader("User-Agent") String userAgent
     ) {
-        LoginResponse loginResponse = oAuthService.loginForBackEnd(code, userAgent);
+        LoginResponse loginResponse = localLoginService.login(userAgent);
 
         return ResponseEntity.ok().body(loginResponse);
     }
 
-    @PostMapping("/auth/kakao")
-    public ResponseEntity<LoginResponse> login(
+    @PostMapping("/auth/{registration}")
+    public ResponseEntity<LoginResponse> oauthLogin(
+            @PathVariable("registration") String registration,
             @RequestParam("code") String code,
             @RequestHeader("Referer") String referer,
             @RequestHeader("User-Agent") String userAgent
     ) {
-        LoginResponse loginResponse = oAuthService.login(code, referer, userAgent);
+        LoginResponse loginResponse = oauthService.redirect(registration, referer, code, userAgent);
 
         return ResponseEntity.ok().body(loginResponse);
     }
@@ -42,7 +45,7 @@ public class OAuthController {
             @RequestHeader("Authorization") String refreshToken,
             @RequestBody AccessTokenRequest accessTokenRequest
     ) {
-        return oAuthService.publishAccessToken(accessTokenRequest.getAccessToken(), refreshToken);
+        return oauthService.publishAccessToken(accessTokenRequest.getAccessToken(), refreshToken);
     }
 
 }

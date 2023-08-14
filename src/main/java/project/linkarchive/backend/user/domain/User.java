@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
+import project.linkarchive.backend.auth.AuthProvider;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.bookmark.domain.Bookmark;
 import project.linkarchive.backend.hashtag.domain.UserHashtag;
@@ -17,8 +18,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static project.linkarchive.backend.advice.data.DataConstants.DEFAULT_COUNT;
-import static project.linkarchive.backend.advice.data.DataConstants.EMPTY;
+import static project.linkarchive.backend.advice.data.DataConstants.*;
 
 @Entity
 @Getter
@@ -30,6 +30,9 @@ public class User extends TimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 
     private String socialId;
     private String email;
@@ -54,8 +57,9 @@ public class User extends TimeEntity {
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
     @Builder
-    public User(Long id, String socialId, String email, String nickname, String introduce, int followerCount, int followingCount, int linkCount, int bookmarkCount, ProfileImage profileImage) {
+    public User(Long id, AuthProvider authProvider, String socialId, String email, String nickname, String introduce, int followerCount, int followingCount, int linkCount, int bookmarkCount, ProfileImage profileImage) {
         this.id = id;
+        this.authProvider = authProvider;
         this.socialId = socialId;
         this.email = email;
         this.nickname = nickname;
@@ -67,8 +71,24 @@ public class User extends TimeEntity {
         this.profileImage = profileImage;
     }
 
-    public static User create(KakaoProfile kakaoProfile, ProfileImage profileImage) {
+    public static User localCreate(ProfileImage profileImage) {
         return User.builder()
+                .authProvider(AuthProvider.LOCAL)
+                .socialId(SOCIAL_LOGIN)
+                .nickname(EMPTY)
+                .email(LOCAL_EMAIL)
+                .introduce(EMPTY)
+                .followerCount(DEFAULT_COUNT)
+                .followingCount(DEFAULT_COUNT)
+                .linkCount(DEFAULT_COUNT)
+                .bookmarkCount(DEFAULT_COUNT)
+                .profileImage(profileImage)
+                .build();
+    }
+
+    public static User create(AuthProvider authProvider, KakaoProfile kakaoProfile, ProfileImage profileImage) {
+        return User.builder()
+                .authProvider(authProvider)
                 .socialId(kakaoProfile.getId())
                 .nickname(EMPTY)
                 .email(kakaoProfile.getKakaoAccount().getEmail())
@@ -88,6 +108,10 @@ public class User extends TimeEntity {
     public void updateProfile(UpdateProfileRequest request) {
         this.nickname = request.getNickname();
         this.introduce = request.getIntroduce();
+    }
+
+    public void updateAuthProvider(AuthProvider authProvider) {
+        this.authProvider = authProvider;
     }
 
 }
