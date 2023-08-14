@@ -1,6 +1,7 @@
 package project.linkarchive.backend.util.setUpData;
 
 import org.springframework.mock.web.MockMultipartFile;
+import project.linkarchive.backend.auth.AuthProvider;
 import project.linkarchive.backend.auth.response.KakaoAccount;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.link.domain.Link;
@@ -26,6 +27,7 @@ import project.linkarchive.backend.user.response.UpdateNicknameResponse;
 import project.linkarchive.backend.user.response.UpdateProfileResponse;
 import project.linkarchive.backend.user.response.UserProfileResponse;
 
+import static project.linkarchive.backend.auth.AuthProvider.TEST;
 import static project.linkarchive.backend.link.enums.LinkStatus.ACTIVE;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
@@ -34,6 +36,7 @@ public class SetUpMockData extends MockDataGenerator {
     protected void setUpUser() {
         user = User.builder()
                 .id(USER_ID)
+                .authProvider(TEST)
                 .socialId(SOCIAL_ID)
                 .email(EMAIL)
                 .nickname(EMPTY)
