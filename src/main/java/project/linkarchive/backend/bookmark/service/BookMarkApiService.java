@@ -34,16 +34,16 @@ public class BookMarkApiService {
 
     public void bookmark(Long linkId, Long userId) {
         Link link = getLinkById(linkId);
-        User user = getUserById(userId);
-
         validateLinkStatus(link);
 
+        User user = getUserById(userId);
         existBookmarkByLinkIdAndUserId(link.getId(), user.getId());
 
         Bookmark bookmark = Bookmark.create(user, link);
         bookMarkRepository.save(bookmark);
 
         linkRepository.increaseBookmarkCount(link.getId());
+        userRepository.increaseBookmarkCount(userId);
     }
 
     public void bookmarkCancel(Long linkId, Long userId) {
@@ -53,6 +53,7 @@ public class BookMarkApiService {
         bookMarkRepository.delete(bookmark);
 
         linkRepository.decreaseBookmarkCount(link.getId());
+        userRepository.decreaseBookmarkCount(userId);
     }
 
     private Link getLinkById(Long linkId) {

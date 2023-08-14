@@ -32,7 +32,7 @@ class UserTest extends SetUpMockData {
     @DisplayName("User Constructor - Domain")
     @Test
     void testConstructor() {
-        user = new User(USER_ID, SOCIAL_ID, EMAIL, NICKNAME, INTRODUCE, FOLLOWER_COUNT, FOLLOWING_COUNT, profileImage);
+        user = new User(USER_ID, SOCIAL_ID, EMAIL, NICKNAME, INTRODUCE, FOLLOWER_COUNT, FOLLOWING_COUNT, USER_LINK_COUNT, USER_BOOKMARK_COUNT, profileImage);
 
         assertEquals(USER_ID, user.getId());
         assertEquals(SOCIAL_ID, user.getSocialId());
