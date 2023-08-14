@@ -15,6 +15,7 @@ import project.linkarchive.backend.util.JwtUtil;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
+import static project.linkarchive.backend.advice.data.DataConstants.SOCIAL_LOGIN;
 import static project.linkarchive.backend.auth.AuthProvider.LOCAL;
 
 @Service
@@ -36,14 +37,11 @@ public class LocalLoginService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public LoginResponse login(String code, String userAgent) {
-        OauthToken oauthToken = jwtUtil.getTokenForBackEnd(code);
-        KakaoProfile kakaoProfile = jwtUtil.getUserInfo(oauthToken.getAccess_token());
-
-        User findUser = userRepository.findBySocialId(kakaoProfile.getId())
+    public LoginResponse login(String userAgent) {
+        User findUser = userRepository.findBySocialId(SOCIAL_LOGIN)
                 .orElseGet(() -> {
                     ProfileImage profileImage = ProfileImage.create(DEFAULT_IMAGE);
-                    User user = User.create(LOCAL, kakaoProfile, profileImage);
+                    User user = User.localCreate(profileImage);
                     userRepository.save(user);
 
                     return user;

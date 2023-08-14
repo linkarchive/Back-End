@@ -18,8 +18,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static project.linkarchive.backend.advice.data.DataConstants.DEFAULT_COUNT;
-import static project.linkarchive.backend.advice.data.DataConstants.EMPTY;
+import static project.linkarchive.backend.advice.data.DataConstants.*;
 
 @Entity
 @Getter
@@ -70,6 +69,21 @@ public class User extends TimeEntity {
         this.linkCount = linkCount;
         this.bookmarkCount = bookmarkCount;
         this.profileImage = profileImage;
+    }
+
+    public static User localCreate(ProfileImage profileImage) {
+        return User.builder()
+                .authProvider(AuthProvider.LOCAL)
+                .socialId(SOCIAL_LOGIN)
+                .nickname(EMPTY)
+                .email(LOCAL_EMAIL)
+                .introduce(EMPTY)
+                .followerCount(DEFAULT_COUNT)
+                .followingCount(DEFAULT_COUNT)
+                .linkCount(DEFAULT_COUNT)
+                .bookmarkCount(DEFAULT_COUNT)
+                .profileImage(profileImage)
+                .build();
     }
 
     public static User create(AuthProvider authProvider, KakaoProfile kakaoProfile, ProfileImage profileImage) {

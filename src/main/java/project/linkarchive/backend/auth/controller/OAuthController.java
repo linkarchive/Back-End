@@ -21,10 +21,9 @@ public class OAuthController {
 
     @PostMapping("/auth/local")
     public ResponseEntity<LoginResponse> localLogin(
-            @RequestParam("code") String code,
             @RequestHeader("User-Agent") String userAgent
     ) {
-        LoginResponse loginResponse = localLoginService.login(code, userAgent);
+        LoginResponse loginResponse = localLoginService.login(userAgent);
 
         return ResponseEntity.ok().body(loginResponse);
     }
