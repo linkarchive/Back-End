@@ -7,6 +7,7 @@ public enum ExceptionCodeConst {
 
     BAD_REQUEST_TOKEN(400, "BAD_REQUEST_TOKEN", "헤더에 토큰이 없습니다."),
     ACCESS_TOKEN_STILL_VALID(400, "ACCESS_TOKEN_STILL_VALID", "엑세스 토큰의 만료시간이 남아있습니다."),
+
     INVALID_TOKEN(401, "INVALID_TOKEN", "유효하지 않은 토큰입니다. 로그인이 필요합니다."),
     TOKEN_TYPE_ERROR(401, "TOKEN_TYPE_ERROR", "Bearer 타입의 토큰이 아닙니다."),
     EXPIRED_TOKEN(401, "EXPIRED_TOKEN", "만료된 토큰입니다."),
@@ -16,6 +17,7 @@ public enum ExceptionCodeConst {
     INVALID_LINK_ACCESS(401, "INVALID_LINK_ACCESS", "이 링크를 복구할 권한이 없습니다."),
 
     FORBIDDEN_ACCESS(403, "FORBIDDEN_ACCESS", "권한이 없습니다."),
+
 
     NOT_FOUND_USER(404, "NOT_FOUND_USER", "유저가 존재하지 않습니다."),
     NOT_FOUND_TOKEN(404, "NOT_FOUND_TOKEN", "토큰이 존재하지 않습니다."),

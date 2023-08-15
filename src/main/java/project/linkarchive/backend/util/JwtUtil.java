@@ -15,7 +15,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import project.linkarchive.backend.advice.exception.custom.InvalidException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.advice.exception.custom.UnauthorizedException;
 import project.linkarchive.backend.auth.domain.RefreshToken;
@@ -184,25 +183,25 @@ public class JwtUtil {
         return userId;
     }
 
-    public AccessTokenResponse publishAccessToken(String accessToken, String refreshToken) {
-        String getAccessToken = getTokenWithoutBearer(accessToken);
+    public AccessTokenResponse publishAccessToken(String refreshToken) {
+
         String getRefreshToken = getTokenWithoutBearer(refreshToken);
         RefreshToken savedRefreshToken;
 
-        if (!isValidatedToken(getAccessToken)) {
-            savedRefreshToken = refreshTokenRepository.findByRefreshToken(getRefreshToken)
-                    .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
-        } else {
-            throw new InvalidException(ACCESS_TOKEN_STILL_VALID);
-        }
+        savedRefreshToken = refreshTokenRepository.findByRefreshToken(getRefreshToken)
+                .orElseThrow(() -> new UnauthorizedException(NOT_FOUND_TOKEN));
 
         if (isValidatedToken(getRefreshToken)) {
             User user = userRepository.findById(savedRefreshToken.getUser().getId())
                     .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
 
             String newAccessToken = createAccessToken(user);
+            String newRefreshToken = createRefreshToken(user);
 
-            return new AccessTokenResponse(newAccessToken);
+            RefreshToken renewalRefreshToken = RefreshToken.create(newRefreshToken, savedRefreshToken.getAgent(), user);
+            savedRefreshToken.updateRefreshToken(renewalRefreshToken);
+
+            return new AccessTokenResponse(newAccessToken, newRefreshToken);
 
         } else {
             throw new UnauthorizedException(INVALID_TOKEN);

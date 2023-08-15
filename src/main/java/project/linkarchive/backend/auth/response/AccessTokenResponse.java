@@ -6,9 +6,11 @@ import lombok.Getter;
 public class AccessTokenResponse {
 
     String accessToken;
+    String refreshToken;
 
-    public AccessTokenResponse(String accessToken) {
+    public AccessTokenResponse(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 
 }
