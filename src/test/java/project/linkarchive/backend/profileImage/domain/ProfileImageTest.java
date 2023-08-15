@@ -25,7 +25,7 @@ class ProfileImageTest extends SetUpMockData {
     @DisplayName("프로필 이미지 getProfileImageFileName - Domain")
     @Test
     void testGetProfileImageFilename() {
-        assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getProfileImageFilename());
+        assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getFileName());
     }
 
     @DisplayName("프로필 이미지 생성자 - Domain")
@@ -34,17 +34,17 @@ class ProfileImageTest extends SetUpMockData {
         profileImage = new ProfileImage(PROFILE_IMAGE_ID, PROFILE_IMAGE_FILENAME);
 
         assertEquals(PROFILE_IMAGE_ID, profileImage.getId());
-        assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getProfileImageFilename());
+        assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getFileName());
     }
 
     @DisplayName("프로필 이미지 Builder 패턴 - Domain")
     @Test
     void testBuilder() {
         profileImage = ProfileImage.builder()
-                .profileImageFilename(PROFILE_IMAGE_FILENAME)
+                .fileName(PROFILE_IMAGE_FILENAME)
                 .build();
 
-        assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getProfileImageFilename());
+        assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getFileName());
     }
 
     @DisplayName("프로필 이미지 create 메서드 - Domain")
@@ -52,16 +52,16 @@ class ProfileImageTest extends SetUpMockData {
     void testCreate() {
         profileImage = ProfileImage.create(PROFILE_IMAGE_FILENAME);
 
-        assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getProfileImageFilename());
+        assertEquals(PROFILE_IMAGE_FILENAME, profileImage.getFileName());
     }
 
     @DisplayName("프로필 이미지 UpdateProfileImage - Domain")
     @Test
     void testUpdateProfileImage() {
-        String oldProfileImageFilename = profileImage.getProfileImageFilename();
+        String oldProfileImageFilename = profileImage.getFileName();
 
         profileImage.updateProfileImage(NEW_PROFILE_IMAGE_FILENAME);
-        String newProfileImageFileName = profileImage.getProfileImageFilename();
+        String newProfileImageFileName = profileImage.getFileName();
 
         assertNotEquals(oldProfileImageFilename, newProfileImageFileName);
         assertEquals(NEW_PROFILE_IMAGE_FILENAME, newProfileImageFileName);

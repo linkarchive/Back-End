@@ -71,14 +71,14 @@ public class UserApiService {
 
         String storedFileName = s3Uploader.upload(image);
 
-        if (!user.getProfileImage().getProfileImageFilename().equals(DEFAULT_IMAGE)) {
-            s3Uploader.deleteFile(user.getProfileImage().getProfileImageFilename());
+        if (!user.getProfileImage().getFileName().equals(DEFAULT_IMAGE)) {
+            s3Uploader.deleteFile(user.getProfileImage().getFileName());
         }
 
         ProfileImage profileImage = user.getProfileImage();
         profileImage.updateProfileImage(storedFileName);
 
-        return new ProfileImageResponse(URL + profileImage.getProfileImageFilename());
+        return new ProfileImageResponse(URL + profileImage.getFileName());
     }
 
     public ProfileImageResponse defaultProfileImage(Long userId) {
@@ -87,7 +87,7 @@ public class UserApiService {
         ProfileImage profileImage = user.getProfileImage();
         profileImage.updateProfileImage(DEFAULT_IMAGE);
 
-        return new ProfileImageResponse(URL + profileImage.getProfileImageFilename());
+        return new ProfileImageResponse(URL + profileImage.getFileName());
     }
 
     public void checkIfNicknameIsAvailable(String nickname) {

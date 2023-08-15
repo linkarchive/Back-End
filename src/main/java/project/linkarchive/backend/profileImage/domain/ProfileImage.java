@@ -19,25 +19,25 @@ public class ProfileImage extends TimeEntity {
     @Column(name = "profile_image_id")
     private Long id;
 
-    private String profileImageFilename;
+    private String fileName;
 
     @OneToOne(mappedBy = "profileImage", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User user;
 
     @Builder
-    public ProfileImage(Long id, String profileImageFilename) {
+    public ProfileImage(Long id, String fileName) {
         this.id = id;
-        this.profileImageFilename = profileImageFilename;
+        this.fileName = fileName;
     }
 
-    public static ProfileImage create(String profileImageFilename) {
+    public static ProfileImage create(String fileName) {
         return ProfileImage.builder()
-                .profileImageFilename(profileImageFilename)
+                .fileName(fileName)
                 .build();
     }
 
     public void updateProfileImage(String profileImage) {
-        this.profileImageFilename = profileImage;
+        this.fileName = profileImage;
     }
 
 }

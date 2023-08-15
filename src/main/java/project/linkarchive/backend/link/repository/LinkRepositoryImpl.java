@@ -86,7 +86,7 @@ public class LinkRepositoryImpl {
                 .select(new QArchiveResponse(
                         link.user.id,
                         link.user.nickname,
-                        link.user.profileImage.profileImageFilename,
+                        link.user.profileImage.fileName,
                         link.id,
                         link.url,
                         link.title,

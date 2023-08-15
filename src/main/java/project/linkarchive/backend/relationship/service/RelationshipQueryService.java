@@ -64,7 +64,7 @@ public class RelationshipQueryService {
 
         List<FollowResponse> followResponses = new ArrayList<>();
         followList.forEach(user -> {
-            String profileImageUrl = userQueryService.generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
+            String profileImageUrl = userQueryService.generateProfileImageUrl(user.getProfileImage().getFileName());
 
             Boolean isFollow = loginUserId != null && isFollowing(user.getId(), loginUserId);
 

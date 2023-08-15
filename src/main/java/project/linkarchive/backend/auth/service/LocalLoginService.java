@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
-import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.LoginResponse;
-import project.linkarchive.backend.auth.response.OauthToken;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
@@ -16,7 +14,6 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 import static project.linkarchive.backend.advice.data.DataConstants.SOCIAL_LOGIN;
-import static project.linkarchive.backend.auth.AuthProvider.LOCAL;
 
 @Service
 @Transactional
@@ -58,7 +55,7 @@ public class LocalLoginService {
                 () -> refreshTokenRepository.save(token)
         );
 
-        return new LoginResponse(findUser, URL + findUser.getProfileImage().getProfileImageFilename(), newAccessToken, newRefreshToken);
+        return new LoginResponse(findUser, URL + findUser.getProfileImage().getFileName(), newAccessToken, newRefreshToken);
     }
 
 }
