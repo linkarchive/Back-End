@@ -1,7 +1,6 @@
 package project.linkarchive.backend.util.setUpData;
 
 import org.springframework.mock.web.MockMultipartFile;
-import project.linkarchive.backend.auth.AuthProvider;
 import project.linkarchive.backend.auth.response.KakaoAccount;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.link.domain.Link;
@@ -50,7 +49,7 @@ public class SetUpMockData extends MockDataGenerator {
     protected void setUpProfileImage() {
         profileImage = ProfileImage.builder()
                 .id(PROFILE_IMAGE_ID)
-                .profileImageFilename(PROFILE_IMAGE_FILENAME)
+                .fileName(PROFILE_IMAGE_FILENAME)
                 .build();
     }
 

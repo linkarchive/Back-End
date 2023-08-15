@@ -64,7 +64,7 @@ public class KakaoLoginService {
                         () -> refreshTokenRepository.save(token)
                 );
 
-        return new LoginResponse(findUser, URL + findUser.getProfileImage().getProfileImageFilename(), newAccessToken, newRefreshToken);
+        return new LoginResponse(findUser, URL + findUser.getProfileImage().getFileName(), newAccessToken, newRefreshToken);
     }
 
 }

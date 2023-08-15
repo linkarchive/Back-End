@@ -30,14 +30,14 @@ public class UserQueryService {
 
     public MyProfileResponse getMyProfile(Long userId) {
         User user = getUserById(userId);
-        String profileImageUrl = generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
+        String profileImageUrl = generateProfileImageUrl(user.getProfileImage().getFileName());
 
         return new MyProfileResponse(user, profileImageUrl);
     }
 
     public UserProfileResponse getUserProfile(Long userId, AuthInfo authInfo) {
         User user = getUserById(userId);
-        String profileImageUrl = generateProfileImageUrl(user.getProfileImage().getProfileImageFilename());
+        String profileImageUrl = generateProfileImageUrl(user.getProfileImage().getFileName());
 
         Long loginUserId = authInfo != null ? authInfo.getId() : null;
         if (loginUserId == null) {
