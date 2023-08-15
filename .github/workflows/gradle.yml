@@ -1,4 +1,4 @@
-name: LinkArchive Spring Boot & Gradle CI/CD
+name: Twincle Spring Boot & Gradle CI/CD
 
 on:
   push:
