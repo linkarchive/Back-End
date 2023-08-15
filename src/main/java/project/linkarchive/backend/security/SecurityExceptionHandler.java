@@ -38,14 +38,13 @@ public class SecurityExceptionHandler implements AuthenticationEntryPoint, Acces
             handler.resolveException(request, response, null, new InvalidException(BAD_REQUEST_TOKEN));
         }
 
+        if (exception.equals(TOKEN_TYPE_ERROR)) {
+            handler.resolveException(request, response, null, new InvalidException(TOKEN_TYPE_ERROR));
+        }
+
         if (exception.equals(INVALID_TOKEN)) {
             handler.resolveException(request, response, null, new UnauthorizedException(INVALID_TOKEN));
         }
-
-        if (exception.equals(NOT_FOUND_USER)) {
-            handler.resolveException(request, response, null, new InvalidException(NOT_FOUND_USER));
-        }
-
     }
 
     @Override

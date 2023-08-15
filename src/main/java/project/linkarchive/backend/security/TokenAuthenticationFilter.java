@@ -1,5 +1,9 @@
 package project.linkarchive.backend.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,9 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static project.linkarchive.backend.advice.data.DataConstants.*;
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.BAD_REQUEST_TOKEN;
-import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.INVALID_TOKEN;
+import static project.linkarchive.backend.advice.exception.ExceptionCodeConst.*;
 
+@Slf4j
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
@@ -38,14 +42,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         String[] tokenData = tokenHeader.split(" ");
 
-        if (tokenData.length != TOKEN_LENGTH) {
-            request.setAttribute("exception", INVALID_TOKEN);
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         if (!tokenData[TOKEN_TYPE_INDEX].equalsIgnoreCase(BEARER)) {
-            request.setAttribute("exception", INVALID_TOKEN);
+            request.setAttribute("exception", TOKEN_TYPE_ERROR);
             filterChain.doFilter(request, response);
             return;
         }

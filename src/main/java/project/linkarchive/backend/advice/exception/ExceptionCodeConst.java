@@ -5,10 +5,11 @@ import lombok.Getter;
 @Getter
 public enum ExceptionCodeConst {
 
-    BAD_REQUEST_TOKEN(400, "BAD_REQUEST_TOKEN", "잘못된 토큰 요청입니다."),
+    BAD_REQUEST_TOKEN(400, "BAD_REQUEST_TOKEN", "헤더에 토큰이 없습니다."),
     ACCESS_TOKEN_STILL_VALID(400, "ACCESS_TOKEN_STILL_VALID", "엑세스 토큰의 만료시간이 남아있습니다."),
-
     INVALID_TOKEN(401, "INVALID_TOKEN", "유효하지 않은 토큰입니다. 로그인이 필요합니다."),
+    TOKEN_TYPE_ERROR(401, "TOKEN_TYPE_ERROR", "Bearer 타입의 토큰이 아닙니다."),
+    EXPIRED_TOKEN(401, "EXPIRED_TOKEN", "만료된 토큰입니다."),
     INVALID_AUTHORIZATION_CODE(401, "INVALID_AUTHORIZATION_CODE", "잘못된 인가코드입니다."),
     INVALID_BAD_WORD(401, "INVALID_BAD_WORD", "욕설은 허용하지 않습니다."),
     INVALID_TRASH_LINK(401, "INVALID_TRASH_LINK", "삭제된 링크가 아닙니다"),
