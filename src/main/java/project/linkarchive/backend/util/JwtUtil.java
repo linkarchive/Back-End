@@ -184,7 +184,6 @@ public class JwtUtil {
     }
 
     public AccessTokenResponse publishAccessToken(String refreshToken) {
-
         String getRefreshToken = getTokenWithoutBearer(refreshToken);
         RefreshToken savedRefreshToken;
 
@@ -196,12 +195,8 @@ public class JwtUtil {
                     .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
 
             String newAccessToken = createAccessToken(user);
-            String newRefreshToken = createRefreshToken(user);
 
-            RefreshToken renewalRefreshToken = RefreshToken.create(newRefreshToken, savedRefreshToken.getAgent(), user);
-            savedRefreshToken.updateRefreshToken(renewalRefreshToken);
-
-            return new AccessTokenResponse(newAccessToken, newRefreshToken);
+            return new AccessTokenResponse(newAccessToken);
 
         } else {
             throw new UnauthorizedException(INVALID_TOKEN);
