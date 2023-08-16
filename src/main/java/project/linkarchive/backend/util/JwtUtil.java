@@ -15,7 +15,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import project.linkarchive.backend.advice.exception.custom.InvalidException;
 import project.linkarchive.backend.advice.exception.custom.NotFoundException;
 import project.linkarchive.backend.advice.exception.custom.UnauthorizedException;
 import project.linkarchive.backend.auth.domain.RefreshToken;
@@ -184,21 +183,14 @@ public class JwtUtil {
         return userId;
     }
 
-    public AccessTokenResponse publishAccessToken(String accessToken, String refreshToken) {
-        String getAccessToken = getTokenWithoutBearer(accessToken);
+    public AccessTokenResponse publishAccessToken(String refreshToken, String userAgent) {
         String getRefreshToken = getTokenWithoutBearer(refreshToken);
         RefreshToken savedRefreshToken;
 
-        if (!isValidatedToken(getAccessToken)) {
-            savedRefreshToken = refreshTokenRepository.findByRefreshToken(getRefreshToken)
-                    .orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
-        } else {
-            throw new InvalidException(ACCESS_TOKEN_STILL_VALID);
-        }
+        savedRefreshToken = getRefreshToken(userAgent, getRefreshToken);
 
         if (isValidatedToken(getRefreshToken)) {
-            User user = userRepository.findById(savedRefreshToken.getUser().getId())
-                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+            User user = getUser(savedRefreshToken);
 
             String newAccessToken = createAccessToken(user);
 
@@ -208,6 +200,16 @@ public class JwtUtil {
             throw new UnauthorizedException(INVALID_TOKEN);
         }
 
+    }
+
+    private User getUser(RefreshToken savedRefreshToken) {
+        return userRepository.findById(savedRefreshToken.getUser().getId())
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+    }
+
+    private RefreshToken getRefreshToken(String userAgent, String getRefreshToken) {
+        return refreshTokenRepository.findByRefreshTokenAndAgent(getRefreshToken, userAgent)
+                .orElseThrow(() -> new UnauthorizedException(NOT_PUBLISHED_BY_TWINCLE));
     }
 
     public boolean isValidatedToken(String token) {
@@ -229,5 +231,6 @@ public class JwtUtil {
 
         return tokenWithoutBearer;
     }
+
 
 }

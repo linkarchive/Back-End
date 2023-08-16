@@ -29,8 +29,8 @@ public class OauthService {
         return null;
     }
 
-    public AccessTokenResponse publishAccessToken(String accessToken, String refreshToken) {
-        return jwtUtil.publishAccessToken(accessToken, refreshToken);
+    public AccessTokenResponse publishAccessToken(String refreshToken, String userAgent) {
+        return jwtUtil.publishAccessToken(refreshToken, userAgent);
     }
 
 }
