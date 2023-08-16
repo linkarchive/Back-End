@@ -9,6 +9,7 @@ import project.linkarchive.backend.bookmark.domain.Bookmark;
 import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
 import project.linkarchive.backend.link.enums.LinkStatus;
 import project.linkarchive.backend.link.request.CreateLinkRequest;
+import project.linkarchive.backend.pin.enums.PinStatus;
 import project.linkarchive.backend.user.domain.User;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.util.List;
 import static project.linkarchive.backend.advice.data.DataConstants.BOOKMARK_DEFAULT_COUNT;
 import static project.linkarchive.backend.link.enums.LinkStatus.ACTIVE;
 import static project.linkarchive.backend.link.enums.LinkStatus.TRASH;
+import static project.linkarchive.backend.pin.enums.PinStatus.UNFIXED;
 
 @Entity
 @Getter
@@ -41,6 +43,9 @@ public class Link extends TimeEntity {
     @Enumerated(EnumType.STRING)
     private LinkStatus linkStatus;
 
+    @Enumerated(EnumType.STRING)
+    private PinStatus pinStatus;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -55,7 +60,7 @@ public class Link extends TimeEntity {
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
     @Builder
-    public Link(Long id, String url, String title, String description, String thumbnail, int bookmarkCount, LinkStatus linkStatus, User user) {
+    public Link(Long id, String url, String title, String description, String thumbnail, int bookmarkCount, LinkStatus linkStatus, PinStatus pinStatus, User user) {
         this.id = id;
         this.url = url;
         this.title = title;
@@ -63,6 +68,7 @@ public class Link extends TimeEntity {
         this.thumbnail = thumbnail;
         this.bookmarkCount = bookmarkCount;
         this.linkStatus = linkStatus.ACTIVE;
+        this.pinStatus = pinStatus.UNFIXED;
         this.user = user;
     }
 
@@ -74,6 +80,7 @@ public class Link extends TimeEntity {
                 .thumbnail(request.getThumbnail())
                 .bookmarkCount(BOOKMARK_DEFAULT_COUNT)
                 .linkStatus(ACTIVE)
+                .pinStatus(UNFIXED)
                 .user(user)
                 .build();
     }

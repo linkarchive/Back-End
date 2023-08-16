@@ -10,6 +10,8 @@ import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.bookmark.domain.Bookmark;
 import project.linkarchive.backend.hashtag.domain.UserHashtag;
 import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
+import project.linkarchive.backend.notification.domain.Notification;
+import project.linkarchive.backend.notification.enums.NotificationPreference;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
@@ -31,10 +33,11 @@ public class User extends TimeEntity {
     @Column(name = "user_id")
     private Long id;
 
+    private String socialId;
+
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
-    private String socialId;
     private String email;
     private String nickname;
     private String introduce;
@@ -42,6 +45,9 @@ public class User extends TimeEntity {
     private int followingCount;
     private int linkCount;
     private int bookmarkCount;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationPreference notificationPreference;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_image_id")
@@ -56,11 +62,14 @@ public class User extends TimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Notification> notificationList = new ArrayList<>();
+
     @Builder
-    public User(Long id, AuthProvider authProvider, String socialId, String email, String nickname, String introduce, int followerCount, int followingCount, int linkCount, int bookmarkCount, ProfileImage profileImage) {
+    public User(Long id, String socialId, AuthProvider authProvider, String email, String nickname, String introduce, int followerCount, int followingCount, int linkCount, int bookmarkCount, NotificationPreference notificationPreference, ProfileImage profileImage) {
         this.id = id;
-        this.authProvider = authProvider;
         this.socialId = socialId;
+        this.authProvider = authProvider;
         this.email = email;
         this.nickname = nickname;
         this.introduce = introduce;
@@ -68,35 +77,38 @@ public class User extends TimeEntity {
         this.followingCount = followingCount;
         this.linkCount = linkCount;
         this.bookmarkCount = bookmarkCount;
+        this.notificationPreference = notificationPreference;
         this.profileImage = profileImage;
     }
 
     public static User localCreate(ProfileImage profileImage) {
         return User.builder()
-                .authProvider(AuthProvider.LOCAL)
                 .socialId(SOCIAL_LOGIN)
-                .nickname(EMPTY)
+                .authProvider(AuthProvider.LOCAL)
                 .email(LOCAL_EMAIL)
+                .nickname(EMPTY)
                 .introduce(EMPTY)
                 .followerCount(DEFAULT_COUNT)
                 .followingCount(DEFAULT_COUNT)
                 .linkCount(DEFAULT_COUNT)
                 .bookmarkCount(DEFAULT_COUNT)
+                .notificationPreference(NotificationPreference.ALLOWED)
                 .profileImage(profileImage)
                 .build();
     }
 
     public static User create(AuthProvider authProvider, KakaoProfile kakaoProfile, ProfileImage profileImage) {
         return User.builder()
-                .authProvider(authProvider)
                 .socialId(kakaoProfile.getId())
-                .nickname(EMPTY)
+                .authProvider(authProvider)
                 .email(kakaoProfile.getKakaoAccount().getEmail())
+                .nickname(EMPTY)
                 .introduce(EMPTY)
                 .followerCount(DEFAULT_COUNT)
                 .followingCount(DEFAULT_COUNT)
                 .linkCount(DEFAULT_COUNT)
                 .bookmarkCount(DEFAULT_COUNT)
+                .notificationPreference(NotificationPreference.ALLOWED)
                 .profileImage(profileImage)
                 .build();
     }
