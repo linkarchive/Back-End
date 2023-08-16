@@ -183,11 +183,11 @@ public class JwtUtil {
         return userId;
     }
 
-    public AccessTokenResponse publishAccessToken(String refreshToken) {
+    public AccessTokenResponse publishAccessToken(String refreshToken, String userAgent) {
         String getRefreshToken = getTokenWithoutBearer(refreshToken);
         RefreshToken savedRefreshToken;
 
-        savedRefreshToken = refreshTokenRepository.findByRefreshToken(getRefreshToken)
+        savedRefreshToken = refreshTokenRepository.findByRefreshTokenAndAgent(getRefreshToken, userAgent)
                 .orElseThrow(() -> new UnauthorizedException(NOT_FOUND_TOKEN));
 
         if (isValidatedToken(getRefreshToken)) {

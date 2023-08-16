@@ -42,9 +42,10 @@ public class OAuthController {
 
     @PostMapping("/publish/access-token")
     public AccessTokenResponse publishAccessToken(
-            @RequestBody RefreshTokenRequest accessTokenRequest
+            @RequestBody RefreshTokenRequest accessTokenRequest,
+            @RequestHeader("User-Agent") String userAgent
     ) {
-        return oauthService.publishAccessToken(accessTokenRequest.getRefreshToken());
+        return oauthService.publishAccessToken(accessTokenRequest.getRefreshToken(), userAgent);
     }
 
 }
