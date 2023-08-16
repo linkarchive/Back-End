@@ -187,12 +187,10 @@ public class JwtUtil {
         String getRefreshToken = getTokenWithoutBearer(refreshToken);
         RefreshToken savedRefreshToken;
 
-        savedRefreshToken = refreshTokenRepository.findByRefreshTokenAndAgent(getRefreshToken, userAgent)
-                .orElseThrow(() -> new UnauthorizedException(NOT_FOUND_TOKEN));
+        savedRefreshToken = getRefreshToken(userAgent, getRefreshToken);
 
         if (isValidatedToken(getRefreshToken)) {
-            User user = userRepository.findById(savedRefreshToken.getUser().getId())
-                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+            User user = getUser(savedRefreshToken);
 
             String newAccessToken = createAccessToken(user);
 
@@ -202,6 +200,16 @@ public class JwtUtil {
             throw new UnauthorizedException(INVALID_TOKEN);
         }
 
+    }
+
+    private User getUser(RefreshToken savedRefreshToken) {
+        return userRepository.findById(savedRefreshToken.getUser().getId())
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_USER));
+    }
+
+    private RefreshToken getRefreshToken(String userAgent, String getRefreshToken) {
+        return refreshTokenRepository.findByRefreshTokenAndAgent(getRefreshToken, userAgent)
+                .orElseThrow(() -> new UnauthorizedException(NOT_PUBLISHED_BY_TWINCLE));
     }
 
     public boolean isValidatedToken(String token) {
@@ -223,5 +231,6 @@ public class JwtUtil {
 
         return tokenWithoutBearer;
     }
+
 
 }

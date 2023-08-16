@@ -9,7 +9,6 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
 
     Optional<RefreshToken> findByRefreshTokenAndAgent(String refreshToken, String agent);
 
-
     Optional<RefreshToken> findByUserIdAndAgent(Long userId, String agent);
 
 }

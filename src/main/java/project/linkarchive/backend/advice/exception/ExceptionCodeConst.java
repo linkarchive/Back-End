@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public enum ExceptionCodeConst {
 
-    BAD_REQUEST_TOKEN(400, "BAD_REQUEST_TOKEN", "헤더에 토큰이 없습니다."),
+    NOT_TOKEN_IN_HEADER(400, "NOT_TOKEN_IN_HEADER", "헤더에 토큰이 없습니다."),
 
     INVALID_TOKEN(401, "INVALID_TOKEN", "유효하지 않은 토큰입니다."),
-    TOKEN_TYPE_ERROR(401, "TOKEN_TYPE_ERROR", "Bearer 타입의 토큰이 아닙니다."),
+    IS_NOT_BEARER(401, "IS_NOT_BEARER", "Bearer 타입의 토큰이 아닙니다."),
     EXPIRED_TOKEN(401, "EXPIRED_TOKEN", "만료된 토큰입니다."),
     INVALID_AUTHORIZATION_CODE(401, "INVALID_AUTHORIZATION_CODE", "잘못된 인가코드입니다."),
     INVALID_BAD_WORD(401, "INVALID_BAD_WORD", "욕설은 허용하지 않습니다."),
@@ -19,7 +19,7 @@ public enum ExceptionCodeConst {
 
 
     NOT_FOUND_USER(404, "NOT_FOUND_USER", "유저가 존재하지 않습니다."),
-    NOT_FOUND_TOKEN(404, "NOT_FOUND_TOKEN", "twincle에서 발급한 토큰이 아닙니다."),
+    NOT_PUBLISHED_BY_TWINCLE(404, "NOT_PUBLISHED_BY_TWINCLE", "twincle에서 발급한 토큰이 아닙니다."),
     NOT_FOUND_PROFILE_IMAGE(404, "NOT_FOUND_PROFILE_IMAGE", "프로필 이미지가 존재하지 않습니다."),
     NOT_FOUND_LINK(404, "NOT_FOUND_URL", "존재하지 않는 Link 입니다."),
     NOT_FOUND_BOOKMARK(404, "NOT_FOUND_BOOKMARK", "존재하지 않는 북마크입니다."),
