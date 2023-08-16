@@ -8,6 +8,7 @@ import project.linkarchive.backend.util.setUpData.SetUpMockData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static project.linkarchive.backend.auth.AuthProvider.TEST;
+import static project.linkarchive.backend.notification.enums.NotificationPreference.ALLOWED;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
 class UserTest extends SetUpMockData {
@@ -33,7 +34,7 @@ class UserTest extends SetUpMockData {
     @DisplayName("User Constructor - Domain")
     @Test
     void testConstructor() {
-        user = new User(USER_ID, TEST, SOCIAL_ID, EMAIL, NICKNAME, INTRODUCE, FOLLOWER_COUNT, FOLLOWING_COUNT, USER_LINK_COUNT, USER_BOOKMARK_COUNT, profileImage);
+        user = new User(USER_ID, SOCIAL_ID, TEST, EMAIL, NICKNAME, INTRODUCE, FOLLOWER_COUNT, FOLLOWING_COUNT, USER_LINK_COUNT, USER_BOOKMARK_COUNT, ALLOWED, profileImage);
 
         assertEquals(USER_ID, user.getId());
         assertEquals(SOCIAL_ID, user.getSocialId());

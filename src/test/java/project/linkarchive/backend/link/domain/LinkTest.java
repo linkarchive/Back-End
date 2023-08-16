@@ -9,6 +9,7 @@ import project.linkarchive.backend.util.setUpData.SetUpMockData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static project.linkarchive.backend.link.enums.LinkStatus.ACTIVE;
+import static project.linkarchive.backend.pin.enums.PinStatus.UNFIXED;
 import static project.linkarchive.backend.util.constant.Constants.*;
 
 class LinkTest extends SetUpMockData {
@@ -35,7 +36,7 @@ class LinkTest extends SetUpMockData {
     @DisplayName("Link Constructor - Domain")
     @Test
     void testConstructor() {
-        link = new Link(LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, ACTIVE, user);
+        link = new Link(LINK_ID, URL, TITLE, DESCRIPTION, THUMBNAIL, BOOKMARK_COUNT, ACTIVE, UNFIXED, user);
 
         assertEquals(LINK_ID, link.getId());
         assertEquals(URL, link.getUrl());
