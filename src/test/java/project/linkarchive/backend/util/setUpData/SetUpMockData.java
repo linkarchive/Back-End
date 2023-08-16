@@ -15,6 +15,7 @@ import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResp
 import project.linkarchive.backend.link.response.trash.TrashLinkListResponse;
 import project.linkarchive.backend.link.response.trash.TrashLinkResponse;
 import project.linkarchive.backend.link.response.trash.UserTrashLinkListResponse;
+import project.linkarchive.backend.pin.domain.Pin;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.security.AuthInfo;
@@ -50,6 +51,14 @@ public class SetUpMockData extends MockDataGenerator {
         profileImage = ProfileImage.builder()
                 .id(PROFILE_IMAGE_ID)
                 .fileName(PROFILE_IMAGE_FILENAME)
+                .build();
+    }
+
+    protected void setUpPin() {
+        pin = Pin.builder()
+                .id(PIN_ID)
+                .linkCount(PIN_LINK_COUNT)
+                .bookmarkCount(PIN_BOOKMARK_COUNT)
                 .build();
     }
 

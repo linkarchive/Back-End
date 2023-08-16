@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
 import project.linkarchive.backend.auth.response.LoginResponse;
+import project.linkarchive.backend.pin.domain.Pin;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
@@ -38,7 +39,8 @@ public class LocalLoginService {
         User findUser = userRepository.findBySocialId(SOCIAL_LOGIN)
                 .orElseGet(() -> {
                     ProfileImage profileImage = ProfileImage.create(DEFAULT_IMAGE);
-                    User user = User.localCreate(profileImage);
+                    Pin pin = Pin.create();
+                    User user = User.localCreate(profileImage, pin);
                     userRepository.save(user);
 
                     return user;

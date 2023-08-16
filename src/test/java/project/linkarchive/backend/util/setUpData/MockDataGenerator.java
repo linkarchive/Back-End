@@ -22,6 +22,7 @@ import project.linkarchive.backend.link.response.linkarchive.UserLinkArchiveResp
 import project.linkarchive.backend.link.response.trash.TrashLinkListResponse;
 import project.linkarchive.backend.link.response.trash.TrashLinkResponse;
 import project.linkarchive.backend.link.response.trash.UserTrashLinkListResponse;
+import project.linkarchive.backend.pin.domain.Pin;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.profileImage.response.ProfileImageResponse;
 import project.linkarchive.backend.security.AuthInfo;
@@ -41,6 +42,7 @@ public class MockDataGenerator {
     protected User user;
     protected KakaoProfile kakaoProfile;
     protected ProfileImage profileImage;
+    protected Pin pin;
     protected AuthInfo authInfo;
     protected MultipartFile multipartFile;
     protected RefreshToken refreshToken;

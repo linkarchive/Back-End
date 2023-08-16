@@ -33,6 +33,10 @@ public class Constants {
     public static final byte[] MULTIPART_FILE_DATA = "image data".getBytes();
     public static final int EXPIRATION_TIME_MINUTE = 3600000;
 
+    public static final Long PIN_ID = 1L;
+    public static final int PIN_LINK_COUNT = 0;
+    public static final int PIN_BOOKMARK_COUNT = 0;
+
     public static final Long REFRESH_TOKEN_ID = 1L;
     public static final String REFRESH_TOKEN = "Test_RefreshToken";
     public static final String AGENT = "Test_Agent";

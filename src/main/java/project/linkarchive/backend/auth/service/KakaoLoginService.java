@@ -7,6 +7,7 @@ import project.linkarchive.backend.auth.repository.RefreshTokenRepository;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.auth.response.LoginResponse;
 import project.linkarchive.backend.auth.response.OauthToken;
+import project.linkarchive.backend.pin.domain.Pin;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.domain.User;
 import project.linkarchive.backend.user.repository.UserRepository;
@@ -45,7 +46,8 @@ public class KakaoLoginService {
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
                 .orElseGet(() -> {
                     ProfileImage profileImage = ProfileImage.create(DEFAULT_IMAGE);
-                    User user = User.create(KAKAO, kakaoProfile, profileImage);
+                    Pin pin = Pin.create();
+                    User user = User.create(KAKAO, kakaoProfile, profileImage, pin);
                     userRepository.save(user);
 
                     return user;

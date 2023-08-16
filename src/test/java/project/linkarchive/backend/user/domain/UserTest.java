@@ -34,7 +34,7 @@ class UserTest extends SetUpMockData {
     @DisplayName("User Constructor - Domain")
     @Test
     void testConstructor() {
-        user = new User(USER_ID, SOCIAL_ID, TEST, EMAIL, NICKNAME, INTRODUCE, FOLLOWER_COUNT, FOLLOWING_COUNT, USER_LINK_COUNT, USER_BOOKMARK_COUNT, ALLOWED, profileImage);
+        user = new User(USER_ID, SOCIAL_ID, TEST, EMAIL, NICKNAME, INTRODUCE, FOLLOWER_COUNT, FOLLOWING_COUNT, USER_LINK_COUNT, USER_BOOKMARK_COUNT, ALLOWED, profileImage, pin);
 
         assertEquals(USER_ID, user.getId());
         assertEquals(SOCIAL_ID, user.getSocialId());
@@ -76,7 +76,7 @@ class UserTest extends SetUpMockData {
     void testCreate() {
         setUpKaKaoProfile();
 
-        user = User.create(TEST, kakaoProfile, profileImage);
+        user = User.create(TEST, kakaoProfile, profileImage, pin);
 
         assertEquals(SOCIAL_ID, user.getSocialId());
         assertEquals(EMAIL, user.getEmail());

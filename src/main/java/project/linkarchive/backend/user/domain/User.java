@@ -12,6 +12,7 @@ import project.linkarchive.backend.hashtag.domain.UserHashtag;
 import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
 import project.linkarchive.backend.notification.domain.Notification;
 import project.linkarchive.backend.notification.enums.NotificationPreference;
+import project.linkarchive.backend.pin.domain.Pin;
 import project.linkarchive.backend.profileImage.domain.ProfileImage;
 import project.linkarchive.backend.user.request.UpdateNicknameRequest;
 import project.linkarchive.backend.user.request.UpdateProfileRequest;
@@ -53,6 +54,10 @@ public class User extends TimeEntity {
     @JoinColumn(name = "profile_image_id")
     private ProfileImage profileImage;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "pin_id")
+    private Pin pin;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserHashtag> userHashtagList = new ArrayList<>();
 
@@ -66,7 +71,7 @@ public class User extends TimeEntity {
     private List<Notification> notificationList = new ArrayList<>();
 
     @Builder
-    public User(Long id, String socialId, AuthProvider authProvider, String email, String nickname, String introduce, int followerCount, int followingCount, int linkCount, int bookmarkCount, NotificationPreference notificationPreference, ProfileImage profileImage) {
+    public User(Long id, String socialId, AuthProvider authProvider, String email, String nickname, String introduce, int followerCount, int followingCount, int linkCount, int bookmarkCount, NotificationPreference notificationPreference, ProfileImage profileImage, Pin pin) {
         this.id = id;
         this.socialId = socialId;
         this.authProvider = authProvider;
@@ -79,9 +84,10 @@ public class User extends TimeEntity {
         this.bookmarkCount = bookmarkCount;
         this.notificationPreference = notificationPreference;
         this.profileImage = profileImage;
+        this.pin = pin;
     }
 
-    public static User localCreate(ProfileImage profileImage) {
+    public static User localCreate(ProfileImage profileImage, Pin pin) {
         return User.builder()
                 .socialId(SOCIAL_LOGIN)
                 .authProvider(AuthProvider.LOCAL)
@@ -94,10 +100,11 @@ public class User extends TimeEntity {
                 .bookmarkCount(DEFAULT_COUNT)
                 .notificationPreference(NotificationPreference.ALLOWED)
                 .profileImage(profileImage)
+                .pin(pin)
                 .build();
     }
 
-    public static User create(AuthProvider authProvider, KakaoProfile kakaoProfile, ProfileImage profileImage) {
+    public static User create(AuthProvider authProvider, KakaoProfile kakaoProfile, ProfileImage profileImage, Pin pin) {
         return User.builder()
                 .socialId(kakaoProfile.getId())
                 .authProvider(authProvider)
@@ -110,6 +117,7 @@ public class User extends TimeEntity {
                 .bookmarkCount(DEFAULT_COUNT)
                 .notificationPreference(NotificationPreference.ALLOWED)
                 .profileImage(profileImage)
+                .pin(pin)
                 .build();
     }
 
