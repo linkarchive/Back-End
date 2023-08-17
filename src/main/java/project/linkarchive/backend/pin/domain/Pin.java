@@ -23,7 +23,7 @@ public class Pin extends TimeEntity {
     private int linkCount;
     private int bookmarkCount;
 
-    @OneToOne(mappedBy = "profileImage", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "pin", fetch = FetchType.LAZY)
     private User user;
 
     @Builder
