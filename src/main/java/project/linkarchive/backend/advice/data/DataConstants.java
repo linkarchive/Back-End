@@ -20,6 +20,7 @@ public class DataConstants {
     public static final int TOKEN_DATA_INDEX = 1;
     public static final int MINIMUM_TITLE_LENGTH = 1;
     public static final int MINIMUM_NICKNAME_LENGTH = 2;
+    public static final int TWO_WEEK = 2;
     public static final int TOKEN_LENGTH = 2;
     public static final int MINIMUM_TAG_LENGTH = 2;
     public static final int S3_KEY = 3;
