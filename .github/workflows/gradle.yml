@@ -1,4 +1,4 @@
-name: Twincle Spring Boot & Gradle CI/CD
+name: Twincle Project Spring Boot & Gradle CI/CD
 
 on:
   push:
