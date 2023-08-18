@@ -50,13 +50,13 @@ public class Link extends TimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "link", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "link", cascade = CascadeType.REMOVE)
     private List<LinkHashtag> linkHashtagList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "link", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "link", cascade = CascadeType.REMOVE)
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "link", cascade = CascadeType.REMOVE)
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
     @Builder
