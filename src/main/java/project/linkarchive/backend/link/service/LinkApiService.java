@@ -59,8 +59,8 @@ public class LinkApiService {
 
         Link link = Link.create(request, user);
         addTagsToLinkAndIncrementUserTagCount(tagsFromRequest, link);
-
         linkRepository.save(link);
+
         userRepository.increaseLinkCount(userId);
     }
 
@@ -132,13 +132,17 @@ public class LinkApiService {
     private void addTagsToLinkAndIncrementUserTagCount(Set<String> tagsFromRequest, Link link) {
         tagsFromRequest.stream()
                 .map(tag -> hashTagRepository.findByTag(tag)
-                        .orElseGet(() -> Hashtag.create(tag)))
+                        .orElseGet(() -> {
+                            Hashtag hashtag = Hashtag.create(tag);
+                            return hashTagRepository.save(hashtag);
+                        }))
                 .forEach(hashTag -> {
-                    userHashTagRepository.findByHashtagId(hashTag.getId())
-                            .ifPresent(tag -> userHashTagRepository.increaseUsageCount(tag.getId()));
+                            userHashTagRepository.findByHashtagId(hashTag.getId())
+                                    .ifPresent(tag -> userHashTagRepository.increaseUsageCount(tag.getId()));
 
-                    linkHashTagRepository.save(LinkHashtag.create(link, hashTag));
-                });
+                            linkHashTagRepository.save(LinkHashtag.create(link, hashTag));
+                        }
+                );
     }
 
     private void validateLinkNotInTrash(Link link) {
