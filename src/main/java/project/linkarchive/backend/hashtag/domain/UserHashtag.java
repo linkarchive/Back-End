@@ -25,7 +25,7 @@ public class UserHashtag extends CreatedEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
 

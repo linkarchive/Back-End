@@ -23,10 +23,10 @@ public class Hashtag extends CreatedEntity {
 
     private String tag;
 
-    @OneToMany(mappedBy = "hashtag", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hashtag", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<UserHashtag> userHashtagList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hashtag", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hashtag", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<LinkHashtag> linkHashtagList = new ArrayList<>();
 
     @Builder

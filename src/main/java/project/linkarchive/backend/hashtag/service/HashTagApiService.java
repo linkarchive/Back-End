@@ -36,13 +36,15 @@ public class HashTagApiService {
         Hashtag hashTag = findAndBuildHashTagByTag(request);
 
         userHashTagRepository.findByHashtagId(hashTag.getId())
-                .ifPresentOrElse(userHashTag -> {
+                .ifPresentOrElse(
+                        userHashTag -> {
                             throw new AlreadyExistException(ALREADY_EXIST_TAG);
                         },
                         () -> {
                             UserHashtag getHashTag = UserHashtag.create(HASHTAG_DEFAULT_COUNT, user, hashTag);
                             userHashTagRepository.save(getHashTag);
-                        });
+                        }
+                );
     }
 
     private User findUserById(Long userId) {
@@ -60,7 +62,9 @@ public class HashTagApiService {
 
     private Hashtag findAndBuildHashTagByTag(CreateTagRequest request) {
         return hashTagRepository.findByTag(request.getTag())
-                .orElseGet(() -> Hashtag.create(request.getTag()));
+                .orElseGet(
+                        () -> Hashtag.create(request.getTag())
+                );
     }
 
 }
