@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.user.domain.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,5 +29,8 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
 
     @Query("SELECT l FROM Link l WHERE l.linkStatus = 'ACTIVE' AND l.user = :user")
     List<Link> findByUser(@Param("user") User user);
+
+    @Query("SELECT l FROM Link l WHERE l.linkStatus = 'TRASH' AND l.updatedAt < :dateTime")
+    List<Link> findOldLinksInTrashStatus(@Param("dateTime") LocalDateTime dateTime);
 
 }
