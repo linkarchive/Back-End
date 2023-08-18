@@ -37,14 +37,16 @@ public class LocalLoginService {
 
     public LoginResponse login(String userAgent) {
         User findUser = userRepository.findBySocialId(SOCIAL_LOGIN)
-                .orElseGet(() -> {
-                    ProfileImage profileImage = ProfileImage.create(DEFAULT_IMAGE);
-                    Pin pin = Pin.create();
-                    User user = User.localCreate(profileImage, pin);
-                    userRepository.save(user);
+                .orElseGet(
+                        () -> {
+                            ProfileImage profileImage = ProfileImage.create(DEFAULT_IMAGE);
+                            Pin pin = Pin.create();
+                            User user = User.localCreate(profileImage, pin);
+                            userRepository.save(user);
 
-                    return user;
-                });
+                            return user;
+                        }
+                );
 
         String newAccessToken = jwtUtil.createAccessToken(findUser);
         String newRefreshToken = jwtUtil.createRefreshToken(findUser);

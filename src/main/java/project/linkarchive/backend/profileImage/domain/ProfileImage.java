@@ -21,7 +21,7 @@ public class ProfileImage extends TimeEntity {
 
     private String fileName;
 
-    @OneToOne(mappedBy = "profileImage", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "profileImage", fetch = FetchType.LAZY)
     private User user;
 
     @Builder

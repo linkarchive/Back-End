@@ -44,14 +44,16 @@ public class KakaoLoginService {
         KakaoProfile kakaoProfile = jwtUtil.getUserInfo(oauthToken.getAccess_token());
 
         User findUser = userRepository.findBySocialId(kakaoProfile.getId())
-                .orElseGet(() -> {
-                    ProfileImage profileImage = ProfileImage.create(DEFAULT_IMAGE);
-                    Pin pin = Pin.create();
-                    User user = User.create(KAKAO, kakaoProfile, profileImage, pin);
-                    userRepository.save(user);
+                .orElseGet(
+                        () -> {
+                            ProfileImage profileImage = ProfileImage.create(DEFAULT_IMAGE);
+                            Pin pin = Pin.create();
+                            User user = User.create(KAKAO, kakaoProfile, profileImage, pin);
+                            userRepository.save(user);
 
-                    return user;
-                });
+                            return user;
+                        }
+                );
 
         findUser.updateAuthProvider(KAKAO);
         String newAccessToken = jwtUtil.createAccessToken(findUser);

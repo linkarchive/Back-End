@@ -6,10 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.linkarchive.backend.advice.entityBase.TimeEntity;
 import project.linkarchive.backend.auth.AuthProvider;
+import project.linkarchive.backend.auth.domain.RefreshToken;
 import project.linkarchive.backend.auth.response.KakaoProfile;
 import project.linkarchive.backend.bookmark.domain.Bookmark;
 import project.linkarchive.backend.hashtag.domain.UserHashtag;
 import project.linkarchive.backend.isLinkRead.domain.IsLinkRead;
+import project.linkarchive.backend.link.domain.Link;
 import project.linkarchive.backend.notification.domain.Notification;
 import project.linkarchive.backend.notification.enums.NotificationPreference;
 import project.linkarchive.backend.pin.domain.Pin;
@@ -50,24 +52,30 @@ public class User extends TimeEntity {
     @Enumerated(EnumType.STRING)
     private NotificationPreference notificationPreference;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "profile_image_id")
     private ProfileImage profileImage;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "pin_id")
     private Pin pin;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private RefreshToken refreshToken;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Link> linkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<UserHashtag> userHashtagList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<IsLinkRead> isLinkReadList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Notification> notificationList = new ArrayList<>();
 
     @Builder
