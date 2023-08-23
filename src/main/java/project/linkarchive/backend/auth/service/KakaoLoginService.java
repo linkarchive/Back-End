@@ -62,10 +62,11 @@ public class KakaoLoginService {
         RefreshToken token = RefreshToken.create(newRefreshToken, userAgent, loginUser);
 
         Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserId(loginUser.getId());
-        savedRefreshToken.ifPresentOrElse(
-                refreshToken -> refreshToken.updateRefreshToken(token),
-                () -> refreshTokenRepository.save(token)
-        );
+        savedRefreshToken.ifPresentOrElse
+                (
+                        refreshToken -> refreshToken.updateRefreshToken(token),
+                        () -> refreshTokenRepository.save(token)
+                );
 
         return new LoginResponse(loginUser, URL + loginUser.getProfileImage().getFileName(), newAccessToken, newRefreshToken);
     }
