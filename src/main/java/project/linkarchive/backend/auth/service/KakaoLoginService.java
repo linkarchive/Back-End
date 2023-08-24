@@ -43,7 +43,7 @@ public class KakaoLoginService {
         OauthToken oauthToken = jwtUtil.getToken(code, redirectUri);
         KakaoProfile kakaoProfile = jwtUtil.getUserInfo(oauthToken.getAccess_token());
 
-        User loginUser = userRepository.findBySocialId(kakaoProfile.getId())
+        User findUser = userRepository.findBySocialId(kakaoProfile.getId())
                 .orElseGet(
                         () -> {
                             ProfileImage profileImage = ProfileImage.create(DEFAULT_IMAGE);
@@ -55,20 +55,20 @@ public class KakaoLoginService {
                         }
                 );
 
-        loginUser.updateAuthProvider(KAKAO);
-        String newAccessToken = jwtUtil.createAccessToken(loginUser);
-        String newRefreshToken = jwtUtil.createRefreshToken(loginUser);
+        findUser.updateAuthProvider(KAKAO);
+        String newAccessToken = jwtUtil.createAccessToken(findUser);
+        String newRefreshToken = jwtUtil.createRefreshToken(findUser);
 
-        RefreshToken token = RefreshToken.create(newRefreshToken, userAgent, loginUser);
+        RefreshToken token = RefreshToken.create(newRefreshToken, userAgent, findUser);
 
-        Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserId(loginUser.getId());
+        Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.getRefreshTokenByUserIdAndAgent(findUser.getId(), userAgent);
         savedRefreshToken.ifPresentOrElse
                 (
                         refreshToken -> refreshToken.updateRefreshToken(token),
                         () -> refreshTokenRepository.save(token)
                 );
 
-        return new LoginResponse(loginUser, URL + loginUser.getProfileImage().getFileName(), newAccessToken, newRefreshToken);
+        return new LoginResponse(findUser, URL + findUser.getProfileImage().getFileName(), newAccessToken, newRefreshToken);
     }
 
 }
