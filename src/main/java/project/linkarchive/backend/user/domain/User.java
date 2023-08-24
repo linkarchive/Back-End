@@ -60,8 +60,8 @@ public class User extends TimeEntity {
     @JoinColumn(name = "pin_id")
     private Pin pin;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private RefreshToken refreshToken;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<RefreshToken> refreshToken = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Link> linkList = new ArrayList<>();
