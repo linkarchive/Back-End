@@ -53,7 +53,7 @@ public class LocalLoginService {
 
         RefreshToken token = RefreshToken.create(newRefreshToken, userAgent, findUser);
 
-        Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.getRefreshTokenByUserIdAndAgent(findUser.getId(), userAgent);
+        Optional<RefreshToken> savedRefreshToken = refreshTokenRepository.findByUserIdAndAgent(findUser.getId(), userAgent);
         savedRefreshToken.ifPresentOrElse(
                 refreshToken -> refreshToken.updateRefreshToken(token),
                 () -> refreshTokenRepository.save(token)

@@ -24,7 +24,7 @@ public class RefreshToken extends TimeEntity {
 
     private String agent;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
