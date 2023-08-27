@@ -1,15 +1,13 @@
 package project.linkarchive.backend.interceptor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Slf4j
 public class LoggingInterceptor implements HandlerInterceptor {
-
-    private static final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -19,12 +17,12 @@ public class LoggingInterceptor implements HandlerInterceptor {
                 "startTime", startTime
         );
 
-        logger.info(
+        log.info(
                 "Method=" + request.getMethod() +
-                ":: Request URL=" + request.getRequestURL().toString() +
-                ":: Client IP=" + request.getRemoteAddr() +
-                ":: User Agent=" + request.getHeader("User-Agent") +
-                ":: Start Time=" + System.currentTimeMillis()
+                        ":: Request URL=" + request.getRequestURL().toString() +
+                        ":: Client IP=" + request.getRemoteAddr() +
+                        ":: User Agent=" + request.getHeader("User-Agent") +
+                        ":: Start Time=" + System.currentTimeMillis()
         );
 
         return true;
@@ -34,12 +32,12 @@ public class LoggingInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         long startTime = (Long) request.getAttribute("startTime");
 
-        logger.info(
+        log.info(
                 "Method=" + request.getMethod() +
-                ":: Request URL=" + request.getRequestURL().toString() +
-                ":: Status Code=" + response.getStatus() +
-                ":: End Time=" + System.currentTimeMillis() +
-                ":: Time Taken=" + (System.currentTimeMillis() - startTime) + "ms"
+                        ":: Request URL=" + request.getRequestURL().toString() +
+                        ":: Status Code=" + response.getStatus() +
+                        ":: End Time=" + System.currentTimeMillis() +
+                        ":: Time Taken=" + (System.currentTimeMillis() - startTime) + "ms"
         );
     }
 
