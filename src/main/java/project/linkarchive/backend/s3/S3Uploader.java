@@ -91,9 +91,8 @@ public class S3Uploader {
         GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, objectKey)
                 .withMethod(HttpMethod.GET)
                 .withExpiration(expiration);
-        URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
 
-        return url;
+        return amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
     }
 
     public void deleteFile(String key) {
@@ -105,8 +104,7 @@ public class S3Uploader {
     }
     
     private String extractKey(String fileName) {
-        String key = fileName.split("/")[S3_KEY];
-        return key;
+        return fileName.split("/")[S3_KEY];
     }
 
 }
