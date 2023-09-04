@@ -41,6 +41,7 @@ public class S3Uploader {
     public String upload(MultipartFile multipartFile) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new NotAcceptableException(CONVERSION_FAILED));
+
         return upload(uploadFile);
     }
 
@@ -52,6 +53,7 @@ public class S3Uploader {
             }
             return Optional.of(convertFile);
         }
+
         return Optional.empty();
     }
 
@@ -60,9 +62,8 @@ public class S3Uploader {
         String uploadImageUrl = putS3(uploadFile, fileName);
 
         removeNewFile(uploadFile);
-        String s3Key = extractKey(uploadImageUrl);
 
-        return s3Key;
+        return extractKey(uploadImageUrl);
     }
 
     private String putS3(File uploadFile, String fileName) {
@@ -70,6 +71,7 @@ public class S3Uploader {
                 new PutObjectRequest(bucket, fileName, uploadFile)
                         .withCannedAcl(CannedAccessControlList.PublicRead)
         );
+
         return amazonS3.getUrl(bucket, fileName).toString();
     }
 
@@ -80,7 +82,6 @@ public class S3Uploader {
             log.info("파일이 삭제되지 못했습니다.");
         }
     }
-
 
     public URL generatePresignedProfileImageUrl(String objectKey, int expirationTimeInMinutes) {
         Date expiration = new Date();
@@ -102,7 +103,7 @@ public class S3Uploader {
             throw new NotAcceptableException(NOT_ACCEPTABLE_CONTENT_TYPE);
         }
     }
-    
+
     private String extractKey(String fileName) {
         return fileName.split("/")[S3_KEY];
     }
